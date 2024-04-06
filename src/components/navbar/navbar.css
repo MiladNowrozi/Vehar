@@ -1,0 +1,164 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.NavbarContainer {
+  user-select: none;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.NavbarLogo {
+  width: 90px;
+  height: 65px;
+  background: url(../navbar/logo/VeharGreen.svg) no-repeat;
+  background-size: 100px;
+  position: absolute;
+  right: 20px;
+  top: 2px;
+  background-position-y: -2px;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 1s;
+  .animation-logo-green {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+  }
+}
+.DisplayNone-AnimationGreen {
+  display: none;
+}
+.animation-logo-yellow {
+  display: none;
+}
+
+.NavbarLogoAddScroll {
+  width: 120px;
+  height: 60px;
+  background: url(../../components/navbar/logo/VeharYellow.svg) no-repeat;
+  background-size: 100px;
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  top: 2px;
+  border-radius: 50px;
+  cursor: pointer;
+  background-position-y: -6px;
+  transition: all 1s;
+  .animation-logo-yellow {
+    display: block;
+    position: absolute;
+    top: 17px;
+    right: 47px;
+  }
+}
+
+/* .DisplayNone-AnimationYellow {
+  display: none;
+} */
+
+/* .NavbarMenuText {
+} */
+
+.NavbarMenuText > ul > li > a {
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 15px;
+  cursor: pointer;
+  color: #ff0000;
+  font-family: iran-1;
+  font-size: 13px;
+  transition: color 0.3s;
+}
+
+.NavbarMenuText > ul > li {
+  list-style-type: none;
+  position: absolute;
+  right: 150px;
+  top: 25px;
+  transition: all 1s;
+}
+
+.NavbarMenuText > ul > li > :hover {
+  color: rgb(255, 0, 255);
+  transition: all 0.3s;
+}
+
+.searchSvg {
+  width: 30px;
+  height: 30px;
+  color: rgb(230, 12, 12);
+  cursor: pointer;
+  transform: scaleX(-1);
+  border: none;
+  border-radius: 5px;
+  margin-right: 2px;
+  background-color: #fff;
+}
+
+.formContent > form > input {
+  width: 200px;
+  text-align: right;
+  padding: 7px;
+  font-family: iran-3;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  padding-right: 15px;
+  font-size: 10px;
+
+  &::placeholder {
+    color: red;
+    font-size: 12px;
+    margin-right: 5px;
+  }
+}
+
+.formContent > form {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 100px;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.SloganVehar {
+  width: 15%;
+  height: 30px;
+  position: absolute;
+  left: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: iran-4;
+  font-size: 6.8px;
+  color: rgb(29, 175, 0);
+}
+
+/* .SloganVehar::before {
+  content: "";
+  border-top: 15px solid #ff180033;
+  border-bottom: 15px solid rgba(255, 0, 0, 0);
+  border-right: 15px solid rgba(209, 175, 175, 0);
+  border-left: 15px solid #ff180033;
+  position: absolute;
+  right: -30px;
+} */
+
+/* .SloganVehar::after{
+  content: "";
+  border-top: 15px solid rgba(0, 255, 255, 0);
+  border-bottom: 15px solid #ff180033;
+  border-left: 15px solid rgba(209, 175, 175, 0);
+  border-right: 15px solid #ff180033;
+  position: absolute;
+  left: -30px;
+} */

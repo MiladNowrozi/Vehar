@@ -1,0 +1,413 @@
+.NavbarMenuHamburger {
+  position: absolute;
+  left: 50px;
+  margin-top: -13px;
+
+  .ContentMenuHamburger {
+    cursor: pointer;
+
+    .spanMenuHam {
+      width: 35px;
+      height: 1px;
+      background-color: rgb(180, 3, 3);
+      margin-top: 5px;
+    }
+
+    .smh1,
+    .smh4 {
+      width: 25px;
+    }
+  }
+}
+.ContentPageMenu {
+  width: 15%;
+  height: 600px;
+  position: fixed;
+  top: 82px;
+  z-index: 1;
+  direction: rtl;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(199, 10, 3) rgba(179, 0, 0, 0);
+  transition: all 0.1s;
+  border-radius: 5px;
+  background-color: rgba(35, 170, 1, 0.836);
+
+  .ContentMenu {
+    width: 100%;
+    height: 597px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    transition: all 0.1s;
+
+    .NavMenu {
+      width: 100%;
+      height: 50px;
+      background-color: #cc3838b9;
+      border-radius: 20px 20px 0px 0px;
+      font-family: iran-3;
+      font-size: 8px;
+      direction: ltr;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+
+      .fa-times {
+        font-size: 15px;
+        cursor: pointer;
+        color: #31e603;
+      }
+    }
+
+    .ListMenuCenter {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .ListMenuNews {
+        width: 100%;
+        height: 280px;
+        background-color: rgb(181, 184, 1);
+        font-size: 13px;
+        margin-bottom: 5px;
+        transition: all 0.1s;
+
+        &.ListMenuNews li {
+          list-style-type: none;
+          margin-right: 10px;
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        &.ListMenuNews::before {
+          content: "";
+          width: 22%;
+          height: 16px;
+          right: 0%;
+          bottom: 274px;
+          position: absolute;
+          background-color: rgb(181, 184, 1);
+          border-radius: 0px 0px 0px 20px;
+          transition: all 1s;
+          z-index: 1;
+        }
+
+        &.ListMenuNews::after {
+          content: "";
+          width: 22%;
+          height: 16px;
+          left: 0%;
+          bottom: 274px;
+          position: absolute;
+          background-color: rgb(181, 184, 1);
+          border-radius: 0px 0px 20px 0px;
+          transition: all 1s;
+          z-index: 1;
+        }
+
+        &.ListMenuNews a:hover {
+          color: red;
+          transition: all 0.2s;
+        }
+
+        &.ListMenuNews a {
+          text-decoration: none;
+          font-family: iran-3;
+        }
+      }
+      .ColumnCenterMenu {
+        width: 95%;
+        height: 32px;
+        background-color: #020202;
+        position: absolute;
+        bottom: 258px;
+        background-size: 50px;
+        background-image: url(../../navbar/logo/VeharYellow.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .ListMenuSite {
+        width: 100%;
+        height: 233px;
+        background-color: rgb(231, 230, 233);
+        font-size: 13px;
+        text-align: center;
+        transition: all 0.1s;
+
+        &.ListMenuSite li {
+          list-style-type: none;
+          margin-top: 25px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        &.ListMenuSite::before {
+          content: "";
+          width: 22%;
+          height: 16px;
+          background-color: rgb(231, 230, 233);
+          border-radius: 0px 20px 0px 0px;
+          position: absolute;
+          left: 0%;
+          bottom: 258px;
+          transition: all 1s;
+        }
+
+        &.ListMenuSite::after {
+          content: "";
+          width: 22%;
+          height: 16px;
+          background-color: rgb(231, 230, 233);
+          border-radius: 20px 0px 0px 0px;
+          position: absolute;
+          right: 0%;
+          bottom: 258px;
+          transition: all 1s;
+        }
+
+        &.ListMenuSite a:hover {
+          color: red;
+          transition: all 0.2s;
+        }
+
+        &.ListMenuSite a {
+          text-decoration: none;
+          font-family: iran-3;
+          margin-top: 25px;
+        }
+      }
+    }
+
+    .SocialNetworks {
+      width: 100%;
+      height: 40px;
+      background-color: rgb(0, 0, 0);
+      border-radius: 0px 0px 20px 20px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      transition: all 0.1s;
+
+      .fab {
+        font-size: 20px;
+        cursor: pointer;
+        color: rgb(4, 224, 4);
+      }
+
+      .eitaa {
+        width: 20px;
+        height: 20px;
+        background: url(../../svg/wla8Wk01.svg) no-repeat;
+        background-size: 20px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+/* start style menu Scroll */
+.ScrollPageMenu {
+  width: 15%;
+  height: 617px;
+  direction: rtl;
+  position: fixed;
+  top: 62px;
+  z-index: 1;
+  transition: all 0.1s;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(199, 10, 3) rgba(179, 0, 0, 0);
+  border-radius: 5px;
+  background-color: rgba(35, 170, 1, 0.836);
+
+  .ContentMenu {
+    width: 100%;
+    height: 617px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    transition: all 0.1s;
+
+    .NavMenu {
+      width: 100%;
+      height: 50px;
+      background-color: #cc3838b9;
+      border-radius: 20px 20px 0px 0px;
+      font-family: iran-3;
+      font-size: 8px;
+      direction: ltr;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      transition: all 0.1s;
+
+      .fa-times {
+        font-size: 15px;
+        cursor: pointer;
+        color: #31e603;
+      }
+    }
+
+    .ListMenuCenter {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .ListMenuNews {
+        width: 100%;
+        height: 300px;
+        background-color: rgb(181, 184, 1);
+        font-size: 13px;
+        transition: all 0.1s;
+
+        &.ListMenuNews li {
+          list-style-type: none;
+          margin-right: 10px;
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        &.ListMenuNews::before {
+          content: "";
+          width: 22%;
+          height: 16px;
+          right: 0%;
+          bottom: 274px;
+          position: absolute;
+          background-color: rgb(181, 184, 1);
+          border-radius: 0px 0px 0px 20px;
+          transition: all 1s;
+          z-index: 1;
+        }
+
+        &.ListMenuNews::after {
+          content: "";
+          width: 22%;
+          height: 16px;
+          left: 0%;
+          bottom: 274px;
+          position: absolute;
+          background-color: rgb(181, 184, 1);
+          border-radius: 0px 0px 20px 0px;
+          transition: all 1s;
+          z-index: 1;
+        }
+
+        &.ListMenuNews a:hover {
+          color: red;
+          transition: all 0.2s;
+        }
+
+        &.ListMenuNews a {
+          text-decoration: none;
+          font-family: iran-3;
+        }
+      }
+
+      .ColumnCenterMenu {
+        width: 95%;
+        height: 32px;
+        background-color: #020202;
+        position: absolute;
+        bottom: 258px;
+        background-image: url(../../navbar/logo/VeharYellow.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50px;
+      }
+
+      .ListMenuSite {
+        width: 100%;
+        height: 233px;
+        background-color: rgb(231, 230, 233);
+        text-align: center;
+        font-size: 13px;
+        transition: all 0.1s;
+
+        &.ListMenuSite::before {
+          content: "";
+          width: 22%;
+          height: 16px;
+          left: 0%;
+          bottom: 258px;
+          position: absolute;
+          background-color: rgb(231, 230, 233);
+          border-radius: 0px 20px 0px 0px;
+          transition: all 0.1s;
+        }
+
+        &.ListMenuSite::after {
+          content: "";
+          width: 22%;
+          height: 16px;
+          right: 0%;
+          bottom: 258px;
+          position: absolute;
+          background-color: rgb(231, 230, 233);
+          border-radius: 20px 0px 0px 0px;
+          transition: all 0.1s;
+        }
+
+        &.ListMenuSite li {
+          list-style-type: none;
+          margin-top: 25px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        &.ListMenuSite a:hover {
+          color: red;
+          transition: all 0.2s;
+        }
+
+        &.ListMenuSite a {
+          text-decoration: none;
+          font-family: iran-3;
+          margin-top: 25px;
+        }
+      }
+    }
+
+    .SocialNetworks {
+      width: 100%;
+      height: 40px;
+      background-color: rgb(0, 0, 0);
+      border-radius: 0px 0px 20px 20px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+
+      .fab {
+        font-size: 20px;
+        cursor: pointer;
+        color: rgb(4, 224, 4);
+      }
+
+      .eitaa {
+        width: 20px;
+        height: 20px;
+        background: url(../../svg/wla8Wk01.svg) no-repeat;
+        background-size: 20px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+}
