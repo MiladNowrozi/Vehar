@@ -1,0 +1,251 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+@font-face {
+  font-family: "iran-1";
+  src: url(../iran/fonts/eot/IRANSansWeb_Medium.eot) format(eot),
+    url(../iran/fonts/ttf/IRANSansWeb_Medium.ttf) format(ttf),
+    url(../iran/fonts/woff2/IRANSansWeb_Medium.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: "iran-2";
+  src: url(../iran/fonts/eot/IRANSansWeb_Bold.eot) format(eot);
+  src: url(../iran/fonts/ttf/IRANSansWeb_Bold.ttf) format(ttf);
+  src: url(../iran/fonts/woff/IRANSansWeb_Bold.woff) format(woff);
+  src: url(../iran/fonts/woff2/IRANSansWeb_Bold.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: "iran-3";
+  src: url(../iran/fonts/eot/IRANSansWeb.eot) format(eot);
+  src: url(../iran/fonts/ttf/IRANSansWeb.ttf) format(ttf);
+  src: url(../iran/fonts/woff/IRANSansWeb.woff) format(woff);
+  src: url(../iran/fonts/woff2/IRANSansWeb.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: "iran-4";
+  src: url(../iran/fonts/eot/IRANSansWeb_Light.eot) format(eot);
+  src: url(../iran/fonts/ttf/IRANSansWeb_Light.ttf) format(ttf);
+  src: url(../iran/fonts/woff/IRANSansWeb_Light.woff) format(woff);
+  src: url(../iran/fonts/woff2/IRANSansWeb_Light.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: "iran-5";
+  src: url(../iran/fonts/eot/IRANSansWeb_UltraLight.eot) format(eot);
+  src: url(../iran/fonts/ttf/IRANSansWeb_UltraLight.ttf) format(ttf);
+  src: url(../iran/fonts/woff/IRANSansWeb_UltraLight.woff) format(woff);
+  src: url(../iran/fonts/woff2/IRANSansWeb_UltraLight.woff2) format(woff2);
+}
+
+.body-admin {
+  width: 100%;
+  height: 100vh;
+  .container-admin {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    .navbar-admin {
+      width: 100%;
+      height: 10vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: green;
+      .content-admin-menu-lines {
+        width: 4%;
+        height: 30px;
+        /* background-color: rgb(0, 94, 177); */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 6px;
+        position: relative;
+        left: 25px;
+        cursor: pointer;
+        .line-admin-1 {
+          width: 100%;
+          height: 1px;
+          background-color: white;
+          transition: all 1s;
+          &.add-class-line-1 {
+            width: 60%;
+            height: 1px;
+            background-color: white;
+            transform: skewY(45deg);
+            margin-bottom: -10.5px;
+            transition: all 1s;
+          }
+        }
+        .line-admin-2 {
+          width: 70%;
+          height: 1px;
+          background-color: white;
+          transition: all 1s;
+        }
+        .line-admin-3 {
+          width: 75%;
+          height: 1px;
+          background-color: white;
+          transition: all 1s;
+        }
+        .line-admin-4 {
+          width: 100%;
+          height: 1px;
+          background-color: white;
+          transition: all 1s;
+          &.add-class-line-4 {
+            width: 60%;
+            height: 1px;
+            background-color: white;
+            transform: skewY(-45deg);
+            margin-top: -10.5px;
+            transition: all 1s;
+          }
+        }
+      }
+      .welcome-navbar-admin {
+        font-family: iran-5;
+        font-size: 12px;
+        color: white;
+        direction: rtl;
+      }
+      .content-admin-menu-ML {
+        width: 8%;
+        height: 80%;
+        display: flex;
+        align-items: center;
+        gap: 2%;
+        position: relative;
+        right: 25px;
+        .login-admin {
+          width: 40%;
+          height: 70%;
+          /* background-color: #fff; */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .fa-user-circle {
+            font-size: 30px;
+            color: rgba(255, 255, 0, 0.911);
+            cursor: pointer;
+          }
+        }
+        .messages-admin {
+          width: 40%;
+          height: 70%;
+          /* background-color: #fff; */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .fa-bell {
+            font-size: 30px;
+            color: rgba(255, 255, 0, 0.911);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .menu-admin {
+      width: 15%;
+      height: 90vh;
+      background-color: #fff;
+      display: flex;
+      position: fixed;
+      transition: all 1s;
+      overflow-y: auto;
+      direction: rtl;
+      scrollbar-width: thin;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      border-radius: 15px 0px 0px 15px;
+      .navbar-menu-admin {
+        width: 100%;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background-color: #eee;
+        font-family: iran-5;
+        font-size: 12px;
+        border-radius: 15px 0px 0px 15px;
+        .× {
+          position: absolute;
+          left: 10px;
+          top: -3px;
+          font-size: 30px;
+          cursor: pointer;
+        }
+      }
+      .header-menu-admin {
+        width: 85%;
+        background-color: rgb(48, 204, 0);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        &.header-menu-admin > a {
+          width: 100%;
+          height: 40px;
+          font-family: iran-4;
+          text-decoration: none;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          color: white;
+        }
+        &.header-menu-admin > a > i {
+          font-size: 20px;
+          width: 25px;
+        }
+        &.header-menu-admin > a:hover {
+          background-color: aqua;
+          border-radius: 5px;
+          transition: all 0.1s;
+          color: rgb(214, 3, 3);
+          transition: all 0.4s;
+        }
+      }
+    }
+
+    .header-admin {
+      width: 100%;
+      height: 90vh;
+      background-color: rgba(0, 128, 0, 0.589);
+      .content-header-admin {
+        width: 100%;
+        background-color: #080808;
+        /* display: flex; */
+        /* justify-content: center; */
+        .navbar-header-admin {
+          height: 90vh;
+          background-color: rgba(139, 173, 15, 0.719);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          transition: all 1s;
+          .header-header-admin {
+            width: 80%;
+            height: 90vh;
+            background-color: rgb(24, 236, 173);
+          }
+        }
+      }
+    }
+
+    /* .footer-admin {
+      width: 100%;
+      height: 10vh;
+      background-color: green;
+    } */
+  }
+}
