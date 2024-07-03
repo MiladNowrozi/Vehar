@@ -30,22 +30,42 @@ const MenuAdmin = () => {
           </span>
         </div>
         <div className="header-menu-admin">
-          <button>
+          <button onClick={() => console.log("3")}>
             <i className="fas fa-user-edit"></i>ویرایش پروفایل
           </button>
-          <button>
+          <button
+            onClick={() => {
+              document.querySelector(".news-create-admin").classList.add("showed-create-news");
+            }}
+          >
             <i className="fas fa-newspaper"></i>ایجاد خبر
           </button>
-          <button>
+          <button
+            onClick={() => {
+              console.log("3");
+            }}
+          >
             <i className="fas fa-users"></i>کاربران
           </button>
-          <button>
+          <button
+            onClick={() => {
+              console.log("4");
+            }}
+          >
             <i className="fas fa-user-plus"></i>اضافه کردن ادمین
           </button>
-          <button>
+          <button
+            onClick={() => {
+              console.log("5");
+            }}
+          >
             <i className="fas fa-user-graduate"></i>ادمین ها
           </button>
-          <button>
+          <button
+            onClick={() => {
+              console.log("6");
+            }}
+          >
             <i className="fas fa-envelope"></i>ایمیل ها
           </button>
         </div>

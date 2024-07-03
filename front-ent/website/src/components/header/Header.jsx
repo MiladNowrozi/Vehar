@@ -173,9 +173,7 @@ function Header() {
                           </a>
                         </div>
                         <div className="abstractNews-left">
-                          <h2 className="AbstractNewsHeader-left ">
-                            {News.abstract}
-                          </h2>
+                          <h2 className="AbstractNewsHeader-left ">{News.abstract}</h2>
                         </div>
                       </div>
                     </div>
@@ -245,16 +243,11 @@ function Header() {
                           />
                         }
                       </div>
-                      <h1 style={{ fontSize: "15px", marginTop: "-10px" }}>
-                        برنامه نویس
-                      </h1>
-                      <h2 style={{ fontSize: "13px", marginTop: "-5px" }}>
-                        {" "}
-                        میلاد نوروزی
-                      </h2>
+                      <h1 style={{ fontSize: "15px", marginTop: "-10px" }}>برنامه نویس</h1>
+                      <h2 style={{ fontSize: "13px", marginTop: "-5px" }}> میلاد نوروزی</h2>
                       <p style={{ fontSize: "11px" }}>
-                        حوزوی و برنامه نویس فرانت و بک اند علاقه مند به یادگیری علوم
-                        اهل استان لرستان با چند سال تجربه در حوزه برنامه نویسی
+                        حوزوی و برنامه نویس فرانت و بک اند علاقه مند به یادگیری علوم اهل استان
+                        لرستان با چند سال تجربه در حوزه برنامه نویسی
                       </p>
                     </div>
                     <div className="Bridge">
@@ -262,11 +255,7 @@ function Header() {
                         <a href="#" className="fab fa-telegram" title="تلگرام"></a>
                       </li>
                       <li>
-                        <a
-                          href="#"
-                          className="fab fa-instagram"
-                          title="اینستاگرام"
-                        ></a>
+                        <a href="#" className="fab fa-instagram" title="اینستاگرام"></a>
                       </li>
                       <li>
                         <a href="#" className="fa fa-envelope" title="ایمیل"></a>
