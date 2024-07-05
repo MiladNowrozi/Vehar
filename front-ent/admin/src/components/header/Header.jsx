@@ -1,15 +1,10 @@
-import "./header.css";
-import CreateNews from "./pages/CreatNews/CreateNews";
-import EditProfile from "./pages/EditProfile/EditProfile";
+import Default from "./pages/DefaultPage/Default";
 
 const HeaderAdmin = () => {
   return (
     <>
       <section className="content-header-admin" style={{ width: "100%" }}>
-        <div className="header-header-admin">
-          <CreateNews />
-          <EditProfile />
-        </div>
+        <Default />
       </section>
     </>
   );

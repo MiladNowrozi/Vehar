@@ -4,9 +4,6 @@ const CreateNews = () => {
   return (
     <>
       <div className="news-create-admin">
-        <div className="title-news-admin">
-          <h1>ایجاد یک خبر جدید </h1>
-        </div>
         <form className="input-news-admin" action="/">
           <label>عنوان خبر :</label>
           <input

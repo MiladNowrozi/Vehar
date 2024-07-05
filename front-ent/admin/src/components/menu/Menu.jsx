@@ -21,7 +21,7 @@ const MenuAdmin = () => {
     document.querySelector(".deleted-4").classList.toggle("add-class-line-4");
   }
   return (
-    <>
+    <div>
       <section className="menu-admin" style={{ right: "-15%" }}>
         <div className="navbar-menu-admin">
           <h1>دسترسی مالک</h1>
@@ -30,12 +30,20 @@ const MenuAdmin = () => {
           </span>
         </div>
         <div className="header-menu-admin">
-          <button onClick={() => console.log("3")}>
+          <button
+            onClick={() => {
+              document.querySelector(".news-create-admin").style.display = "none";
+              document.querySelector(".admin-edit-page").style.display = "block";
+              document.querySelector(".edit-profile-admin").style.display = "none";
+            }}
+          >
             <i className="fas fa-user-edit"></i>ویرایش پروفایل
           </button>
           <button
             onClick={() => {
-              document.querySelector(".news-create-admin").classList.add("showed-create-news");
+              document.querySelector(".news-create-admin").style.display = "flex";
+              document.querySelector(".admin-edit-page").style.display = "none";
+              document.querySelector(".edit-profile-admin").style.display = "none";
             }}
           >
             <i className="fas fa-newspaper"></i>ایجاد خبر
@@ -59,7 +67,7 @@ const MenuAdmin = () => {
               console.log("5");
             }}
           >
-            <i className="fas fa-user-graduate"></i>ادمین ها
+            <i className="fas fa-users"></i>ادمین ها
           </button>
           <button
             onClick={() => {
@@ -70,7 +78,7 @@ const MenuAdmin = () => {
           </button>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
