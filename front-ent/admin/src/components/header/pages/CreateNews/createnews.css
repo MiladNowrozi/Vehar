@@ -5,7 +5,8 @@
   border-radius: 5px;
   padding: 15px;
   display: none;
-
+  flex-direction: column;
+  position: relative;
   .title-news-admin {
     width: 20%;
     height: 35px;
@@ -25,18 +26,6 @@
     flex-direction: column;
     align-items: end;
     gap: 5px;
-
-    &.input-news-admin > textarea {
-      width: 60%;
-      height: 40vh;
-      border: none;
-      border-radius: 5px;
-      outline: none;
-      direction: rtl;
-      padding: 12px;
-      font-family: iran-3;
-      resize: inherit;
-    }
     &.input-news-admin > input[type="text"] {
       width: 60%;
       height: 15px;
@@ -53,25 +42,31 @@
       font-family: iran-3;
       user-select: none;
     }
-    &.input-news-admin .row {
-      width: 60%;
-      &.row input[type="submit"] {
-        width: 15%;
-        background-color: white;
-        color: black;
-        padding: 5px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        float: right;
-        font-family: iran-3;
-        font-size: 15px;
-      }
-      &.row input[type="submit"]:hover {
-        background-color: rgb(42, 179, 0);
-        transition: all 0.5s;
-        color: white;
-      }
+  }
+  .buttons-create-news {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    button[type="button"],
+    input[type="submit"] {
+      width: 8%;
+      padding: 6px;
+      font-family: iran-3;
+      user-select: none;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: white;
+    }
+    input[type="submit"]:hover {
+      background-color: rgb(42, 179, 0);
+      transition: all 0.5s;
+      color: white;
+    }
+    button[type="button"]:hover {
+      background-color: red;
+      transition: all 0.5s;
+      color: white;
     }
   }
 }

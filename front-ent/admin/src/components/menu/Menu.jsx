@@ -48,34 +48,18 @@ const MenuAdmin = () => {
           >
             <i className="fas fa-newspaper"></i>ایجاد خبر
           </button>
-          <button
-            onClick={() => {
-              console.log("3");
-            }}
-          >
+          {/* <button>
             <i className="fas fa-users"></i>کاربران
           </button>
-          <button
-            onClick={() => {
-              console.log("4");
-            }}
-          >
+          <button>
             <i className="fas fa-user-plus"></i>اضافه کردن ادمین
           </button>
-          <button
-            onClick={() => {
-              console.log("5");
-            }}
-          >
+          <button>
             <i className="fas fa-users"></i>ادمین ها
           </button>
-          <button
-            onClick={() => {
-              console.log("6");
-            }}
-          >
+          <button>
             <i className="fas fa-envelope"></i>ایمیل ها
-          </button>
+          </button> */}
         </div>
       </section>
     </div>

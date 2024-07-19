@@ -39,18 +39,19 @@ const EditProfile = () => {
               placeholder="میلاد نوروزی برنامه نویس فرانت و بک، حدودا سه سالی هست در این زمینه مشغول هستم ..."
             ></textarea>
           </div>
-          <div className="row">
+          <div className="buttons-edit-profile">
             <input type="submit" value="ذخیره" />
+            <button
+              type="button"
+              onClick={() => {
+                document.querySelector(".admin-edit-page").style.display = "none";
+                document.querySelector(".edit-profile-admin").style.display = "flex";
+              }}
+            >
+              انصراف
+            </button>
           </div>
         </form>
-        <button
-          onClick={() => {
-            document.querySelector(".admin-edit-page").style.display = "none";
-            document.querySelector(".edit-profile-admin").style.display = "flex";
-          }}
-        >
-          انصراف
-        </button>
       </div>
     </>
   );

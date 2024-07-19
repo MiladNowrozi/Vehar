@@ -1,4 +1,5 @@
 import "./createnews.css";
+import Editor from "./Editor";
 
 const CreateNews = () => {
   return (
@@ -19,9 +20,21 @@ const CreateNews = () => {
             autoComplete="off"
             placeholder="خبرنگار باید به دید جهانی، وقایع را نگاه کند ..."
           ></input>
+
           <label>متن خبر :</label>
-          <textarea name="subject" placeholder="تایپ کردن ..."></textarea>
-          <div className="row">
+          <Editor />
+
+          <div className="buttons-create-news">
+            <button
+              type="button"
+              onClick={() => {
+                document.querySelector(".admin-edit-page").style.display = "none";
+                document.querySelector(".edit-profile-admin").style.display = "flex";
+                document.querySelector(".news-create-admin").style.display = "none";
+              }}
+            >
+              انصراف
+            </button>
             <input type="submit" value="ثبت" />
           </div>
         </form>
