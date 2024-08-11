@@ -2,8 +2,8 @@ import "./header.css";
 import Galeyre from "../../pages/data/data.js";
 import { PageMenu } from "./pageMenu/PageMenu.jsx";
 import { AnimationRed } from "../../animations/Animation.jsx";
-import { useNavigate } from "react-router-dom";
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   function oofMenuPage() {

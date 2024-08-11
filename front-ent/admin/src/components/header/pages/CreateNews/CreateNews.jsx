@@ -1,41 +1,101 @@
+import React, { useEffect, useState } from "react";
+
 import "./createnews.css";
-import Editor from "./Editor";
+
+import EditorContent from "./Editor.jsx";
 
 const CreateNews = () => {
+  const [getId, setGetId] = useState(null);
+  const handleChange = (e) => {
+    const ele = document.getElementsByName("HandleCheckbox");
+    setGetId(e.target.id);
+    if (document.getElementById(e.target.id).checked) {
+      for (var i = 0; i < ele.length; i++) {
+        ele[i].checked = false;
+        document.getElementById(e.target.id).checked = true;
+      }
+    }
+  };
+
   return (
     <>
       <div className="news-create-admin">
-        <form className="input-news-admin" action="/">
+        <form id="loginForm" className="input-news-admin">
           <label>عنوان خبر :</label>
-          <input
-            type="text"
-            name="lname"
-            autoComplete="off"
-            placeholder="جهان بینی خبرنگاران ..."
-          ></input>
+          <input id="title" type="text" autoComplete="off" placeholder="جهان بینی خبرنگاران ..." />
           <label>توضیح کوتاه :</label>
           <input
+            id="sh"
             type="text"
-            name="lname"
             autoComplete="off"
             placeholder="خبرنگار باید به دید جهانی، وقایع را نگاه کند ..."
-          ></input>
-
+          />
           <label>متن خبر :</label>
-          <Editor />
-
+          <EditorContent />
+          <div className="checkbox-content">
+            <div id={getId} className="title-category">
+              <h2>مربوط به دسته</h2>
+            </div>
+            <input type="checkbox" id="sports" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="sports">ورزشی</label>
+            <br />
+            <input
+              type="checkbox"
+              id="cultural-and-artistic"
+              onChange={handleChange}
+              name="HandleCheckbox"
+            />
+            <label htmlFor="cultural-and-artistic">فرهنگی و هنری</label>
+            <br />
+            <input
+              type="checkbox"
+              id="political-and-social"
+              onChange={handleChange}
+              name="HandleCheckbox"
+            />
+            <label htmlFor="political-and-social">سیاسی و اجتماعی</label>
+            <br />
+            <input
+              type="checkbox"
+              id="special-news"
+              onChange={handleChange}
+              name="HandleCheckbox"
+            />
+            <label htmlFor="special-news">اخبار ویژه</label>
+            <br />
+            <input type="checkbox" id="slider" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="slider">اسلایدر</label>
+            <br />
+            <input
+              type="checkbox"
+              id="full-viewers"
+              onChange={handleChange}
+              name="HandleCheckbox"
+            />
+            <label htmlFor="full-viewers">پر بیننده ها</label>
+            <br />
+            <input
+              type="checkbox"
+              id="important-news"
+              onChange={handleChange}
+              name="HandleCheckbox"
+            />
+            <label htmlFor="important-news">خبر مهم</label>
+            <br />
+            <input type="checkbox" id="dialogue" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="dialogue">گفت و گو</label>
+            <br />
+            <input type="checkbox" id="mahdism" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="mahdism">مهدویت</label>
+            <br />
+            <input type="checkbox" id="notes" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="notes">یادداشت ها</label>
+          </div>
           <div className="buttons-create-news">
-            <button
-              type="button"
-              onClick={() => {
-                document.querySelector(".admin-edit-page").style.display = "none";
-                document.querySelector(".edit-profile-admin").style.display = "flex";
-                document.querySelector(".news-create-admin").style.display = "none";
-              }}
-            >
+            <button type="button" onClick={() => {}}>
               انصراف
             </button>
-            <input type="submit" value="ثبت" />
+            <button type="submit">ارسال</button>
           </div>
         </form>
       </div>

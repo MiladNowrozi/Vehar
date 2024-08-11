@@ -1,25 +1,10 @@
 .news-create-admin {
-  width: 80%;
-  height: 85vh;
-  background-color: rgb(23, 108, 119);
-  border-radius: 5px;
+  width: 85%;
   padding: 15px;
-  display: none;
+  background-color: rgb(23, 108, 119);
   flex-direction: column;
-  position: relative;
-  .title-news-admin {
-    width: 20%;
-    height: 35px;
-    background-color: #fff;
-    font-family: iran-5;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    border-radius: 5px;
-    user-select: none;
-  }
+  border-radius: 5px;
+  margin-top: 5%;
   .input-news-admin {
     width: 100%;
     display: flex;
@@ -42,31 +27,65 @@
       font-family: iran-3;
       user-select: none;
     }
-  }
-  .buttons-create-news {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    button[type="button"],
-    input[type="submit"] {
-      width: 8%;
-      padding: 6px;
-      font-family: iran-3;
-      user-select: none;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
+    .checkbox-content {
+      width: 70%;
+      height: 20vh;
       background-color: white;
+      direction: rtl;
+      font-family: iran-4;
+      font-size: 12px;
+      border-radius: 5px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      .title-category {
+        width: 13%;
+        height: 35px;
+        padding: 0px 10px 0px 10px;
+        margin: 10px;
+        font-size: 10px;
+        background-color: #eee;
+        text-align: center;
+        margin-right: 10px;
+        /* margin-top: 10px; */
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+        position: sticky;
+        top: 0px;
+      }
+      input[type="checkbox"] {
+        cursor: pointer;
+        margin-left: 5px;
+        margin-right: 10px;
+        margin-top: 5px;
+      }
     }
-    input[type="submit"]:hover {
-      background-color: rgb(42, 179, 0);
-      transition: all 0.5s;
-      color: white;
-    }
-    button[type="button"]:hover {
-      background-color: red;
-      transition: all 0.5s;
-      color: white;
+    .buttons-create-news {
+      width: 70%;
+      display: flex;
+      justify-content: space-between;
+      button[type="button"],
+      button[type="submit"] {
+        width: 8%;
+        padding: 6px;
+        font-family: iran-3;
+        user-select: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        background-color: white;
+      }
+      button[type="submit"]:hover {
+        background-color: rgb(42, 179, 0);
+        transition: all 0.5s;
+        color: white;
+      }
+      button[type="button"]:hover {
+        background-color: red;
+        transition: all 0.5s;
+        color: white;
+      }
     }
   }
 }

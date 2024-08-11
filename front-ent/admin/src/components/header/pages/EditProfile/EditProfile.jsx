@@ -29,7 +29,7 @@ const EditProfile = () => {
               type="text"
               name="lname"
               autoComplete="off"
-              placeholder="میلاد نوروزی برنامه نویس ..."
+              placeholder="برنامه نویس فول استک ..."
             ></input>
           </div>
           <div className="admin-bio-edit">

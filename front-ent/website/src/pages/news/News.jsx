@@ -47,9 +47,7 @@ export const News = () => {
                             </div>
                             <div className="RoutingNews-left">
                               <div>
-                                <h1 className="RoutingNewsHeader-left">
-                                  {News.Routing}
-                                </h1>
+                                <h1 className="RoutingNewsHeader-left">{News.Routing}</h1>
                                 <a className="titleNews-left">
                                   <h1
                                     accessKey={News.id}
@@ -61,9 +59,7 @@ export const News = () => {
                                 </a>
                               </div>
                               <div className="abstractNews-left">
-                                <h2 className="AbstractNewsHeader-left ">
-                                  {News.abstract}
-                                </h2>
+                                <h2 className="AbstractNewsHeader-left ">{News.abstract}</h2>
                               </div>
                             </div>
                           </div>
@@ -122,9 +118,7 @@ export const News = () => {
                             </div>
                             <div className="RoutingNews-Right">
                               <div>
-                                <h1 className="RoutingNewsHeader-Right">
-                                  {News.Routing}
-                                </h1>
+                                <h1 className="RoutingNewsHeader-Right">{News.Routing}</h1>
                                 <a className="titleNews-Right">
                                   <h1
                                     accessKey={News.id}
@@ -136,9 +130,7 @@ export const News = () => {
                                 </a>
                               </div>
                               <div className="abstractNews-Right">
-                                <h2 className="AbstractNewsHeader-Right ">
-                                  {News.abstract}
-                                </h2>
+                                <h2 className="AbstractNewsHeader-Right ">{News.abstract}</h2>
                               </div>
                             </div>
                           </div>
