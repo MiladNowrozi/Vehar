@@ -1,10 +1,10 @@
 .news-create-admin {
   width: 85%;
   padding: 15px;
-  background-color: rgb(23, 108, 119);
+  background-color: green;
   flex-direction: column;
   border-radius: 5px;
-  margin-top: 5%;
+  margin-top: 11.3%;
   .input-news-admin {
     width: 100%;
     display: flex;
@@ -29,7 +29,7 @@
     }
     .checkbox-content {
       width: 70%;
-      height: 20vh;
+      height: 200px;
       background-color: white;
       direction: rtl;
       font-family: iran-4;
@@ -65,26 +65,48 @@
       width: 70%;
       display: flex;
       justify-content: space-between;
-      button[type="button"],
+      #submit-warning {
+        background-color: white;
+        font-family: iran-3;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        direction: rtl;
+        padding: 0px 5px 0px 5px;
+        border-radius: 5px;
+        display: none;
+        &#submit-warning p {
+          margin-left: 5px;
+        }
+      }
+      a,
       button[type="submit"] {
         width: 8%;
-        padding: 6px;
+        padding: 5px;
         font-family: iran-3;
+        font-size: 12px;
         user-select: none;
         border-radius: 5px;
         border: none;
         cursor: pointer;
         background-color: white;
+        text-decoration: none;
+        list-style-type: none;
+        text-align: center;
       }
       button[type="submit"]:hover {
         background-color: rgb(42, 179, 0);
         transition: all 0.5s;
         color: white;
       }
+
       button[type="button"]:hover {
+        transition: all 0.5s;
+      }
+      a:hover {
         background-color: red;
         transition: all 0.5s;
-        color: white;
       }
     }
   }

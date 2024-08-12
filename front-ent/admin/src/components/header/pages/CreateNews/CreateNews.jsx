@@ -3,17 +3,20 @@ import React, { useEffect, useState } from "react";
 import "./createnews.css";
 
 import EditorContent from "./Editor.jsx";
+import { Link } from "react-router-dom";
 
 const CreateNews = () => {
   const [getId, setGetId] = useState(null);
   const handleChange = (e) => {
     const ele = document.getElementsByName("HandleCheckbox");
-    setGetId(e.target.id);
     if (document.getElementById(e.target.id).checked) {
+      setGetId(e.target.id);
       for (var i = 0; i < ele.length; i++) {
         ele[i].checked = false;
         document.getElementById(e.target.id).checked = true;
       }
+    } else {
+      setGetId("");
     }
   };
 
@@ -92,9 +95,8 @@ const CreateNews = () => {
             <label htmlFor="notes">یادداشت ها</label>
           </div>
           <div className="buttons-create-news">
-            <button type="button" onClick={() => {}}>
-              انصراف
-            </button>
+            <Link to={"/main-admin"}>انصراف</Link>
+            <div id="submit-warning"></div>
             <button type="submit">ارسال</button>
           </div>
         </form>

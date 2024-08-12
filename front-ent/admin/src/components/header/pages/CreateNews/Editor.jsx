@@ -15,18 +15,18 @@ const EditorContent = () => {
       let sh = document.getElementById("sh");
       let getCategory = document.querySelector(".title-category");
 
-      if (title.value == "") {
-        alert("لطفا فیلد عنوان را پر کنید!");
-      }
-      if (sh.value == "") {
-        alert("لطفا فیلد توضیح کوتاه را پر کنید! ");
-      }
-      if (editorRef.current.getContent() == "") {
-        alert("لطفاً متن خبر را بنویسید!");
-      }
-      if (getCategory.id == "") {
-        alert("لطفاً دسته مربوطه را انتخاب کنید!");
-      } else {
+      const values = {
+        title: { value: title.value, name: "title" },
+        sh: { value: sh.value, name: "sh" },
+        editor: { value: editorRef.current.getContent(), name: "editor" },
+        category: { value: getCategory.id, name: "category" },
+      };
+
+      const filterValues = Object.values(values).filter((i) => {
+        return i.value == "";
+      });
+
+      if (filterValues.length <= 0) {
         await axios({
           method: "post",
           url: "http://localhost:5000/auth/data",
@@ -37,7 +37,24 @@ const EditorContent = () => {
             category: getCategory.id,
           },
         });
-        alert("خبر با موفقیت ارسال شد!");
+        const showWarning = document.getElementById("submit-warning");
+        showWarning.style.display = "flex";
+        showWarning.innerHTML = `<p style="color: green;">خبر با موفقیت ارسال شد!</p>`;
+        setTimeout(() => {
+          showWarning.style.display = "none";
+        }, 5000);
+      } else {
+        const showWarning = document.getElementById("submit-warning");
+        showWarning.style.display = "flex";
+        showWarning.innerHTML = `لطفاً فیلد:${
+          title.value == "" ? `<p style="color: red;">عنوان خبر،</p>` : ""
+        }
+          ${sh.value == "" ? `<p style="color: red;">توضیح کوتاه،</p>` : ""}
+          ${editorRef.current.getContent() == "" ? `<p style="color: red;">متن خبر،</p>` : ""}
+          ${getCategory.id == "" ? `<p style="color: red;">دسته مربوطه،</p>` : ""} را هم پر کنید!`;
+        setTimeout(() => {
+          showWarning.style.display = "none";
+        }, 5000);
       }
     });
   }, []);
@@ -46,7 +63,6 @@ const EditorContent = () => {
     <>
       <Editor
         tinymceScriptSrc="/tinymce/tinymce.min.js"
-        // tinymceScriptSrc={process.env.REACT_APP_URL_TMCE}
         onInit={(_evt, editor) => (editorRef.current = editor)}
         init={{
           width: "70%",

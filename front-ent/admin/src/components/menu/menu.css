@@ -1,6 +1,5 @@
 .menu-admin {
   width: 13%;
-  /* height: 100vh; */
   background-color: green;
   display: flex;
   position: fixed;
@@ -22,7 +21,6 @@
     user-select: none;
     border-radius: 5px;
     gap: 5px;
-    /* margin-top: 5px; */
     .animation {
       width: 60px;
       height: 48px;
@@ -58,7 +56,6 @@
     overflow-y: auto;
     direction: rtl;
     scrollbar-width: thin;
-    /* user-select: none; */
     &.header-menu-admin a > button {
       width: 100%;
       height: 40px;
@@ -88,9 +85,3 @@
     }
   }
 }
-
-/* adding classes sub */
-/* 
-.admin-pages-display-none {
-  display: none;
-} */
