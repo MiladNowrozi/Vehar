@@ -1,2 +1,4 @@
-node_modules
-tinymce
+back_end/node_modules
+front_end/admin/public/tinymce
+front_end/admin/node_modules
+front_end/website/node_modules
