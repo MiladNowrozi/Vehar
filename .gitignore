@@ -1,5 +1,3 @@
 back_end/node_modules
-front_end/admin/public/tinymce
-front_end/admin/node_modules
-front_end/website/node_modules
-front_end/website/src/context
+front_end/node_modules
+front_end/public/tinymce
