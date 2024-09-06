@@ -29,9 +29,9 @@ const Navbar = () => {
       </div>
       <div className="formContent">
         <div className="SloganVehar">
-          <h1>
+          <p>
             <span style={{ color: "red" }}>سیاسی هستیم</span> جناحی نیستیم
-          </h1>
+          </p>
         </div>
         <MenuHamburger />
         <form action="#">
@@ -42,12 +42,7 @@ const Navbar = () => {
               </span>
             }
           </button>
-          <input
-            type="text"
-            placeholder=".... جستجو"
-            name="search"
-            autoComplete="off"
-          />
+          <input type="text" placeholder=".... جستجو" name="search" autoComplete="off" />
         </form>
       </div>
     </div>

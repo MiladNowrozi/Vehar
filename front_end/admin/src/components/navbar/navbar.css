@@ -9,7 +9,7 @@
   top: 0px;
   z-index: 10;
   .welcome-navbar-admin {
-    font-family: iran-5;
+    font-family: Vazirmatn;
     font-size: 8px;
     color: white;
     direction: rtl;
@@ -37,7 +37,7 @@
       flex-direction: column;
       align-items: end;
       justify-content: center;
-      font-family: iran-4;
+      font-family: Vazirmatn;
       font-size: 12px;
       &.Show-LoginProfile-MainAdmin a {
         width: 60%;

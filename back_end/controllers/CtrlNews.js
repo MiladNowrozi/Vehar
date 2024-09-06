@@ -1,102 +1,58 @@
-import { Op, sql } from "@sequelize/core";
+import { Op } from "@sequelize/core";
 import { News } from "../models/News.js";
 import db from "../db.js";
 
 export default class NewsControllers {
   // CREATE ONE NEWS
-
   static CreateNews = async (req, res) => {
     try {
       await db.authenticate();
       try {
-        db.queryInterface.tableExists("News").then(async (e) => {
-          if (e) {
+        await News.sync({ alter: true });
+        try {
+          const NewsExistCheck = await News.findOne({
+            where: {
+              [Op.or]: [
+                { title: req.body.Title },
+                { Short_Description: req.body.Short_Description },
+                { content: req.body.Editor },
+              ],
+            },
+          });
+          if (NewsExistCheck === null) {
             try {
-              const NewsExistCheck = await News.findOne({
-                where: {
-                  [Op.or]: [
-                    { title: req.body.Title },
-                    { Short_Description: req.body.Short_Description },
-                    { content: req.body.Editor },
-                  ],
-                },
+              await News.create({
+                title: req.body.Title,
+                Short_Description: req.body.Short_Description,
+                content: req.body.Editor,
+                category: req.body.Category,
               });
-              if (NewsExistCheck === null) {
-                try {
-                  await News.create({
-                    title: req.body.Title,
-                    Short_Description: req.body.Short_Description,
-                    content: req.body.Editor,
-                    category: req.body.Category,
-                  });
-                  res.status(200).json({
-                    success: true,
-                    message: "خبر با موفقیت ذخیره شد!",
-                  });
-                } catch (e) {
-                  res.status(412).json({
-                    success: false,
-                    message: e.errors[0].message,
-                  });
-                }
-              } else {
-                res.status(412).json({
-                  success: false,
-                  message: "این خبر قبلاً منتشر شده است!",
-                });
-              }
-            } catch (error) {
-              res.status(404).json({
+              res.status(200).json({
+                success: true,
+                message: "خبر با موفقیت ذخیره شد!",
+              });
+            } catch (e) {
+              res.status(412).json({
                 success: false,
-                message: "متاسفانه دیتابیس شما با مشکل مواجه است دوباره تلاش کنید!",
+                message: e.errors[0].message,
               });
             }
           } else {
-            if (req.body.Create_Table === null) {
-              res.status(500).json({
-                success: false,
-                message: "جدول درج اطلاعات، در دیتابیس وجود ندارد! آیا میخواهید آن را ایجاد کنید ؟",
-              });
-            } else if (req.body.Create_Table === true && req.body.Warning_Create_Table === null) {
-              res.status(200).json({
-                success: true,
-                message: `پیشنهاد می کنیم این کار را با هناهنگی پشتیبان سایتتون انجام بدید ممکن است با وجود اطلاعات، آن را از بین ببرید! در هر صورت انجام شود .`,
-              });
-            } else if (req.body.Create_Table === true && req.body.Warning_Create_Table === true) {
-              try {
-                await News.sync({ force: true });
-                res.status(200).json({
-                  success: true,
-                  message: "جدول با موفقیت ایجاد شد!",
-                });
-              } catch (error) {
-                res.status(500).json({
-                  success: false,
-                  message: "عملیات ساخت ناموفق بود! لطفاً با پشتیبانی تماس بگیرید.",
-                });
-              }
-            } else if (req.body.Warning_Create_Table === false) {
-              res.status(500).json({
-                success: false,
-                message: "عملیات ساخت لغو شد!",
-              });
-            } else if (req.body.Create_Table === false) {
-              res.status(500).json({
-                success: false,
-                message: "عملیات ساخت، بعلت احتیاط در حفظ اطلاعات لغو شد",
-              });
-            } else {
-              res.status(500).json({
-                success: false,
-                message: "گزینه معتبری را انتخاب کنید",
-              });
-            }
+            res.status(412).json({
+              success: false,
+              message: "این خبر قبلاً منتشر شده است!",
+            });
           }
-        });
+        } catch (error) {
+          res.status(404).json({
+            success: false,
+            message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
+          });
+        }
       } catch (error) {
         res.status(500).json({
           success: false,
-          message: "بررسی جدول دیتابیس ناموفق بود، لطفاً دوباره تلاش کنید!",
+          message: "ساخت جدول ناموفق بود، لطفا با پشتیبانی تماس بگیرید!",
         });
       }
     } catch (error) {
@@ -326,12 +282,20 @@ export default class NewsControllers {
       try {
         const GetOneResult = await News.findByPk(req.body.id);
         if (GetOneResult) {
-          await News.destroy({ where: { id: req.body.id } });
-          res.status(200).json({
-            success: true,
-            body: null,
-            message: "خبر با موفقیت حذف شد!",
-          });
+          try {
+            await News.destroy({ where: { id: req.body.id } });
+            res.status(200).json({
+              success: true,
+              body: null,
+              message: "خبر با موفقیت حذف شد!",
+            });
+          } catch (error) {
+            res.status(200).json({
+              success: true,
+              body: null,
+              message: `سرور با خطا موجه شد علت خطا: ${error.message}`,
+            });
+          }
         } else {
           res.status(404).json({
             success: false,

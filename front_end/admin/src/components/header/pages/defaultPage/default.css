@@ -16,17 +16,17 @@
     user-select: none;
   }
   .admin-name {
-    font-family: iran-2;
+    font-family: Vazirmatn;
     font-size: 15px;
   }
   .admin-title {
-    font-family: iran-4;
+    font-family: Vazirmatn;
     font-size: 15px;
   }
   .admin-Bio {
     width: 60%;
     text-align: justify;
-    font-family: iran-5;
+    font-family: Vazirmatn;
     font-size: 12.5px;
   }
 }

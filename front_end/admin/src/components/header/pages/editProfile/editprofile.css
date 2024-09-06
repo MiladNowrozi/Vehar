@@ -3,7 +3,7 @@
   height: 95vh;
   background-color: green;
   direction: rtl;
-  font-family: iran-5;
+  font-family: Vazirmatn;
   padding: 15px;
   border-radius: 5px;
   .admin-image-profile-edit {
@@ -33,7 +33,7 @@
       outline: none;
       border: none;
       font-size: 12px;
-      font-family: iran-4;
+      font-family: Vazirmatn;
     }
     .admin-bio-edit {
       width: 60%;
@@ -47,7 +47,7 @@
         border-radius: 5px;
         outline: none;
         border: none;
-        font-family: iran-4;
+        font-family: Vazirmatn;
         font-size: 12.5px;
       }
     }
@@ -62,7 +62,7 @@
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        font-family: iran-3;
+        font-family: Vazirmatn;
         font-size: 12.5px;
         user-select: none;
         background-color: white;
@@ -73,11 +73,11 @@
       input[type="submit"] {
         width: 8%;
         padding: 5px;
-        font-family: iran-3;
+        font-family: Vazirmatn;
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        font-family: iran-3;
+        font-family: Vazirmatn;
         font-size: 12.5px;
         text-align: center;
       }

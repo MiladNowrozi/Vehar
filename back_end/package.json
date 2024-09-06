@@ -12,11 +12,15 @@
   "license": "ISC",
   "dependencies": {
     "@sequelize/core": "^7.0.0-alpha.37",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "html-react-parser": "^5.1.12",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.10.2",
+    "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4"
   }
 }

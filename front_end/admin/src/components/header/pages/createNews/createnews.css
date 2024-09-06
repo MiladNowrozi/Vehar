@@ -18,12 +18,12 @@
       outline: none;
       direction: rtl;
       padding: 8px;
-      font-family: iran-3;
+      font-family: Vazirmatn;
     }
     &.input-news-admin > label {
       direction: rtl;
       width: 60%;
-      font-family: iran-3;
+      font-family: Vazirmatn;
       user-select: none;
     }
 
@@ -32,7 +32,7 @@
       height: 200px;
       background-color: white;
       direction: rtl;
-      font-family: iran-4;
+      font-family: Vazirmatn;
       font-size: 12px;
       border-radius: 5px;
       overflow-y: auto;
@@ -65,7 +65,7 @@
       justify-content: space-between;
       #submit-warning {
         background-color: white;
-        font-family: iran-3;
+        font-family: Vazirmatn;
         font-size: 12px;
         display: flex;
         justify-content: center;
@@ -82,7 +82,7 @@
       button[type="submit"] {
         width: 8%;
         padding: 5px;
-        font-family: iran-3;
+        font-family: Vazirmatn;
         font-size: 12px;
         user-select: none;
         border-radius: 5px;

@@ -46,7 +46,7 @@
             direction: rtl;
 
             .RoutingNewsHeader-Gallery {
-              font-family: Yekan;
+              font-family: Vazirmatn;
               font-size: 12px;
             }
           }
@@ -59,7 +59,7 @@
             .HeadlineNewsHeader-Gallery {
               width: 100%;
               height: 25px;
-              font-family: Yekan;
+              font-family: Vazirmatn;
               font-size: 12px;
               direction: rtl;
               cursor: pointer;
@@ -111,7 +111,7 @@
         .ContainerTextLeft {
           width: 98%;
           height: 400px;
-          font-family: Yekan;
+          font-family: Vazirmatn;
           font-size: 13px;
           /* background-color: rgba(92, 182, 89, 0.438); */
           display: flex;
@@ -190,7 +190,7 @@
           .ContentTextLeft {
             width: 100%;
             height: 374px;
-            font-family: Yekan;
+            font-family: Vazirmatn;
             font-size: 13px;
             background-color: rgba(3, 500, 1, 0.12);
             border-radius: 0% 15% 0% 15%;
@@ -305,7 +305,7 @@
             position: absolute;
             bottom: -5px;
             border-radius: 5px;
-            font-family: Yekan;
+            font-family: Vazirmatn;
             font-size: 8px;
             transition: all 0.2s;
 
@@ -372,7 +372,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          font-family: Yekan;
+          font-family: Vazirmatn;
           font-size: 12px;
           position: absolute;
           bottom: 7px;
@@ -462,7 +462,7 @@
 
               .RoutingNews {
                 .RoutingNewsHeader {
-                  font-family: Yekan;
+                  font-family: Vazirmatn;
                   font-size: 12px;
                   margin-top: 3px;
                 }
@@ -471,7 +471,7 @@
                   text-decoration: none;
 
                   .HeadlineNewsHeader {
-                    font-family: Yekan;
+                    font-family: Vazirmatn;
                     cursor: pointer;
                     font-size: 15px;
                     margin-top: 3px;
@@ -488,7 +488,7 @@
                   word-break: break-word;
 
                   .AbstractNewsHeader {
-                    font-family: Yekan;
+                    font-family: Vazirmatn;
                     font-size: 14px;
                     margin-top: 3px;
                     user-select: text;
@@ -507,7 +507,7 @@
               padding: 1px 5px 1px 5px;
 
               .AuthorNewsHeader {
-                font-family: Yekan;
+                font-family: Vazirmatn;
                 font-size: 14px;
               }
 
@@ -528,7 +528,7 @@
             border-radius: 5px;
             background-color: #7f8102a6;
             direction: rtl;
-            font-family: Yekan;
+            font-family: Vazirmatn;
             text-align: center;
             margin-right: 10px;
 
@@ -623,7 +623,7 @@
                 display: inline;
 
                 .RoutingNewsHeader-left {
-                  font-family: Yekan;
+                  font-family: Vazirmatn;
                   font-size: 10px;
                   margin-top: 3px;
                 }
@@ -632,7 +632,7 @@
                   text-decoration: none;
 
                   .HeadlineNewsHeader-left {
-                    font-family: Yekan;
+                    font-family: Vazirmatn;
                     cursor: pointer;
                     font-size: 11px;
                     margin-top: 3px;
@@ -648,7 +648,7 @@
                   word-break: break-word;
 
                   .AbstractNewsHeader-left {
-                    font-family: Yekan;
+                    font-family: Vazirmatn;
                     font-size: 11px;
                     margin-top: 3px;
                     user-select: text;
@@ -666,7 +666,7 @@
               align-items: center;
 
               .AuthorNewsHeader-left {
-                font-family: Yekan;
+                font-family: Vazirmatn;
                 padding: 1px 5px 1px 5px;
               }
 

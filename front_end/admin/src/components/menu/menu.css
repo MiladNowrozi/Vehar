@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    font-family: iran-5;
+    font-family: Vazirmatn;
     font-size: 12px;
     user-select: none;
     border-radius: 5px;
@@ -63,7 +63,7 @@
     &.header-menu-admin a > button {
       width: 100%;
       height: 40px;
-      font-family: iran-4;
+      font-family: Vazirmatn;
       display: flex;
       gap: 10px;
       align-items: center;

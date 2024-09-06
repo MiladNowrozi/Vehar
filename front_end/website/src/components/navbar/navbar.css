@@ -69,8 +69,9 @@
   margin-left: 15px;
   cursor: pointer;
   color: #ff0000;
-  font-family: Yekan;
-  font-size: 13px;
+  font-family: Vazirmatn;
+  font-weight: 300;
+  font-size: 14px;
   transition: color 0.3s;
 }
 
@@ -103,7 +104,7 @@
   width: 200px;
   text-align: right;
   padding: 7px;
-  font-family: Yekan;
+  font-family: Vazirmatn;
   border-radius: 5px;
   outline: none;
   border: none;
@@ -138,27 +139,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Yekan;
-  font-size: 6.8px;
+  font-family: Vazirmatn;
+  font-weight: 400;
+  font-size: 15px;
   color: rgb(29, 175, 0);
 }
-
-/* .SloganVehar::before {
-  content: "";
-  border-top: 15px solid #ff180033;
-  border-bottom: 15px solid rgba(255, 0, 0, 0);
-  border-right: 15px solid rgba(209, 175, 175, 0);
-  border-left: 15px solid #ff180033;
-  position: absolute;
-  right: -30px;
-} */
-
-/* .SloganVehar::after{
-  content: "";
-  border-top: 15px solid rgba(0, 255, 255, 0);
-  border-bottom: 15px solid #ff180033;
-  border-left: 15px solid rgba(209, 175, 175, 0);
-  border-right: 15px solid #ff180033;
-  position: absolute;
-  left: -30px;
-} */
