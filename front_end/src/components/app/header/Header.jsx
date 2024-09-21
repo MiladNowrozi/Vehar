@@ -24,16 +24,11 @@ function Header() {
           <div className="ContentSlider">
             <div className="ItemsSliderTextLeft">
               <div className="ContainerTextLeft">
-                <div className="Content-Item-Tab">
-                  <div className="line-Befor"></div>
-                  <div className="Center-BeforAndAfter">
-                    <div className="background-title">
-                      <h1 className="title"> پر بازدیدها</h1>
-                    </div>
-                  </div>
-                  <div className="line-After">
-                    <AnimationRed />
-                  </div>
+                <div className="Content-Item-full-viewers">
+                  <span className="span-title-full-viewers">
+                    <p>پر بیننده ها</p>
+                  </span>
+                  <AnimationRed />
                 </div>
                 <div className="ContentTextLeft">
                   <div className="TextLeft">
@@ -106,6 +101,12 @@ function Header() {
             ))}
           </div>
         </div>
+        <div className="content-title-chosen">
+          <span className="span-title-chosen">
+            <p>منتخب</p>
+          </span>
+          <AnimationRed />
+        </div>
         <div className="Gallery-Row-Slider">
           {Galeyre.slice(3, 8).map((News, i) => (
             <div key={i} className="Content-Gallery">
@@ -139,9 +140,15 @@ function Header() {
             </div>
           ))}
         </div>
-        <div className="line-Center"></div>
+
         <div className="Container-Header">
           <div className="ContainerLeft">
+            <div className="content-title-political-and-social">
+              <span className="span-title-political-and-social">
+                <p>سیاسی و اجتمایی</p>
+              </span>
+              <AnimationRed />
+            </div>
             {Galeyre.slice(8, 13).map((News, i) => (
               <div key={i} className="ContainerHeaderLeft">
                 <div className="NewsContainer-left">
@@ -189,6 +196,12 @@ function Header() {
             ))}
           </div>
           <div className="ContainerRight">
+            <div className="content-title-special-news">
+              <span className="span-title-special-news">
+                <p>اخبار ویژه</p>
+              </span>
+              <AnimationRed />
+            </div>
             <div className="containerHeaderRight">
               {Galeyre.slice(13, 17).map((News, i) => (
                 <div key={i} className="NewsContainer">
@@ -231,43 +244,58 @@ function Header() {
                       </h2>
                     </div>
                   </div>
-                  <div className="ContainerAuthorNews">
-                    <div className="ContentAuthor">
-                      <div className="ImgAuthor">
-                        {
-                          <img
-                            accessKey={News.id}
-                            onClick={GetDataNews}
-                            className="imgAuthor"
-                            src={News.img}
-                            alt="imgs"
-                          />
-                        }
-                      </div>
-                      <h1 style={{ fontSize: "15px", marginTop: "-10px" }}>برنامه نویس</h1>
-                      <h2 style={{ fontSize: "13px", marginTop: "-5px" }}> میلاد نوروزی</h2>
-                      <p style={{ fontSize: "11px" }}>
-                        حوزوی و برنامه نویس فرانت و بک اند علاقه مند به یادگیری علوم اهل استان
-                        لرستان با چند سال تجربه در حوزه برنامه نویسی
-                      </p>
-                    </div>
-                    <div className="Bridge">
-                      <li>
-                        <a href="#" className="fab fa-telegram" title="تلگرام"></a>
-                      </li>
-                      <li>
-                        <a href="#" className="fab fa-instagram" title="اینستاگرام"></a>
-                      </li>
-                      <li>
-                        <a href="#" className="fa fa-envelope" title="ایمیل"></a>
-                      </li>
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+        <div className="content-title-reading-content">
+          <span className="span-title-reading-content">
+            <p>برای مطالعه</p>
+          </span>
+          <AnimationRed />
+        </div>
+        <div className="Gallery-reading-content">
+          {Galeyre.slice(3, 8).map((News, i) => (
+            <div key={i} className="Content-Gallery">
+              <div className="NewsItems-Gallery">
+                <div className="imgNews-Gallery">
+                  {
+                    <img
+                      accessKey={News.id}
+                      onClick={GetDataNews}
+                      className="imgStyleHeader-Gallery"
+                      src={News.img}
+                      alt="imgs"
+                    />
+                  }
+                </div>
+                <div className="Content-Texts-Dallery">
+                  <div className="RoutingNews-Gallery">
+                    <h1 className="RoutingNewsHeader-Gallery">{News.Routing}</h1>
+                  </div>
+                  <div className="titleNews-Gallery">
+                    <h1
+                      accessKey={News.id}
+                      onClick={GetDataNews}
+                      className="HeadlineNewsHeader-Gallery"
+                    >
+                      {News.headline}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* <div className="container-videos-title"> */}
+        {/* <div className="content-title-videos-title">
+            <span className="span-title-videos-title">
+              <p>برای مطالعه</p>
+            </span>
+            <AnimationRed />
+          </div> */}
+        {/* </div> */}
       </header>
     </Fragment>
   );

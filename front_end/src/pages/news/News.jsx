@@ -1,14 +1,30 @@
 import "./news.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Galeyre from "../data/data";
 import Navbar from "../../components/app/navbar/Navbar";
 import Footer from "../../components/app/footer/Footer";
 import { PageMenu } from "../../components/app/header/pageMenu/PageMenu";
+import { AxiosDefaultUrl } from "../../components/admin/header/pages/createNews/CreateNews";
 export const News = () => {
   const navigate = useNavigate();
-  const DataNews = useLocation();
-  const data = DataNews.state;
+  // const DataNews = useLocation();
+  // const data = DataNews.state;
+  const [news, setNews] = useState({});
+
+  const FetchData = async () => {
+    try {
+      const res = await AxiosDefaultUrl({
+        method: "get",
+        url: "/news/get/1",
+      });
+      setNews(res.data.body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  FetchData();
+
   function GetDataNews(e) {
     const DataNews = Galeyre.filter((x) => x.id === Number(e.target.accessKey))[0];
     navigate("/news", { state: DataNews });
@@ -81,15 +97,18 @@ export const News = () => {
                       <div className="News_Result">
                         <div className="Title_Result">
                           <div>
-                            <h6>{data.Routing}</h6>
+                            <h6>{news.title}</h6>
                           </div>
                           <div>
-                            <h1>{data.headline}</h1>
+                            <h1>{news.Short_Description}</h1>
                           </div>
                         </div>
-                        <img className="Img_Result" src={data.img} alt="img" />
+                        {/* <img className="Img_Result" src={data.img} alt="img" /> */}
                         <div className="P_News" style={{ textAlign: "justify" }}>
-                          <p>{data.body}</p>
+                          <p id="Content-news"></p>
+                          {window.addEventListener("load", () => {
+                            document.getElementById("Content-news").innerHTML = news.content;
+                          })}
                         </div>
                       </div>
                     </section>

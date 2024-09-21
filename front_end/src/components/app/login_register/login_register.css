@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 
-.login-container {
+.container-auth {
   width: 100%;
   height: 100vh;
   direction: rtl;
@@ -12,8 +12,7 @@
   align-items: center;
   font-family: vazirmatn;
   color: white;
-  /* background-image: url("../../../img/ai-generated-8659507.jpg"); */
-  background-image: url("../../../../img/ai-generated-8659507.jpg");
+  background-image: url("../img/ai-generated-8659507.jpg");
 
   background-position: center center;
   background-repeat: no-repeat;
@@ -116,28 +115,6 @@
             cursor: pointer;
             /* position: relative; */
           }
-          label {
-            display: flex;
-            gap: 5px;
-            cursor: pointer;
-            p {
-              font-size: 14px;
-            }
-            p:hover ~ .show-abut-login {
-              display: block;
-            }
-            .show-abut-login {
-              background-color: black;
-              padding: 0 5px 0 5px;
-              border-radius: 5px;
-              position: absolute;
-              bottom: 60px;
-              display: none;
-            }
-            input[type="checkbox"] {
-              cursor: pointer;
-            }
-          }
         }
       }
       button[type="submit"] {
@@ -153,6 +130,126 @@
       }
     }
     #submit-warning-login {
+      background-color: white;
+      font-family: Vazirmatn;
+      font-size: 12px;
+      font-weight: 300;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      direction: rtl;
+      padding: 2px 5px 2px 5px;
+      border-radius: 5px;
+      visibility: hidden;
+      color: black;
+    }
+  }
+  /* start style ForgotPassword page  */
+
+  .forgot-password {
+    width: 30%;
+    height: 70%;
+    background-color: rgba(25, 173, 5, 0.295);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    position: fixed;
+    transition: all 1s;
+    .title-forgot {
+      font-size: 25px;
+      font-weight: 200;
+      margin-top: 10px;
+    }
+    .forgot-form {
+      width: 80%;
+      height: 100vh;
+      font-size: 14px;
+      font-weight: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      .forgot-input {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        gap: 10px;
+        .email-forgot,
+        .username-forgot,
+        .password-forgot {
+          width: 100%;
+          position: relative;
+        }
+
+        .fa-envelope,
+        .fa-user,
+        .fa-lock {
+          color: green;
+          font-size: 20px;
+          position: absolute;
+          padding: 5px;
+          left: 10px;
+          bottom: 2px;
+          background-color: white;
+        }
+        input[type="email"],
+        input[type="username"],
+        input[type="password"] {
+          width: 100%;
+          height: 35px;
+          padding: 15px;
+          margin-top: 5px;
+          outline: none;
+          border: none;
+          font-size: 15px;
+          border-radius: 5px;
+          background: white;
+          font-family: vazirmatn;
+          font-size: 14px;
+          font-weight: 250;
+          -webkit-box-shadow: 0 0 0 30px white inset !important;
+        }
+      }
+      .other-info-forgot {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 12px;
+        gap: 35px;
+        .btn-forgot {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          button[type="button"] {
+            width: 30%;
+            padding: 5px;
+            border: none;
+            font-family: vazirmatn;
+            font-weight: 400;
+            font-size: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            /* position: relative; */
+          }
+        }
+      }
+      button[type="submit"] {
+        width: 50%;
+        padding: 5px 5px;
+        font-family: vazirmatn;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+      }
+      button[type="submit"]:hover {
+        background-color: aqua;
+      }
+    }
+    #submit-warning-forgot {
       background-color: white;
       font-family: Vazirmatn;
       font-size: 12px;

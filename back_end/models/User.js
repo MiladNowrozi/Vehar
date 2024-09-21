@@ -78,6 +78,10 @@ export const User = db.define("User", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  role: {
+    type: DataTypes.STRING(10),
+    defaultValue: "user",
+  },
 });
 
 export const Email = db.define("Email", {
@@ -99,4 +103,24 @@ User.hasOne(Email, {
     onDelete: "CASCADE",
     allowNull: false,
   },
+});
+
+db.queryInterface.tableExists("Users").then(async (e) => {
+  if (!e) {
+    try {
+      await User.sync({ alter: true });
+    } catch (error) {
+      console.log(`table user not created! : ${error}`);
+    }
+  }
+});
+
+db.queryInterface.tableExists("Emails").then(async (e) => {
+  if (!e) {
+    try {
+      await Email.sync({ alter: true });
+    } catch (error) {
+      console.log(`table email not created! : ${error}`);
+    }
+  }
 });

@@ -10,3 +10,13 @@ export const Token = db.define("Token", {
     allowNull: false,
   },
 });
+
+db.queryInterface.tableExists("Tokens").then(async (e) => {
+  if (!e) {
+    try {
+      await Token.sync({ alter: true });
+    } catch (error) {
+      console.log(`table token not created! : ${error}`);
+    }
+  }
+});

@@ -18,7 +18,7 @@ export const MenuAdmin = () => {
         </div>
       </Link>
       <div className="header-menu-admin">
-        <Link to={""}>
+        <Link to={"/main-admin"}>
           <button>
             <i className="fas fa-home"></i>صفحه اصلی
           </button>

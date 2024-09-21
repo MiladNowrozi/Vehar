@@ -1,5 +1,6 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
+import { User } from "./User.js";
 
 // export
 
@@ -48,10 +49,6 @@ export const News = db.define(
         notNull: {
           msg: "متن خبر، نباید null باشد!",
         },
-        len: {
-          args: [100, 10000],
-          msg: "متن خبر، باید حداقل 100 و حداکثر 10000 کاراکتر باشد!",
-        },
       },
     },
     category: {
@@ -66,15 +63,14 @@ export const News = db.define(
         },
       },
     },
-    // date: {
-    //   type: DataTypes.DATE,
-    //   allowNull: false,
-    // },
+    images: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
   },
 
   {
-    // paranoid: true,
-
+    paranoid: true,
     validate: {
       None() {
         if (
@@ -89,3 +85,19 @@ export const News = db.define(
     },
   }
 );
+
+User.hasOne(News, {
+  foreignKey: {
+    onDelete: "SET NULL",
+  },
+});
+
+db.queryInterface.tableExists("News").then(async (e) => {
+  if (!e) {
+    try {
+      await News.sync({ alter: true });
+    } catch (error) {
+      console.log(`table news not created! : ${error}`);
+    }
+  }
+});

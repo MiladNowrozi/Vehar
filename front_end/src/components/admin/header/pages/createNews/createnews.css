@@ -28,7 +28,7 @@
     }
 
     .checkbox-content {
-      width: 70%;
+      width: 80%;
       height: 200px;
       background-color: white;
       direction: rtl;
@@ -60,7 +60,7 @@
       }
     }
     .buttons-create-news {
-      width: 70%;
+      width: 80%;
       display: flex;
       justify-content: space-between;
       #submit-warning {

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Editor } from "@tinymce/tinymce-react";
 import { Link } from "react-router-dom";
 
 import "./createnews.css";
+import { AuthContext } from "../../../../../context/authContext";
 
 export const AxiosDefaultUrl = axios.create({ baseURL: "http://localhost:5000" });
 
@@ -13,16 +14,24 @@ export const CreateNews = () => {
     Short_Description: "",
     Editor: "",
     Category: "",
+    Images: "",
+    UserId: null,
   });
-
+  const { CurrentUser } = useContext(AuthContext);
   const handelChange = (e) => {
-    setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setInput((prev) => ({ ...prev, [e.target.name]: e.target.value, UserId: CurrentUser.id }));
   };
 
   const handelEditorChange = (e) => {
-    setInput((prev) => ({ ...prev, Editor: e }));
-  };
+    const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
+    const imageUrls = [];
+    let match;
+    while ((match = imgRegex.exec(e)) !== null) {
+      imageUrls.push(match[1]);
+    }
 
+    setInput((prev) => ({ ...prev, Editor: e, Images: imageUrls.toString() }));
+  };
   const handleChange = (e) => {
     const ele = document.getElementsByName("HandleCheckbox");
     if (document.getElementById(e.target.id).checked) {
@@ -35,6 +44,7 @@ export const CreateNews = () => {
       setInput((prev) => ({ ...prev, Category: "" }));
     }
   };
+  // console.log(input);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,6 +82,7 @@ export const CreateNews = () => {
           method: "post",
           url: "news/create",
           data: input,
+          withCredentials: true,
         })
           .then((success) => {
             const showWarning = document.getElementById("submit-warning");
@@ -82,6 +93,7 @@ export const CreateNews = () => {
             }, 5000);
           })
           .catch((err) => {
+            console.log(err.response.data);
             const showWarning = document.getElementById("submit-warning");
             showWarning.style.display = "flex";
             showWarning.innerHTML = `<p style="color: red;">${
@@ -134,13 +146,14 @@ export const CreateNews = () => {
             tinymceScriptSrc="/tinymce/tinymce.min.js"
             onEditorChange={handelEditorChange}
             init={{
-              width: "70%",
-              height: "50vh",
+              width: "80%",
+              height: "100vh",
               auto_focus: true,
               placeholder: "تایپ کردن ...",
               license_key: "gpl",
               language_url: "/tinymce/fa.js",
               language: "fa",
+              image_advtab: true,
               plugins: [
                 "autosave", // it required for 'restoredraft plugin'
                 "anchor",
@@ -173,6 +186,8 @@ export const CreateNews = () => {
               toolbar: [
                 "ltr rtl preview undo redo blocks fontfamily fontsize bold italic underline strikethrough link image media table mergetags addcomment showcomments spellcheckdialog a11ycheck typography align lineheight checklist numlist bullist indent outdent emoticons charmap removeformat",
               ],
+              images_upload_url: "http://localhost:5000/upload",
+              automatic_uploads: true,
             }}
           />
 
@@ -234,6 +249,12 @@ export const CreateNews = () => {
             <br />
             <input type="checkbox" id="notes" onChange={handleChange} name="HandleCheckbox" />
             <label htmlFor="notes">یادداشت ها</label>
+            <br />
+            <input type="checkbox" id="chosen" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="chosen">منتخب</label>
+            <br />
+            <input type="checkbox" id="reading" onChange={handleChange} name="HandleCheckbox" />
+            <label htmlFor="reading">برای مطالعه</label>
           </div>
           <div className="buttons-create-news">
             <Link to={"/main-admin"}>انصراف</Link>

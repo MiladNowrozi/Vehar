@@ -1,6 +1,20 @@
-import { Link } from "react-router-dom";
 import "./editprofile.css";
+import { useState } from "react";
+import { AxiosDefaultUrl } from "../createNews/CreateNews";
 export const EditProfile = () => {
+  const [file, setFile] = useState(null);
+  const handleClick = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // await AxiosDefaultUrl({
+    //   method: "post",
+    //   url: "/upload",
+    //   data: formData,
+    //   withCredentials: true,
+    // });
+  };
+
   return (
     <>
       <div className="admin-edit-page">
@@ -11,10 +25,16 @@ export const EditProfile = () => {
           />
           <form action="/">
             <label htmlFor="file">انتخاب تصویر</label>
-            <input type="file" id="myfile" name="myfile" />
+            <input
+              type="file"
+              id="myfile"
+              name="myfile"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
           </form>
+          <button onClick={handleClick}>send</button>
         </div>
-        <form action="/">
+        {/* <form action="/">
           <div className="admin-name-edit">
             <label>نام :</label>
             <input
@@ -44,7 +64,7 @@ export const EditProfile = () => {
             <input type="submit" value="ذخیره" />
             <Link to={"/main-admin"}>انصراف</Link>
           </div>
-        </form>
+        </form> */}
       </div>
     </>
   );

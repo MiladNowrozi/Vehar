@@ -1,5 +1,4 @@
 import Sequelize from "@sequelize/core";
-
 import "dotenv/config";
 
 const { DB_HOST, DB_USER, DB_PASS, DB_NAME } = process.env;

@@ -1,6 +1,3 @@
-import { DataTypes } from "@sequelize/core";
-import sequelize from "../db.js";
-
 // CREATE ADMIN
 export const CreateAdmin = async (req, res) => {
   // await sequelize.sync({ force: true });

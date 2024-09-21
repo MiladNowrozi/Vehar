@@ -1,11 +1,11 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../context/authContext.js";
 
 import "./login_register.css";
-import { AxiosDefaultUrl } from "../../header/pages/createNews/CreateNews";
-
+import { AxiosDefaultUrl } from "../../admin/header/pages/createNews/CreateNews";
 export const LoginAndRegister = () => {
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const [input, setInput] = useState({
     username_login: "",
     password_login: "",
@@ -15,6 +15,9 @@ export const LoginAndRegister = () => {
     username_register: "",
     password_register: "",
     email_register: "",
+    email_forgot: "",
+    username_forgot: "",
+    password_forgot: "",
   });
 
   const LoginAndRegisterChangHandle = (e) => {
@@ -39,9 +42,7 @@ export const LoginAndRegister = () => {
     const countInvalid = username_register_validation.filter((e) => {
       return e === false;
     }).length;
-    console.log(countInvalid);
     showWarningRegister.style.visibility = "visible";
-    console.log(username_register_validation);
     !username_register_validation[2]
       ? (showWarningRegister.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل بک حرف کوچگ باشد!</p>`)
       : (showWarningRegister.style.visibility = "visible");
@@ -65,6 +66,7 @@ export const LoginAndRegister = () => {
     countInvalid === 0 && (showWarningRegister.style.visibility = "hidden");
     setInput((prev) => ({ ...prev, username_register: countInvalid === 0 ? value : "" }));
   };
+
   const EmailRegisterChangHandle = (e) => {
     const { value } = e.target;
     const showWarningRegister = document.getElementById("submit-warning-register");
@@ -76,6 +78,61 @@ export const LoginAndRegister = () => {
         setInput((prev) => ({ ...prev, email_register: value }));
   };
 
+  const forgotEmailChangHandle = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    const WarningForgot = document.getElementById("submit-warning-forgot");
+    const email_register_validation = /^.+@gmail\.com+[\S]?$/.test(value);
+    WarningForgot.style.visibility = "visible";
+    !email_register_validation && value !== ""
+      ? (WarningForgot.innerHTML = `<p style="color: red;">ایمیل باید به @gmail.com ختم شود!</p>`)
+      : (WarningForgot.style.visibility = "hidden") &&
+        setInput((prev) => ({ ...prev, email_forgot: value }));
+  };
+
+  const forgotUsernameChangHandle = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    const WarningForgot = document.getElementById("submit-warning-forgot");
+    const username_forgot_validation = [
+      /.{8,}/.test(value),
+      /^[\w@#$%&]*$/.test(value),
+      /[a-z]/.test(value),
+      /[A-Z]/.test(value),
+      /[0-9]/.test(value),
+      /[@#$%&]/.test(value),
+    ];
+    const countInvalid = username_forgot_validation.filter((e) => {
+      return e === false;
+    }).length;
+    WarningForgot.style.visibility = "visible";
+    !username_forgot_validation[2]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل بک حرف کوچگ باشد!</p>`)
+      : (WarningForgot.style.visibility = "visible");
+    !username_forgot_validation[0]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید حداقل 8 کاراکتر باشد !</p>`)
+      : (WarningForgot.style.visibility = "visible");
+    !username_forgot_validation[4]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یک عدد باشد!</p>`)
+      : (WarningForgot.style.visibility = "visible");
+    !username_forgot_validation[3]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یک حرف بزرگ باشد!</p>`)
+      : (WarningForgot.style.visibility = "visible");
+    !username_forgot_validation[5]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یکی از نمادهای @#$%& باشد!</p>`)
+      : (WarningForgot.style.visibility = "visible");
+    !username_forgot_validation[1]
+      ? (WarningForgot.innerHTML = `<p style="color: red;">نام کاربری باید از کاراکتر های انگلیسی تشکیل شود!</p>`)
+      : (WarningForgot.style.visibility = "visible");
+
+    countInvalid === 6 && (WarningForgot.style.visibility = "hidden");
+    countInvalid === 0 && (WarningForgot.style.visibility = "hidden");
+    setInput((prev) => ({ ...prev, username_forgot: countInvalid === 0 ? value : "" }));
+  };
+
+  const forgotPasswordChangHandle = (e) => {
+    setInput((prev) => ({ ...prev, password_forgot: e.target.value }));
+  };
   const handelSubmitLogin = async (e) => {
     e.preventDefault();
     const showWarningLogin = document.getElementById("submit-warning-login");
@@ -93,33 +150,9 @@ export const LoginAndRegister = () => {
 
     if (DataLoginCheck.length === 0) {
       try {
-        await AxiosDefaultUrl({
-          method: "post",
-          url: "auth/login",
-          withCredentials: true,
-          data: {
-            username_login: input.username_login,
-            password_login: input.password_login,
-            remember_login: input.remember_login,
-          },
-        })
-          .then((success) => {
-            showWarningLogin.innerHTML = `<p style="color: green;">${
-              !success.data.success ? success.data.message : navigate("main-admin")
-            }</p>`;
-            WarningTime();
-          })
-          .catch((err) => {
-            showWarningLogin.innerHTML = `<p style="color:red;">${
-              err.response.data.message === undefined
-                ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
-                : err.response.data.message
-            }</p>`;
-            WarningTime();
-          });
+        await login(input);
       } catch (error) {
-        WarningTime();
-        showWarningLogin.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
+        console.log(error);
       }
     } else if (DataLoginCheck.length === 2) {
       WarningTime();
@@ -129,6 +162,71 @@ export const LoginAndRegister = () => {
       showWarningLogin.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${
         input.username_login === "" ? "نام کاربری، " : ""
       }${input.password_login === "" ? "رمز عبور، " : ""}</p> &nbsp;را هم پر کنید!`;
+    }
+  };
+
+  const handelEUPForgot = async (e) => {
+    e.preventDefault();
+    const WarningForgot = document.getElementById("submit-warning-forgot");
+    const WarningTime = () => {
+      WarningForgot.style.visibility = "visible";
+      setTimeout(() => {
+        WarningForgot.style.visibility = "hidden";
+      }, 5000);
+    };
+    const DataForgotCheck = [
+      input.email_forgot === "",
+      input.username_forgot === "",
+      input.password_forgot === "",
+    ].filter((v) => {
+      return v === true;
+    });
+
+    if (DataForgotCheck.length === 0) {
+      try {
+        await AxiosDefaultUrl({
+          method: "post",
+          url: "auth/email_password_forgot",
+          withCredentials: true,
+          data: {
+            email_forgot: input.email_forgot,
+            username_forgot: input.username_forgot,
+            password_forgot: input.password_forgot,
+          },
+        })
+          .then((success) => {
+            WarningTime();
+            WarningForgot.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
+          })
+          .catch((err) => {
+            WarningTime();
+            WarningForgot.style.visibility = "visible";
+            WarningForgot.innerHTML = `<p style="color: red;">${
+              err.response.data.message === undefined
+                ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+                : err.response.data.message
+            }</p>`;
+          });
+      } catch (error) {
+        WarningTime();
+        WarningForgot.style.visibility = "visible";
+        WarningForgot.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
+      }
+    } else {
+      if (DataForgotCheck.length === 3) {
+        WarningTime();
+        WarningForgot.style.visibility = "visible";
+        WarningForgot.innerHTML = `<p style="color: red;">لطفاً فیلد ها رو پر کنید</p>`;
+      } else {
+        WarningTime();
+        WarningForgot.style.visibility = "visible";
+        WarningForgot.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${
+          input.email_forgot === "" ? "ایمیل، " : ""
+        }${input.username_forgot === "" ? "نام کاربری، " : ""}${
+          input.password_forgot === "" ? "رمز عبور، " : ""
+        }
+        </p> &nbsp;را هم پر کنید!`;
+      }
     }
   };
 
@@ -214,7 +312,7 @@ export const LoginAndRegister = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="container-auth">
       {/* start login part */}
 
       <div id="login-content" style={{ right: "35%" }} className="login-content">
@@ -250,22 +348,19 @@ export const LoginAndRegister = () => {
               ارسال درخواست
             </button>
             <div className="btn-login">
-              <label>
-                <input
-                  type="checkbox"
-                  name="remember_login"
-                  onChange={LoginAndRegisterChangHandle}
-                />
-                <p> ورود هوشمند</p>
-                <div className="show-abut-login">
-                  در صورت فعال کردن این گزینه، بعد از ورود به صورت خودکار وارد می شوید!
-                </div>
-              </label>
-              <button type="button">فراموشی رمز عبور!</button>
               <button
                 onClick={() => {
-                  document.getElementById("login-content").style.right = "-30%";
-                  document.getElementById("register-content").style.left = "35%";
+                  document.getElementById("login-content").style.right = "100%";
+                  document.getElementById("forgot-password").style.right = "35%";
+                }}
+                type="button"
+              >
+                فراموشی رمز عبور!
+              </button>
+              <button
+                onClick={() => {
+                  document.getElementById("login-content").style.right = "100%";
+                  document.getElementById("register-content").style.right = "35%";
                 }}
                 type="button"
               >
@@ -275,9 +370,76 @@ export const LoginAndRegister = () => {
           </div>
         </form>
       </div>
+      {/* start forgot password */}
+      <div id="forgot-password" style={{ right: "-30%" }} className="forgot-password">
+        <p className="title-forgot">فراموشی رمز عبور</p>
+        <form className="forgot-form" id="forgot-form" action="">
+          <div className="forgot-input">
+            <div className="email-forgot">
+              <label htmlFor="email_forgot">ایمیل :</label>
+              <i className="fas fa-envelope"></i>
+              <input
+                type="email"
+                name="email_forgot"
+                placeholder="ایمیل ..."
+                id="email_forgot"
+                onChange={forgotEmailChangHandle}
+              />
+            </div>
+            <div className="username-forgot">
+              <label htmlFor="username_forgot">نام کاربری جدید</label>
+              <i className="fas fa-user"></i>
+              <input
+                type="username"
+                name="username_forgot"
+                placeholder="نام کاربری جدید..."
+                id="username_forgot"
+                onChange={forgotUsernameChangHandle}
+              />
+            </div>
+            <div className="password-forgot">
+              <label htmlFor="password_forgot">رمز عبور جدید :</label>
+              <i className="fas fa-lock"></i>
+              <input
+                type="password"
+                name="password_forgot"
+                placeholder="رمز عبور جدید ..."
+                id="password_forgot"
+                onChange={forgotPasswordChangHandle}
+              />
+            </div>
+          </div>
+          <div id="submit-warning-forgot"></div>
+          <div className="other-info-forgot">
+            <button onClick={handelEUPForgot} type="submit">
+              ارسال درخواست
+            </button>
+            <div className="btn-forgot">
+              <button
+                onClick={() => {
+                  document.getElementById("forgot-password").style.right = "100%";
+                  document.getElementById("register-content").style.right = "35%";
+                }}
+                type="button"
+              >
+                ثبت نام
+              </button>
+              <button
+                onClick={() => {
+                  document.getElementById("forgot-password").style.right = "-35%";
+                  document.getElementById("login-content").style.right = "35%";
+                }}
+                type="button"
+              >
+                صفحه ورود
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
       {/* start register part */}
 
-      <div id="register-content" style={{ left: "-35%" }} className="register-content">
+      <div id="register-content" style={{ right: "-35%" }} className="register-content">
         <p className="title-register">ثبت نام کنید!</p>
         <form className="register-form" id="register-form" action="">
           <div className="register-input">
@@ -344,7 +506,7 @@ export const LoginAndRegister = () => {
             <button
               onClick={() => {
                 document.getElementById("login-content").style.right = "35%";
-                document.getElementById("register-content").style.left = "-30%";
+                document.getElementById("register-content").style.right = "-30%";
               }}
               type="button"
             >

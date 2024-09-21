@@ -1,13 +1,15 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: Vazirmatn;
 }
 
 .NavbarContainer {
-  user-select: none;
-  display: flex;
-  justify-content: space-evenly;
   width: 100%;
+  user-select: none;
+  /* display: flex; */
+  /* justify-content: space-evenly; */
+  /* width: 100%; */
 }
 
 .NavbarLogo {
@@ -39,7 +41,7 @@
   width: 120px;
   height: 60px;
   background: url(../navbar/logo/VeharYellow.svg) no-repeat;
-  background-size: 100px;
+  background-size: 80px;
   display: inline-block;
   position: absolute;
   right: 0px;
@@ -51,17 +53,10 @@
   .animation-logo-yellow {
     display: block;
     position: absolute;
-    top: 17px;
-    right: 47px;
+    top: 10px;
+    right: 60px;
   }
 }
-
-/* .DisplayNone-AnimationYellow {
-  display: none;
-} */
-
-/* .NavbarMenuText {
-} */
 
 .NavbarMenuText > ul > li > a {
   text-decoration: none;
@@ -69,7 +64,6 @@
   margin-left: 15px;
   cursor: pointer;
   color: #ff0000;
-  font-family: Vazirmatn;
   font-weight: 300;
   font-size: 14px;
   transition: color 0.3s;
@@ -79,7 +73,7 @@
   list-style-type: none;
   position: absolute;
   right: 150px;
-  top: 25px;
+  top: 18px;
   transition: all 1s;
 }
 
@@ -104,13 +98,12 @@
   width: 200px;
   text-align: right;
   padding: 7px;
-  font-family: Vazirmatn;
   border-radius: 5px;
   outline: none;
   border: none;
   padding-right: 15px;
   font-size: 10px;
-
+  font-weight: 350;
   &::placeholder {
     color: red;
     font-size: 12px;
@@ -126,9 +119,85 @@
 }
 
 .formContent {
+  width: 10%;
   display: flex;
-  flex-direction: row;
   align-items: center;
+  .login-icon {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    .Link {
+      margin-top: 3px;
+      display: flex;
+      text-decoration: none;
+    }
+    .fa-sign-in {
+      cursor: pointer;
+      color: green;
+    }
+  }
+  .logout-icon {
+    margin-left: 12px;
+    .fa-user-check {
+      cursor: pointer;
+      color: rgb(180, 3, 3);
+    }
+    .fa-user-check:hover ~ .content-logout {
+      visibility: visible;
+    }
+    .content-logout {
+      width: 10%;
+      background-color: rgb(43, 175, 61);
+      display: flex;
+      flex-direction: column;
+      border-radius: 5px;
+      position: absolute;
+      direction: rtl;
+      padding: 5px;
+      z-index: 1;
+      gap: 10px;
+      font-weight: 300;
+      visibility: hidden;
+      transition: all 1s;
+      .img-user {
+        width: 50px;
+        height: 50px;
+        .img {
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          border-radius: 30px;
+        }
+      }
+      .firstName-user {
+        font-size: 15px;
+      }
+      .btn-logout {
+        width: 100%;
+        padding: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 30px;
+      }
+    }
+    .content-logout:hover {
+      visibility: visible;
+    }
+    .content-logout::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background-color: rgb(43, 175, 61);
+      position: absolute;
+      top: 0;
+      left: 5px;
+      margin-top: -4px;
+      transform: rotate(45deg);
+    }
+  }
 }
 
 .SloganVehar {

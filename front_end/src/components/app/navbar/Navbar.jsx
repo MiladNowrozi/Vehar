@@ -1,8 +1,13 @@
+import { useContext } from "react";
 import AnimationGreen, { AnimationYellow } from "../../../animations/Animation";
 import { MenuHamburger } from "../header/pageMenu/PageMenu";
+import { AuthContext } from "../../../context/authContext";
+import { Link } from "react-router-dom";
 
 import "./navbar.css";
+
 const Navbar = () => {
+  const { CurrentUser, logout } = useContext(AuthContext);
   return (
     <div className="NavbarContainer">
       <div className="NavbarMenuText defNavbarMenuText">
@@ -19,12 +24,13 @@ const Navbar = () => {
         </div>
         <ul>
           <li>
-            <a href="/">ورزشی</a>
-            <a href="/">اجتماعی</a>
-            <a href="/">سیاسی</a>
-            <a href="/">اخبار جدید</a>
-            <a href="/">اخبار بومی</a>
-            <a href="/">صفحه اصلی</a>
+            <Link to="/contact">ارتباط با ما</Link>
+            <Link to="/about">درباره ما</Link>
+            <Link to="/sport">ورزشی</Link>
+            <Link to="/social">اجتماعی</Link>
+            <Link to="/politic">سیاسی</Link>
+            <Link to="/local">بومی</Link>
+            <Link to="/">صفحه اصلی</Link>
           </li>
         </ul>
       </div>
@@ -43,8 +49,34 @@ const Navbar = () => {
               </span>
             }
           </button>
-          <input type="text" placeholder=".... جستجو" name="search" autoComplete="off" />
+          <input type="search" placeholder="... جستجو" name="search" autoComplete="off" />
         </form>
+        {!CurrentUser ? (
+          <div className="login-icon">
+            <Link to={"/login-register"} className="Link">
+              <i className="fa fa-sign-in"></i>
+            </Link>
+          </div>
+        ) : (
+          <div className="logout-icon">
+            <i className="fas fa-user-check"></i>
+            <div className="content-logout">
+              <span className="img-user">
+                {CurrentUser.img === null ? (
+                  <i className="fas fa-user-circle"></i>
+                ) : (
+                  <img className="img" src={CurrentUser.img} alt="img-user" />
+                )}
+              </span>
+              <span className="firstName-user">
+                {CurrentUser.firstName + " " + CurrentUser.lastName}
+              </span>
+              <button type="button" onClick={logout} className="btn-logout">
+                <i className="fa fa-sign-out"></i>خروج
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

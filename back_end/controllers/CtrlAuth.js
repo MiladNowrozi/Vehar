@@ -3,9 +3,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/sendEmail.js";
 import { Token } from "../models/Token.js";
-import db from "../db.js";
-
-await db.sync({ alter: true });
 
 console.clear();
 
@@ -27,6 +24,37 @@ export const RegisterToken = async (req, res) => {
     }
   } catch (error) {
     res.send("لینک نامعتبر است!");
+  }
+};
+
+export const PasswordForgot = async (req, res) => {
+  const username_forgot = req.body.username_forgot.replace(/\s+/g, " ");
+  const password_forgot = req.body.password_forgot.replace(/\s+/g, "");
+  try {
+    const existEmail = await Email.findOne({ where: { Email: req.body.email_forgot } });
+    if (existEmail) {
+      const user = await existEmail.getUser();
+      const salt = bcrypt.genSaltSync(10);
+      const HashPassword = bcrypt.hashSync(password_forgot, salt);
+      await user.update({
+        username: username_forgot,
+        password: HashPassword,
+      });
+      res.status(200).json({
+        success: true,
+        message: "نام کاربری و رمز عبور شما با موفقیت تغییر کرد لطفاً به صفحه ورود مراجعه کنید!",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "ایمیل نامعتبر است!",
+      });
+    }
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -101,8 +129,8 @@ export const Register = async (req, res) => {
                 "لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
                 `<a href=${url}>
                   <button>تایید ایمیل</button>
-                  </a>
-                  `
+                 </a>
+                `
               );
               setTimeout(async () => {
                 await Token.destroy({ where: { Token: ResetToken.Token } });
@@ -153,15 +181,16 @@ export const Login = async (req, res) => {
       const ExistUser = await User.findOne({
         where: { username: username_login },
       });
-      const GetUserByPk = await User.findByPk(ExistUser.id);
-      const CheckUserFullInfo = await User.findOne({
-        where: {
-          id: GetUserByPk.id,
-          username: username_login,
-        },
-      });
+
       // CHECK USER FULL INFO
-      if (CheckUserFullInfo) {
+      if (ExistUser !== null) {
+        const GetUserByPk = await User.findByPk(ExistUser.id);
+        const CheckUserFullInfo = await User.findOne({
+          where: {
+            id: GetUserByPk.id,
+            username: username_login,
+          },
+        });
         const isPasswordCurrent = bcrypt.compareSync(password_login, CheckUserFullInfo.password);
         if (isPasswordCurrent) {
           if (!CheckUserFullInfo.verify_email) {
@@ -175,7 +204,10 @@ export const Login = async (req, res) => {
               if (countRequestUser.length === 0) {
                 const TokenEmail = jwt.sign({ email: getEmail.email }, "secret");
                 const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${getUser.id}`;
-                const ExistToken = await Token.create({ Token: TokenEmail, Email: getEmail.email });
+                const ExistToken = await Token.create({
+                  Token: TokenEmail,
+                  Email: getEmail.email,
+                });
                 await sendEmail(
                   getEmail.email,
                   "تایید ایمیل",
@@ -206,13 +238,14 @@ export const Login = async (req, res) => {
             }
           } else {
             const token = jwt.sign({ id: CheckUserFullInfo.id }, "secret");
-            const { password, ...other } = CheckUserFullInfo;
+            const { password, ...other } = CheckUserFullInfo.dataValues;
+
             res
               .cookie("access_token", token, {
                 httpOnly: true,
               })
               .status(200)
-              .json({ other, success: true });
+              .json(other);
           }
         } else {
           res.status(404).json({
@@ -241,5 +274,11 @@ export const Login = async (req, res) => {
 };
 
 export const Logout = async (req, res) => {
-  res.send("<h1>page logout</h1>");
+  res
+    .clearCookie("access_token", {
+      sameSite: "none",
+      secure: true,
+    })
+    .status(200)
+    .json("user has been logged out.");
 };
