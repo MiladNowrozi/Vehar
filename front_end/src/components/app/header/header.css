@@ -57,54 +57,33 @@
       width: 20%;
       margin-right: 5px;
       position: relative;
-
-      .NewsItems-Gallery {
+      img {
         width: 100%;
-        height: 200px;
+        height: 150px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .Content-Texts-Dallery {
+        margin-right: 10px;
         display: flex;
         flex-direction: column;
-        .imgNews-Gallery {
-          width: 100%;
-          height: 150px;
-          cursor: pointer;
-          .imgStyleHeader-Gallery {
-            width: 100%;
-            height: 150px;
-            border-radius: 5px;
-          }
+        gap: 5px;
+        .RoutingNewsHeader-Gallery {
+          font-weight: 400;
+          font-size: 12px;
+          direction: rtl;
+          color: rgb(153, 0, 0);
         }
-
-        .Content-Texts-Dallery {
-          margin-right: 10px;
-          margin-top: 5px;
-          .RoutingNews-Gallery {
-            width: 100%;
-            height: 25px;
-            direction: rtl;
-
-            .RoutingNewsHeader-Gallery {
-              font-weight: 350;
-              font-size: 10px;
-            }
-          }
-
-          .titleNews-Gallery {
-            &.titleNews-Gallery {
-              text-decoration: none;
-              margin-top: -8px;
-            }
-
-            .HeadlineNewsHeader-Gallery {
-              width: 100%;
-              height: 25px;
-              font-weight: 450;
-              font-size: 12px;
-              direction: rtl;
-              cursor: pointer;
-              &.HeadlineNewsHeader-Gallery:hover {
-                color: green;
-              }
-            }
+        .HeadlineNewsHeader-Gallery {
+          width: 100%;
+          font-weight: 500;
+          font-size: 12px;
+          direction: rtl;
+          cursor: pointer;
+          color: black;
+          word-break: break-word;
+          &.HeadlineNewsHeader-Gallery:hover {
+            color: green;
           }
         }
       }
@@ -112,11 +91,11 @@
       &.Content-Gallery::before {
         content: "";
         width: 1px;
-        height: 50px;
+        height: 80px;
         background-color: red;
         position: absolute;
         bottom: 0px;
-        right: 0px;
+        right: -3px;
         border-radius: 50%;
       }
     }
@@ -214,10 +193,12 @@
             .TextLeft {
               width: 100%;
               height: 374px;
-              text-align: center;
+              word-break: break-word;
+              padding: 20px;
               scrollbar-color: #029b0f rgba(17, 34, 85, 0);
-              &.TextLeft a {
+              &.TextLeft a , ul {
                 text-decoration: none;
+                list-style-type: none;
               }
               &.TextLeft a {
                 cursor: pointer;

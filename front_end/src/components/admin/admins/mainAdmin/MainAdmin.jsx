@@ -5,13 +5,13 @@ import { MenuAdmin } from "../../menu/Menu";
 import "./mainAdmin.css";
 
 export const MainAdmin = () => {
-  return (
-    <div className="container-admin">
-      <NavbarAdmin />
-      <header className="hed-main-admin">
-        <MenuAdmin />
-        <Outlet />
-      </header>
-    </div>
-  );
+	return (
+		<div className="container-admin">
+			<NavbarAdmin />
+			<header className="hed-main-admin">
+				<MenuAdmin />
+				<Outlet />
+			</header>
+		</div>
+	);
 };

@@ -1,111 +1,203 @@
 .news-create-admin {
-  width: 85%;
-  padding: 15px;
-  background-color: green;
-  flex-direction: column;
-  border-radius: 5px;
-  .input-news-admin {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
-    &.input-news-admin > input[type="text"] {
-      width: 60%;
-      height: 35px;
-      border: none;
-      border-radius: 5px;
-      outline: none;
-      direction: rtl;
-      padding: 8px;
-      font-family: Vazirmatn;
-    }
-    &.input-news-admin > label {
-      direction: rtl;
-      width: 60%;
-      font-family: Vazirmatn;
-      user-select: none;
-    }
+	width: 85%;
+	padding: 15px;
+	background-color: green;
+	flex-direction: column;
+	border-radius: 5px;
+	.input-news-admin {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 5px;
+		&.input-news-admin > input[type="text"] {
+			width: 60%;
+			height: 35px;
+			border: none;
+			border-radius: 5px;
+			outline: none;
+			direction: rtl;
+			padding: 8px;
+			font-family: Vazirmatn;
+		}
+		&.input-news-admin > label {
+			direction: rtl;
+			width: 60%;
+			font-family: Vazirmatn;
+			user-select: none;
+		}
 
-    .checkbox-content {
-      width: 80%;
-      height: 200px;
-      background-color: white;
-      direction: rtl;
-      font-family: Vazirmatn;
-      font-size: 12px;
-      border-radius: 5px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      .title-category {
-        width: 16%;
-        height: 35px;
-        padding: 0px 10px 0px 10px;
-        margin: 10px;
-        font-size: 10px;
-        background-color: #eee;
-        text-align: center;
-        margin-right: 10px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        position: sticky;
-        top: 0px;
-      }
-      input[type="checkbox"] {
-        cursor: pointer;
-        margin-left: 5px;
-        margin-right: 10px;
-        margin-top: 5px;
-      }
-    }
-    .buttons-create-news {
-      width: 80%;
-      display: flex;
-      justify-content: space-between;
-      #submit-warning {
-        background-color: white;
-        font-family: Vazirmatn;
-        font-size: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        direction: rtl;
-        padding: 0px 5px 0px 5px;
-        border-radius: 5px;
-        display: none;
-        &#submit-warning p {
-          margin-left: 5px;
-        }
-      }
-      a,
-      button[type="submit"] {
-        width: 8%;
-        padding: 5px;
-        font-family: Vazirmatn;
-        font-size: 12px;
-        user-select: none;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        background-color: white;
-        text-decoration: none;
-        list-style-type: none;
-        text-align: center;
-      }
-      button[type="submit"]:hover {
-        background-color: rgb(42, 179, 0);
-        transition: all 0.5s;
-        color: white;
-      }
+		.Category {
+			width: 80%;
+			background-color: white;
+			direction: rtl;
+			font-family: Vazirmatn;
+			font-size: 12px;
+			border-radius: 5px;
+			overflow-y: auto;
+			scrollbar-width: thin;
+			.title-category {
+				width: 16%;
+				height: 35px;
+				padding: 0px 10px 0px 10px;
+				margin: 10px;
+				font-size: 10px;
+				background-color: #eee;
+				text-align: center;
+				border-radius: 5px;
+				display: flex;
+				align-items: center;
+				position: sticky;
+				top: 0px;
+			}
+			.server-category {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: 10px;
+				gap: 10px;
+			}
+			.content-create-category {
+				width: 30%;
+				cursor: pointer;
+				display: flex;
+				gap: 5px;
+				input[type="input"] {
+					width: 80%;
+					border: none;
+					outline: none;
+					border-radius: 5px;
+					transition: all 1s;
+					padding: 5px;
+					background-color: #eee;
+				}
+				input[type="button"] {
+					width: 20%;
+					cursor: pointer;
+					border: none;
+					border-radius: 5px;
+					padding: 5px;
+					background-color: rgb(0, 255, 0);
+					transition: all 1s;
+				}
+				input[type="button"]:hover {
+					background-color: red;
+				}
+			}
+			.content-add-category {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				gap: 5px;
+				.add-Category {
+					width: 20%;
+					background-color: #eee;
+					padding: 5px;
+					label {
+						user-select: none;
+					}
+				}
+				.Create-SubCategory {
+					width: 30%;
+					background-color: #0b948d41;
+					padding: 15px;
+					border-radius: 5px;
+					display: none;
+					.branch-Create-content {
+						width: 100%;
+						margin-right: 20px;
+					}
+					input[type="button"] {
+						width: 20%;
+						cursor: pointer;
+					}
+					.input-subcategory {
+						width: 50%;
+					}
+					.ShowWarningSubCategory {
+						color: red;
+						visibility: hidden;
+					}
+				}
+			}
+			.button-category {
+				width: 15%;
+				cursor: pointer;
+				user-select: none;
+				background-color: #eee;
+				border: none;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			.content-column {
+				width: 15%;
+				margin-right: 20px;
+				border-radius: 5px;
+				user-select: none;
+				padding: 5px;
+				display: none;
+				&.ll {
+					display: block;
+				}
+				.content-two-column {
+					width: 100%;
+					margin-right: 20px;
+				}
+			}
+			input[type="checkbox"] {
+				cursor: pointer;
+				margin-left: 5px;
+				margin-right: 10px;
+				margin-top: 5px;
+			}
+		}
+		.buttons-create-news {
+			width: 80%;
+			display: flex;
+			justify-content: space-between;
+			#submit-warning {
+				background-color: white;
+				font-family: Vazirmatn;
+				font-size: 12px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				direction: rtl;
+				padding: 0px 5px 0px 5px;
+				border-radius: 5px;
+				display: none;
+				&#submit-warning p {
+					margin-left: 5px;
+				}
+			}
+			a,
+			button[type="submit"] {
+				width: 8%;
+				padding: 5px;
+				font-family: Vazirmatn;
+				font-size: 12px;
+				user-select: none;
+				border-radius: 5px;
+				border: none;
+				cursor: pointer;
+				background-color: white;
+				text-decoration: none;
+				list-style-type: none;
+				text-align: center;
+			}
+			button[type="submit"]:hover {
+				background-color: rgb(42, 179, 0);
+				transition: all 0.5s;
+				color: white;
+			}
 
-      button[type="button"]:hover {
-        transition: all 0.5s;
-      }
-      a:hover {
-        background-color: red;
-        transition: all 0.5s;
-      }
-    }
-  }
+			button[type="button"]:hover {
+				transition: all 0.5s;
+			}
+			a:hover {
+				background-color: red;
+				transition: all 0.5s;
+			}
+		}
+	}
 }

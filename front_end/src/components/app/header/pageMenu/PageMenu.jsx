@@ -2,7 +2,9 @@ import "./pagemenu.css";
 export const MenuHamburger = () => {
   function handleHamburger() {
     const changeStyleMenu = document.querySelector("#ContentPageMenu");
-    changeStyleMenu.style.right === "-18%" ? (changeStyleMenu.style.right = "0%") : (changeStyleMenu.style.right = "-18%");
+    changeStyleMenu.style.right === "-18%"
+      ? (changeStyleMenu.style.right = "0%")
+      : (changeStyleMenu.style.right = "-18%");
   }
   return (
     <div>

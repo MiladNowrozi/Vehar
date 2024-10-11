@@ -1,0 +1,34 @@
+.container-sport {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  .left-sport-offer {
+    width: 25%;
+    background-color: rgba(3, 500, 1, 0.12);
+    margin-right: 5px;
+  }
+  .center-sport-current {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    direction: rtl;
+    background-color: rgba(3, 500, 1, 0.12);
+    padding: 10px;
+    .title-sport {
+      font-size: 12px;
+    }
+    img {
+      width: 80%;
+      border-radius: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  }
+  .right-sport-offer {
+    width: 25%;
+    margin-left: 5px;
+    background-color: rgba(3, 500, 1, 0.12);
+  }
+}

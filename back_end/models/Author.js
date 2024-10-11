@@ -1,10 +1,8 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
-import { Comment } from "./Comment.js";
-import { Activity } from "./Activity.js";
-
-export const User = db.define("User", {
-	firstName: {
+import { News } from "./News.js";
+export const Author = db.define("Author", {
+	Author_FirstName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -20,7 +18,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	lastName: {
+	Author_LastName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -36,7 +34,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	username: {
+	Author_UserName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -52,7 +50,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	password: {
+	Author_Password: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
 		validate: {
@@ -68,26 +66,25 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	img: {
+	Role: {
+		type: DataTypes.STRING(100),
+		defaultValue: "OnAuthor", // or OffAuthor
+	},
+	Author_Img: {
 		type: DataTypes.STRING(255),
 		allowNull: true,
 	},
-	remember: {
+	Author_remember: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false,
 	},
-	verify_email: {
+	Verify_Email: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false,
-	},
-	Role: {
-		type: DataTypes.STRING(10),
-		defaultValue: "user",
 	},
 });
-
-export const EmailUser = db.define("EmailUser", {
-	EmailUser: {
+export const EmailAuthor = db.define("EmailAuthor", {
+	EmailAuthor: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
 		unique: true,
@@ -99,7 +96,7 @@ export const EmailUser = db.define("EmailUser", {
 	},
 });
 
-User.hasOne(EmailUser, {
+Author.hasOne(EmailAuthor, {
 	foreignKey: {
 		unique: true,
 		onDelete: "CASCADE",
@@ -107,15 +104,7 @@ User.hasOne(EmailUser, {
 		allowNull: true,
 	},
 });
-User.hasMany(Comment, {
-	foreignKey: {
-		unique: false,
-		allowNull: true,
-		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
-	},
-});
-User.hasMany(Activity, {
+Author.hasMany(News, {
 	foreignKey: {
 		unique: false,
 		allowNull: true,
@@ -124,22 +113,23 @@ User.hasMany(Activity, {
 	},
 });
 
-db.queryInterface.tableExists("Users").then(async (e) => {
+db.queryInterface.tableExists("EmailAuthors").then(async (e) => {
 	if (!e) {
 		try {
-			await User.sync({ alter: true });
+			await EmailAuthor.sync({ alter: true });
 		} catch (error) {
-			console.log(`table user not created! : ${error}`);
+			console.log(`table EmailAuthor not created! : ${error}`);
 		}
 	}
+	return;
 });
-
-db.queryInterface.tableExists("EmailUsers").then(async (e) => {
+db.queryInterface.tableExists("Authors").then(async (e) => {
 	if (!e) {
 		try {
-			await EmailUser.sync({ alter: true });
+			await Author.sync({ alter: true });
 		} catch (error) {
-			console.log(`table email not created! : ${error}`);
+			console.log(`table Author not created! : ${error}`);
 		}
 	}
+	return;
 });

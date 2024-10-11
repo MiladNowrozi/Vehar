@@ -35,7 +35,7 @@ export const MenuAdmin = () => {
         </Link>
         <Link to={"list-admins"}>
           <button>
-            <i className="fas fa-users"></i>ادمین ها
+            <i className="fas fa-users"></i>نویسنده ها
           </button>
         </Link>
         <Link to={"list-emails"}>

@@ -100,7 +100,7 @@ export const News = () => {
                             <h6>{news.title}</h6>
                           </div>
                           <div>
-                            <h1>{news.Short_Description}</h1>
+                            <h1>{news.Description}</h1>
                           </div>
                         </div>
                         {/* <img className="Img_Result" src={data.img} alt="img" /> */}

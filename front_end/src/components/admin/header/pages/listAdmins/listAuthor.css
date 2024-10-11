@@ -1,0 +1,179 @@
+.container-add-author {
+	width: 85%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	.content-add-author {
+		direction: rtl;
+		background-color: aqua;
+		.content-table-author {
+			width: 100%;
+			border-collapse: collapse;
+			.titles-table-author {
+				th {
+					border: 1px solid #acaf00;
+					padding: 5px;
+					text-align: start;
+				}
+			}
+			.content-map-author {
+				display: flexbox;
+				.map-author {
+					&.map-author:hover {
+						background-color: #34be4b80;
+					}
+					.td-info {
+						border: 1px solid #acaf00;
+						text-align: center;
+						padding: 5px;
+					}
+					.green {
+						color: green;
+					}
+					.red {
+						color: red;
+					}
+				}
+			}
+			.delete-author,
+			.cancel-author {
+				padding: 5px;
+				cursor: pointer;
+				border: none;
+				margin-right: 5px;
+				border-radius: 5px;
+				padding: 5px 10px 5px 10px;
+			}
+			.cancel-author:hover {
+				background-color: black;
+				color: white;
+				transition: all 0.5s;
+			}
+			.delete-author:hover {
+				background-color: red;
+				color: white;
+				transition: all 0.5s;
+			}
+		}
+
+		.author-content {
+			width: 100%;
+			padding: 10px;
+			background-color: rgb(1, 11, 153);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			border-radius: 5px;
+			direction: rtl;
+			.title-author {
+				font-size: 20px;
+				font-weight: 200;
+				margin-top: 5px;
+				color: white;
+			}
+			.author-form {
+				width: 100%;
+				font-size: 14px;
+				font-weight: 200;
+				display: flex;
+				align-items: flex-end;
+				color: white;
+				.author-input {
+					/* width: 100%; */
+					display: flex;
+					position: relative;
+					gap: 5px;
+					.username-author {
+						position: relative;
+						.fa-user {
+							color: green;
+							font-size: 15px;
+							padding: 5px;
+							position: absolute;
+							left: 10px;
+							bottom: 2px;
+							background-color: white;
+						}
+					}
+					.password-author {
+						position: relative;
+						.fa-lock {
+							color: green;
+							font-size: 15px;
+							padding: 5px;
+							position: absolute;
+							left: 10px;
+							bottom: 2px;
+							background-color: white;
+						}
+					}
+					.email-author {
+						.fa-envelope {
+							color: green;
+							font-size: 15px;
+							padding: 5px;
+							position: absolute;
+							left: 10px;
+							bottom: 1px;
+							background-color: white;
+						}
+					}
+
+					input[type="text"],
+					input[type="username"],
+					input[type="password"],
+					input[type="email"] {
+						width: 100%;
+						height: 30px;
+						margin-top: 5px;
+						outline: none;
+						border: none;
+						font-size: 13px;
+						font-weight: 400;
+						border-radius: 5px;
+						font-family: vazirmatn;
+						-webkit-box-shadow: 0 0 0 30px white inset !important;
+					}
+					input[type="username"],
+					input[type="text"]:valid {
+						padding: 15px 15px 12px 15px;
+					}
+					input[type="password"]:valid {
+						padding: 15px 15px 10px 15px;
+					}
+					input[type="email"]:valid {
+						padding: 15px 15px 10px 15px;
+					}
+				}
+
+				button[type="submit"] {
+					width: 100px;
+					padding: 5px;
+					font-family: vazirmatn;
+					cursor: pointer;
+					border: none;
+					border-radius: 5px;
+					margin-right: 5px;
+				}
+				button[type="submit"]:hover {
+					transition: all 0.5s;
+					background-color: green;
+					color: white;
+				}
+				#submit-warning-author {
+					background-color: white;
+					font-family: Vazirmatn;
+					font-size: 12px;
+					font-weight: 300;
+					display: none;
+					justify-content: center;
+					align-items: center;
+					direction: rtl;
+					padding: 2px 5px 2px 5px;
+					border-radius: 5px;
+					color: red;
+				}
+			}
+		}
+	}
+}
