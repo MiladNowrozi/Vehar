@@ -20,13 +20,13 @@ export const SubCategory = db.define("SubCategory", {
 	},
 });
 
-db.queryInterface.tableExists("SubCategory").then(async (e) => {
-	if (!e) {
-		try {
-			await SubCategory.sync({ alter: true });
-		} catch (error) {
-			console.log(`table SubCategory not created! : ${error}`);
-		}
-	}
-	return;
-});
+// db.queryInterface.tableExists("SubCategory").then(async (e) => {
+// 	if (!e) {
+// 		try {
+// 			await SubCategory.sync({ alter: true });
+// 		} catch (error) {
+// 			console.log(`table SubCategory not created! : ${error}`);
+// 		}
+// 	}
+// 	return;
+// });

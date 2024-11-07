@@ -1,10 +1,8 @@
 import { Author } from "../models/Author.js";
-import { Token } from "../models/Token.js";
 import { EmailAuthor } from "../models/Author.js";
 import bcrypt from "bcryptjs";
 
 // CREATE Author
-
 export default class AuthorControllers {
 	static CreateAuthor = async (req, res) => {
 		try {
@@ -20,76 +18,58 @@ export default class AuthorControllers {
 					where: { Author_UserName: Author_UserName },
 				});
 				const getEmail = await EmailAuthor.findOne({ where: { EmailAuthor: Author_Email } });
-				const countRequestUser = await Token.findAll({ where: { Email: Author_Email } });
-				if (countRequestUser.length === 0) {
-					if (UserExist === null && getEmail === null) {
-						try {
-							const salt = bcrypt.genSaltSync(10);
-							const HashPassword = bcrypt.hashSync(Author_Password, salt);
 
-							// Hash the password and create a user
-							const CreatedAuthor = await Author.create({
-								Author_FirstName: Author_FirstName,
-								Author_LastName: Author_LastName,
-								Author_UserName: Author_UserName,
-								Author_Password: HashPassword,
-							});
-							await EmailAuthor.create({ EmailAuthor: Author_Email, authorId: CreatedAuthor.id });
-							const ShowAllAuthor = await Author.findAll({
-								include: [
-									{
-										model: EmailAuthor,
-										required: false, // This will include users even if they have no emails
-									},
-								],
-							});
-							const AllAuthor = ShowAllAuthor.map((e) => {
-								return {
-									id: e.id,
-									Author_FirstName: e.Author_FirstName,
-									Author_LastName: e.Author_LastName,
-									emailAuthor: e.emailAuthor.EmailAuthor,
-									Role: e.Role,
-									Verify_Email: e.Verify_Email,
-									createdAt: e.createdAt,
-									updatedAt: e.updatedAt,
-								};
-							});
-							res.status(200).json({
-								success: true,
-								body: AllAuthor,
-								message: `نویسنده ${CreatedAuthor.Author_FirstName + " " + CreatedAuthor.Author_LastName} با موفقیت اضافه شد!`,
-							});
-						} catch (error) {
-							res.status(412).json({
-								success: false,
-								message: error.message,
-							});
-						}
-					} else {
-						if (UserExist !== null && !UserExist.verify_email) {
-							if (countRequestUser.length === 0) {
-								res.status(200).json({
-									success: true,
-									message: `پیامکی جهت تایید ایمیل، به ایمیل ${Author_Email} ارسال شد(اعتبار پیامک 5 دقیقه) !`,
-								});
-							} else {
-								res.status(412).json({
-									success: false,
-									message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
-								});
-							}
-						} else {
-							res.status(412).json({
-								success: false,
-								message: "این نویسنده در سیستم موجود است!",
-							});
-						}
+				if (UserExist === null && getEmail === null) {
+					try {
+						const salt = bcrypt.genSaltSync(10);
+						const HashPassword = bcrypt.hashSync(Author_Password, salt);
+
+						// Hash the password and create a user
+						const CreatedAuthor = await Author.create({
+							Author_FirstName: Author_FirstName,
+							Author_LastName: Author_LastName,
+							Author_UserName: Author_UserName,
+							Author_Password: HashPassword,
+						});
+
+						await EmailAuthor.create({ EmailAuthor: Author_Email, authorId: CreatedAuthor.id });
+						const ShowAllAuthor = await Author.findAll({
+							include: [
+								{
+									model: EmailAuthor,
+									required: false, // This will include users even if they have no emails
+								},
+							],
+						});
+						const AllAuthor = ShowAllAuthor.map((e) => {
+							return {
+								id: e.id,
+								Author_FirstName: e.Author_FirstName,
+								Author_LastName: e.Author_LastName,
+								emailAuthor: e.emailAuthor.EmailAuthor,
+								Role: e.Role,
+								Verify_Email: e.Verify_Email,
+								createdAt: e.createdAt,
+								updatedAt: e.updatedAt,
+								Author_Img: e.Author_Img,
+							};
+						});
+						res.status(200).json({
+							success: true,
+							body: AllAuthor,
+							message: `نویسنده ${CreatedAuthor.Author_FirstName + " " + CreatedAuthor.Author_LastName} با موفقیت اضافه شد!`,
+						});
+					} catch (error) {
+						res.status(412).json({
+							success: false,
+							message: error.message,
+						});
+						console.log(error);
 					}
 				} else {
 					res.status(412).json({
 						success: false,
-						message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
+						message: "این نویسنده در سیستم موجود است!",
 					});
 				}
 			} catch (error) {
@@ -138,6 +118,7 @@ export default class AuthorControllers {
 						Verify_Email: e.Verify_Email,
 						createdAt: e.createdAt,
 						updatedAt: e.updatedAt,
+						Author_Img: e.Author_Img,
 					};
 				});
 				res.status(200).json({
@@ -172,6 +153,7 @@ export default class AuthorControllers {
 						Verify_Email: e.Verify_Email,
 						createdAt: e.createdAt,
 						updatedAt: e.updatedAt,
+						Author_Img: e.Author_Img,
 					};
 				});
 				res.status(200).json({
@@ -189,7 +171,30 @@ export default class AuthorControllers {
 	};
 
 	// GET
-	static GetAuthor = async (req, res) => {};
+	static GetAuthor = async (req, res) => {
+		try {
+			const existUser = await Author.findByPk(req.params.id);
+			const { Author_UserName, Author_Password, ...other } = existUser.dataValues;
+
+			if (existUser) {
+				res.status(200).json({
+					success: true,
+					body: other,
+					message: "this user is exist!",
+				});
+			} else {
+				res.status(404).json({
+					success: false,
+					message: "this user not exist!",
+				});
+			}
+		} catch (error) {
+			res.status(404).json({
+				success: false,
+				message: error,
+			});
+		}
+	};
 
 	// GET ALL
 	static GetAllAuthor = async (req, res) => {
@@ -211,20 +216,14 @@ export default class AuthorControllers {
 				Verify_Email: e.Verify_Email,
 				createdAt: e.createdAt,
 				updatedAt: e.updatedAt,
+				Author_Img: e.Author_Img,
 			};
 		});
-		if (ShowAllAuthor.length !== 0) {
-			res.status(200).json({
-				success: true,
-				body: AllAuthor,
-				message: "all Author received successfully!",
-			});
-		} else {
-			res.status(403).json({
-				success: false,
-				message: "شما هیچ نویسنده ای ندارید !",
-			});
-		}
+		res.status(200).json({
+			success: true,
+			body: AllAuthor.length !== 0 ? AllAuthor : AllAuthor,
+			message: `${AllAuthor.length === 0 ? "شما هیچ نویسنده ای ندارید !" : ""}`,
+		});
 	};
 
 	// UPDATE
@@ -253,21 +252,14 @@ export default class AuthorControllers {
 						Verify_Email: e.Verify_Email,
 						createdAt: e.createdAt,
 						updatedAt: e.updatedAt,
+						Author_Img: e.Author_Img,
 					};
 				});
-				if (AllAuthor.length !== 0) {
-					res.status(200).json({
-						success: true,
-						body: AllAuthor,
-						message: "نویسنده با موفقیت حذف شد!",
-					});
-				} else {
-					res.status(200).json({
-						success: true,
-						body: AllAuthor,
-						message: "شما هیچ نویسنده ای ندارید !",
-					});
-				}
+				res.status(200).json({
+					success: true,
+					body: AllAuthor.length !== 0 ? AllAuthor : AllAuthor,
+					message: `${AllAuthor.length === 0 ? "شما هیچ نویسنده ای ندارید !" : ""}`,
+				});
 			} catch (error) {
 				res.status(403).json({
 					success: false,

@@ -21,14 +21,3 @@ News.hasMany(Activity, {
 		onUpdate: "SET NULL",
 	},
 });
-
-db.queryInterface.tableExists("Activities").then(async (e) => {
-	if (!e) {
-		try {
-			await Activity.sync({ alter: true });
-		} catch (error) {
-			console.log(`table Activity not created! : ${error}`);
-		}
-	}
-	return;
-});

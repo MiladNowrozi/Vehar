@@ -1,6 +1,7 @@
 import { News } from "../models/News.js";
 import db from "../db.js";
 import { Category } from "../models/Category.js";
+import { SubCategory } from "../models/SubCategory.js";
 
 export default class CategoryControllers {
 	// *******   { CREATE ONE CATEGORY }  ********
@@ -71,5 +72,20 @@ export default class CategoryControllers {
 	// static upd = async (req, res) => {};
 
 	// DELETE ONE CATEGORY
-	//  static delete = async (req, res) => {}
+	static DeleteCategory = async (req, res) => {
+		if (req.params.id) {
+			await Category.destroy({ where: { id: req.params.id } });
+			const BackAllCategory = await Category.findAll();
+			res.status(200).json({
+				success: true,
+				body: BackAllCategory.length !== 0 ? BackAllCategory : BackAllCategory,
+				message: BackAllCategory.length !== 0 ? "" : "دسته ای وجود ندارد.",
+			});
+		} else {
+			res.status(403).json({
+				success: false,
+				message: "invalid server!",
+			});
+		}
+	};
 }

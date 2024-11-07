@@ -1,31 +1,62 @@
-.container-add-author {
+.container-add-user {
 	width: 85%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	.content-add-author {
+	.content-add-user {
+		width: 100%;
+		padding: 15px;
 		direction: rtl;
-		background-color: aqua;
-		.content-table-author {
+		background-color: green;
+		display: flex;
+		flex-direction: column;
+		border-radius: 5px;
+		gap: 15px;
+		.content-table-user {
 			width: 100%;
 			border-collapse: collapse;
-			.titles-table-author {
+			.titles-table-user {
 				th {
-					border: 1px solid #acaf00;
+					border-right: 1px solid #acaf003b;
+					border-left: 1px solid #acaf003b;
+					border-top: 1px solid #acaf003b;
 					padding: 5px;
 					text-align: start;
+					font-size: 14px;
+					color: white;
 				}
 			}
-			.content-map-author {
-				display: flexbox;
-				.map-author {
-					&.map-author:hover {
-						background-color: #34be4b80;
+			.content-map-user {
+				.map-user {
+					background-color: white;
+					margin-top: 10px;
+
+					&.map-user:hover {
+						background-color: #d1d1d1;
+						transition: all 0.3s;
+					}
+					.ffff {
+						background-color: green;
+					}
+					.img-profile-user {
+						display: flex;
+						justify-content: center;
+						img {
+							width: 40px;
+							border-radius: 50%;
+						}
 					}
 					.td-info {
-						border: 1px solid #acaf00;
+						border-right: 1px solid #acaf003b;
 						text-align: center;
+						font-size: 13px;
 						padding: 5px;
+						.Date {
+							color: rgb(173, 0, 150);
+						}
+						.Time {
+							color: blue;
+						}
 					}
 					.green {
 						color: green;
@@ -35,8 +66,8 @@
 					}
 				}
 			}
-			.delete-author,
-			.cancel-author {
+			.delete-user,
+			.cancel-user {
 				padding: 5px;
 				cursor: pointer;
 				border: none;
@@ -44,19 +75,19 @@
 				border-radius: 5px;
 				padding: 5px 10px 5px 10px;
 			}
-			.cancel-author:hover {
+			.cancel-user:hover {
 				background-color: black;
 				color: white;
 				transition: all 0.5s;
 			}
-			.delete-author:hover {
+			.delete-user:hover {
 				background-color: red;
 				color: white;
 				transition: all 0.5s;
 			}
 		}
 
-		.author-content {
+		.user-content {
 			width: 100%;
 			padding: 10px;
 			background-color: rgb(1, 11, 153);
@@ -65,25 +96,26 @@
 			align-items: center;
 			border-radius: 5px;
 			direction: rtl;
-			.title-author {
+			gap: 20px;
+			.title-user {
 				font-size: 20px;
 				font-weight: 200;
 				margin-top: 5px;
 				color: white;
 			}
-			.author-form {
+			.user-form {
 				width: 100%;
 				font-size: 14px;
 				font-weight: 200;
 				display: flex;
 				align-items: flex-end;
 				color: white;
-				.author-input {
+				.user-input {
 					/* width: 100%; */
 					display: flex;
 					position: relative;
 					gap: 5px;
-					.username-author {
+					.username-user {
 						position: relative;
 						.fa-user {
 							color: green;
@@ -95,7 +127,7 @@
 							background-color: white;
 						}
 					}
-					.password-author {
+					.password-user {
 						position: relative;
 						.fa-lock {
 							color: green;
@@ -107,7 +139,7 @@
 							background-color: white;
 						}
 					}
-					.email-author {
+					.email-user {
 						.fa-envelope {
 							color: green;
 							font-size: 15px;
@@ -160,7 +192,7 @@
 					background-color: green;
 					color: white;
 				}
-				#submit-warning-author {
+				#submit-warning-user {
 					background-color: white;
 					font-family: Vazirmatn;
 					font-size: 12px;
@@ -174,6 +206,42 @@
 					color: red;
 				}
 			}
+		}
+	}
+	.warning-delete-user {
+		width: 50%;
+		height: 50vh;
+		padding: 10px;
+		background-color: #07006b;
+		border-radius: 15px;
+		position: fixed;
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 50px;
+		color: white;
+		top: 25%;
+		left: 25%;
+		right: 25%;
+		bottom: 25%;
+		button {
+			width: 100px;
+			padding: 5px;
+			border: none;
+			margin-right: 5px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.btn-deleted-user:hover {
+			background-color: red;
+			color: white;
+			transition: all 0.3s;
+		}
+		.btn-cancel-user:hover {
+			background-color: green;
+			color: white;
+			transition: all 0.3s;
 		}
 	}
 }

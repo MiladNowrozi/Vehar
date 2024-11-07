@@ -68,13 +68,18 @@ export default class SubCategoryControllers {
 
 	// DELETE ONE NEWS
 	static DeleteSubCategory = async (req, res) => {
-		const Tables = await queryInterface.showAllTables();
-		console.log(Tables);
-
-		// db.queryInterface.dropTable(req.params.name);
-		res.status(200).json({
-			success: true,
-			message: "دسته با موفقیت حذف شد!",
-		});
+		if (req.params.id) {
+			await SubCategory.destroy({ where: { id: req.params.id } });
+			const BackAllCategory = await SubCategory.findAll();
+			res.status(200).json({
+				success: true,
+				body: BackAllCategory.length !== 0 ? BackAllCategory : BackAllCategory,
+			});
+		} else {
+			res.status(403).json({
+				success: false,
+				message: "invalid server!",
+			});
+		}
 	};
 }

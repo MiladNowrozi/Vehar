@@ -1,0 +1,177 @@
+.container-add-news {
+	width: 85%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	user-select: none;
+	box-sizing: border-box;
+
+	.content-add-news {
+		width: 100%;
+		padding: 15px;
+		direction: rtl;
+		background-color: green;
+		display: flex;
+		flex-direction: column;
+		border-radius: 5px;
+		gap: 15px;
+		.content-table-news {
+			width: 100%;
+			border-collapse: collapse;
+			.titles-table-news {
+				th {
+					border-right: 1px solid #acaf003b;
+					border-left: 1px solid #acaf003b;
+					border-top: 1px solid #acaf003b;
+					padding: 5px;
+					text-align: start;
+					font-size: 14px;
+					color: white;
+				}
+			}
+			.content-map-news {
+				.map-news {
+					background-color: white;
+					margin-top: 10px;
+
+					&.map-news:hover {
+						background-color: #d1d1d1;
+						transition: all 0.3s;
+					}
+					.ffff {
+						background-color: green;
+					}
+					.img-profile-news {
+						width: 25%;
+						padding: 10px;
+						p {
+							width: 255px;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							font-size: 14px;
+						}
+					}
+					.td-info {
+						border-right: 1px solid #acaf003b;
+						text-align: center;
+						font-size: 13px;
+						padding: 5px;
+						.Date {
+							color: rgb(173, 0, 150);
+						}
+						.Time {
+							color: blue;
+						}
+					}
+					.green {
+						color: green;
+					}
+					.red {
+						color: red;
+					}
+				}
+			}
+			.delete-news,
+			.cancel-news {
+				padding: 5px;
+				cursor: pointer;
+				border: none;
+				margin-right: 5px;
+				border-radius: 5px;
+				padding: 5px 10px 5px 10px;
+			}
+			.cancel-news:hover {
+				background-color: black;
+				color: white;
+				transition: all 0.5s;
+			}
+			.delete-news:hover {
+				background-color: red;
+				color: white;
+				transition: all 0.5s;
+			}
+		}
+		.pagination {
+			width: 25%;
+			display: flex;
+			align-items: center;
+			/* background-color: white; */
+			button {
+				width: 50%;
+				height: 35px;
+				border: none;
+				border-radius: 5%;
+				background-color: aqua;
+				cursor: pointer;
+			}
+			h1 {
+				width: 50%;
+				height: 35px;
+				font-weight: 300;
+				font-size: 25px;
+				text-align: center;
+				color: white;
+				background-color: black;
+			}
+		}
+	}
+	.container-search-news-lord {
+		display: flex;
+		justify-content: space-evenly;
+		.search-news-by-title-lord,
+		.search-news-by-id-lord {
+			display: flex;
+			gap: 10px;
+			input[type="search"],
+			input[type="number"] {
+				border: none;
+				outline: none;
+				padding: 2px 5px 2px 5px;
+				border-radius: 5px;
+			}
+			input[type="number"] {
+				border: none;
+				outline: none;
+				padding: 2px 5px 2px 5px;
+				border-radius: 5px;
+			}
+		}
+	}
+	.warning-delete-news {
+		width: 50%;
+		height: 50vh;
+		padding: 10px;
+		background-color: #07006b;
+		border-radius: 15px;
+		position: fixed;
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 50px;
+		color: white;
+		top: 25%;
+		left: 25%;
+		right: 25%;
+		bottom: 25%;
+		button {
+			width: 100px;
+			padding: 5px;
+			border: none;
+			margin-right: 5px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.btn-deleted-news:hover {
+			background-color: red;
+			color: white;
+			transition: all 0.3s;
+		}
+		.btn-cancel-news:hover {
+			background-color: green;
+			color: white;
+			transition: all 0.3s;
+		}
+	}
+}

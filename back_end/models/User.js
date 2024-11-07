@@ -1,10 +1,10 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
-import { Comment } from "./Comment.js";
 import { Activity } from "./Activity.js";
+import { Comment } from "./Comment.js";
 
 export const User = db.define("User", {
-	firstName: {
+	User_FirstName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -20,7 +20,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	lastName: {
+	User_LastName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -36,7 +36,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	username: {
+	User_UserName: {
 		type: DataTypes.STRING(45),
 		allowNull: false,
 		validate: {
@@ -52,7 +52,7 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	password: {
+	User_Password: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
 		validate: {
@@ -68,21 +68,21 @@ export const User = db.define("User", {
 			},
 		},
 	},
-	img: {
+	User_Img: {
 		type: DataTypes.STRING(255),
 		allowNull: true,
 	},
-	remember: {
+	User_remember: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false,
 	},
-	verify_email: {
+	Verify_Email: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false,
 	},
 	Role: {
 		type: DataTypes.STRING(10),
-		defaultValue: "user",
+		defaultValue: "OnUser",
 	},
 });
 
@@ -124,22 +124,22 @@ User.hasMany(Activity, {
 	},
 });
 
-db.queryInterface.tableExists("Users").then(async (e) => {
-	if (!e) {
-		try {
-			await User.sync({ alter: true });
-		} catch (error) {
-			console.log(`table user not created! : ${error}`);
-		}
-	}
-});
+// db.queryInterface.tableExists("Users").then(async (e) => {
+// 	if (!e) {
+// 		try {
+// 			await User.sync({ alter: true });
+// 		} catch (error) {
+// 			console.log(`table user not created! : ${error}`);
+// 		}
+// 	}
+// });
 
-db.queryInterface.tableExists("EmailUsers").then(async (e) => {
-	if (!e) {
-		try {
-			await EmailUser.sync({ alter: true });
-		} catch (error) {
-			console.log(`table email not created! : ${error}`);
-		}
-	}
-});
+// db.queryInterface.tableExists("EmailUsers").then(async (e) => {
+// 	if (!e) {
+// 		try {
+// 			await EmailUser.sync({ alter: true });
+// 		} catch (error) {
+// 			console.log(`table email not created! : ${error}`);
+// 		}
+// 	}
+// });

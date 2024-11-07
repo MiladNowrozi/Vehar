@@ -19,3 +19,4 @@ try {
   console.log(e.message);
 }
 export default db;
+console.clear();

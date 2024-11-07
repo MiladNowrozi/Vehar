@@ -36,8 +36,9 @@
 			border-radius: 5px;
 			overflow-y: auto;
 			scrollbar-width: thin;
+			display: flex;
 			.title-category {
-				width: 16%;
+				width: 50%;
 				height: 35px;
 				padding: 0px 10px 0px 10px;
 				margin: 10px;
@@ -49,106 +50,254 @@
 				align-items: center;
 				position: sticky;
 				top: 0px;
+				h2 {
+					color: rgb(128, 0, 0);
+				}
 			}
-			.server-category {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				padding: 10px;
-				gap: 10px;
-			}
-			.content-create-category {
-				width: 30%;
-				cursor: pointer;
-				display: flex;
-				gap: 5px;
-				input[type="input"] {
-					width: 80%;
-					border: none;
-					outline: none;
+			.container-category {
+				width: 40%;
+				.server-category {
+					width: 90%;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					padding: 10px;
 					border-radius: 5px;
-					transition: all 1s;
-					padding: 5px;
-					background-color: #eee;
+					gap: 10px;
+					/* background-color: rgb(12, 100, 34); */
 				}
-				input[type="button"] {
-					width: 20%;
-					cursor: pointer;
-					border: none;
-					border-radius: 5px;
-					padding: 5px;
-					background-color: rgb(0, 255, 0);
-					transition: all 1s;
+				#emptyCategory {
+					color: red;
 				}
-				input[type="button"]:hover {
-					background-color: red;
+				p {
+					color: rgb(128, 0, 0);
+					font-weight: 500;
 				}
-			}
-			.content-add-category {
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				gap: 5px;
-				.add-Category {
-					width: 20%;
-					background-color: #eee;
-					padding: 5px;
-					label {
-						user-select: none;
+				.content-add-category {
+					display: flex;
+					flex-direction: column;
+					gap: 2px;
+					.add-Category {
+						display: flex;
+						justify-content: space-between;
+						/* gap: 5px; */
+						/* width: 60%; */
+						background-color: #eee;
+						padding: 5px;
+						border-radius: 5px;
+						.fa-trash {
+							padding: 4px 10px 4px 10px;
+							cursor: pointer;
+							border: none;
+							border-radius: 5px;
+							margin-bottom: -3px;
+						}
+						label {
+							user-select: none;
+							display: flex;
+							gap: 10px;
+							font-size: 14px;
+						}
+					}
+					.Create-SubCategory {
+						background-color: #eee;
+						padding: 5px;
+						border-radius: 5px;
+						margin-right: 20px;
+						display: none;
+						.btn-checkbox-subC {
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							gap: 15px;
+							.content-checkbox {
+								width: 100%;
+								display: flex;
+								gap: 5px;
+								font-size: 13px;
+							}
+							.fa-trash {
+								padding: 4px 10px 4px 10px;
+								cursor: pointer;
+								border: none;
+								border-radius: 5px;
+								margin-bottom: 2px;
+								background-color: #eee;
+							}
+						}
+						.branch-Create-content {
+							width: 100%;
+							margin-right: 20px;
+						}
+						input[type="button"] {
+							width: 20%;
+							cursor: pointer;
+						}
+						.input-subcategory {
+							width: 50%;
+						}
+						.ShowWarningSubCategory {
+							color: red;
+							visibility: hidden;
+						}
 					}
 				}
-				.Create-SubCategory {
-					width: 30%;
-					background-color: #0b948d41;
-					padding: 15px;
-					border-radius: 5px;
-					display: none;
-					.branch-Create-content {
+				.content-create-category {
+					cursor: pointer;
+					display: flex;
+					gap: 5px;
+					input[type="input"] {
 						width: 100%;
-						margin-right: 20px;
+						border: none;
+						outline: none;
+						border-radius: 5px;
+						transition: all 1s;
+						padding: 5px;
+						background-color: #eee;
 					}
 					input[type="button"] {
 						width: 20%;
 						cursor: pointer;
+						border: none;
+						border-radius: 5px;
+						padding: 5px;
+						background-color: #eee;
+						transition: all 1s;
 					}
-					.input-subcategory {
-						width: 50%;
-					}
-					.ShowWarningSubCategory {
-						color: red;
-						visibility: hidden;
+					input[type="button"]:hover {
+						background-color: green;
 					}
 				}
-			}
-			.button-category {
-				width: 15%;
-				cursor: pointer;
-				user-select: none;
-				background-color: #eee;
-				border: none;
-				padding: 10px;
-				border-radius: 5px;
-			}
-			.content-column {
-				width: 15%;
-				margin-right: 20px;
-				border-radius: 5px;
-				user-select: none;
-				padding: 5px;
-				display: none;
-				&.ll {
-					display: block;
+				.button-category {
+					cursor: pointer;
+					user-select: none;
+					background-color: #eee;
+					border: none;
+					padding: 10px;
+					border-radius: 5px;
 				}
-				.content-two-column {
+			}
+			.container-columns {
+				width: 40%;
+				display: flex;
+				flex-direction: column;
+				background-color: white;
+				.title-column {
+					width: 50%;
+					height: 35px;
+					padding: 0px 10px 0px 10px;
+					margin: 10px 0px 10px 10px;
+					font-size: 10px;
+					background-color: #eee;
+					text-align: center;
+					border-radius: 5px;
+					display: flex;
+					align-items: center;
+					position: sticky;
+					top: 0px;
+					h2 {
+						color: rgb(128, 0, 0);
+					}
+				}
+				.content-column {
+					width: 90%;
+					border-radius: 5px;
+					user-select: none;
+					padding: 10px;
+					background-color: #eee;
+					.content-two-column {
+						margin-right: 20px;
+					}
+					.slider {
+						font-size: 14px;
+						font-weight: 700;
+						color: rgb(128, 0, 0);
+					}
+				}
+				input[type="checkbox"] {
+					width: 13px;
+					cursor: pointer;
+					margin-left: 5px;
+					margin-right: 10px;
+					margin-top: 5px;
+				}
+			}
+			.content-options-news {
+				width: 20%;
+				height: 33vh;
+				overflow-y: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 5px;
+				border-radius: 5px;
+				margin-top: 10px;
+				margin-left: 10px;
+				.add-Options {
+					display: flex;
+					gap: 5px;
+					margin-top: 5px;
+					user-select: none;
+					input {
+						cursor: pointer;
+					}
+					label {
+						color: rgb(128, 0, 0);
+						font-weight: 500;
+					}
+				}
+				.title-options {
 					width: 100%;
-					margin-right: 20px;
+					height: 35px;
+					padding: 10px;
+					/* margin: 10px 0px 10px 10px; */
+					font-size: 10px;
+					background-color: #eee;
+					text-align: center;
+					border-radius: 5px;
+					display: flex;
+					align-items: center;
+					position: sticky;
+					top: 0px;
+					h2 {
+						color: rgb(128, 0, 0);
+					}
+				}
+				.option-news {
+					height: 33vh;
+					padding: 10px;
+					background-color: #eee;
 				}
 			}
-			input[type="checkbox"] {
-				cursor: pointer;
-				margin-left: 5px;
-				margin-right: 10px;
-				margin-top: 5px;
+			.content-configuration-news {
+				display: flex;
+				.drafts {
+					padding: 10px 0px 10px 10px;
+					button {
+						padding: 5px;
+						color: rgb(128, 0, 0);
+						cursor: pointer;
+						border: none;
+						transition: all 0.3s;
+						border-radius: 5px;
+						font-weight: 500;
+					}
+					.hover:hover {
+						background-color: green;
+						border: none;
+						color: white;
+					}
+				}
+				.disable-comment {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					gap: 5px;
+					user-select: none;
+					color: rgb(128, 0, 0);
+					input {
+						cursor: pointer;
+					}
+				}
 			}
 		}
 		.buttons-create-news {
@@ -171,7 +320,7 @@
 				}
 			}
 			a,
-			button[type="submit"] {
+			button[type="button"] {
 				width: 8%;
 				padding: 5px;
 				font-family: Vazirmatn;
@@ -184,20 +333,57 @@
 				text-decoration: none;
 				list-style-type: none;
 				text-align: center;
-			}
-			button[type="submit"]:hover {
-				background-color: rgb(42, 179, 0);
-				transition: all 0.5s;
-				color: white;
+				/* pointer-events: none; */
 			}
 
 			button[type="button"]:hover {
 				transition: all 0.5s;
+				background-color: rgb(128, 0, 0);
+				color: white;
 			}
 			a:hover {
 				background-color: red;
 				transition: all 0.5s;
+				color: white;
 			}
 		}
+	}
+}
+.warning-delete {
+	width: 50%;
+	height: 50vh;
+	padding: 10px;
+	background-color: #07006b;
+	border-radius: 15px;
+	position: fixed;
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	direction: rtl;
+	gap: 50px;
+	top: 25%;
+	bottom: 25%;
+	left: 25%;
+	bottom: 0%;
+	z-index: 2;
+	button {
+		width: 100px;
+		padding: 5px;
+		border: none;
+		margin-right: 5px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	.btn-deleted-SubCategory:hover {
+		background-color: red;
+		color: white;
+		transition: all 0.3s;
+	}
+	.btn-cancel-SubCategory:hover {
+		background-color: green;
+		color: white;
+		transition: all 0.3s;
 	}
 }

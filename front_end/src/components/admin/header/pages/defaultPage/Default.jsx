@@ -1,29 +1,59 @@
-// import CreateNews from "../CreateNews/CreateNews";
-// import EditProfile from "../EditProfile/EditProfile";
+import { useContext } from "react";
 import "./default.css";
+import { AuthContext } from "../../../../../context/authContext";
 
-export const Default = () => {
-  return (
-    <div className="content-profile-admin">
-      <div className="image-admin">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/100px-User_icon_2.svg.png"
-          alt="admin"
-        />
-      </div>
-      <div className="admin-name">
-        <h1>میلاد نوروزی</h1>
-      </div>
-      <div className="admin-title">
-        <h2>برنامه نویس فرانت و بک اند</h2>
-      </div>
-      <div className="admin-Bio">
-        <h3>
-          از سال 1400 به برنامه نویسی تحت وب گرایش پیدا کردم و در بدو این حرفه، با وردپرس آشنا شدم؛
-          اما در اندک زمانی بعد، به سمت کد نویسی اومدم و بعد از حدوداً 3 سال توانستم به درک قابل
-          قبولی از html css, js, react, nodejs, mysql برسم و تا الآن در این حوزه مشغول
-        </h3>
-      </div>
-    </div>
-  );
+export const DefaultLord = () => {
+	const { CurrentLord } = useContext(AuthContext);
+
+	return (
+		<div className="content-profile-lord">
+			<div className="image-lord">
+				<img
+					src={
+						CurrentLord.Lord_Img
+							? CurrentLord.Lord_Img
+							: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/100px-User_icon_2.svg.png"
+					}
+					alt="lord"
+				/>
+			</div>
+			<div className="lord-name">
+				<h1>{CurrentLord.Lord_FirstName && CurrentLord.Lord_FirstName + " " + CurrentLord.Lord_LastName}</h1>
+			</div>
+			<div className="lord-title">
+				<h2>{CurrentLord.Lord_Describe}</h2>
+			</div>
+			<div className="lord-Bio">
+				<h3>{CurrentLord.Lord_Content}</h3>
+			</div>
+		</div>
+	);
+};
+
+export const DefaultAuthor = () => {
+	const { CurrentAuthor } = useContext(AuthContext);
+
+	return (
+		<div className="content-profile-author">
+			<div className="image-author">
+				<img
+					src={
+						CurrentAuthor.Author_Img
+							? CurrentAuthor.Author_Img
+							: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/100px-User_icon_2.svg.png"
+					}
+					alt="author"
+				/>
+			</div>
+			<div className="author-name">
+				<h1>{CurrentAuthor.Author_FirstName && CurrentAuthor.Author_FirstName + " " + CurrentAuthor.Author_LastName}</h1>
+			</div>
+			<div className="author-title">
+				<h2>{CurrentAuthor.Author_Describe}</h2>
+			</div>
+			<div className="author-Bio">
+				<h3>{CurrentAuthor.Author_Content}</h3>
+			</div>
+		</div>
+	);
 };

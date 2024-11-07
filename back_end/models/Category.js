@@ -4,14 +4,18 @@ import { SubCategory } from "./SubCategory.js";
 
 export const Category = db.define("Category", {
 	Category: {
-		type: DataTypes.STRING(100),
+		type: DataTypes.STRING(50),
 		allowNull: false,
 		validate: {
 			notEmpty: {
-				msg: "لطفاً دسته مربوطه را انتخاب کنید!",
+				msg: "news OptionNews should not be empty!",
 			},
 			notNull: {
-				msg: "دسته مربوطه، نباید null باشد!",
+				msg: "news OptionNews should not be null!",
+			},
+			len: {
+				args: [1, 50],
+				msg: "news OptionNews should not be than more than 50!",
 			},
 		},
 	},
@@ -24,15 +28,4 @@ Category.hasMany(SubCategory, {
 		onDelete: "SET NULL",
 		onUpdate: "SET NULL",
 	},
-});
-
-db.queryInterface.tableExists("Categories").then(async (e) => {
-	if (!e) {
-		try {
-			await Category.sync({ alter: true });
-		} catch (error) {
-			console.log(`table Category not created! : ${error}`);
-		}
-	}
-	return;
 });

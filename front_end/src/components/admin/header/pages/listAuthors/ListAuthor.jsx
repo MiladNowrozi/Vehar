@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
 import "./listAuthor.css";
-import { AxiosDefaultUrl } from "../createNews/CreateNews";
+import { AxiosInstance } from "../../../../../axiosInstance.js";
 
-export const ListAdmins = () => {
-	// const [ReceiveNewAuthor, setReceiveNewAuthor] = useState([]);
+export const ListAuthors = () => {
 	const [ReceiveAllAuthor, setReceiveAllAuthor] = useState([]);
+	console.log(ReceiveAllAuthor);
+
 	const [input, setInput] = useState({
 		Author_FirstName: "",
 		Author_LastName: "",
@@ -96,9 +97,9 @@ export const ListAdmins = () => {
 		});
 		if (DataAuthorCheck.length === 0) {
 			try {
-				await AxiosDefaultUrl({
+				await AxiosInstance({
 					method: "post",
-					url: "author/create-author",
+					url: "author/create",
 					withCredentials: true,
 					data: {
 						Author_FirstName: input.Author_FirstName,
@@ -115,6 +116,7 @@ export const ListAdmins = () => {
 						document.getElementById("Author_Password").value = "";
 						document.getElementById("Author_Email").value = "";
 						setReceiveAllAuthor(success.data.body);
+						document.getElementById("empty-author").innerHTML = "";
 						showWarningAuthor.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
 						WarningTime();
 					})
@@ -194,48 +196,48 @@ export const ListAdmins = () => {
 
 	useEffect(() => {
 		const res = async () => {
-			await AxiosDefaultUrl({
+			await AxiosInstance({
 				method: "get",
-				url: "author/get-all-author",
+				url: "author/get-all",
 				withCredentials: true,
 			})
 				.then(async (success) => {
 					setReceiveAllAuthor(success.data.body);
+					document.getElementById("empty-author").innerHTML = success.data.message;
 				})
 				.catch((e) => {
-					document.getElementById("empty-author").innerHTML = e.response.data.message;
+					console.log(e);
 				});
 		};
 		res();
 	}, []);
 
-	const handleDeleteAuthor = async (Delete) => {
-		try {
-			await AxiosDefaultUrl({
-				method: "delete",
-				url: `author/delete-author${Delete.target.id}`,
-				withCredentials: true,
-			})
-				.then((success) => {
-					setReceiveAllAuthor(success.data.body);
-				})
-				.catch((err) => {
-					document.getElementById("empty-author").innerHTML = err.response.data.message;
-				});
-		} catch (error) {
-			console.log(error);
-		}
+	const [IdDeletedAuthor, setIdDeletedAuthor] = useState(null);
+
+	const handleDeletedAuthor = async (Deleted) => {
+		setIdDeletedAuthor(Deleted.target.id);
+		document.getElementById("warning-delete-author").style.display = "flex";
+		document.getElementById("deleted-author").innerHTML = `آیا میخواهید نویسنده <span style="color:red;">${Deleted.target.name}</span> را حذف کنید ؟`;
 	};
 
-	const handleCancelAuthor = async (Cancel) => {
+	const handleCancelDeleAuthor = async () => {
+		document.getElementById("warning-delete-author").style.display = "none";
+	};
+
+	console.log(IdDeletedAuthor);
+
+	const handleDeleteAuthor = async () => {
 		try {
-			await AxiosDefaultUrl({
-				method: "post",
-				url: `author/cancel-author${Cancel.target.id}`,
+			await AxiosInstance({
+				method: "delete",
+				url: `author/delete${IdDeletedAuthor}`,
 				withCredentials: true,
 			})
 				.then((success) => {
 					setReceiveAllAuthor(success.data.body);
+					document.getElementById("empty-author").innerHTML = "";
+					document.getElementById("warning-delete-author").style.display = "none";
+					document.getElementById("empty-author").innerHTML = success.data.message;
 				})
 				.catch((err) => {
 					console.log(err);
@@ -244,6 +246,26 @@ export const ListAdmins = () => {
 			console.log(error);
 		}
 	};
+
+	const handleCancelAuthor = async (Cancel) => {
+		try {
+			await AxiosInstance({
+				method: "put",
+				url: `author/cancel${Cancel.target.id}`,
+				withCredentials: true,
+			})
+				.then((success) => {
+					setReceiveAllAuthor(success.data.body);
+					document.getElementById("empty-author").innerHTML = "";
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="container-add-author">
 			<div id="content-add-author" className="content-add-author">
@@ -251,37 +273,75 @@ export const ListAdmins = () => {
 				<table className="content-table-author">
 					<thead>
 						<tr className="titles-table-author">
+							<th>پروفایل</th>
 							<th>نام نویسنده</th>
 							<th>ایمیل</th>
 							<th>وضعیت سمت</th>
 							<th>وضعیت ایمیل</th>
-							<th>تاریخ ساخت</th>
+							<th>تاریخ ایجاد</th>
 							<th>آخرین بروزرسانی</th>
 						</tr>
 					</thead>
 					{ReceiveAllAuthor.map((e) => {
+						const [DateC, TimeC] = [
+							{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+							{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
+						];
+						const [DateU, TimeU] = [
+							{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+							{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
+						];
 						return (
 							<tbody key={e.id} className="content-map-author">
+								<tr>
+									<td>
+										<hr style={{ border: "none", height: "1px" }} />
+									</td>
+								</tr>
 								<tr className="map-author">
+									<td className="img-profile-author">
+										<img
+											src={e.Author_Img ? e.Author_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
+											alt="img-profile"
+										/>
+									</td>
 									<td className="td-info">{e.Author_FirstName + " " + e.Author_LastName}</td>
 									<td className="td-info">{e.emailAuthor}</td>
-									<td className={e.Role === "OnAuthor" ? "green td-info" : "red td-info"}>{e.Role === "OnAuthor" ? "فعال" : "عزل"}</td>
+									<td className={e.Role !== "OnAuthor" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
+										{e.Role === "OnAuthor" && "نصب"}
+										{e.Role === "OffAuthor" && "عزل"}
+										{e.Role === "Lord" && "مالک"}
+									</td>
 									<td className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</td>
-									<td className="td-info">{e.createdAt}</td>
-									<td className="td-info">{e.updatedAt}</td>
-									<td>
-										<button id={e.id} onClick={handleDeleteAuthor} className="delete-author">
-											حذف
-										</button>
-										<button id={e.id} onClick={handleCancelAuthor} className="cancel-author">
-											{e.Role === "OnAuthor" ? "عزل" : "منصوب"}
-										</button>
+									<td className="td-info">
+										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
+									</td>
+									<td className="td-info">
+										<span className="Date">{DateU.DateUpdate}</span> <span className="Time">{TimeU.TimeUpdate}</span>
+									</td>
+									<td className="ffff">
+										{e.Role !== "Lord" && (
+											<button id={e.id} name={e.Author_FirstName + " " + e.Author_LastName} onClick={handleDeletedAuthor} className="delete-author">
+												حذف
+											</button>
+										)}
+										{e.Role !== "Lord" && (
+											<button id={e.id} onClick={handleCancelAuthor} className="cancel-author">
+												{e.Role === "OnAuthor" ? "عزل" : "منصوب"}
+											</button>
+										)}
 									</td>
 								</tr>
 							</tbody>
 						);
 					})}
-					<p id="empty-author"></p>
+					<thead>
+						<tr>
+							<td>
+								<span style={{ color: "white" }} id="empty-author"></span>
+							</td>
+						</tr>
+					</thead>
 				</table>
 				<div>
 					<div id="author-content" className="author-content">
@@ -320,6 +380,17 @@ export const ListAdmins = () => {
 						</form>
 						<div id="submit-warning-author"></div>
 					</div>
+				</div>
+			</div>
+			<div id="warning-delete-author" className="warning-delete-author">
+				<div id="deleted-author"></div>
+				<div>
+					<button className="btn-deleted-author" onClick={handleDeleteAuthor}>
+						حذف
+					</button>
+					<button className="btn-cancel-author" onClick={handleCancelDeleAuthor}>
+						لغو
+					</button>
 				</div>
 			</div>
 		</div>

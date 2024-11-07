@@ -1,6 +1,9 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
 import { News } from "./News.js";
+import bcrypt from "bcryptjs";
+const salt = bcrypt.genSaltSync(10);
+const HashPassword = bcrypt.hashSync("123", salt);
 export const Author = db.define("Author", {
 	Author_FirstName: {
 		type: DataTypes.STRING(45),
@@ -113,23 +116,54 @@ Author.hasMany(News, {
 	},
 });
 
-db.queryInterface.tableExists("EmailAuthors").then(async (e) => {
-	if (!e) {
-		try {
-			await EmailAuthor.sync({ alter: true });
-		} catch (error) {
-			console.log(`table EmailAuthor not created! : ${error}`);
-		}
-	}
-	return;
-});
+// db.queryInterface.tableExists("EmailAuthors").then(async (e) => {
+// 	if (!e) {
+// 		try {
+// 			await EmailAuthor.sync({ alter: true });
+// 		} catch (error) {
+// 			console.log(`table EmailAuthor not created! : ${error}`);
+// 		}
+// 	}
+// 	return;
+// });
+// db.queryInterface.tableExists("Authors").then(async (e) => {
+// 	if (!e) {
+// 		try {
+// 			await Author.sync({ alter: true });
+// 		} catch (error) {
+// 			console.log(`table Author not created! : ${error}`);
+// 		}
+// 	}
+// 	return;
+// });
+
 db.queryInterface.tableExists("Authors").then(async (e) => {
 	if (!e) {
 		try {
 			await Author.sync({ alter: true });
+			const CreatedLordAuthor = await Author.create({
+				Author_FirstName: "حسین",
+				Author_LastName: "ناصری",
+				Author_UserName: "Milad@2009",
+				Author_Password: HashPassword,
+				Role: "Lord",
+				Author_Img: "http://localhost:5000/get-images?name=vehar.irunnamed.jpg",
+				Author_remember: false,
+				Verify_Email: false,
+			});
+			db.queryInterface.tableExists("EmailAuthors").then(async (e) => {
+				if (!e) {
+					try {
+						await EmailAuthor.sync({ alter: true });
+						await EmailAuthor.create({ EmailAuthor: "vahdatvjod@gmail.com", authorId: CreatedLordAuthor.id });
+					} catch (error) {
+						console.log(`table EmailAuthor not created! : ${error}`);
+					}
+				}
+				return;
+			});
 		} catch (error) {
 			console.log(`table Author not created! : ${error}`);
 		}
 	}
-	return;
 });

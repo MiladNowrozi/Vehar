@@ -1,11 +1,16 @@
 import { Outlet } from "react-router-dom";
 import "./author.css";
+import { MenuAuthor } from "../../menu/Menu";
+import { NavbarAdmin } from "../../navbar/Navbar";
 
 export const Author = () => {
 	return (
-		<div className="sob-admin">
-			<h1>Author</h1>
-			<Outlet />
+		<div className="container-admin">
+			<NavbarAdmin />
+			<header className="hed-main-admin">
+				<MenuAuthor />
+				<Outlet />
+			</header>
 		</div>
 	);
 };

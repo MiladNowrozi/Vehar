@@ -1,21 +1,22 @@
-import { EmailUser, User } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+//
+import { EmailUser, User } from "../models/User.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { Token } from "../models/Token.js";
-import { Author } from "../models/Author.js";
+import { Author, EmailAuthor } from "../models/Author.js";
+import { Lord } from "../models/Lord.js";
 
-console.clear();
-
+//
 export const RegisterToken = async (req, res) => {
 	try {
-		if (req.query.Role === "user") {
+		if (req.query.Role === "User") {
 			const TokenExist = await Token.findOne({ where: { Token: req.query.verify_token } });
 			const HeckVerifyUser = await User.findByPk(req.query.Id);
-			if (TokenExist !== null && !HeckVerifyUser.verify_email) {
+			if (TokenExist !== null && !HeckVerifyUser.Verify_Email) {
 				await Token.destroy({ where: { Token: req.query.verify_token }, force: true });
 				await User.update(
-					{ verify_email: true },
+					{ Verify_Email: true },
 					{
 						where: { id: HeckVerifyUser.id },
 					}
@@ -77,6 +78,60 @@ export const PasswordForgot = async (req, res) => {
 	}
 };
 
+export const AuthToken = async (req, res, next) => {
+	const accessToken = req.headers["authorization"]?.split(" ")[1];
+	if (!accessToken || accessToken === undefined) {
+		return res.sendStatus(401);
+	}
+	jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+		if (err) {
+			return res.status(401).json({
+				success: false,
+				message: "invalid server AuthToken",
+			});
+		}
+		req.user = user;
+		next();
+	});
+};
+
+export const RefreshToken = async (req, res) => {
+	const { refreshToken } = req.body;
+	if (!refreshToken || refreshToken === undefined) {
+		return res.sendStatus(401);
+	}
+	try {
+		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+			if (err) {
+				return res.status(401).json({
+					success: false,
+					message: "invalid server RefreshToken",
+				});
+			}
+			const refreshToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
+				expiresIn: "30s",
+			});
+			const accessToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
+				expiresIn: "10s",
+			});
+
+			res.status(200).json({
+				success: true,
+				body: {
+					Role: "Lord",
+					refreshToken: refreshToken,
+					accessToken: accessToken,
+				},
+			});
+		});
+	} catch (error) {
+		res.status(404).json({
+			success: false,
+			message: error,
+		});
+	}
+};
+
 export const Register = async (req, res) => {
 	try {
 		const firstName_register = req.body.firstName_register.replace(/\s+/g, " ");
@@ -88,9 +143,9 @@ export const Register = async (req, res) => {
 		// CHECK EXISTING USER
 		try {
 			const UserExist = await User.findOne({
-				where: { username: username_register },
+				where: { User_UserName: username_register },
 			});
-			const getEmail = await EmailUser.findOne({ where: { email: email_register } });
+			const getEmail = await EmailUser.findOne({ where: { EmailUser: email_register } });
 			const countRequestUser = await Token.findAll({ where: { Email: email_register } });
 
 			if (countRequestUser.length === 0) {
@@ -104,12 +159,12 @@ export const Register = async (req, res) => {
 
 						// Hash the password and create a user
 						const CreatedUser = await User.create({
-							firstName: firstName_register,
-							lastName: lastName_register,
-							username: username_register,
-							password: HashPassword,
+							User_FirstName: firstName_register,
+							User_LastName: lastName_register,
+							User_UserName: username_register,
+							User_Password: HashPassword,
 						});
-						await EmailUser.create({ email: email_register, userId: CreatedUser.id });
+						await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
 						const url = `${process.env.BASE_URL}/auth/register/?verify_token=${token}&Id=${CreatedUser.id}&Role=User`;
 						await sendEmail(
 							email_register,
@@ -122,7 +177,7 @@ export const Register = async (req, res) => {
 						);
 						setTimeout(async () => {
 							await Token.destroy({ where: { Token: ResetToken.Token } });
-						}, 1000 * 60 * 5);
+						}, 1000 * 60 * 1);
 						res.status(200).json({
 							success: true,
 							message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
@@ -134,7 +189,7 @@ export const Register = async (req, res) => {
 						});
 					}
 				} else {
-					if (UserExist !== null && !UserExist.verify_email) {
+					if (UserExist !== null && !UserExist.Verify_Email) {
 						const countRequestUser = await Token.findAll({ where: { Email: email_register } });
 						if (countRequestUser.length === 0) {
 							const token = jwt.sign({ email: email_register }, "secret");
@@ -153,7 +208,7 @@ export const Register = async (req, res) => {
 							);
 							setTimeout(async () => {
 								await Token.destroy({ where: { Token: ResetToken.Token } });
-							}, 1000 * 60 * 5);
+							}, 1000 * 60 * 1);
 							res.status(200).json({
 								success: true,
 								message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
@@ -192,37 +247,68 @@ export const Register = async (req, res) => {
 };
 
 export const Login = async (req, res) => {
+	// if (!accessToken) {
+	// 	res.status(401).json({
+	// 		success: false,
+	// 		message: "invalid server login",
+	// 	});
+	// }
+	// try {
+	// 	jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+	// 		if (err)
+	// 			return res.status(401).json({
+	// 				success: false,
+	// 				message: "invalid server login",
+	// 			});
+	// 		const refreshToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
+	// 			expiresIn: "120s",
+	// 		});
+	// 		const accessToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "60s" });
+	// 		res.json({ accessToken, refreshToken });
+	// 	});
+	// } catch (error) {
+	// 	res.status(404).json({
+	// 		success: false,
+	// 		message: error,
+	// 	});
+	// }
+	// dffffffffffffffff
 	try {
-		await Token.sync({ alter: true });
 		const username_login = req.body.username_login.replace(/\s+/g, "");
 		const password_login = req.body.password_login.replace(/\s+/g, "");
 		try {
 			const ExistUser = await User.findOne({
-				where: { username: username_login },
+				where: { User_UserName: username_login },
+			});
+			const ExistAuthor = await Author.findOne({
+				where: { Author_UserName: username_login },
+			});
+			const ExistLord = await Lord.findOne({
+				where: { Lord_UserName: username_login },
 			});
 
 			// CHECK USER FULL INFO
-			if (ExistUser !== null) {
+			if (ExistUser !== null && ExistUser.Role === "OnUser") {
 				const GetUserByPk = await User.findByPk(ExistUser.id);
 				const CheckUserFullInfo = await User.findOne({
 					where: {
 						id: GetUserByPk.id,
-						username: username_login,
+						User_UserName: username_login,
 					},
 				});
-				const isPasswordCurrent = bcrypt.compareSync(password_login, CheckUserFullInfo.password);
+				const isPasswordCurrent = bcrypt.compareSync(password_login, CheckUserFullInfo.User_Password);
 				if (isPasswordCurrent) {
-					if (!CheckUserFullInfo.verify_email) {
+					if (!CheckUserFullInfo.Verify_Email) {
 						try {
 							const getUser = await User.findOne({
-								where: { username: CheckUserFullInfo.username },
+								where: { User_UserName: CheckUserFullInfo.User_UserName },
 							});
 							const getEmail = await EmailUser.findOne({ where: { userId: getUser.id } });
 							const countRequestUser = await Token.findAll({ where: { Email: getEmail.email } });
 
 							if (countRequestUser.length === 0) {
 								const TokenEmail = jwt.sign({ email: getEmail.email }, "secret");
-								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${getUser.id}`;
+								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${getUser.id}&Role=user`;
 								const ExistToken = await Token.create({
 									Token: TokenEmail,
 									Email: getEmail.email,
@@ -232,9 +318,9 @@ export const Login = async (req, res) => {
 									"تایید ایمیل",
 									"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
 									`<a href=${url}>
-                  <button>تایید ایمیل</button>
-                  </a>
-                  `
+			            <button>تایید ایمیل</button>
+			            </a>
+			            `
 								);
 								setTimeout(async () => {
 									await Token.destroy({ where: { Token: ExistToken.Token } });
@@ -257,14 +343,16 @@ export const Login = async (req, res) => {
 						}
 					} else {
 						const token = jwt.sign({ id: CheckUserFullInfo.id }, "secret");
-						const { password, ...other } = CheckUserFullInfo.dataValues;
-
+						const { User_Password, User_UserName, ...other } = CheckUserFullInfo.dataValues;
 						res
 							.cookie("access_token", token, {
 								httpOnly: true,
 							})
 							.status(200)
-							.json(other);
+							.json({
+								body: other,
+								success: true,
+							});
 					}
 				} else {
 					res.status(404).json({
@@ -272,10 +360,112 @@ export const Login = async (req, res) => {
 						message: "رمز عبور اشتباه است!",
 					});
 				}
+			}
+			// CHECK Author FULL INFO
+			else if (ExistAuthor !== null && ExistAuthor.Role === "OnAuthor") {
+				const GetAuthorByPk = await Author.findByPk(ExistAuthor.id);
+				const CheckAuthorFullInfo = await Author.findOne({
+					where: {
+						id: GetAuthorByPk.id,
+						Author_UserName: username_login,
+					},
+				});
+				const isPasswordCurrent = bcrypt.compareSync(password_login, CheckAuthorFullInfo.Author_Password);
+				if (isPasswordCurrent) {
+					if (!CheckAuthorFullInfo.Verify_Email) {
+						try {
+							const getEmail = await EmailAuthor.findOne({ where: { authorId: CheckAuthorFullInfo.id } });
+							const countRequestUser = await Token.findAll({ where: { Email: getEmail.EmailAuthor } });
+
+							if (countRequestUser.length === 0) {
+								const TokenEmail = jwt.sign({ email: getEmail.EmailAuthor }, "secret");
+								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${CheckAuthorFullInfo.id}&Role=Author`;
+								const ExistToken = await Token.create({
+									Token: TokenEmail,
+									Email: getEmail.EmailAuthor,
+								});
+								await sendEmail(
+									getEmail.EmailAuthor,
+									"تایید ایمیل",
+									"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
+									`<a href=${url}>
+			            <button>تایید ایمیل</button>
+			            </a>
+			            `
+								);
+								setTimeout(async () => {
+									await Token.destroy({ where: { Token: ExistToken.Token } });
+								}, 1000 * 60 * 1);
+								res.status(200).json({
+									success: false,
+									message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
+								});
+							} else {
+								res.status(404).json({
+									success: false,
+									message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
+								});
+							}
+						} catch (error) {
+							res.status(404).json({
+								success: false,
+								message: "عملیات بررسی صحت ایمیل شما ناموفق بود، لطفاً دوباره تلاش کنید!",
+							});
+						}
+					} else {
+						const token = jwt.sign({ id: CheckAuthorFullInfo.id }, "secret");
+						const { Author_Password, Author_UserName, ...other } = CheckAuthorFullInfo.dataValues;
+						res
+							.cookie("access_token", token, {
+								httpOnly: true,
+							})
+							.status(200)
+							.json({
+								body: other,
+								success: true,
+							});
+					}
+				} else {
+					res.status(404).json({
+						success: false,
+						message: "رمز عبور اشتباه است!",
+					});
+				}
+			}
+
+			// CHECK Lord  FULL INFO
+			else if (ExistLord !== null && ExistAuthor.Role === "Lord") {
+				// Asynchronous run 👇
+				// const buf = randomBytes(256).toString("hex");
+				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistLord.Lord_Password);
+				if (isPasswordCurrent) {
+					// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
+					const refreshToken = jwt.sign({ id: ExistLord.id, Lord_UserName: ExistLord.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
+						expiresIn: "35s",
+					});
+					const accessToken = jwt.sign({ id: ExistLord.id, Lord_UserName: ExistLord.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
+						expiresIn: "15s",
+					});
+					// Store refresh token with expiration time
+
+					res.status(200).json({
+						body: {
+							accessToken: accessToken,
+							refreshToken: refreshToken,
+							Role: "Lord",
+						},
+						success: true,
+					});
+				} else {
+					res.status(404).json({
+						success: false,
+						message: "نام کاربری یا رمز عبور اشتباه است!",
+					});
+				}
 			} else {
 				res.status(404).json({
 					success: false,
-					message: "این کاربر موجود نیست، لطفاً ابتدا ثبت نام کنید!",
+					message: "رمز عبور یا نام کاربری اشتباه است!",
 				});
 			}
 		} catch (error) {

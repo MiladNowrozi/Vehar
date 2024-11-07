@@ -3,8 +3,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/authContext.js";
 
 import "./login_register.css";
-
-import { AxiosDefaultUrl } from "../../admin/header/pages/createNews/CreateNews";
+import { AxiosInstance } from "../../../axiosInstance.js";
 
 export const LoginAndRegister = () => {
 	const { login } = useContext(AuthContext);
@@ -134,7 +133,7 @@ export const LoginAndRegister = () => {
 	const forgotPasswordChangHandle = (e) => {
 		setInput((prev) => ({ ...prev, password_forgot: e.target.value }));
 	};
-  
+
 	const handelSubmitLogin = async (e) => {
 		e.preventDefault();
 		const showWarningLogin = document.getElementById("submit-warning-login");
@@ -180,7 +179,7 @@ export const LoginAndRegister = () => {
 
 		if (DataForgotCheck.length === 0) {
 			try {
-				await AxiosDefaultUrl({
+				await AxiosInstance({
 					method: "post",
 					url: "auth/email_password_forgot",
 					withCredentials: true,
@@ -244,7 +243,7 @@ export const LoginAndRegister = () => {
 
 		if (DataRegisterCheck.length === 0) {
 			try {
-				await AxiosDefaultUrl({
+				await AxiosInstance({
 					method: "post",
 					url: "auth/register",
 					withCredentials: true,
@@ -302,7 +301,6 @@ export const LoginAndRegister = () => {
 	return (
 		<div className="container-auth">
 			{/* start login part */}
-
 			<div id="login-content" style={{ right: "35%" }} className="login-content">
 				<p className="title-login">وارد شوید!</p>
 				<form className="login-form" id="login-form" action="">

@@ -5,9 +5,18 @@ import { PageMenu } from "./pageMenu/PageMenu.jsx";
 import { AnimationRed } from "../../../animations/Animation.jsx";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AxiosDefaultUrl } from "../../admin/header/pages/createNews/CreateNews.jsx";
 
 function Header() {
+	const [ReceiveAllNews, setReceiveAllNews] = useState({
+		News: [],
+		Limit: 10,
+		CurrentPage: 1,
+		TotalNews: null,
+		TotalPages: null,
+		Search: null,
+		SearchById: null,
+	});
+
 	function oofMenuPage() {
 		document.querySelector("#ContentPageMenu").style.right = "-18%";
 	}
@@ -18,43 +27,20 @@ function Header() {
 		document.documentElement.scrollTop = 0;
 	}
 
-	// const [category, setCategory] = useState();
-	// const [subColumn, setSubColumn] = useState({
-	//   OneColumn: [],
-	//   TwoColumn: [],
-	// });
 	// useEffect(() => {
-	//   const res = async () => {
-	//     try {
-	//       const res = await AxiosDefaultUrl({
-	//         method: "get",
-	//         url: "news/get-all/sports",
-	//       });
-	//       setCategory(
-	//         res.data.body?.map((e) => {
-	//           return e;
-	//         })
-	//       );
-	//     } catch (error) {
-	//       console.log(error);
-	//     }
-	//     try {
-	//       const res = await AxiosDefaultUrl({
-	//         method: "get",
-	//         url: "news/get-all/subColumn",
-	//       });
-	//       const One = res.data.body?.filter((e) => {
-	//         return e.subColumn === "one-column";
-	//       });
-	//       const Two = res.data.body?.filter((e) => {
-	//         return e.subColumn === "first-column" || e.subColumn === "scend-column";
-	//       });
-	//       setSubColumn((prev) => ({ ...prev, OneColumn: One, TwoColumn: Two }));
-	//     } catch (error) {
-	//       console.log(error);
-	//     }
-	//   };
-	//   res();
+	// 	const res = async () => {
+	// 		try {
+	// 			const res = await axiosInstance({
+	// 				method: "get",
+	// 				url: `news/get-all?cli=true&currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}`,
+	// 			});
+
+	// 			console.log(res.data);
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 		}
+	// 	};
+	// 	res();
 	// }, []);
 	return (
 		<Fragment>

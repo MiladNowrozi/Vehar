@@ -1,7 +1,6 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
 import { News } from "./News.js";
-import { User } from "./User.js";
 
 export const Comment = db.define(
 	"Comment",
@@ -46,15 +45,4 @@ News.hasMany(Comment, {
 		onDelete: "SET NULL",
 		onUpdate: "SET NULL",
 	},
-});
-
-db.queryInterface.tableExists("Comments").then(async (e) => {
-	if (!e) {
-		try {
-			await Comment.sync({ alter: true });
-		} catch (error) {
-			console.log(`table Comment not created! : ${error}`);
-		}
-	}
-	return;
 });

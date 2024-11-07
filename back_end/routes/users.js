@@ -3,9 +3,9 @@ import UserControllers from "../controllers/CtrlUsers.js";
 
 const router = express.Router();
 
-router.get("/get/:id", UserControllers.GteUser);
-// router.get("/get-all-user", UserControllers.GetAllUser);
-// router.put("/upd/user/:id", UserControllers.UpdUser);
-// router.delete("/delete/user/:id", UserControllers.DeleUser);
+router.get("/get:id&:role", UserControllers.GteUser);
+router.get("/get-all", UserControllers.GetAllUser);
+router.put("/put:id", UserControllers.CancelUser);
+router.delete("/delete:id", UserControllers.DeleteUser);
 
 export default router;

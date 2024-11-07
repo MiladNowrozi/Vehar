@@ -62,14 +62,14 @@ const Navbar = () => {
             <i className="fas fa-user-check"></i>
             <div className="content-logout">
               <span className="img-user">
-                {CurrentUser.img === null ? (
+                {CurrentUser.User_Img === null ? (
                   <i className="fas fa-user-circle"></i>
                 ) : (
-                  <img className="img" src={CurrentUser.img} alt="img-user" />
+                  <img className="img" src={CurrentUser.User_Img} alt="img-user" />
                 )}
               </span>
               <span className="firstName-user">
-                {CurrentUser.firstName + " " + CurrentUser.lastName}
+                {CurrentUser.User_FirstName + " " + CurrentUser.User_LastName}
               </span>
               <button type="button" onClick={logout} className="btn-logout">
                 <i className="fa fa-sign-out"></i>خروج

@@ -1,40 +1,31 @@
 import "./editprofile.css";
 import { useState } from "react";
-import { AxiosDefaultUrl } from "../createNews/CreateNews";
 export const EditProfile = () => {
-  const [file, setFile] = useState(null);
-  const handleClick = async () => {
-    const formData = new FormData();
-    formData.append("file", file);
+	const [file, setFile] = useState(null);
+	const handleClick = async () => {
+		const formData = new FormData();
+		formData.append("file", file);
 
-    // await AxiosDefaultUrl({
-    //   method: "post",
-    //   url: "/upload",
-    //   data: formData,
-    //   withCredentials: true,
-    // });
-  };
+		// await axiosInstance({
+		//   method: "post",
+		//   url: "/upload",
+		//   data: formData,
+		//   withCredentials: true,
+		// });
+	};
 
-  return (
-    <>
-      <div className="admin-edit-page">
-        <div className="admin-image-profile-edit">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/110px-User_icon_2.svg.png"
-            alt="admin"
-          />
-          <form action="/">
-            <label htmlFor="file">انتخاب تصویر</label>
-            <input
-              type="file"
-              id="myfile"
-              name="myfile"
-              onChange={(e) => setFile(e.target.files[0])}
-            />
-          </form>
-          <button onClick={handleClick}>send</button>
-        </div>
-        {/* <form action="/">
+	return (
+		<>
+			<div className="admin-edit-page">
+				<div className="admin-image-profile-edit">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/110px-User_icon_2.svg.png" alt="admin" />
+					<form action="/">
+						<label htmlFor="file">انتخاب تصویر</label>
+						<input type="file" id="myfile" name="myfile" onChange={(e) => setFile(e.target.files[0])} />
+					</form>
+					<button onClick={handleClick}>send</button>
+				</div>
+				{/* <form action="/">
           <div className="admin-name-edit">
             <label>نام :</label>
             <input
@@ -62,10 +53,10 @@ export const EditProfile = () => {
           </div>
           <div className="buttons-edit-profile">
             <input type="submit" value="ذخیره" />
-            <Link to={"/main-admin"}>انصراف</Link>
+            <Link to={"/lord"}>انصراف</Link>
           </div>
         </form> */}
-      </div>
-    </>
-  );
+			</div>
+		</>
+	);
 };

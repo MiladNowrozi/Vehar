@@ -1,51 +1,82 @@
+import { Op } from "@sequelize/core";
 import { News } from "../models/News.js";
+// import axios from "axios";
+import fs from "fs";
+import { Author } from "../models/Author.js";
+import { Category } from "../models/Category.js";
+import { SubCategory } from "../models/SubCategory.js";
+import { OptionNews } from "../models/OptionNews.js";
 
+// fs.readFile("News.json", "utf8", (err, data) => {
+// 	if (err) {
+// 		console.error(err);
+// 		return;
+// 	}
+// 	const users = JSON.parse(data);
+
+// 	// Access the data
+// 	users.forEach(async (user) => {
+// 		try {
+// 			await News.create({
+// 				News_Title: user.title.rendered,
+// 				News_Describe: user.excerpt.rendered,
+// 				News_Content: user.content.rendered,
+// 				createdAt: new Date(user.date),
+// 				categoryId: 1,
+// 				subCategoryId: 1,
+// 				authorId: 1,
+// 			});
+// 			console.log("yes");
+// 		} catch (error) {
+// 			console.log(error.message);
+// 		}
+// 	});
+// });
 export default class NewsControllers {
 	static CreateNews = async (req, res) => {
-		if (req.body.Category === "sports") {
-			try {
-				const NewsExist = await SportSpecialNews.findOne({
-					where: {
-						[Op.or]: [{ News_Title: req.body.Title }, { News_Describe: req.body.Description }, { News_Content: req.body.Editor }],
-					},
-				});
-				if (NewsExist === null) {
-					try {
-						const NotesNewsId = await SportSpecialNews.create({
-							News_Title: req.body.Title,
-							News_Describe: req.body.Description,
-							News_Content: req.body.Editor,
-							News_Images: req.body.Images,
-							// authorId: req.body.UserId,
-							// categoryId: req.body.categoryId,
-						});
-						await Sport.create({
-							SubCategoryName: req.body.Category,
-							SubColumnName: req.body.SubColumn,
-							SportSpecialNewsId: NotesNewsId.id,
-						});
-						res.status(200).json({
-							success: true,
-							message: "خبر با موفقیت ذخیره شد!",
-						});
-					} catch (e) {
-						res.status(412).json({
-							success: false,
-							message: e.errors[0].message,
-						});
-					}
-				} else {
+		try {
+			const NewsExist = await News.findOne({
+				where: {
+					[Op.or]: [{ News_Title: req.body.Title }, { News_Describe: req.body.Description }, { News_Content: req.body.Editor }],
+				},
+			});
+			if (NewsExist === null) {
+				try {
+					const NotesNewsId = await News.create({
+						News_Title: req.body.Title,
+						News_Describe: req.body.Description,
+						News_Content: req.body.Editor,
+						News_Images: req.body.Images,
+						News_Status: req.body.NewsStatus,
+						Comment_Status: req.body.Comment_Status,
+						Column: req.body.Column,
+						categoryId: req.body.CategoryId,
+						subCategoryId: req.body.SubCategoryId,
+						authorId: req.body.AuthorId,
+						optionNewsId: req.body.OptionNewsId,
+					});
+					res.status(200).json({
+						success: true,
+						message: "خبر با موفقیت ذخیره شد!",
+					});
+				} catch (e) {
 					res.status(412).json({
 						success: false,
-						message: "این خبر قبلاً منتشر شده است!",
+						message: e.errors[0].message,
 					});
 				}
-			} catch (error) {
-				res.status(404).json({
+			} else {
+				res.status(412).json({
 					success: false,
-					message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
+					message: "این خبر قبلاً منتشر شده است!",
 				});
 			}
+		} catch (error) {
+			// console.log(error);
+			res.status(404).json({
+				success: false,
+				message: error.message,
+			});
 		}
 		//  else if (req.body.Category === "cultural-and-artistic") {
 		//   try {
@@ -509,61 +540,161 @@ export default class NewsControllers {
 		//   // }
 		// }
 	};
+
 	// GET ALL NEWS
 	static GetAllNews = async (req, res) => {
-		try {
-			if (req.params.category === "subColumn") {
-				const OneColumn = await News.findOne({
-					where: { subColumn: "one-column" },
-					order: [["id", "DESC"]],
+		if (req.query.searchbyid !== "null") {
+			try {
+				const GetAllResult = await News.findAndCountAll({
+					where: {
+						id: req.query.searchbyid,
+					},
 				});
-				const ScendColumn = await News.findOne({
-					where: { subColumn: "scend-column" },
-					order: [["id", "DESC"]],
+
+				const ResultSearchId = await Promise.all(
+					GetAllResult.rows.map(async (i) => {
+						const author = await i.getAuthor({ raw: true });
+						const category = await i.getCategory({ raw: true });
+						const subCategory = await i.getSubCategory({ raw: true });
+						const optionNews = await i.getOptionNews({ raw: true });
+						return {
+							id: i.id,
+							News_Title: i.News_Title,
+							News_Describe: i.News_Describe,
+							News_Content: i.News_Content,
+							News_Images: i.News_Images,
+							News_Status: i.News_Status,
+							Comment_Status: i.Comment_Status,
+							Author: author.Author_FirstName + " " + author.Author_LastName,
+							Category: category?.Category,
+							SubCategory: subCategory?.SubCategory,
+							OptionNews: optionNews?.Option,
+							createdAt: i.createdAt,
+						};
+					})
+				);
+				res.status(200).json({
+					success: true,
+					body: {
+						News: ResultSearchId,
+						CurrentPage: parseInt(req.query.currentpage),
+						TotalPages: Math.ceil(GetAllResult.count / parseInt(req.query.limit)),
+						TotalNews: GetAllResult.count,
+					},
+					message: req.query.searchbyid === "null" ? "هیچ خبری موجود نیست" : `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
 				});
-				const FirstColumn = await News.findOne({
-					where: { subColumn: "first-column" },
-					order: [["id", "DESC"]],
+			} catch (e) {
+				res.status(500).json({
+					success: false,
+					body: null,
+					message: "درخواست برای دریافت اخبار ناموفق بود!",
 				});
-				const GetAllResult = [OneColumn, FirstColumn, ScendColumn];
-				if (GetAllResult.length > 0) {
-					res.status(200).json({
-						success: true,
-						body: GetAllResult,
-						message: "تمام اخبار با موفقیت دریافت شد!",
-					});
-				} else {
-					res.status(404).json({
-						success: false,
-						body: null,
-						message: "هیچ اخباری در این دسته موجود نیست!",
-					});
-				}
-			} else {
-				const GetAllResult = await News.findAll({
-					where: { category: req.params.category },
-					// limit: 2,
-				});
-				if (GetAllResult.length > 0) {
-					res.status(200).json({
-						success: true,
-						body: GetAllResult,
-						message: "تمام اخبار با موفقیت دریافت شد!",
-					});
-				} else {
-					res.status(404).json({
-						success: false,
-						body: null,
-						message: "هیچ اخباری در این دسته موجود نیست!",
-					});
-				}
 			}
-		} catch (e) {
-			res.status(500).json({
-				success: false,
-				body: null,
-				message: "درخواست برای دریافت اخبار ناموفق بود!",
+		} else if (req.query.search !== "null") {
+			const SearchInNewsByTitle = await News.findAll({
+				// attributes: ["News_Title"],
+				where: {
+					News_Title: {
+						[Op.like]: `%${req.query.search}%`,
+					},
+				},
 			});
+
+			const ResultSearchTitle = await Promise.all(
+				SearchInNewsByTitle.map(async (i) => {
+					const author = await i.getAuthor({ raw: true });
+					const category = await i.getCategory({ raw: true });
+					const subCategory = await i.getSubCategory({ raw: true });
+					const optionNews = await i.getOptionNews({ raw: true });
+
+					return {
+						id: i.id,
+						News_Title: i.News_Title,
+						News_Describe: i.News_Describe,
+						News_Content: i.News_Content,
+						News_Images: i.News_Images,
+						News_Status: i.News_Status,
+						Comment_Status: i.Comment_Status,
+						Author: author.Author_FirstName + " " + author.Author_LastName,
+						Category: category?.Category,
+						SubCategory: subCategory?.SubCategory,
+						OptionNews: optionNews?.Option,
+						createdAt: i.createdAt,
+					};
+				})
+			);
+			res.status(200).json({
+				success: true,
+				body: {
+					News: ResultSearchTitle,
+					CurrentPage: parseInt(req.query.currentpage),
+					TotalPages: Math.ceil(ResultSearchTitle.length / parseInt(req.query.limit)),
+					TotalNews: ResultSearchTitle.length,
+				},
+				message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
+			});
+		} else {
+			try {
+				const findAndCountAll = await News.findAndCountAll({
+					limit: parseInt(req.query.limit),
+					offset: (parseInt(req.query.currentpage) - 1) * parseInt(req.query.limit),
+				});
+
+				const Result = await Promise.all(
+					findAndCountAll.rows.map(async (i) => {
+						const author = await i.getAuthor({ raw: true });
+						const category = await i.getCategory({ raw: true });
+						const subCategory = await i.getSubCategory({ raw: true });
+						const optionNews = await i.getOptionNews({ raw: true });
+
+						return {
+							id: i.id,
+							News_Title: i.News_Title,
+							News_Describe: i.News_Describe,
+							News_Content: i.News_Content,
+							News_Images: i.News_Images,
+							News_Status: i.News_Status,
+							Comment_Status: i.Comment_Status,
+							Author: author.Author_FirstName + " " + author.Author_LastName,
+							Category: category?.Category,
+							SubCategory: subCategory?.SubCategory,
+							OptionNews: optionNews?.Option,
+							createdAt: i.createdAt,
+						};
+					})
+				);
+
+				// if (req.query.search === "null") {
+				res.status(200).json({
+					success: true,
+					body: {
+						News: Result,
+						CurrentPage: parseInt(req.query.currentpage),
+						TotalPages: Math.ceil(findAndCountAll.count / parseInt(req.query.limit)),
+						TotalNews: findAndCountAll.count,
+					},
+					message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
+				});
+				// }
+				//  else {
+				// 	res.status(200).json({
+				// 		success: true,
+				// 		body: {
+				// 			News: ResultSearchTitle,
+				// 			CurrentPage: parseInt(req.query.currentpage),
+				// 			TotalPages: Math.ceil(findAndCountAll.count / parseInt(req.query.limit)),
+				// 			TotalNews: ResultSearchTitle.length,
+				// 		},
+				// 		message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
+				// 	});
+				// }
+			} catch (e) {
+				res.status(500).json({
+					success: false,
+					body: null,
+					message: "درخواست برای دریافت اخبار ناموفق بود!",
+				});
+			}
 		}
 	};
 	// GET ONE NEWS
