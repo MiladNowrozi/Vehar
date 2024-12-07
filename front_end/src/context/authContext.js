@@ -7,9 +7,6 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
 	const navigate = useNavigate();
 	const [CurrentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("user") || null));
-	const [CurrentAuthor, setCurrentAuthor] = useState(JSON.parse(localStorage.getItem("author") || null));
-	const [CurrentLord, setCurrentLord] = useState(JSON.parse(localStorage.getItem("lord") || null));
-
 	const login = async (inputs) => {
 		const showWarningLogin = document.getElementById("submit-warning-login");
 		const WarningTime = () => {
@@ -19,7 +16,6 @@ export const AuthContextProvider = ({ children }) => {
 			}, 5000);
 		};
 		//
-
 		try {
 			const res = await AxiosInstance({
 				method: "post",
@@ -33,11 +29,11 @@ export const AuthContextProvider = ({ children }) => {
 			});
 			if (res.data.success) {
 				if (res.data.body.Role === "OnAuthor") {
-					setCurrentAuthor(res.data.body);
+					setCurrentUser(res.data.body);
 					navigate("/author");
 				}
 				if (res.data.body.Role === "Lord") {
-					setCurrentLord(res.data.body);
+					setCurrentUser(res.data.body);
 					navigate("/lord");
 				}
 				if (res.data.body.Role === "OnUser") {
@@ -50,7 +46,9 @@ export const AuthContextProvider = ({ children }) => {
 			}
 		} catch (err) {
 			showWarningLogin.innerHTML = `<p style="color:red;">${
-				err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
+				err.response.data.message === undefined
+					? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+					: err.response.data.message
 			}</p>`;
 			WarningTime();
 		}
@@ -65,9 +63,7 @@ export const AuthContextProvider = ({ children }) => {
 	};
 	useEffect(() => {
 		localStorage.setItem("user", JSON.stringify(CurrentUser));
-		localStorage.setItem("author", JSON.stringify(CurrentAuthor));
-		localStorage.setItem("lord", JSON.stringify(CurrentLord));
-	}, [CurrentUser, CurrentAuthor, CurrentLord]);
+	}, [CurrentUser]);
 
-	return <AuthContext.Provider value={{ CurrentUser, CurrentAuthor, CurrentLord, login, logout }}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ CurrentUser, login, logout }}>{children}</AuthContext.Provider>;
 };

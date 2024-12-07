@@ -1,44 +1,43 @@
 @font-face {
-  font-family: "Vazirmatn";
-  src: url("/src/fonts/vazirmatn/webfonts/Vazirmatn[wght].woff2")
-      format("woff2 supports variations"),
-    url("/src/fonts/vazirmatn/webfonts/Vazirmatn[wght].woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Vazirmatn";
+	src: url("/src/fonts/vazirmatn/webfonts/Vazirmatn[wght].woff2") format("woff2 supports variations"),
+		url("/src/fonts/vazirmatn/webfonts/Vazirmatn[wght].woff2") format("woff2-variations");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
 }
 
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 /*style page body in home*/
 
 .bodyHome {
-  margin: 0;
-  padding: 0;
-  /*style page Navbar in home*/
-  .Navbar {
-    width: 100%;
-    height: 70px;
-    background-color: rgba(3, 500, 1, 0.12);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 6px 0px 6px 0px;
-    font-size: 20px;
-    transition: all 1s;
-  }
+	margin: 0;
+	padding: 0;
+	/*style page Navbar in home*/
+	.Navbar {
+		width: 100%;
+		height: 70px;
+		background-color: rgba(3, 500, 1, 0.12);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 6px 0px 6px 0px;
+		font-size: 20px;
+		transition: all 1s;
+	}
 }
 
 /*style page Header in home*/
 
 .HeaderHome {
-  width: 100%;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
+	width: 100%;
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
 }
 
 /*style page Footer in home*/
@@ -46,23 +45,23 @@
 /* start style scroll add to menu*/
 
 .NACScroll {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #1edd0459;
-  position: sticky;
-  top: 0px;
-  padding: 6px 0px 6px 0px;
-  font-size: 20px;
-  transition: all 1s;
-  z-index: 999;
+	width: 100%;
+	height: 50px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	background-color: #1edd0459;
+	position: sticky;
+	top: 0px;
+	padding: 6px 0px 6px 0px;
+	font-size: 20px;
+	transition: all 1s;
+	z-index: 999;
 }
 
 .scrollAddMenuText > ul > li {
-  position: absolute;
-  right: 150px;
-  top: 8px;
-  transition: all 2s;
+	position: absolute;
+	right: 150px;
+	top: 8px;
+	transition: all 2s;
 }

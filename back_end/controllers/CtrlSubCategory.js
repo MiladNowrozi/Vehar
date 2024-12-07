@@ -7,32 +7,53 @@ export default class SubCategoryControllers {
 		try {
 			const ExistSubCategory = await SubCategory.findOne({
 				where: {
-					SubCategory: req.params.subcategory,
-					categoryId: req.params.ParentCategory,
+					SubCategory: req.query.subcategory,
+					Category: req.query.Category,
 				},
 			});
 			if (!ExistSubCategory) {
-				await SubCategory.create({
-					SubCategory: req.params.subcategory,
-					categoryId: req.params.ParentCategory,
-				});
-				const ShowAllSubCategory = await SubCategory.findAll();
-				if (ShowAllSubCategory.length !== 0) {
-					res.status(200).json({
-						success: true,
-						body: ShowAllSubCategory,
-						message: "all Subcategory received successfully!",
+				if (req.query.subcategory && req.query.Category) {
+					await SubCategory.create({
+						SubCategory: req.query.subcategory,
+						Category: req.query.Category,
 					});
+					const politic = await SubCategory.findAndCountAll({ where: { Category: "politic" } });
+					const economy = await SubCategory.findAndCountAll({ where: { Category: "economy" } });
+					const social = await SubCategory.findAndCountAll({ where: { Category: "social" } });
+					const sport = await SubCategory.findAndCountAll({ where: { Category: "sport" } });
+					const local = await SubCategory.findAndCountAll({ where: { Category: "local" } });
+					const ShowAllSubCategory = await SubCategory.findAll();
+					if (ShowAllSubCategory.length !== 0) {
+						res.status(200).json({
+							success: true,
+							body: {
+								ShowAllSubCategory,
+								Count: {
+									politic: politic.count,
+									economy: economy.count,
+									social: social.count,
+									sport: sport.count,
+									local: local.count,
+								},
+							},
+							message: "all Subcategory received successfully!",
+						});
+					} else {
+						res.status(403).json({
+							success: false,
+							message: "دسته ای وجود ندارد.",
+						});
+					}
 				} else {
-					res.status(403).json({
+					res.status(404).json({
 						success: false,
-						message: "دسته ای وجود ندارد.",
+						message: "لطفاً دسته و زیر دسته را تعیین کنید!",
 					});
 				}
 			} else {
 				res.status(404).json({
 					success: false,
-					message: `زیر دسته ${req.params.subcategory} قبلا ساخته شده است!`,
+					message: `زیر دسته ${req.query.subcategory} قبلا ساخته شده است!`,
 				});
 			}
 		} catch (er) {
@@ -48,11 +69,25 @@ export default class SubCategoryControllers {
 
 	// GET ALL NEWS
 	static GetAllSubCategory = async (req, res) => {
+		const politic = await SubCategory.findAndCountAll({ where: { Category: "politic" } });
+		const economy = await SubCategory.findAndCountAll({ where: { Category: "economy" } });
+		const social = await SubCategory.findAndCountAll({ where: { Category: "social" } });
+		const sport = await SubCategory.findAndCountAll({ where: { Category: "sport" } });
+		const local = await SubCategory.findAndCountAll({ where: { Category: "local" } });
 		const ShowAllSubCategory = await SubCategory.findAll();
 		if (ShowAllSubCategory.length !== 0) {
 			res.status(200).json({
 				success: true,
-				body: ShowAllSubCategory,
+				body: {
+					ShowAllSubCategory,
+					Count: {
+						politic: politic.count,
+						economy: economy.count,
+						social: social.count,
+						sport: sport.count,
+						local: local.count,
+					},
+				},
 				message: "all Subcategory received successfully!",
 			});
 		} else {
@@ -68,12 +103,38 @@ export default class SubCategoryControllers {
 
 	// DELETE ONE NEWS
 	static DeleteSubCategory = async (req, res) => {
-		if (req.params.id) {
-			await SubCategory.destroy({ where: { id: req.params.id } });
-			const BackAllCategory = await SubCategory.findAll();
+		if (req.query.id) {
+			await SubCategory.destroy({ where: { id: req.query.id } });
+			const politic = await SubCategory.findAndCountAll({ where: { Category: "politic" } });
+			const economy = await SubCategory.findAndCountAll({ where: { Category: "economy" } });
+			const social = await SubCategory.findAndCountAll({ where: { Category: "social" } });
+			const sport = await SubCategory.findAndCountAll({ where: { Category: "sport" } });
+			const local = await SubCategory.findAndCountAll({ where: { Category: "local" } });
+			const ShowAllSubCategory = await SubCategory.findAll();
 			res.status(200).json({
 				success: true,
-				body: BackAllCategory.length !== 0 ? BackAllCategory : BackAllCategory,
+				body:
+					ShowAllSubCategory.length !== 0
+						? {
+								ShowAllSubCategory,
+								Count: {
+									politic: politic.count,
+									economy: economy.count,
+									social: social.count,
+									sport: sport.count,
+									local: local.count,
+								},
+						  }
+						: {
+								ShowAllSubCategory,
+								Count: {
+									politic: politic.count,
+									economy: economy.count,
+									social: social.count,
+									sport: sport.count,
+									local: local.count,
+								},
+						  },
 			});
 		} else {
 			res.status(403).json({

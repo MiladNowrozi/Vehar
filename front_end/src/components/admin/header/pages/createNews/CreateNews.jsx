@@ -1,7 +1,5 @@
 /** @format */
-
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { Editor } from "@tinymce/tinymce-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,19 +10,23 @@ import { AxiosInstance } from "../../../../../axiosInstance.js";
 export const CreateNews = () => {
 	const navigate = useNavigate();
 	const [input, setInput] = useState({
+		Titer: "",
 		Title: "",
 		Description: "",
 		Editor: "",
 		Images: null,
 		NewsStatus: true,
 		Comment_Status: false,
-		Column: null,
-		CategoryId: "",
+		MainPageSlider: false,
+		MainPageChoice: false,
+		SubPageSlider: false,
+		SubPageColumn: false,
+		MainNote: false,
+		SubNote: false,
+		Category: "",
 		SubCategoryId: null,
 		AuthorId: null,
-		OptionNewsId: "",
 	});
-
 	const { CurrentLord } = useContext(AuthContext);
 
 	const handelChange = (e) => {
@@ -53,16 +55,11 @@ export const CreateNews = () => {
 	const handleChangeCategory = (e) => {
 		const ele = document.getElementsByName("HandleCheckboxCategory");
 		const eleSubCategory = document.getElementsByName("HandleCheckboxSubCategory");
-		const showCreateSubCategory = document.getElementById(e.target.id + "-Create-SubCategory");
-
-		document.getElementById(e.target.id).checked === true
-			? (showCreateSubCategory.style.display = "block")
-			: (showCreateSubCategory.style.display = "none");
-
+		const showCreateSubCategory = document.getElementById("subcategory-content");
 		if (document.getElementById(e.target.id).checked) {
 			setInput((prev) => ({
 				...prev,
-				CategoryId: e.target.id.match(/(\d+)/)[0],
+				Category: e.target.id,
 			}));
 			const a = document.getElementsByClassName("Create-SubCategory");
 			for (let i = 0; i < a.length; i++) {
@@ -79,14 +76,12 @@ export const CreateNews = () => {
 		} else {
 			setInput((prev) => ({
 				...prev,
-				CategoryId: "",
+				Category: "",
 			}));
 		}
 	};
 
 	const handleChangeSubCategory = (e) => {
-		console.log(e.target.id.match(/(\d+)/)[0]);
-
 		const ele = document.getElementsByName("HandleCheckboxSubCategory");
 		// const showCreateSubCategory = document.getElementById(e.target.id + "-Create-SubCategory");
 		// document.getElementById(e.target.id).checked === true
@@ -113,61 +108,21 @@ export const CreateNews = () => {
 			}));
 		}
 	};
-	const handleChangeOptions = (e) => {
-		const ele = document.getElementsByName("HandleCheckboxOptions");
-		// const showCreateSubCategory = document.getElementById(e.target.id + "-Create-SubCategory");
-		// document.getElementById(e.target.id).checked === true
-		// 	? (showCreateSubCategory.style.display = "block")
-		// 	: (showCreateSubCategory.style.display = "none");
-		if (document.getElementById(e.target.id).checked) {
-			setInput((prev) => ({
-				...prev,
-				OptionNewsId: e.target.id.match(/(\d+)/)[0],
-			}));
-			// const a = document.getElementsByClassName("Create-SubCategory");
-			// for (let i = 0; i < a.length; i++) {
-			// 	a[i].style.display = "none";
-			// 	showCreateSubCategory.style.display = "block";
-			// }
-			for (let i = 0; i < ele.length; i++) {
-				ele[i].checked = false;
-				document.getElementById(e.target.id).checked = true;
-			}
-		} else {
-			setInput((prev) => ({
-				...prev,
-				OptionNewsId: "",
-			}));
-		}
-	};
-
-	const handleChangeColumn = (e) => {
-		const ele = document.getElementsByName("HandleCheckboxColumn");
-		if (document.getElementById(e.target.id).checked) {
-			setInput((prev) => ({ ...prev, Column: e.target.id }));
-			for (let i = 0; i < ele.length; i++) {
-				ele[i].checked = false;
-				document.getElementById(e.target.id).checked = true;
-			}
-		} else {
-			setInput((prev) => ({ ...prev, Column: "" }));
-		}
-	};
 
 	const handleSubmit = async () => {
-		if (input.Title === "" && input.Description === "" && input.Editor === "" && input.CategoryId === "") {
+		if (input.Title === "" && input.Description === "" && input.Editor === "" && input.Category === "") {
 			const showWarning = document.getElementById("submit-warning");
 			showWarning.style.display = "flex";
 			showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
 			setTimeout(() => {
 				showWarning.style.display = "none";
 			}, 5000);
-		} else if (input.Title === "" || input.Description === "" || input.Editor === "" || input.CategoryId === "") {
+		} else if (input.Title === "" || input.Description === "" || input.Editor === "" || input.Category === "") {
 			const showWarning = document.getElementById("submit-warning");
 			showWarning.style.display = "flex";
 			showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${input.Title === "" ? "عنوان خبر، " : ""}${
 				input.Description === "" ? "توضیح کوتاه، " : ""
-			}${input.Editor === "" ? "متن خبر، " : ""}${input.CategoryId === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
+			}${input.Editor === "" ? "متن خبر، " : ""}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
 			setTimeout(() => {
 				showWarning.style.display = "none";
 			}, 5000);
@@ -192,7 +147,9 @@ export const CreateNews = () => {
 						const showWarning = document.getElementById("submit-warning");
 						showWarning.style.display = "flex";
 						showWarning.innerHTML = `<p style="color: red;">${
-							err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
+							err.response.data.message === undefined
+								? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+								: err.response.data.message
 						}</p>`;
 						setTimeout(() => {
 							showWarning.style.display = "none";
@@ -210,34 +167,22 @@ export const CreateNews = () => {
 	};
 
 	const [Categories, setCategories] = useState({
-		GetCategories: "",
-		GetSubCategories: "",
-		GetOptionsNews: "",
+		GetCategories: [
+			{ id: "politic", name: "سیاست" },
+			{ id: "economy", name: "اقتصاد" },
+			{ id: "social", name: "جامعه" },
+			{ id: "sport", name: "ورزش" },
+			{ id: "local", name: "بومی" },
+		],
+		GetSubCategories: [],
 	});
-
-	const [valueCategory, setValueCategory] = useState("");
-
 	const [valueSubCategory, setValueSubCategory] = useState({
-		ParentCategory: "",
 		SubCategory: "",
+		Category: "",
 	});
 
 	useEffect(() => {
 		const k = async () => {
-			await AxiosInstance({
-				method: "get",
-				url: "news/category/get-all",
-				withCredentials: true,
-			})
-				.then(async (success) => {
-					setCategories((prev) => ({
-						...prev,
-						GetCategories: success.data.body,
-					}));
-				})
-				.catch((e) => {
-					document.getElementById("emptyCategory").innerHTML = e.response.data.message;
-				});
 			await AxiosInstance({
 				method: "get",
 				url: "news/subcategory/get-all",
@@ -252,69 +197,25 @@ export const CreateNews = () => {
 				.catch((e) => {
 					console.log(e.response.data.message);
 				});
-			await AxiosInstance({
-				method: "get",
-				url: "news/Option/get-all",
-				withCredentials: true,
-			})
-				.then((success) => {
-					setCategories((prev) => ({
-						...prev,
-						GetOptionsNews: success.data.body,
-					}));
-				})
-				.catch((e) => {
-					console.log(e.response.data);
-				});
 		};
 		k();
 	}, []);
 
-	const handelChangeCategory = (e) => {
-		setValueCategory(e.target.value);
-	};
 	const handelChangeSubCategory = (e) => {
 		setValueSubCategory((prev) => ({
 			...prev,
-			ParentCategory: e.target.id.match(/(\d+)/)[0],
+			Category: e.target.id,
 			SubCategory: e.target.value,
 		}));
 	};
 	//
-	const submitCategoryName = async () => {
-		// e.preventDefault();
-		try {
-			await AxiosInstance({
-				method: "post",
-				url: `news/category/create/${valueCategory}`,
-				withCredentials: true,
-			})
-				.then((success) => {
-					setCategories((prev) => ({
-						...prev,
-						GetCategories: success.data.body,
-					}));
-					document.getElementById("emptyCategory").innerHTML = "";
-				})
-				.catch((err) => {
-					const showWarningById = document.getElementById("emptyCategory");
-					showWarningById.style.visibility = "visible";
-					showWarningById.innerHTML = err.response.data.message;
-					setTimeout(() => {
-						showWarningById.style.visibility = "hidden";
-					}, 2000);
-				});
-			document.getElementById("input-create-Category").value = "";
-		} catch (error) {
-			console.log(error);
-		}
-	};
+
 	const submitSubCategoryName = async (e) => {
 		e.preventDefault();
 		try {
 			await AxiosInstance({
 				method: "post",
-				url: `news/create-subcategory/${valueSubCategory.ParentCategory}/${valueSubCategory.SubCategory}`,
+				url: `news/create-subcategory?Category=${valueSubCategory.Category}&subcategory=${valueSubCategory.SubCategory}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -324,7 +225,7 @@ export const CreateNews = () => {
 					}));
 				})
 				.catch((err) => {
-					const showWarningById = document.getElementById(e.target.id + "ShowWarningSubCategory");
+					const showWarningById = document.getElementById(e.target.id + "1");
 					const showWarningByClass = document.getElementsByClassName("ShowWarningSubCategory");
 					showWarningById.style.visibility = "visible";
 					for (let i = 0; i < showWarningByClass.length; i++) {
@@ -334,10 +235,7 @@ export const CreateNews = () => {
 						}, 2000);
 					}
 				});
-			const ele = document.getElementsByClassName("input-subcategory");
-			for (let i = 0; i < ele.length; i++) {
-				ele[i].value = "";
-			}
+			document.querySelector(".input-subcategory").value = "";
 		} catch (error) {
 			console.log(error);
 		}
@@ -348,44 +246,12 @@ export const CreateNews = () => {
 		SetGetSubCategoryId: null,
 	});
 
-	const handleDeletedCategory = async (Deleted) => {
-		try {
-			await AxiosInstance({
-				method: "delete",
-				url: `news/category-delete/${Deleted.target.id}`,
-				withCredentials: true,
-			})
-				.then((success) => {
-					document.getElementById("warning-delete-Category").style.display = "none";
-					setCategories((prev) => ({
-						...prev,
-						GetCategories: success.data.body,
-					}));
-					document.getElementById("emptyCategory").innerHTML = success.data.message;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		} catch (error) {
-			console.log(error);
-		}
-	};
-	const handleDeleteCategory = async (Delete) => {
-		SetGetCategoriesId((prev) => ({
-			...prev,
-			GetCategoryId: Delete.target.id,
-		}));
-		document.getElementById("warning-delete-Category").style.display = "flex";
-		document.getElementById(
-			"deleted-Category"
-		).innerHTML = `آیا میخواهید دسته والد <span style="color:red;">${Delete.target.name}</span> را حذف کنید ؟ <br> <span  style="color:red;">این کار خبرهای فرزند ${Delete.target.name} و تمام زیر مجموعه  های آن مانند اخبار ویژه، اخبار پربیننده و ... را به لیست اخبار بدون دسته اضافه می کند .</span>`;
-	};
 	//
 	const handleDeletedSubCategory = async (Deleted) => {
 		try {
 			await AxiosInstance({
 				method: "delete",
-				url: `news/dele-subcategory/${Deleted.target.id}`,
+				url: `news/dele-subcategory?id=${Deleted.target.id}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -410,85 +276,99 @@ export const CreateNews = () => {
 		document.getElementById("warning-delete-SubCategory").style.display = "flex";
 		document.getElementById(
 			"deleted-SubCategory"
-		).innerHTML = `آیا میخواهید دسته فرزند <span style="color:red;">${Delete.target.name}</span> را حذف کنید ؟ <br> <span  style="color:red;">این کار خبرهای زیر مجموعه ${Delete.target.name}  مانند اخبار ویژه، اخبار پربیننده و ... را بدون دسته قرار می دهد .</span>`;
-	};
-	//
-	const handleCancelDeleCategory = async () => {
-		document.getElementById("warning-delete-Category").style.display = "none";
+		).innerHTML = `آیا میخواهید دسته فرزند <span style="color:red;">${Delete.target.name}</span> را حذف کنید ؟ <br> <span  style="color:red;">این کار خبرهای زیر مجموعه ${Delete.target.name} را به لیست اخبار بدون دسته منتقل می کند !</span>`;
 	};
 	const handleCancelDeleSubCategory = async () => {
 		document.getElementById("warning-delete-SubCategory").style.display = "none";
 	};
 	//
-	const HandelNewsStatus = async () => {
-		document.getElementById("release").style.pointerEvents = "none";
-		if (input.Title === "" && input.Description === "" && input.Editor === "" && input.CategoryId === "") {
-			const showWarning = document.getElementById("submit-warning");
-			showWarning.style.display = "flex";
-			showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
-			setTimeout(() => {
-				showWarning.style.display = "none";
-			}, 5000);
-		} else if (input.Title === "" || input.Description === "" || input.Editor === "" || input.CategoryId === "") {
-			const showWarning = document.getElementById("submit-warning");
-			showWarning.style.display = "flex";
-			showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${input.Title === "" ? "عنوان خبر، " : ""}${
-				input.Description === "" ? "توضیح کوتاه، " : ""
-			}${input.Editor === "" ? "متن خبر، " : ""}${input.CategoryId === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
-			setTimeout(() => {
-				showWarning.style.display = "none";
-			}, 5000);
-		} else {
-			try {
-				await AxiosInstance({
-					method: "post",
-					url: "news/create",
-					data: input,
-					withCredentials: true,
-				})
-					.then((success) => {
-						const showWarning = document.getElementById("submit-warning");
-						showWarning.style.display = "flex";
-						showWarning.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
-						setTimeout(() => {
-							showWarning.style.display = "none";
-						}, 5000);
-					})
-					.catch((err) => {
-						console.log(err.response.data);
-						const showWarning = document.getElementById("submit-warning");
-						showWarning.style.display = "flex";
-						showWarning.innerHTML = `<p style="color: red;">${
-							err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
-						}</p>`;
-						setTimeout(() => {
-							showWarning.style.display = "none";
-						}, 5000);
-					});
-			} catch (error) {
-				const showWarning = document.getElementById("submit-warning");
-				showWarning.style.display = "flex";
-				showWarning.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
-				setTimeout(() => {
-					showWarning.style.display = "none";
-				}, 5000);
-			}
-		}
-	};
+	// const HandelNewsStatus = async () => {
+	// 	document.getElementById("release").style.pointerEvents = "none";
+	// 	if (input.Title === "" && input.Description === "" && input.Editor === "" && input.CategoryId === "") {
+	// 		const showWarning = document.getElementById("submit-warning");
+	// 		showWarning.style.display = "flex";
+	// 		showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
+	// 		setTimeout(() => {
+	// 			showWarning.style.display = "none";
+	// 		}, 5000);
+	// 	} else if (input.Title === "" || input.Description === "" || input.Editor === "" || input.Category === "") {
+	// 		const showWarning = document.getElementById("submit-warning");
+	// 		showWarning.style.display = "flex";
+	// 		showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${input.Title === "" ? "عنوان خبر، " : ""}${
+	// 			input.Description === "" ? "توضیح کوتاه، " : ""
+	// 		}${input.Editor === "" ? "متن خبر، " : ""}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
+	// 		setTimeout(() => {
+	// 			showWarning.style.display = "none";
+	// 		}, 5000);
+	// 	} else {
+	// 		try {
+	// 			await AxiosInstance({
+	// 				method: "post",
+	// 				url: "news/create",
+	// 				data: input,
+	// 				withCredentials: true,
+	// 			})
+	// 				.then((success) => {
+	// 					const showWarning = document.getElementById("submit-warning");
+	// 					showWarning.style.display = "flex";
+	// 					showWarning.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
+	// 					setTimeout(() => {
+	// 						showWarning.style.display = "none";
+	// 					}, 5000);
+	// 				})
+	// 				.catch((err) => {
+	// 					console.log(err.response.data);
+	// 					const showWarning = document.getElementById("submit-warning");
+	// 					showWarning.style.display = "flex";
+	// 					showWarning.innerHTML = `<p style="color: red;">${
+	// 						err.response.data.message === undefined
+	// 							? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+	// 							: err.response.data.message
+	// 					}</p>`;
+	// 					setTimeout(() => {
+	// 						showWarning.style.display = "none";
+	// 					}, 5000);
+	// 				});
+	// 		} catch (error) {
+	// 			const showWarning = document.getElementById("submit-warning");
+	// 			showWarning.style.display = "flex";
+	// 			showWarning.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
+	// 			setTimeout(() => {
+	// 				showWarning.style.display = "none";
+	// 			}, 5000);
+	// 		}
+	// 	}
+	// };
 
 	return (
 		<>
 			<div className="news-create-admin">
 				<form id="loginForm" className="input-news-admin">
+					<label htmlFor="Titer">تیتر خبر :</label>
+					<input
+						type="text"
+						id="Titer"
+						name="Titer"
+						autoComplete="off"
+						placeholder="مسئول اداره امور خبرنگاران ؛"
+						onChange={handelChange}
+					/>
 					<label htmlFor="Title">عنوان خبر :</label>
-					<input type="text" id="Title" name="Title" autoComplete="off" placeholder="جهان بینی خبرنگاران ..." onChange={handelChange} />
+					<input
+						type="text"
+						id="Title"
+						name="Title"
+						autoComplete="off"
+						placeholder="جهان بینی خبرنگاران، در حوزه رسانه ها مسئله ای بسیار مهم است ..."
+						onChange={handelChange}
+					/>
 					<label htmlFor="Description">توضیح کوتاه :</label>
 					<input
 						type="text"
 						id="Description"
 						name="Description"
 						autoComplete="off"
-						placeholder="خبرنگار باید به دید جهانی، وقایع را نگاه کند ..."
+						placeholder="مسئول محترم اداره امور خبرنگاران گفت؛ خبرنگار باید به دید جهانی، وقایع را نگاه کند ..."
 						onChange={handelChange}
 					/>
 
@@ -545,149 +425,249 @@ export const CreateNews = () => {
 					/>
 
 					<div className="Category">
+						<div className="title-category">
+							<h2>مربوط به دسته</h2>
+						</div>
 						<div className="container-category">
-							<div className="title-category">
-								<h2>مربوط به دسته</h2>
-							</div>
 							<div className="server-category">
 								{/* receive Categories from server */}
-								{Categories.GetCategories?.length !== 0 &&
-									Categories.GetCategories?.map((Category) => {
-										return (
-											<div key={Category.id + "Category"} className="content-add-category">
-												<div className="add-Category">
-													<label htmlFor={Category.id + "Category"}>
+								<div className="content-add-category">
+									{Categories.GetCategories.length !== 0 &&
+										Categories.GetCategories.map((Category) => {
+											return (
+												<div key={Category.id} className="add-Category">
+													<label htmlFor={Category.id}>
 														<input
 															name="HandleCheckboxCategory"
 															onChange={handleChangeCategory}
 															type="checkbox"
-															id={Category.id + "Category"}
+															id={Category.id}
 															className="button-category"
 														/>
-														{Category.Category}
+														{Category.name}
 													</label>
-													<button type="button" id={Category.id} name={Category.Category} onClick={handleDeleteCategory} className="fa fa-trash"></button>
 												</div>
-												{/* receive SubCategories from server */}
-												<div id={Category.id + "Category" + "-Create-SubCategory"} className="Create-SubCategory">
-													{Categories.GetSubCategories.length !== 0 &&
-														Categories.GetSubCategories.map((SubCategory) => {
-															return (
-																SubCategory.categoryId === Category.id && (
-																	<div key={SubCategory.id + "SubCategory"} className="btn-checkbox-subC">
-																		<label htmlFor={SubCategory.id + "SubCategory"} className="content-checkbox">
-																			<input
-																				name="HandleCheckboxSubCategory"
-																				onChange={handleChangeSubCategory}
-																				type="checkbox"
-																				id={SubCategory.id + "SubCategory"}
-																				className="button-category"
-																			/>
-																			{SubCategory.SubCategory}
-																		</label>
-																		<button
-																			name={SubCategory.SubCategory}
-																			id={SubCategory.id}
-																			onClick={handleDeleteSubCategory}
-																			type="button"
-																			className="fa fa-trash"
-																		></button>
-																	</div>
-																)
-															);
-														})}
-													<hr />
-													<div className="branch-Create-content">
-														<p>{`اضافه کردن زیر دسته برای ${Category.Category}`}</p>
-														<input id={Category.id + "Parent-SubCategory"} onChange={handelChangeSubCategory} className="input-subcategory" type="input" />
-														<input id={Category.id + "test"} onClick={submitSubCategoryName} type="button" value={"+"} />
-														<br />
-														<span
-															id={Category.id + "test" + "ShowWarningSubCategory"}
-															name={Category.id + "ShowWarningSubCategory"}
-															className="ShowWarningSubCategory"
-														></span>
+											);
+										})}
+								</div>
+								<div id="subcategory-content" className="Create-SubCategory">
+									<h3>
+										{(Categories.GetSubCategories.Count?.[input.Category] === 0 &&
+											`${
+												(input.Category === "politic" && "سیاست") ||
+												(input.Category === "economy" && "اقتصاد") ||
+												(input.Category === "social" && "جامعه") ||
+												(input.Category === "sport" && "ورزش") ||
+												(input.Category === "local" && "بومی")
+											}، هیچ زیر دسته ای ندارد!`) ||
+											` افزودن دسته جدید برای ${
+												(input.Category === "politic" && "سیاست") ||
+												(input.Category === "economy" && "اقتصاد") ||
+												(input.Category === "social" && "جامعه") ||
+												(input.Category === "sport" && "ورزش") ||
+												(input.Category === "local" && "بومی") ||
+												"..."
+											} `}
+									</h3>
+									<div className="ddd">
+										{Categories.GetSubCategories.ShowAllSubCategory?.map((SubCategory) => {
+											return (
+												SubCategory.Category === input.Category && (
+													<div key={SubCategory.id + "SubCategory"} className="btn-checkbox-subC">
+														<label htmlFor={SubCategory.id + "SubCategory"} className="content-checkbox">
+															<input
+																name="HandleCheckboxSubCategory"
+																onChange={handleChangeSubCategory}
+																type="checkbox"
+																id={SubCategory.id + "SubCategory"}
+																className="button-category"
+															/>
+															{SubCategory.SubCategory}
+														</label>
+														<button
+															name={SubCategory.SubCategory}
+															id={SubCategory.id}
+															onClick={handleDeleteSubCategory}
+															type="button"
+															className="fa fa-trash"
+														></button>
 													</div>
-												</div>
-											</div>
-										);
-									})}
-								<div id="emptyCategory"></div>
-								<p>اضافه کردن یک دسته جدید.</p>
-								<div className="content-create-category">
-									<input id="input-create-Category" onChange={handelChangeCategory} type="input" />
-									<input onClick={submitCategoryName} type="button" value={"+"} />
+												)
+											);
+										})}
+									</div>
+									<div className="branch-Create-content">
+										<span
+											id={input.Category + "test1"}
+											name={input.Category + "ShowWarningSubCategory"}
+											className="ShowWarningSubCategory"
+										></span>
+										<div className="btn-create-sub-category">
+											<input id={input.Category} onChange={handelChangeSubCategory} className="input-subcategory" type="input" />
+											<input id={input.Category + "test"} onClick={submitSubCategoryName} type="button" value={"+"} />
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-
-						{/*  */}
-						<div className="container-columns">
-							<div className="title-column">
-								<h2>افزودن به اسلایدر</h2>
-							</div>
-							<div id="content-column" className="content-column">
-								<input type="checkbox" id="one-column" onChange={handleChangeColumn} name="HandleCheckboxColumn" />
-								<label htmlFor="one-column">تک ستونی</label>
-								<br />
-								<label className="slider" htmlFor="slider">
-									دو ستونی
-								</label>
-								<br />
-								<div className="content-two-column">
-									<input type="checkbox" id="first-column" onChange={handleChangeColumn} name="HandleCheckboxColumn" />
-									<label htmlFor="first-column">ستون اول</label>
-									<br />
-									<input type="checkbox" id="scend-column" onChange={handleChangeColumn} name="HandleCheckboxColumn" />
-									<label htmlFor="scend-column">ستون دوم</label>
-									<br />
-								</div>
-							</div>
-							<div className="content-configuration-news">
-								<div className="drafts">
-									<button onClick={HandelNewsStatus} type="button">
-										ذخیره در پیشنویس ها
-									</button>
-								</div>
+							<div className="container-columns">
 								<div className="disable-comment">
 									<input
 										onClick={() => {
-											const l = document.getElementById("disable-comment");
 											setInput((prev) => ({
 												...prev,
-												Comment_Status: l.checked ? true : false,
+												Comment_Status: document.getElementById("disable-comment").checked,
 											}));
 										}}
 										type="checkbox"
 										id="disable-comment"
 									/>
-									<label htmlFor="disable-comment">بستن نظرات برای این خبر</label>
+									<label htmlFor="disable-comment">بستن اظهار نظر</label>
+								</div>
+								<hr style={{ width: "100%", backgroundColor: "red" }} />
+								<div className="add-to-slider-main-page">
+									<input
+										type="checkbox"
+										id="add-to-slider-main-page"
+										onChange={(e) => {
+											if (document.getElementById("add-to-slider-main-page").checked) {
+												document.getElementById("add-to-chosen-main-page").checked = false;
+												document.getElementById("add-to-slider-self-news").checked = true;
+												document.getElementById("add-to-main-page-note").checked = false;
+												document.getElementById("add-to-chosen-self-news").checked = false;
+												document.getElementById("add-to-self-page-note").checked = false;
+											}
+											setInput((prev) => ({
+												...prev,
+												SubPageSlider: document.getElementById(e.target.id).checked,
+											}));
+										}}
+									/>
+									<label htmlFor="add-to-slider-main-page">اسلایدر صفحه اصلی</label>
+									<br />
+								</div>
+								<div className="add-to-slider-self-news">
+									<input
+										onChange={(e) => {
+											if (document.getElementById("add-to-slider-self-news").checked) {
+												document.getElementById("add-to-chosen-main-page").checked = false;
+												document.getElementById("add-to-slider-main-page").checked = false;
+												document.getElementById("add-to-main-page-note").checked = false;
+												document.getElementById("add-to-chosen-self-news").checked = false;
+												document.getElementById("add-to-self-page-note").checked = false;
+											} else {
+												document.getElementById("add-to-slider-main-page").checked = false;
+											}
+											setInput((prev) => ({ ...prev, MainPageSlider: document.getElementById(e.target.id).checked }));
+										}}
+										type="checkbox"
+										id="add-to-slider-self-news"
+									/>
+									<label htmlFor="add-to-slider-self-news">
+										{`اسلایدر صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
+									</label>
+								</div>
+								<hr style={{ width: "100%", backgroundColor: "red" }} />
+								<div className="add-to-chosen-main-page">
+									<input
+										onClick={(e) => {
+											if (document.getElementById("add-to-chosen-main-page").checked) {
+												document.getElementById("add-to-slider-self-news").checked = false;
+												document.getElementById("add-to-slider-main-page").checked = false;
+												document.getElementById("add-to-main-page-note").checked = false;
+												document.getElementById("add-to-chosen-self-news").checked = true;
+												document.getElementById("add-to-self-page-note").checked = false;
+											}
+											setInput((prev) => ({
+												...prev,
+												SubPageColumn: document.getElementById(e.target.id).checked,
+											}));
+										}}
+										type="checkbox"
+										id="add-to-chosen-main-page"
+									/>
+									<label htmlFor="add-to-chosen-main-page">منتخب صفحه اصلی</label>
+								</div>
+								<div className="add-to-chosen-self-news">
+									<input
+										onChange={(e) => {
+											if (document.getElementById("add-to-chosen-self-news").checked) {
+												document.getElementById("add-to-slider-self-news").checked = false;
+												document.getElementById("add-to-slider-main-page").checked = false;
+												document.getElementById("add-to-main-page-note").checked = false;
+												document.getElementById("add-to-chosen-main-page").checked = false;
+												document.getElementById("add-to-self-page-note").checked = false;
+											} else {
+												document.getElementById("add-to-chosen-main-page").checked = false;
+											}
+											setInput((prev) => ({ ...prev, MainPageChoice: document.getElementById(e.target.id).checked }));
+										}}
+										type="checkbox"
+										id="add-to-chosen-self-news"
+									/>
+									<label htmlFor="add-to-chosen-self-news">
+										{`منتخب صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
+									</label>
+								</div>
+								<hr style={{ width: "100%", backgroundColor: "red" }} />
+								<div className="add-to-main-page-note">
+									<input
+										onChange={(e) => {
+											if (document.getElementById("add-to-main-page-note").checked) {
+												document.getElementById("add-to-slider-self-news").checked = false;
+												document.getElementById("add-to-slider-main-page").checked = false;
+												document.getElementById("add-to-chosen-self-news").checked = false;
+												document.getElementById("add-to-chosen-main-page").checked = false;
+												document.getElementById("add-to-self-page-note").checked = false;
+											}
+											setInput((prev) => ({ ...prev, SubNote: document.getElementById(e.target.id).checked }));
+										}}
+										type="checkbox"
+										id="add-to-main-page-note"
+									/>
+									<label htmlFor="add-to-main-page-note">یادداشت در صفحه اصلی</label>
+								</div>
+								<div className="add-to-self-page-note">
+									<input
+										onChange={(e) => {
+											if (document.getElementById("add-to-self-page-note").checked) {
+												document.getElementById("add-to-slider-self-news").checked = false;
+												document.getElementById("add-to-slider-main-page").checked = false;
+												document.getElementById("add-to-main-page-note").checked = false;
+												document.getElementById("add-to-chosen-self-news").checked = false;
+												document.getElementById("add-to-chosen-main-page").checked = false;
+											}
+											setInput((prev) => ({ ...prev, MainNote: document.getElementById(e.target.id).checked }));
+										}}
+										type="checkbox"
+										id="add-to-self-page-note"
+									/>
+									<label htmlFor="add-to-self-page-note">
+										{`یادداشت در صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
+									</label>
 								</div>
 							</div>
 						</div>
-						<div className="content-options-news">
-							<div className="title-options">
-								<h2>گزینه های سفارشی</h2>
-							</div>
-							<div className="option-news">
-								{Categories.GetOptionsNews.length !== 0 &&
-									Categories.GetOptionsNews.map((Options) => {
-										return (
-											<div key={Options.id + "Options"} className="add-Options">
-												<input
-													name="HandleCheckboxOptions"
-													onChange={handleChangeOptions}
-													type="checkbox"
-													id={Options.id + "Options"}
-													className="checkbox-Options"
-												/>
-												<label htmlFor={Options.id + "Options"}>{Options.Option}</label>
-											</div>
-										);
-									})}
-							</div>
-						</div>
-						{/*  */}
 					</div>
 					<div className="buttons-create-news">
 						<Link to={"/lord"}>انصراف</Link>
@@ -698,23 +678,16 @@ export const CreateNews = () => {
 					</div>
 				</form>
 			</div>
-			{/* delete category */}
-			<div id="warning-delete-Category" className="warning-delete">
-				<div id="deleted-Category"></div>
-				<div>
-					<button type="button" id={GetCategoriesId.GetCategoryId} onClick={handleDeletedCategory} className="btn-deleted-Category">
-						حذف
-					</button>
-					<button type="button" className="btn-cancel-Category" onClick={handleCancelDeleCategory}>
-						لغو
-					</button>
-				</div>
-			</div>
 			{/* delete sub category */}
 			<div id="warning-delete-SubCategory" className="warning-delete">
 				<div id="deleted-SubCategory"></div>
 				<div>
-					<button type="button" id={GetCategoriesId.SetGetSubCategoryId} onClick={handleDeletedSubCategory} className="btn-deleted-SubCategory">
+					<button
+						type="button"
+						id={GetCategoriesId.SetGetSubCategoryId}
+						onClick={handleDeletedSubCategory}
+						className="btn-deleted-SubCategory"
+					>
 						حذف
 					</button>
 					<button type="button" className="btn-cancel-SubCategory" onClick={handleCancelDeleSubCategory}>

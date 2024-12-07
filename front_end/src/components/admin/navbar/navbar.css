@@ -1,74 +1,81 @@
 .admin-navbar-page {
-  width: 100%;
-  height: 6vh;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: green;
-  position: sticky;
-  top: 0px;
-  z-index: 10;
-  .welcome-navbar-admin {
-    font-family: Vazirmatn;
-    font-size: 8px;
-    color: white;
-    direction: rtl;
-    user-select: none;
-  }
+	width: 100%;
+	height: 6vh;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: green;
+	position: sticky;
+	top: 0px;
+	z-index: 10;
+	.welcome-navbar-admin {
+		font-family: Vazirmatn;
+		font-size: 8px;
+		color: white;
+		direction: rtl;
+		user-select: none;
+	}
 
-  .login-admin {
-    margin-right: 2%;
-    position: relative;
-    .fa-user-circle {
-      font-size: 25px;
-      color: white;
-      cursor: pointer;
-    }
-    .Show-LoginProfile-Lord {
-      width: 10%;
-      padding: 5px;
-      background-color: rgba(0, 0, 0, 0.616);
-      color: white;
-      border-radius: 5px;
-      position: fixed;
-      right: 5px;
-      gap: 5px;
-      display: none;
-      flex-direction: column;
-      align-items: end;
-      justify-content: center;
-      font-family: Vazirmatn;
-      font-size: 12px;
-      &.Show-LoginProfile-Lord a {
-        width: 60%;
-        border-radius: 5px;
-        background-color: white;
-        color: black;
-        list-style-type: none;
-        text-decoration: none;
-        text-align: right;
-        padding: 5px;
-      }
-      a:hover {
-        background-color: aqua;
-      }
-      h3 {
-        direction: rtl;
-      }
-    }
-    &.login-admin:hover {
-      & .Show-LoginProfile-Lord {
-        display: flex;
-      }
-    }
-  }
+	.login-admin {
+		margin-right: 2%;
+		position: relative;
+		.fa-user-circle {
+			font-size: 25px;
+			color: white;
+			cursor: pointer;
+		}
+		.Show-LoginProfile-Lord {
+			width: 10%;
+			padding: 5px;
+			background-color: rgba(0, 0, 0, 0.616);
+			color: white;
+			border-radius: 5px;
+			position: fixed;
+			right: 5px;
+			gap: 5px;
+			display: none;
+			flex-direction: column;
+			align-items: end;
+			justify-content: center;
+			font-family: Vazirmatn;
+			font-size: 12px;
+			&.Show-LoginProfile-Lord a {
+				width: 60%;
+				border-radius: 5px;
+				background-color: white;
+				color: black;
+				list-style-type: none;
+				text-decoration: none;
+				text-align: right;
+				padding: 5px;
+			}
+			a:hover {
+				background-color: aqua;
+			}
+			h3 {
+				direction: rtl;
+			}
+		}
+		&.login-admin:hover {
+			& .Show-LoginProfile-Lord {
+				display: flex;
+			}
+		}
+	}
 
-  .messages-admin {
-    margin-left: 2%;
-    .fa-comment-alt {
-      font-size: 20px;
-      color: white;
-      cursor: pointer;
-    }
-  }
+	.messages-admin {
+		margin-left: 2%;
+		.Link {
+			text-decoration: none;
+		}
+		.span-notification-comment {
+			width: 10px;
+			height: 10px;
+			background-color: red;
+		}
+		.fa-comment-alt {
+			font-size: 20px;
+			color: white;
+		}
+	}
 }

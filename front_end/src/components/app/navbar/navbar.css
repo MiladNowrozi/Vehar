@@ -1,215 +1,223 @@
 * {
-  margin: 0;
-  padding: 0;
-  font-family: Vazirmatn;
+	margin: 0;
+	padding: 0;
+	font-family: Vazirmatn;
 }
 
 .NavbarContainer {
-  width: 100%;
-  user-select: none;
-  /* display: flex; */
-  /* justify-content: space-evenly; */
-  /* width: 100%; */
-}
+	width: 100%;
+	user-select: none;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.NavbarLogo {
+		width: 90px;
+		height: 65px;
+		background: url(../navbar/logo/VeharGreen.svg) no-repeat;
+		background-size: 100px;
+		position: absolute;
+		right: 20px;
+		top: 2px;
+		background-position-y: -2px;
+		cursor: pointer;
+		border-radius: 50px;
+		transition: all 1s;
+		.animation-logo-green {
+			position: absolute;
+			top: 20px;
+			right: 18px;
+		}
+	}
+	.DisplayNone-AnimationGreen {
+		display: none;
+	}
+	.animation-logo-yellow {
+		display: none;
+	}
 
-.NavbarLogo {
-  width: 90px;
-  height: 65px;
-  background: url(../navbar/logo/VeharGreen.svg) no-repeat;
-  background-size: 100px;
-  position: absolute;
-  right: 20px;
-  top: 2px;
-  background-position-y: -2px;
-  cursor: pointer;
-  border-radius: 50px;
-  transition: all 1s;
-  .animation-logo-green {
-    position: absolute;
-    top: 20px;
-    right: 18px;
-  }
-}
-.DisplayNone-AnimationGreen {
-  display: none;
-}
-.animation-logo-yellow {
-  display: none;
-}
+	.NavbarLogoAddScroll {
+		width: 120px;
+		height: 60px;
+		background: url(../navbar/logo/VeharYellow.svg) no-repeat;
+		background-size: 80px;
+		display: inline-block;
+		position: absolute;
+		right: 0px;
+		top: 2px;
+		border-radius: 50px;
+		cursor: pointer;
+		background-position-y: -6px;
+		transition: all 1s;
+		.animation-logo-yellow {
+			display: block;
+			position: absolute;
+			top: 10px;
+			right: 60px;
+		}
+	}
 
-.NavbarLogoAddScroll {
-  width: 120px;
-  height: 60px;
-  background: url(../navbar/logo/VeharYellow.svg) no-repeat;
-  background-size: 80px;
-  display: inline-block;
-  position: absolute;
-  right: 0px;
-  top: 2px;
-  border-radius: 50px;
-  cursor: pointer;
-  background-position-y: -6px;
-  transition: all 1s;
-  .animation-logo-yellow {
-    display: block;
-    position: absolute;
-    top: 10px;
-    right: 60px;
-  }
-}
+	.input-search-home-page {
+		.searchSvg {
+			width: 30px;
+			height: 30px;
+			color: rgb(230, 12, 12);
+			cursor: pointer;
+			transform: scaleX(-1);
+			border: none;
+			border-radius: 5px;
+			margin-right: 2px;
+			background-color: #fff;
+		}
+		form > input {
+			width: 200px;
+			text-align: right;
+			padding: 7px;
+			border-radius: 5px;
+			outline: none;
+			border: none;
+			padding-right: 15px;
+			font-size: 10px;
+			font-weight: 350;
+			&::placeholder {
+				color: red;
+				font-size: 12px;
+				margin-right: 5px;
+			}
+		}
+		form {
+			display: flex;
+			align-items: center;
+			position: absolute;
+			left: 100px;
+		}
+	}
+	.formContent {
+		display: flex;
+		align-items: center;
+	}
+	.input-search-home-page {
+		width: 10%;
+		display: flex;
+		align-items: center;
+		.login-icon {
+			margin-left: 12px;
+			display: flex;
+			align-items: center;
+			.fa-sign-in {
+				cursor: pointer;
+				color: green;
+			}
+		}
+	}
+	.NavbarMenuText {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		margin-right: 10%;
+		.options-select {
+			display: flex;
+			gap: 5px;
+			.options-navbar > h6:hover {
+				color: rgb(255, 0, 255);
+				transition: all 0.3s;
+			}
+			.options-navbar > h6 {
+				text-decoration: none;
+				display: inline-block;
+				margin-left: 15px;
+				cursor: pointer;
+				color: #ff0000;
+				font-weight: 300;
+				font-size: 14px;
+				transition: color 0.3s;
+			}
+			.options-navbar {
+				text-decoration: none;
+				h6 {
+					font-size: 14px;
+					font-weight: 400;
+				}
+			}
+		}
+	}
 
-.NavbarMenuText > ul > li > a {
-  text-decoration: none;
-  display: inline-block;
-  margin-left: 15px;
-  cursor: pointer;
-  color: #ff0000;
-  font-weight: 300;
-  font-size: 14px;
-  transition: color 0.3s;
-}
-
-.NavbarMenuText > ul > li {
-  list-style-type: none;
-  position: absolute;
-  right: 150px;
-  top: 18px;
-  transition: all 1s;
-}
-
-.NavbarMenuText > ul > li > :hover {
-  color: rgb(255, 0, 255);
-  transition: all 0.3s;
-}
-
-.searchSvg {
-  width: 30px;
-  height: 30px;
-  color: rgb(230, 12, 12);
-  cursor: pointer;
-  transform: scaleX(-1);
-  border: none;
-  border-radius: 5px;
-  margin-right: 2px;
-  background-color: #fff;
-}
-
-.formContent > form > input {
-  width: 200px;
-  text-align: right;
-  padding: 7px;
-  border-radius: 5px;
-  outline: none;
-  border: none;
-  padding-right: 15px;
-  font-size: 10px;
-  font-weight: 350;
-  &::placeholder {
-    color: red;
-    font-size: 12px;
-    margin-right: 5px;
-  }
-}
-
-.formContent > form {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  left: 100px;
-}
-
-.formContent {
-  width: 10%;
-  display: flex;
-  align-items: center;
-  .login-icon {
-    margin-left: 12px;
-    display: flex;
-    align-items: center;
-    .Link {
-      margin-top: 3px;
-      display: flex;
-      text-decoration: none;
-    }
-    .fa-sign-in {
-      cursor: pointer;
-      color: green;
-    }
-  }
-  .logout-icon {
-    margin-left: 12px;
-    .fa-user-check {
-      cursor: pointer;
-      color: rgb(180, 3, 3);
-    }
-    .fa-user-check:hover ~ .content-logout {
-      visibility: visible;
-    }
-    .content-logout {
-      width: 10%;
-      background-color: rgb(43, 175, 61);
-      display: flex;
-      flex-direction: column;
-      border-radius: 5px;
-      position: absolute;
-      direction: rtl;
-      padding: 5px;
-      z-index: 1;
-      gap: 10px;
-      font-weight: 300;
-      visibility: hidden;
-      transition: all 1s;
-      .img-user {
-        width: 50px;
-        height: 50px;
-        .img {
-          width: 100%;
-          height: 100%;
-          background-size: cover;
-          border-radius: 30px;
-        }
-      }
-      .firstName-user {
-        font-size: 15px;
-      }
-      .btn-logout {
-        width: 100%;
-        padding: 5px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        display: inline-flex;
-        align-items: center;
-        gap: 30px;
-      }
-    }
-    .content-logout:hover {
-      visibility: visible;
-    }
-    .content-logout::after {
-      content: "";
-      width: 10px;
-      height: 10px;
-      background-color: rgb(43, 175, 61);
-      position: absolute;
-      top: 0;
-      left: 5px;
-      margin-top: -4px;
-      transform: rotate(45deg);
-    }
-  }
-}
-
-.SloganVehar {
-  width: 15%;
-  height: 30px;
-  position: absolute;
-  left: 360px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Vazirmatn;
-  font-weight: 400;
-  font-size: 15px;
-  color: rgb(29, 175, 0);
+	.SloganVehar {
+		width: 15%;
+		height: 30px;
+		position: absolute;
+		left: 360px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: Vazirmatn;
+		font-weight: 400;
+		font-size: 15px;
+		color: rgb(29, 175, 0);
+	}
+	.login-logout {
+		margin-top: 8px;
+		margin-left: 10px;
+		.logout-icon {
+			margin-left: 12px;
+			.fa-user-check {
+				cursor: pointer;
+				color: rgb(180, 3, 3);
+			}
+			.fa-user-check:hover ~ .content-logout {
+				visibility: visible;
+			}
+			.content-logout {
+				width: 10%;
+				background-color: rgb(43, 175, 61);
+				display: flex;
+				flex-direction: column;
+				border-radius: 5px;
+				position: absolute;
+				direction: rtl;
+				padding: 5px;
+				z-index: 1;
+				gap: 10px;
+				font-weight: 300;
+				visibility: hidden;
+				transition: all 1s;
+				.img-user {
+					width: 50px;
+					height: 50px;
+					.img {
+						width: 100%;
+						height: 100%;
+						background-size: cover;
+						border-radius: 30px;
+					}
+				}
+				.firstName-user {
+					font-size: 15px;
+				}
+				.btn-logout {
+					width: 100%;
+					padding: 5px;
+					cursor: pointer;
+					border: none;
+					border-radius: 5px;
+					display: inline-flex;
+					align-items: center;
+					gap: 30px;
+				}
+			}
+			.content-logout:hover {
+				visibility: visible;
+			}
+			.content-logout:after {
+				content: "";
+				width: 10px;
+				height: 10px;
+				background-color: rgb(43, 175, 61);
+				position: absolute;
+				top: 0;
+				left: 5px;
+				margin-top: -4px;
+				transform: rotate(45deg);
+			}
+		}
+	}
 }

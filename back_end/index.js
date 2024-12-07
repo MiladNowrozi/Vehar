@@ -12,7 +12,7 @@ import newsRouter from "./routes/news.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import db from "./db.js";
-import { AuthToken, RefreshToken } from "./controllers/CtrlAuth.js";
+import { AuthToken } from "./controllers/CtrlAuth.js";
 //
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -49,8 +49,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 // middlewares
 app.use("/auth", authRouter);
 app.use("/lord", AuthToken, lordRouter);
-app.use("/author", authorRouter);
-app.use("/user", usersRouter);
+app.use("/author", AuthToken, authorRouter);
+app.use("/user", AuthToken, usersRouter);
 app.use("/news", AuthToken, newsRouter);
 app.use("*", (req, res) => {
 	res.status(404).send("چنین مسیری یافت نشد!");

@@ -2,6 +2,10 @@ import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
 import { Activity } from "./Activity.js";
 import { Comment } from "./Comment.js";
+import { Like } from "./Like.js";
+import { Responses } from "./Responses.js";
+import { ResToResponses } from "./ResToResponses.js";
+import { ResToRes } from "./ResToRes.js";
 
 export const User = db.define("User", {
 	User_FirstName: {
@@ -116,6 +120,40 @@ User.hasMany(Comment, {
 	},
 });
 User.hasMany(Activity, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+User.hasMany(Like, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+
+User.hasMany(Responses, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+
+User.hasMany(ResToResponses, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+User.hasMany(ResToRes, {
 	foreignKey: {
 		unique: false,
 		allowNull: true,

@@ -1,6 +1,8 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
 import { News } from "./News.js";
+import { Like } from "./Like.js";
+import { Responses } from "./Responses.js";
 
 export const Comment = db.define(
 	"Comment",
@@ -22,12 +24,15 @@ export const Comment = db.define(
 			defaultValue: false,
 		},
 		Like_Comment: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+		},
+		UnLike_Comment: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
 		},
 	},
 	{
-		paranoid: true,
 		validate: {
 			None() {
 				if (this.Title == "" && this.Describe == "" && this.Content == "" && this.category == "") {
@@ -39,6 +44,22 @@ export const Comment = db.define(
 );
 
 News.hasMany(Comment, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+Comment.hasMany(Like, {
+	foreignKey: {
+		unique: false,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "SET NULL",
+	},
+});
+Comment.hasMany(Responses, {
 	foreignKey: {
 		unique: false,
 		allowNull: true,

@@ -37,8 +37,11 @@
 			overflow-y: auto;
 			scrollbar-width: thin;
 			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
 			.title-category {
-				width: 50%;
+				width: 95%;
 				height: 35px;
 				padding: 0px 10px 0px 10px;
 				margin: 10px;
@@ -55,91 +58,124 @@
 				}
 			}
 			.container-category {
-				width: 40%;
+				width: 100%;
+				display: flex;
+				padding: 20px;
+				gap: 3px;
 				.server-category {
-					width: 90%;
+					width: 100%;
 					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					padding: 10px;
-					border-radius: 5px;
+					justify-content: flex-start;
 					gap: 10px;
-					/* background-color: rgb(12, 100, 34); */
-				}
-				#emptyCategory {
-					color: red;
-				}
-				p {
-					color: rgb(128, 0, 0);
-					font-weight: 500;
-				}
-				.content-add-category {
-					display: flex;
-					flex-direction: column;
-					gap: 2px;
-					.add-Category {
+					.content-add-category {
+						width: 35%;
 						display: flex;
-						justify-content: space-between;
-						/* gap: 5px; */
-						/* width: 60%; */
-						background-color: #eee;
-						padding: 5px;
-						border-radius: 5px;
-						.fa-trash {
-							padding: 4px 10px 4px 10px;
-							cursor: pointer;
-							border: none;
-							border-radius: 5px;
-							margin-bottom: -3px;
-						}
-						label {
-							user-select: none;
-							display: flex;
-							gap: 10px;
-							font-size: 14px;
-						}
-					}
-					.Create-SubCategory {
-						background-color: #eee;
-						padding: 5px;
-						border-radius: 5px;
-						margin-right: 20px;
-						display: none;
-						.btn-checkbox-subC {
+						flex-direction: column;
+						gap: 2px;
+						.add-Category {
+							width: 100%;
 							display: flex;
 							justify-content: space-between;
 							align-items: center;
-							gap: 15px;
-							.content-checkbox {
-								width: 100%;
-								display: flex;
-								gap: 5px;
-								font-size: 13px;
-							}
+							/* gap: 5px; */
+							/* width: 60%; */
+							background-color: #eee;
+							padding: 5px;
+							border-radius: 5px;
 							.fa-trash {
 								padding: 4px 10px 4px 10px;
 								cursor: pointer;
 								border: none;
 								border-radius: 5px;
-								margin-bottom: 2px;
-								background-color: #eee;
+								margin-bottom: -3px;
+							}
+							label {
+								user-select: none;
+								display: flex;
+								gap: 10px;
+								font-size: 14px;
 							}
 						}
-						.branch-Create-content {
+					}
+				}
+				.Create-SubCategory {
+					width: 60%;
+					/* height: 40vh; */
+					border-radius: 5px;
+					padding: 10px;
+					text-align: center;
+					padding-bottom: 5px;
+					background-color: #eee;
+					h3 {
+						margin-bottom: 5px;
+						font-weight: 450;
+					}
+					.btn-checkbox-subC {
+						display: flex;
+						justify-content: space-around;
+						align-items: center;
+						gap: 15px;
+						.content-checkbox {
 							width: 100%;
-							margin-right: 20px;
+							display: flex;
+							gap: 5px;
+							font-size: 13px;
 						}
-						input[type="button"] {
-							width: 20%;
+						.fa-trash {
+							padding: 4px 10px 4px 10px;
 							cursor: pointer;
+							border: none;
+							border-radius: 5px;
+							margin-bottom: 2px;
+							background-color: #eee;
 						}
-						.input-subcategory {
-							width: 50%;
+					}
+					.ddd {
+						height: 30vh;
+						overflow-y: auto;
+						scrollbar-width: thin;
+					}
+					.branch-Create-content {
+						width: 100%;
+						height: 8vh;
+						display: flex;
+						flex-direction: column;
+						gap: 5px;
+						justify-content: space-around;
+						border-radius: 5px;
+						align-items: center;
+						.btn-create-sub-category {
+							width: 100%;
+							display: flex;
+							justify-content: center;
+							gap: 5px;
+							input[type="button"] {
+								border: none;
+								background-color: white;
+								border-radius: 5px;
+							}
+							input[type="input"] {
+								width: 80%;
+								padding: 5px;
+								border: none;
+								font-size: 10px;
+								background-color: white;
+								border-radius: 5px;
+							}
 						}
-						.ShowWarningSubCategory {
-							color: red;
-							visibility: hidden;
-						}
+					}
+					input[type="button"] {
+						width: 10%;
+						cursor: pointer;
+					}
+					.input-subcategory {
+						width: 80%;
+						border: none;
+						outline: none;
+					}
+					.ShowWarningSubCategory {
+						color: red;
+						visibility: hidden;
 					}
 				}
 				.content-create-category {
@@ -179,32 +215,23 @@
 			}
 			.container-columns {
 				width: 40%;
+				/* height: 40vh; */
 				display: flex;
+				align-items: flex-start;
 				flex-direction: column;
-				background-color: white;
-				.title-column {
-					width: 50%;
-					height: 35px;
-					padding: 0px 10px 0px 10px;
-					margin: 10px 0px 10px 10px;
-					font-size: 10px;
-					background-color: #eee;
-					text-align: center;
-					border-radius: 5px;
-					display: flex;
-					align-items: center;
-					position: sticky;
-					top: 0px;
-					h2 {
-						color: rgb(128, 0, 0);
-					}
-				}
+				justify-content: center;
+				background-color: #eee;
+				padding: 10px;
+				gap: 15px;
+				user-select: none;
+				border-radius: 5px;
 				.content-column {
-					width: 90%;
 					border-radius: 5px;
 					user-select: none;
-					padding: 10px;
-					background-color: #eee;
+					display: flex;
+					align-items: center;
+					gap: 5px;
+					color: rgb(128, 0, 0);
 					.content-two-column {
 						margin-right: 20px;
 					}
@@ -214,80 +241,13 @@
 						color: rgb(128, 0, 0);
 					}
 				}
-				input[type="checkbox"] {
-					width: 13px;
-					cursor: pointer;
-					margin-left: 5px;
-					margin-right: 10px;
-					margin-top: 5px;
-				}
-			}
-			.content-options-news {
-				width: 20%;
-				height: 33vh;
-				overflow-y: auto;
-				display: flex;
-				flex-direction: column;
-				gap: 5px;
-				border-radius: 5px;
-				margin-top: 10px;
-				margin-left: 10px;
-				.add-Options {
-					display: flex;
-					gap: 5px;
-					margin-top: 5px;
-					user-select: none;
-					input {
-						cursor: pointer;
-					}
-					label {
-						color: rgb(128, 0, 0);
-						font-weight: 500;
-					}
-				}
-				.title-options {
-					width: 100%;
-					height: 35px;
-					padding: 10px;
-					/* margin: 10px 0px 10px 10px; */
-					font-size: 10px;
-					background-color: #eee;
-					text-align: center;
-					border-radius: 5px;
-					display: flex;
-					align-items: center;
-					position: sticky;
-					top: 0px;
-					h2 {
-						color: rgb(128, 0, 0);
-					}
-				}
-				.option-news {
-					height: 33vh;
-					padding: 10px;
-					background-color: #eee;
-				}
-			}
-			.content-configuration-news {
-				display: flex;
-				.drafts {
-					padding: 10px 0px 10px 10px;
-					button {
-						padding: 5px;
-						color: rgb(128, 0, 0);
-						cursor: pointer;
-						border: none;
-						transition: all 0.3s;
-						border-radius: 5px;
-						font-weight: 500;
-					}
-					.hover:hover {
-						background-color: green;
-						border: none;
-						color: white;
-					}
-				}
-				.disable-comment {
+				.add-to-slider-main-page,
+				.add-to-chosen-main-page,
+				.disable-comment,
+				.add-to-slider-self-news,
+				.add-to-chosen-self-news,
+				.add-to-self-page-note,
+				.add-to-main-page-note {
 					display: flex;
 					justify-content: center;
 					align-items: center;
@@ -297,6 +257,12 @@
 					input {
 						cursor: pointer;
 					}
+				}
+				input[type="checkbox"] {
+					width: 13px;
+					cursor: pointer;
+					margin-left: 5px;
+					margin-right: 10px;
 				}
 			}
 		}

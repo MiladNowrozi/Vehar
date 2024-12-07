@@ -1,51 +1,85 @@
 import "./header.css";
-import Galeyre from "../../../pages/data/data.js";
-
+//
 import { PageMenu } from "./pageMenu/PageMenu.jsx";
 import { AnimationRed } from "../../../animations/Animation.jsx";
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
+import { AxiosInstance } from "../../../axiosInstance.js";
+//
 function Header() {
-	const [ReceiveAllNews, setReceiveAllNews] = useState({
-		News: [],
-		Limit: 10,
-		CurrentPage: 1,
-		TotalNews: null,
-		TotalPages: null,
-		Search: null,
-		SearchById: null,
+	// const [ReceiveAllNews, setReceiveAllNews] = useState([]);
+	const [MostVisitedNews, SetMostVisitedNews] = useState([]);
+	const [LastNews, SetLastNews] = useState([]);
+	const [SliderNews, SetSliderNews] = useState({
+		SliderNews: [],
+		ChoiceNews: [],
+		SpecialNews: [],
+		SubNoteNews: [],
 	});
-
 	function oofMenuPage() {
 		document.querySelector("#ContentPageMenu").style.right = "-18%";
 	}
-	const navigate = useNavigate();
-	function GetDataNews(e) {
-		const DataNews = Galeyre.filter((x) => x.id === Number(e.target.Key))[0];
-		navigate("/news", { state: DataNews });
-		document.documentElement.scrollTop = 0;
-	}
+	const Urls = useLocation().search;
+	useEffect(() => {
+		const NewsHeader = async () => {
+			// await AxiosInstance({
+			// 	method: "get",
+			// 	url: "news/get-all",
+			// 	withCredentials: true,
+			// })
+			// 	.then((success) => {
+			// 		setReceiveAllNews(success.data.body);
+			// 	})
+			// 	.catch((e) => {
+			// 		console.log(e);
+			// 	});
+			await AxiosInstance({
+				method: "get",
+				url: `news/most-visited${Urls}`,
+				withCredentials: true,
+			})
+				.then((success) => {
+					SetMostVisitedNews(success.data.body);
+				})
+				.catch((e) => {
+					console.log(e);
+				});
+			await AxiosInstance({
+				method: "get",
+				url: `news/sliders${Urls}`,
+				withCredentials: true,
+			})
+				.then((success) => {
+					SetSliderNews((prev) => ({
+						...prev,
+						SpecialNews: success.data.body.SpecialNews,
+						SliderNews: success.data.body.SliderNews,
+						ChoiceNews: success.data.body.ChoiceNews,
+						SubNoteNews: success.data.body.SubNoteNews,
+					}));
+				})
+				.catch((e) => {
+					console.log(e);
+				});
+			await AxiosInstance({
+				method: "get",
+				url: `news/last-news${Urls}`,
+				withCredentials: true,
+			})
+				.then((success) => {
+					SetLastNews(success.data.body);
+				})
+				.catch((e) => {
+					console.log(e);
+				});
+		};
+		NewsHeader();
+	}, [Urls]);
 
-	// useEffect(() => {
-	// 	const res = async () => {
-	// 		try {
-	// 			const res = await axiosInstance({
-	// 				method: "get",
-	// 				url: `news/get-all?cli=true&currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}`,
-	// 			});
-
-	// 			console.log(res.data);
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 		}
-	// 	};
-	// 	res();
-	// }, []);
 	return (
 		<Fragment>
 			<PageMenu />
-			<header onClick={oofMenuPage} className="bodyHederHome">
+			<div onClick={oofMenuPage} className="bodyHederHome">
 				<div className="Container-Slider">
 					<div className="ContentSlider">
 						<div className="ItemsSliderTextLeft">
@@ -58,235 +92,184 @@ function Header() {
 								</div>
 								<div className="ContentTextLeft">
 									<div className="TextLeft">
-										{/* {category?.map((News) => {
-                      return (
-                        <ul>
-                          <li>
-                            <a Key={News.id} onClick={GetDataNews}>
-                              {News.Description}
-                            </a>
-                          </li>
-                        </ul>
-                      );
-                    })} */}
+										{MostVisitedNews.map((e) => (
+											<div key={e.id} className="li-full-see">
+												<Link className="link" to={`/news/${e.id}`}>
+													<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
+												</Link>
+											</div>
+										))}
 									</div>
 								</div>
 							</div>
 						</div>
-						<div className="ItemsSliderCenter">
-							{/* {subColumn.TwoColumn.map((News) => {
-                return (
-                  <div key={News.id} className="ItemSliderCenter">
-                    <div className="imgCenter1">
-                      {
-                        <img
-                          Key="gff"
-                          onClick={GetDataNews}
-                          className="SliderImgCenter"
-                          src={News.images}
-                          alt="img"
-                        />
-                      }
-                    </div>
-                    <div className="TextImgCenter">
-                      <div className="TextImg">
-                        <h2>{News.title}</h2>
-                      </div>
-                      <div className="TextImg">
-                        <h1>
-                          <a Key="jh" onClick={GetDataNews}>
-                            {News.Description}
-                          </a>
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })} */}
+						<div className="ItemsSlider">
+							{SliderNews.SliderNews.sort((a, b) => b.id - a.id).map((e, i) => (
+								<div key={e.id} className={"milad imgCenter" + i}>
+									<Link className="link-slider-img" to={`/news/${e.id}`}>
+										<img src={e.News_Images} alt="img" />
+									</Link>
+									<div className="TextImgCenter">
+										<div className="TextImg-1">
+											<p dangerouslySetInnerHTML={{ __html: e.News_Titre }}></p>
+										</div>
+										<div className="TextImg-2">
+											<Link className="link-slider-title" to={`/news/${e.id}`}>
+												<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
+											</Link>
+										</div>
+									</div>
+								</div>
+							))}
 						</div>
-						{/* {subColumn.OneColumn.map((News) => {
-              return (
-                <div key={News.id} className="ItemsSliderRight">
-                  <div className="imgRight">
-                    {
-                      <img
-                        Key={News.id}
-                        onClick={GetDataNews}
-                        className="SliderImgRight"
-                        src={News.images}
-                        alt="imgs"
-                      />
-                    }
-                  </div>
-                  <div className="RightTextImg">
-                    <div className="TextImg">
-                      <h2>{News.title}</h2>
-                    </div>
-                    <div className="TextImg">
-                      <h1 Key={News.id} onClick={GetDataNews}>
-                        {News.Description}
-                      </h1>
-                    </div>
-                  </div>
-                </div>
-              );
-            })} */}
 					</div>
 				</div>
 				<div className="content-title-chosen">
-					<span className="span-title-chosen">
-						<p>منتخب</p>
-					</span>
-					<AnimationRed />
+					<div className="test">
+						<div className="span-title-chosen">
+							<p>منتخب</p>
+						</div>
+						<span className="span">
+							<AnimationRed />
+						</span>
+					</div>
 				</div>
 				<div className="Gallery-Row-Slider">
-					{/* {category?.map((News) => {
-            return (
-              <div key={News.id} className="Content-Gallery">
-                <img Key={News.id} onClick={GetDataNews} src={News.images} alt="img" />
-                <div className="Content-Texts-Dallery">
-                  <p className="RoutingNewsHeader-Gallery">{News.title}</p>
-                  <p Key={News.id} onClick={GetDataNews} className="HeadlineNewsHeader-Gallery">
-                    {News.Description}
-                  </p>
-                </div>
-              </div>
-            );
-          })} */}
+					{SliderNews.ChoiceNews.map((e, i) => (
+						<div key={i} className="Content-Gallery">
+							<Link to={`/news/${e.id}`} className="HeadlineNewsHeader-Gallery">
+								<img src={e.News_Images} alt="img" />
+							</Link>
+							<div className="Content-Texts-Dallery">
+								<p className="RoutingNewsHeader-Gallery"> به این جمع بپیوندید!</p>
+								<Link className="HeadlineNewsHeader-Gallery" to={`/news/${e.id}`}>
+									<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
+								</Link>
+							</div>
+						</div>
+					))}
 				</div>
-
 				<div className="Container-Header">
 					<div className="ContainerLeft">
-						<div className="content-title-political-and-social">
-							<span className="span-title-political-and-social">
-								<p>سیاسی و اجتمایی</p>
-							</span>
-							<AnimationRed />
-						</div>
-						{Galeyre.slice(8, 13).map((News, i) => (
-							<div key={i} className="ContainerHeaderLeft">
-								<div className="NewsContainer-left">
-									<div className="NewsContent-left">
-										<div className="NewsItems-left">
-											<div className="img-content-left">
-												<div className="ImgNews-left">
-													{<img Key={News.id} onClick={GetDataNews} className="imgStyleHeader-left" src={News.img} alt="imgs" />}
-												</div>
-											</div>
-											<div className="RoutingNews-left">
-												<div>
-													<h1 className="RoutingNewsHeader-left">{News.Routing}</h1>
-													<a className="titleNews-left">
-														<h1 Key={News.id} onClick={GetDataNews} className="HeadlineNewsHeader-left">
-															{News.headline}
-														</h1>
-													</a>
-												</div>
-												<div className="abstractNews-left">
-													<h2 className="AbstractNewsHeader-left ">{News.abstract}</h2>
-												</div>
-											</div>
+						{SliderNews.SubNoteNews.length > 0 && (
+							<div className="container-note">
+								<div className="content-title-note">
+									<span className="span-title-note">
+										<p>یادداشت</p>
+									</span>
+									<AnimationRed />
+								</div>
+								{SliderNews.SubNoteNews.map((e, i) => (
+									<div key={i} className="content-note">
+										<div key={i} className="content-writer">
+											<img src={e.News_Images} alt="img" />
 										</div>
-										<div className="authorNews-left">
-											<h2 className="AuthorNewsHeader-left CommonStyleToAuthor-left">{"نویسنده : " + News.author}</h2>
+										<div className="content-write">
+											<div className="titre-note">
+												<p>{e.News_Titre}</p>
+											</div>
+											<div className="comment-note">
+												<Link to={`/news/${e.id}`}>
+													<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
+												</Link>
+											</div>
 										</div>
 									</div>
-								</div>
+								))}
 							</div>
-						))}
+						)}
+						<div className="Container-political">
+							<div className="content-title-political-and-social">
+								<span className="span-title-political-and-social">
+									<p>آخرین اخبار</p>
+								</span>
+								<AnimationRed />
+							</div>
+							<div className="Container-Header-Left">
+								{LastNews.map((News, i) => (
+									<div key={i} className="News-Container-left" style={{ borderBottom: i === LastNews.length - 1 ? 0 : "" }}>
+										<Link className="Routing-News-Header-left" to={`/news/${News.id}`}>
+											<p dangerouslySetInnerHTML={{ __html: News.News_Title }}></p>
+										</Link>
+									</div>
+								))}
+							</div>
+						</div>
 					</div>
 					<div className="ContainerRight">
 						<div className="content-title-special-news">
 							<span className="span-title-special-news">
-								<p>اخبار ویژه</p>
+								<p>{`اخبار ویژه${
+									(Urls.split("?cat=")[1] === "politic" && " سیاست") ||
+									(Urls.split("?cat=")[1] === "economy" && " اقتصاد") ||
+									(Urls.split("?cat=")[1] === "social" && " جامعه") ||
+									(Urls.split("?cat=")[1] === "sport" && " ورزش") ||
+									(Urls.split("?cat=")[1] === "local" && " بومی") ||
+									""
+								}`}</p>
 							</span>
 							<AnimationRed />
 						</div>
 						<div className="containerHeaderRight">
-							{/* {category?.map((News) => {
-                return (
-                  <div key={News.id} className="NewsContainer">
-                    <div className="NewsContent">
-                      <div className="NewsItems">
-                        <div className="img-content">
-                          <div className="ImgNews">
-                            {
-                              <img
-                                Key={News.id}
-                                onClick={GetDataNews}
-                                className="imgStyleHeader"
-                                src={News.images}
-                                alt="imgs"
-                              />
-                            }
-                          </div>
-                        </div>
-                        <div className="RoutingNews">
-                          <div>
-                            <h1 className="RoutingNewsHeader">{News.title}</h1>
-                            <a className="titleNews">
-                              <h1
-                                Key={News.id}
-                                onClick={GetDataNews}
-                                className="HeadlineNewsHeader"
-                              >
-                                {News.headline}
-                              </h1>
-                            </a>
-                          </div>
-                          <div className="abstractNews">
-                            <h2 className="AbstractNewsHeader">{News.Description}</h2>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="authorNews">
-                        <h2 className="AuthorNewsHeader CommonStyleToAuthor">
-                          {"نویسنده : " + News.author}
-                        </h2>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })} */}
+							{SliderNews.SpecialNews.sort((a, b) => b.id - a.id).map((News, i) => (
+								<div key={i} className="NewsContainer">
+									<div className="NewsContent" style={{ borderBottom: i === SliderNews.SpecialNews.length - 1 ? 0 : "" }}>
+										<div className="NewsItems">
+											<div className="img-content">
+												<div className="ImgNews">
+													<Link to={`/news/${News.id}`} className="HeadlineNewsHeader">
+														<img className="imgStyleHeader" src={News.News_Images} alt="imgs" />
+													</Link>
+												</div>
+											</div>
+											<div className="RoutingNews">
+												<div>
+													<h1 className="RoutingNewsHeader">یادم نرود که بتنظیمانم</h1>
+													<Link className="HeadlineNewsHeader" to={`/news/${News.id}`}>
+														<h1 dangerouslySetInnerHTML={{ __html: News.News_Title }}></h1>
+													</Link>
+												</div>
+												<div className="abstractNews">
+													<h2 className="AbstractNewsHeader" dangerouslySetInnerHTML={{ __html: News.News_Describe }}></h2>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
 				</div>
 				<div className="content-title-reading-content">
 					<span className="span-title-reading-content">
-						<p>برای مطالعه</p>
+						<p>شبکه های اجتماعی</p>
 					</span>
 					<AnimationRed />
 				</div>
 				<div className="Gallery-reading-content">
-					{Galeyre.slice(3, 8).map((News, i) => (
-						<div key={i} className="Content-Gallery">
-							<div className="NewsItems-Gallery">
-								<div className="imgNews-Gallery">
-									{<img Key={News.id} onClick={GetDataNews} className="imgStyleHeader-Gallery" src={News.img} alt="imgs" />}
-								</div>
-								<div className="Content-Texts-Dallery">
-									<div className="RoutingNews-Gallery">
-										<h1 className="RoutingNewsHeader-Gallery">{News.Routing}</h1>
+					{/* {ReceiveAllNews.map((News, i) =>
+						News.Category.News.map((News) => (
+							<div key={i} className="Content-Gallery">
+								<div className="NewsItems-Gallery">
+									<div className="imgNews-Gallery">
+										{<img className="imgStyleHeader-Gallery" src={News.News_Images} alt="imgs" />}
 									</div>
-									<div className="titleNews-Gallery">
-										<h1 Key={News.id} onClick={GetDataNews} className="HeadlineNewsHeader-Gallery">
-											{News.headline}
-										</h1>
+									<div className="Content-Texts-Dallery">
+										<div className="RoutingNews-Gallery">
+											<h1 className="RoutingNewsHeader-Gallery"></h1>
+										</div>
+										<div className="titleNews-Gallery">
+											<h1 className="HeadlineNewsHeader-Gallery" dangerouslySetInnerHTML={{ __html: News.News_Title }}>
+												{News.headline}
+											</h1>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))
+					)} */}
 				</div>
-				{/* <div className="container-videos-title"> */}
-				{/* <div className="content-title-videos-title">
-            <span className="span-title-videos-title">
-              <p>برای مطالعه</p>
-            </span>
-            <AnimationRed />
-          </div> */}
-				{/* </div> */}
-			</header>
+			</div>
 		</Fragment>
 	);
 }

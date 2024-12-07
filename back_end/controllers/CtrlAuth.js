@@ -96,10 +96,11 @@ export const AuthToken = async (req, res, next) => {
 };
 
 export const RefreshToken = async (req, res) => {
-	const { refreshToken } = req.body;
+	const { refreshToken, Role } = req.body;
 	if (!refreshToken || refreshToken === undefined) {
 		return res.sendStatus(401);
 	}
+
 	try {
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
 			if (err) {
@@ -108,21 +109,79 @@ export const RefreshToken = async (req, res) => {
 					message: "invalid server RefreshToken",
 				});
 			}
-			const refreshToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
-				expiresIn: "30s",
-			});
-			const accessToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
-				expiresIn: "10s",
-			});
 
-			res.status(200).json({
-				success: true,
-				body: {
-					Role: "Lord",
-					refreshToken: refreshToken,
-					accessToken: accessToken,
-				},
-			});
+			if (Role === "OnUser") {
+				const refreshToken = jwt.sign(
+					{ id: user.id, Role: user.Role, User_UserName: user.User_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "1h",
+					}
+				);
+				const accessToken = jwt.sign(
+					{ id: user.id, Role: user.Role, User_UserName: user.User_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "5s",
+					}
+				);
+				res.status(200).json({
+					success: true,
+					body: {
+						Role: "OnUser",
+						refreshToken: refreshToken,
+						accessToken: accessToken,
+					},
+				});
+			}
+			if (Role === "OnAuthor") {
+				const refreshToken = jwt.sign(
+					{ id: user.id, Role: user.Role, Author_UserName: user.Author_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "1h",
+					}
+				);
+				const accessToken = jwt.sign(
+					{ id: user.id, Role: user.Role, Author_UserName: user.Author_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "5s",
+					}
+				);
+				res.status(200).json({
+					success: true,
+					body: {
+						Role: "OnAuthor",
+						refreshToken: refreshToken,
+						accessToken: accessToken,
+					},
+				});
+			}
+			if (Role === "Lord") {
+				const refreshToken = jwt.sign(
+					{ id: user.id, Role: user.Role, Lord_UserName: user.Lord_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "1h",
+					}
+				);
+				const accessToken = jwt.sign(
+					{ id: user.id, Role: user.Role, Lord_UserName: user.Lord_UserName },
+					process.env.REFRESH_TOKEN_SECRET,
+					{
+						expiresIn: "5s",
+					}
+				);
+				res.status(200).json({
+					success: true,
+					body: {
+						Role: "Lord",
+						refreshToken: refreshToken,
+						accessToken: accessToken,
+					},
+				});
+			}
 		});
 	} catch (error) {
 		res.status(404).json({
@@ -150,42 +209,51 @@ export const Register = async (req, res) => {
 
 			if (countRequestUser.length === 0) {
 				if (UserExist === null && getEmail === null) {
-					try {
-						const token = jwt.sign({ email: email_register }, "secret");
-						await Token.create({ Token: token, Email: email_register });
-						const ResetToken = await Token.findOne({ where: { Token: token } });
-						const salt = bcrypt.genSaltSync(10);
-						const HashPassword = bcrypt.hashSync(password_register, salt);
+					const CheckInLord = await Lord.findOne({ where: { Lord_UserName: username_register } });
+					const CheckInAuthor = await Author.findOne({ where: { Author_UserName: username_register } });
+					if (CheckInLord === null && CheckInAuthor === null) {
+						try {
+							const token = jwt.sign({ email: email_register }, "secret");
+							await Token.create({ Token: token, Email: email_register });
+							const ResetToken = await Token.findOne({ where: { Token: token } });
+							const salt = bcrypt.genSaltSync(10);
+							const HashPassword = bcrypt.hashSync(password_register, salt);
 
-						// Hash the password and create a user
-						const CreatedUser = await User.create({
-							User_FirstName: firstName_register,
-							User_LastName: lastName_register,
-							User_UserName: username_register,
-							User_Password: HashPassword,
-						});
-						await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
-						const url = `${process.env.BASE_URL}/auth/register/?verify_token=${token}&Id=${CreatedUser.id}&Role=User`;
-						await sendEmail(
-							email_register,
-							"تایید ایمیل",
-							"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
-							`<a href=${url}>
-                <button>تایید ایمیل</button>
-              </a>
-              `
-						);
-						setTimeout(async () => {
-							await Token.destroy({ where: { Token: ResetToken.Token } });
-						}, 1000 * 60 * 1);
-						res.status(200).json({
-							success: true,
-							message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
-						});
-					} catch (error) {
-						res.status(412).json({
+							// Hash the password and create a user
+							const CreatedUser = await User.create({
+								User_FirstName: firstName_register,
+								User_LastName: lastName_register,
+								User_UserName: username_register,
+								User_Password: HashPassword,
+							});
+							await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
+							const url = `${process.env.BASE_URL}/auth/register/?verify_token=${token}&Id=${CreatedUser.id}&Role=User`;
+							await sendEmail(
+								email_register,
+								"تایید ایمیل",
+								"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
+								`<a href=${url}>
+									<button>تایید ایمیل</button>
+								</a>
+								`
+							);
+							setTimeout(async () => {
+								await Token.destroy({ where: { Token: ResetToken.Token } });
+							}, 1000 * 60 * 1);
+							res.status(200).json({
+								success: true,
+								message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
+							});
+						} catch (error) {
+							res.status(412).json({
+								success: false,
+								message: error.message,
+							});
+						}
+					} else {
+						res.status(403).json({
 							success: false,
-							message: error.message,
+							message: "نام کاربری نامعتبر است!",
 						});
 					}
 				} else {
@@ -247,32 +315,6 @@ export const Register = async (req, res) => {
 };
 
 export const Login = async (req, res) => {
-	// if (!accessToken) {
-	// 	res.status(401).json({
-	// 		success: false,
-	// 		message: "invalid server login",
-	// 	});
-	// }
-	// try {
-	// 	jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-	// 		if (err)
-	// 			return res.status(401).json({
-	// 				success: false,
-	// 				message: "invalid server login",
-	// 			});
-	// 		const refreshToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
-	// 			expiresIn: "120s",
-	// 		});
-	// 		const accessToken = jwt.sign({ id: user.id, Lord_UserName: user.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "60s" });
-	// 		res.json({ accessToken, refreshToken });
-	// 	});
-	// } catch (error) {
-	// 	res.status(404).json({
-	// 		success: false,
-	// 		message: error,
-	// 	});
-	// }
-	// dffffffffffffffff
 	try {
 		const username_login = req.body.username_login.replace(/\s+/g, "");
 		const password_login = req.body.password_login.replace(/\s+/g, "");
@@ -342,17 +384,31 @@ export const Login = async (req, res) => {
 							});
 						}
 					} else {
-						const token = jwt.sign({ id: CheckUserFullInfo.id }, "secret");
-						const { User_Password, User_UserName, ...other } = CheckUserFullInfo.dataValues;
-						res
-							.cookie("access_token", token, {
-								httpOnly: true,
-							})
-							.status(200)
-							.json({
-								body: other,
-								success: true,
-							});
+						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
+						const refreshToken = jwt.sign(
+							{ id: ExistUser.id, Role: ExistUser.Role, User_UserName: ExistUser.User_UserName },
+							process.env.REFRESH_TOKEN_SECRET,
+							{
+								expiresIn: "1h",
+							}
+						);
+						const accessToken = jwt.sign(
+							{ id: ExistUser.id, Role: ExistUser.Role, User_UserName: ExistUser.User_UserName },
+							process.env.REFRESH_TOKEN_SECRET,
+							{
+								expiresIn: "5s",
+							}
+						);
+						// Store refresh token with expiration time
+
+						res.status(200).json({
+							body: {
+								accessToken: accessToken,
+								refreshToken: refreshToken,
+								Role: "OnUser",
+							},
+							success: true,
+						});
 					}
 				} else {
 					res.status(404).json({
@@ -363,23 +419,16 @@ export const Login = async (req, res) => {
 			}
 			// CHECK Author FULL INFO
 			else if (ExistAuthor !== null && ExistAuthor.Role === "OnAuthor") {
-				const GetAuthorByPk = await Author.findByPk(ExistAuthor.id);
-				const CheckAuthorFullInfo = await Author.findOne({
-					where: {
-						id: GetAuthorByPk.id,
-						Author_UserName: username_login,
-					},
-				});
-				const isPasswordCurrent = bcrypt.compareSync(password_login, CheckAuthorFullInfo.Author_Password);
+				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistAuthor.Author_Password);
 				if (isPasswordCurrent) {
-					if (!CheckAuthorFullInfo.Verify_Email) {
+					if (!ExistAuthor.Verify_Email) {
 						try {
-							const getEmail = await EmailAuthor.findOne({ where: { authorId: CheckAuthorFullInfo.id } });
+							const getEmail = await EmailAuthor.findOne({ where: { authorId: ExistAuthor.id } });
 							const countRequestUser = await Token.findAll({ where: { Email: getEmail.EmailAuthor } });
 
 							if (countRequestUser.length === 0) {
 								const TokenEmail = jwt.sign({ email: getEmail.EmailAuthor }, "secret");
-								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${CheckAuthorFullInfo.id}&Role=Author`;
+								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${ExistAuthor.id}&Role=Author`;
 								const ExistToken = await Token.create({
 									Token: TokenEmail,
 									Email: getEmail.EmailAuthor,
@@ -413,17 +462,31 @@ export const Login = async (req, res) => {
 							});
 						}
 					} else {
-						const token = jwt.sign({ id: CheckAuthorFullInfo.id }, "secret");
-						const { Author_Password, Author_UserName, ...other } = CheckAuthorFullInfo.dataValues;
-						res
-							.cookie("access_token", token, {
-								httpOnly: true,
-							})
-							.status(200)
-							.json({
-								body: other,
-								success: true,
-							});
+						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
+						const refreshToken = jwt.sign(
+							{ id: ExistAuthor.id, Role: ExistAuthor.Role, Author_UserName: ExistAuthor.Author_UserName },
+							process.env.REFRESH_TOKEN_SECRET,
+							{
+								expiresIn: "1h",
+							}
+						);
+						const accessToken = jwt.sign(
+							{ id: ExistAuthor.id, Role: ExistAuthor.Role, Author_UserName: ExistAuthor.Author_UserName },
+							process.env.REFRESH_TOKEN_SECRET,
+							{
+								expiresIn: "5m",
+							}
+						);
+						// Store refresh token with expiration time
+
+						res.status(200).json({
+							body: {
+								accessToken: accessToken,
+								refreshToken: refreshToken,
+								Role: "OnAuthor",
+							},
+							success: true,
+						});
 					}
 				} else {
 					res.status(404).json({
@@ -440,12 +503,20 @@ export const Login = async (req, res) => {
 				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistLord.Lord_Password);
 				if (isPasswordCurrent) {
 					// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
-					const refreshToken = jwt.sign({ id: ExistLord.id, Lord_UserName: ExistLord.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
-						expiresIn: "35s",
-					});
-					const accessToken = jwt.sign({ id: ExistLord.id, Lord_UserName: ExistLord.Lord_UserName }, process.env.REFRESH_TOKEN_SECRET, {
-						expiresIn: "15s",
-					});
+					const refreshToken = jwt.sign(
+						{ id: ExistLord.id, Role: ExistLord.Role, Lord_UserName: ExistLord.Lord_UserName },
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "1h",
+						}
+					);
+					const accessToken = jwt.sign(
+						{ id: ExistLord.id, Role: ExistLord.Role, Lord_UserName: ExistLord.Lord_UserName },
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "5m",
+						}
+					);
 					// Store refresh token with expiration time
 
 					res.status(200).json({

@@ -2,11 +2,8 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import { News } from "./pages/news/News";
-import Politic from "./pages/politic/Politic";
-import Sport from "./pages/sport/Sport";
-import Local from "./pages/local/Local";
 import About from "./pages/about/About";
-import Social from "./pages/social/Social";
+
 // admin
 import { LoginAndRegister } from "./components/app/login_register/Login_Register";
 import { Lord } from "./components/admin/admins/lord/Lord";
@@ -24,19 +21,20 @@ import Header from "./components/app/header/Header";
 import { Author } from "./components/admin/admins/author/Author";
 import { ListNews } from "./components/admin/header/pages/listNews/ListNews";
 import { CreateNews } from "./components/admin/header/pages/createNews/CreateNews";
+import { AuthContext } from "./context/authContext";
+import { useContext } from "react";
 
 export const App = () => {
+	// const { Lord } = useContext(AuthContext);
+	// console.log(Lord);
+	
 	return (
 		<div>
 			<Routes>
 				{/* app route */}
 				<Route path="/" element={<Home />}>
 					<Route path="/" element={<Header />} />
-					<Route path="/news" element={<News />} />
-					<Route path="/politic" element={<Politic />} />
-					<Route path="/social" element={<Social />} />
-					<Route path="/sport" element={<Sport />} />
-					<Route path="/local" element={<Local />} />
+					<Route path="/news/:id" element={<News />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/contact" element={<Contact />} />
 				</Route>

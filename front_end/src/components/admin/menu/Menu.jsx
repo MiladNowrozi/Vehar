@@ -20,17 +20,7 @@ export const MenuLord = ({ onAction }) => {
 			<div className="header-menu-lord">
 				<Link to={"/lord"}>
 					<button>
-						<i className="fas fa-user"></i>پروفایل
-					</button>
-				</Link>
-				<Link to={"create-news"}>
-					<button>
-						<i className="fas fa-newspaper"></i>ایجاد خبر
-					</button>
-				</Link>
-				<Link to={"news"}>
-					<button onClick={onAction}>
-						<i className="fas fa-newspaper"></i>اخبار
+						<i className="fas fa-user"></i>پروفایل شخصی
 					</button>
 				</Link>
 				<Link to={"list-lords"}>
@@ -43,9 +33,24 @@ export const MenuLord = ({ onAction }) => {
 						<i className="fas fa-users"></i>کاربران
 					</button>
 				</Link>
+				<Link to={"create-news"}>
+					<button>
+						<i className="fas fa-newspaper"></i>ایجاد خبر
+					</button>
+				</Link>
+				<Link to={"news"}>
+					<button onClick={onAction}>
+						<i className="fas fa-newspaper"></i>اخبار
+					</button>
+				</Link>
 				<Link to={"list-users"}>
 					<button>
-						<i className="fas fa-envelope"></i>ایمیل کاربران
+						<i className="fas fa-envelope"></i>ایمیل های دریافتی
+					</button>
+				</Link>
+				<Link to={"list-users"}>
+					<button>
+						<i className="fas fa-cog"></i>تنظیمات پایگاه وهار
 					</button>
 				</Link>
 			</div>

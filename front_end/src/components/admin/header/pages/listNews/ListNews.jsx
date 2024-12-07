@@ -12,14 +12,18 @@ export const ListNews = () => {
 		Search: null,
 		SearchById: null,
 	});
-
+	const [NewsStatus, setNewsStatus] = useState({
+		Comments: [],
+		Count: [],
+	});
 	window.addEventListener("load", () => {
 		LodNews();
+		fetchData();
 	});
 	const LodNews = async () => {
 		await AxiosInstance({
 			method: "get",
-			url: `news/get-all?currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}&search=${ReceiveAllNews.Search}&searchbyid=${ReceiveAllNews.SearchById}`,
+			url: `news/search-news?currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}&search=${ReceiveAllNews.Search}&searchbyid=${ReceiveAllNews.SearchById}`,
 			withCredentials: true,
 		})
 			.then((success) => {
@@ -59,27 +63,34 @@ export const ListNews = () => {
 	}, []);
 
 	const [IdDeletedNews, setIdDeletedNews] = useState(null);
+	const [SelectComment, setSelectComment] = useState({});
 
 	const handleDeletedNews = async (Deleted) => {
-		setIdDeletedNews(Deleted.target.id);
+		setIdDeletedNews(Deleted.id);
+		document.getElementById("news-dele-lord-btn-content").style.display = "block";
 		document.getElementById("warning-delete-news").style.display = "flex";
-		document.getElementById("deleted-news").innerHTML = `آیا میخواهید کاربر <span style="color:red;">${Deleted.target.name}</span> را حذف کنید ؟`;
-	};
-
-	const handleCancelDeleNews = async () => {
-		document.getElementById("warning-delete-news").style.display = "none";
+		document.getElementById("deleted-news").innerHTML = `آیا میخواهید این خبر را حذف کنید ؟<br/>
+		کد: <span style="color:red;">${Deleted.id}</span> <br/>
+		تیتر: <span style="color:red;">${Deleted.Titre}</span><br/>
+		عنوان: <span style="color:red;">${Deleted.Title}</span><br/>
+		نویسنده: <span style="color:red;">${Deleted.Author}</span>
+		`;
 	};
 
 	const handleDeleteNews = async () => {
 		try {
 			await AxiosInstance({
 				method: "delete",
-				url: `news/delete${IdDeletedNews}`,
+				url: `news/delete?id=${IdDeletedNews}`,
 				withCredentials: true,
 			})
 				.then((success) => {
-					setReceiveAllNews(success.data.body);
-					console.log(success.data.message);
+					LodNews();
+					document.getElementById("deleted-news").innerHTML = success.data.message;
+					document.getElementById("news-dele-lord-btn-content").style.display = "none";
+					setTimeout(() => {
+						document.getElementById("warning-delete-news").style.display = "none";
+					}, [1000]);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -106,12 +117,222 @@ export const ListNews = () => {
 			console.log(error);
 		}
 	};
+
+	const fetchData = async () => {
+		try {
+			await AxiosInstance({
+				method: "get",
+				url: "news/status-comment",
+				withCredentials: true,
+			})
+				.then((success) => {
+					setNewsStatus((prov) => ({ ...prov, Comments: success.data.body.Comments, Count: success.data.body.Count }));
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="container-add-news">
+			<div id="content-status-comment" className="status-comment-container">
+				<div className="top-access">
+					<h2>وضعیت نظرات</h2>
+					<button
+						onClick={() => {
+							document.getElementById("content-add-news").style.display = "flex";
+							document.getElementById("content-status-comment").style.display = "none";
+							fetchData();
+						}}
+					>
+						برگشت
+					</button>
+				</div>
+				<div id="success-verification" className="success-verification"></div>
+				<div id="select-comment" className="select-comment">
+					<div className="content-select">
+						<section>
+							<h6>نام</h6>
+							<p>{SelectComment.name}</p>
+						</section>
+						<section>
+							<h6>نظر</h6>
+							<p>{SelectComment.comment}</p>
+						</section>
+						<section>
+							<h6>تیتر خبر منظور</h6>
+							<p>{SelectComment.titre}</p>
+						</section>
+						<section>
+							<h6>عنوان خبر منظور</h6>
+							<p>{SelectComment.title}</p>
+						</section>
+					</div>
+					<div className="btn-comment-select">
+						<button
+							onClick={() => {
+								document.getElementById("table-comment").style.display = "unset";
+								document.getElementById("select-comment").style.display = "none";
+								fetchData();
+							}}
+						>
+							برگشت
+						</button>
+						<button
+							onClick={async () => {
+								await AxiosInstance({
+									method: "post",
+									url: `news/verification-comment?id=${SelectComment.id}`,
+									withCredentials: true,
+								})
+									.then((success) => {
+										fetchData();
+										document.getElementById("select-comment").style.display = "none";
+										document.getElementById("success-verification").style.display = "unset";
+										document.getElementById("success-verification").innerHTML = success.data.message;
+										setTimeout(() => {
+											document.getElementById("success-verification").style.display = "none";
+											document.getElementById("table-comment").style.display = "unset";
+											document.getElementById("success-verification").innerHTML = "";
+										}, 3000);
+									})
+									.catch((err) => {
+										console.log(err);
+									});
+							}}
+						>
+							قبول
+						</button>
+						<button>رد</button>
+					</div>
+				</div>
+				<table id="table-comment" className="content-table-comment">
+					<thead>
+						<tr className="titles-table-comment">
+							<th>تعداد</th>
+							<th>پروفایل</th>
+							<th>نام</th>
+							<th>نظر</th>
+							<th>دسته</th>
+							<th>تیتر خبر</th>
+							<th>عنوان خبر</th>
+							<th>تاریخ</th>
+							<th>کد خبر</th>
+						</tr>
+					</thead>
+					{(NewsStatus.Comments.length !== 0 &&
+						NewsStatus.Comments.map((e, i) => {
+							const [DateC, TimeC] = [
+								{
+									DateCreate: new Date(e.createdAt)
+										.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })
+										.split("T")[0],
+								},
+								{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
+							];
+							return (
+								<tbody key={i} className="content-map-comment">
+									<tr>
+										<td>
+											<hr style={{ border: "none", height: "1px" }} />
+										</td>
+									</tr>
+									<tr className="map-comment">
+										<td className="count-comment">{i + 1}</td>
+										<td className="img-user-comment">
+											<img src={e.user.User_Img} alt="img" />
+										</td>
+										<td
+											onClick={() => {
+												document.getElementById("table-comment").style.display = "none";
+												document.getElementById("select-comment").style.display = "flex";
+												setSelectComment({
+													id: e.id,
+													name: e.user.User_FirstName + " " + e.user.User_LastName,
+													img: e.user.User_Img,
+													titre: e.news.News_Titre,
+													title: e.news.News_Title,
+													comment: e.Comment_Content,
+												});
+												fetchData();
+											}}
+											className="name-user-comment"
+										>
+											<p>{e.user.User_FirstName + " " + e.user.User_LastName}</p>
+										</td>
+										<td className="text-comment-news">
+											<p>{e.Comment_Content}</p>
+										</td>
+										<td className="titre-news-comment">
+											<p>{e.news.News_Titre}</p>
+										</td>
+										<td className="title-news-comment">
+											<p>{e.news.News_Title}</p>
+										</td>
+										<td className="category-news-comment">
+											<p>
+												{(e.news.Category === "politic" && "سیاست") ||
+													(e.news.Category === "economy" && "اقتصاد") ||
+													(e.news.Category === "social" && "جامعه") ||
+													(e.news.Category === "sport" && "ورزش") ||
+													(e.news.Category === "local" && "بومی")}
+											</p>
+										</td>
+										<td className="date-comment">
+											<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
+										</td>
+										<td className="date-comment">
+											<span className="Date">{e.news.id}</span>
+										</td>
+										<td className="btn-action-comment">
+											<button
+												className="delete-comment"
+												onClick={async () => {
+													await AxiosInstance({
+														method: "post",
+														url: `news/verification-comment?id=${e.id}`,
+														withCredentials: true,
+													})
+														.then((success) => {
+															fetchData();
+															document.getElementById("success-verification").style.display = "unset";
+															document.getElementById("success-verification").innerHTML = success.data.message;
+															setTimeout(() => {
+																document.getElementById("success-verification").style.display = "none";
+																document.getElementById("success-verification").innerHTML = "";
+															}, 3000);
+														})
+														.catch((err) => {
+															console.log(err);
+														});
+												}}
+											>
+												قبول
+											</button>
+											<button className="cancel-comment">رد</button>
+										</td>
+									</tr>
+								</tbody>
+							);
+						})) ||
+						"لیست خبر های منتشر نشده خالی است ."}
+					<thead>
+						<tr>
+							<td>
+								<span style={{ color: "white" }} id="empty-news"></span>
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
 			<div id="content-add-news" className="content-add-news">
 				<h2>اخبار</h2>
 				<div className="container-search-news-lord">
 					<div className="search-news-by-title-lord">
+						<label htmlFor="search"> جستجو در تیتر و عنوان؛</label>
 						<input
 							onChange={(e) => {
 								ReceiveAllNews.Search = e.target.value !== "" ? e.target.value : null;
@@ -121,9 +342,9 @@ export const ListNews = () => {
 							name="search"
 							id="search"
 						/>
-						<label htmlFor="search">جستجو در اخبار</label>
 					</div>
 					<div className="search-news-by-id-lord">
+						<label htmlFor="SearchById">جستجو با کد خبر؛</label>
 						<input
 							onChange={(e) => {
 								ReceiveAllNews.SearchById = e.target.value !== "" ? e.target.value : null;
@@ -133,12 +354,21 @@ export const ListNews = () => {
 							name="SearchById"
 							id="SearchById"
 						/>
-						<label htmlFor="SearchById">جستجو با کد خبر</label>
 					</div>
+					<button
+						onClick={() => {
+							document.getElementById("content-status-comment").style.display = "flex";
+							document.getElementById("content-add-news").style.display = "none";
+							fetchData();
+						}}
+					>
+						نظرات
+					</button>
 				</div>
 				<table className="content-table-news">
 					<thead>
 						<tr className="titles-table-news">
+							<th>تیتر</th>
 							<th>عنوان</th>
 							<th>نویسنده</th>
 							<th>دسته ها</th>
@@ -149,13 +379,13 @@ export const ListNews = () => {
 					</thead>
 					{ReceiveAllNews.News.map((e) => {
 						const [DateC, TimeC] = [
-							{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+							{
+								DateCreate: new Date(e.createdAt)
+									.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })
+									.split("T")[0],
+							},
 							{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
 						];
-						// const [DateU, TimeU] = [
-						// 	{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
-						// 	{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
-						// ];
 						return (
 							<tbody key={e.id} className="content-map-news">
 								<tr>
@@ -164,11 +394,20 @@ export const ListNews = () => {
 									</td>
 								</tr>
 								<tr className="map-news">
-									<td className="img-profile-news">
-										<p>{e.News_Title}</p>
+									<td className="titre-news">
+										<p dangerouslySetInnerHTML={{ __html: e.News_Titre }}></p>
+									</td>
+									<td className="title-news">
+										<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
 									</td>
 									<td className="td-info">{e.Author}</td>
-									<td className="td-info">{e.Category}</td>
+									<td className="td-info">
+										{(e.Category === "politic" && "سیاست") ||
+											(e.Category === "economy" && "اقتصاد") ||
+											(e.Category === "social" && "جامعه") ||
+											(e.Category === "sport" && "ورزش") ||
+											(e.Category === "local" && "بومی")}
+									</td>
 									<td className="green td-info">{e.Comment_Status === false ? 0 : "تنظیم"}</td>
 									<td className="td-info">
 										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
@@ -177,7 +416,18 @@ export const ListNews = () => {
 										<span className="Date">{e.id}</span>
 									</td>
 									<td className="ffff">
-										<button id={e.id} onClick={handleDeletedNews} className="delete-news">
+										<button
+											onClick={() =>
+												handleDeletedNews({
+													id: e.id,
+													Titre: e.News_Titre,
+													Title: e.News_Title,
+													Category: e.Category,
+													Author: e.Author,
+												})
+											}
+											className="delete-news"
+										>
 											حذف
 										</button>
 										<button id={e.id} onClick={handleCancelNews} className="cancel-news">
@@ -221,12 +471,17 @@ export const ListNews = () => {
 				</div>
 			</div>
 			<div id="warning-delete-news" className="warning-delete-news">
-				<div id="deleted-news"></div>
-				<div>
+				<div id="deleted-news" className="deleted-news"></div>
+				<div id="news-dele-lord-btn-content">
 					<button className="btn-deleted-news" onClick={handleDeleteNews}>
 						حذف
 					</button>
-					<button className="btn-cancel-news" onClick={handleCancelDeleNews}>
+					<button
+						className="btn-cancel-news"
+						onClick={() => {
+							document.getElementById("warning-delete-news").style.display = "none";
+						}}
+					>
 						لغو
 					</button>
 				</div>

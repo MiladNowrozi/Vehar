@@ -3,28 +3,28 @@ import "./default.css";
 import { AuthContext } from "../../../../../context/authContext";
 
 export const DefaultLord = () => {
-	const { CurrentLord } = useContext(AuthContext);
+	const { CurrentUser } = useContext(AuthContext);
 
 	return (
 		<div className="content-profile-lord">
 			<div className="image-lord">
 				<img
 					src={
-						CurrentLord.Lord_Img
-							? CurrentLord.Lord_Img
+						CurrentUser.Lord_Img
+							? CurrentUser.Lord_Img
 							: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/100px-User_icon_2.svg.png"
 					}
 					alt="lord"
 				/>
 			</div>
 			<div className="lord-name">
-				<h1>{CurrentLord.Lord_FirstName && CurrentLord.Lord_FirstName + " " + CurrentLord.Lord_LastName}</h1>
+				<h1>{CurrentUser.Lord_FirstName && CurrentUser.Lord_FirstName + " " + CurrentUser.Lord_LastName}</h1>
 			</div>
 			<div className="lord-title">
-				<h2>{CurrentLord.Lord_Describe}</h2>
+				<h2>{CurrentUser.Lord_Describe}</h2>
 			</div>
 			<div className="lord-Bio">
-				<h3>{CurrentLord.Lord_Content}</h3>
+				<h3>{CurrentUser.Lord_Content}</h3>
 			</div>
 		</div>
 	);
