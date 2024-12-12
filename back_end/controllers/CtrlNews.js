@@ -6,8 +6,6 @@ import { Like } from "../models/Like.js";
 import { Comment } from "../models/Comment.js";
 import { User } from "../models/User.js";
 import { Responses } from "../models/Responses.js";
-import { ResToResponses } from "../models/ResToResponses.js";
-import { ResToRes } from "../models/ResToRes.js";
 
 // fs.readFile("News.json", "utf8", (err, data) => {
 // 	if (err) {
@@ -618,8 +616,7 @@ export default class NewsControllers {
 						TotalPages: Math.ceil(GetAllResult.count / parseInt(req.query.limit)),
 						TotalNews: GetAllResult.count,
 					},
-					message:
-						req.query.searchbyid === "null" ? "هیچ خبری موجود نیست" : `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
+					message: req.query.searchbyid === "null" ? "هیچ خبری موجود نیست" : `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
 				});
 			} catch (e) {
 				res.status(500).json({
@@ -674,8 +671,7 @@ export default class NewsControllers {
 					TotalPages: Math.ceil(SearchInNewsByTitle.count / parseInt(req.query.limit)),
 					TotalNews: SearchInNewsByTitle.count,
 				},
-				message:
-					req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
+				message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
 			});
 		} else {
 			try {
@@ -747,39 +743,16 @@ export default class NewsControllers {
 					offset: CountChosen.length <= 5 ? 0 : CountChosen.length - 5,
 				});
 				const Comments = await Comment.findAll({
-					where: { newsId: req.query.id },
+					where: { newsId: req.query.id, Comment_Status: true },
 					include: [
 						{
 							model: User,
-							attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
 						},
 						{
 							model: Responses,
-							attributes: ["id", "Responses_Content", "createdAt", "commentId"], // Specify the attributes you want from User
 							include: [
 								{
 									model: User,
-									attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-								},
-								{
-									model: ResToResponses,
-									attributes: ["id", "ResToResponses_Content", "createdAt", "responsesId"], // Specify the attributes you want from User
-									include: [
-										{
-											model: User,
-											attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-										},
-										{
-											model: ResToRes,
-											attributes: ["id", "ResToRes_Content", "createdAt", "resToResponsesId"], // Specify the attributes you want from User
-											include: [
-												{
-													model: User,
-													attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-												},
-											],
-										},
-									],
 								},
 							],
 						},
@@ -1502,19 +1475,43 @@ export default class NewsControllers {
 			});
 			if (Comments !== null) {
 				if (Comments.Comment_Status === true) {
-					await Comment.create({
+					const newComment = await Comment.create({
 						Comment_Content: req.query.text,
 						newsId: req.query.newsId,
 						userId: req.user.id,
 						Comment_Status: true,
 					});
+					const Comments = await Comment.findAll({
+						where: { newsId: newComment.newsId },
+						include: [
+							{
+								model: User,
+							},
+							{
+								model: Responses,
+								include: [
+									{
+										model: User,
+									},
+								],
+							},
+						],
+					});
 					res.status(200).json({
 						success: true,
-						message: "نظر شما با موفقیت ارسال شد بعد از تایید مدیر منتشر خواهد شد .",
+						body: {
+							Comments: Comments,
+							newCommentId: newComment.id,
+						},
+						message: "نظر شما با موفقیت منتشر شد.",
 					});
 				} else {
 					res.status(200).json({
-						success: true,
+						success: false,
+						body: {
+							Comments: [],
+							newCommentId: null,
+						},
 						message: "نظر قبلی شما در انتظار تایید مدیر است لطفاً صبر کنید .",
 					});
 				}
@@ -1523,9 +1520,14 @@ export default class NewsControllers {
 					Comment_Content: req.query.text,
 					newsId: req.query.newsId,
 					userId: req.user.id,
+					Comment_Status: false,
 				});
 				res.status(200).json({
 					success: true,
+					body: {
+						Comment: [],
+						newCommentId: null,
+					},
 					message: "نظر شما با موفقیت ارسال شد بعد از تایید مدیر منتشر خواهد شد .",
 				});
 			}
@@ -1538,125 +1540,98 @@ export default class NewsControllers {
 	};
 	// Responses
 	static Responses = async (req, res) => {
-		try {
-			if (req.query.text !== "") {
-				const NewsResponse = await Responses.create({
-					Responses_Content: req.query.text,
-					commentId: req.query.commentId,
-					userId: req.user.id,
-				});
-				const SendCourntResponde = await Comment.findOne({
-					where: { id: NewsResponse.commentId },
-					include: [
-						{
-							model: User,
-							attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
+		if (req.query.type === "response") {
+			try {
+				if (req.query.text !== "") {
+					const NewsResponse = await Responses.create({
+						Responses_Content: req.query.text,
+						commentId: req.query.commentId,
+						userId: req.user.id,
+					});
+					const idNews = await Comment.findByPk(NewsResponse.commentId);
+					const Comments = await Comment.findAll({
+						where: { newsId: idNews.newsId },
+						include: [
+							{
+								model: User,
+							},
+							{
+								model: Responses,
+								include: [
+									{
+										model: User,
+									},
+								],
+							},
+						],
+					});
+
+					res.status(200).json({
+						success: true,
+						body: {
+							UpdateResponses: Comments,
+							currentResponses: NewsResponse.id,
 						},
-						{
-							model: Responses,
-							attributes: ["id", "Responses_Content", "createdAt", "commentId"], // Specify the attributes you want from User
-							include: [
-								{
-									model: User,
-									attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-								},
-								{
-									model: ResToResponses,
-									attributes: ["id", "ResToResponses_Content", "createdAt", "responsesId"], // Specify the attributes you want from User
-									include: [
-										{
-											model: User,
-											attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-										},
-									],
-								},
-							],
-						},
-					],
-				});
-				res.status(200).json({
-					success: true,
-					body: SendCourntResponde,
-				});
-			} else {
+					});
+				} else {
+					res.status(403).json({
+						success: false,
+						message: "لطفاً نظر خود را پر کنید .",
+					});
+				}
+			} catch (error) {
 				res.status(403).json({
 					success: false,
-					message: "لطفاً نظر خود را پر کنید .",
+					message: error.message,
 				});
 			}
-		} catch (error) {
-			res.status(403).json({
-				success: false,
-				message: error.message,
-			});
-		}
-	};
-	// Responses
-	static ResToResponses = async (req, res) => {
-		try {
-			if (req.query.text !== "") {
-				await ResToResponses.create({
-					ResToResponses_Content: req.query.text,
-					responsesId: req.query.resId,
-					userId: req.user.id,
-				});
-				const SendAllNewsResToResponse = await ResToResponses.findAll({
-					include: [
-						{
-							model: User,
-							attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
+		} else if (req.query.type === "ResToResponse") {
+			try {
+				if (req.query.text !== "") {
+					const CommentId = await Responses.findByPk(req.query.ResToResponseId);
+					const NewsResToResponse = await Responses.create({
+						Responses_Content: req.query.text,
+						ResponsesToRes: req.query.ResToResponseId,
+						commentId: CommentId.commentId,
+						userId: req.user.id,
+					});
+					const idNews = await Comment.findByPk(NewsResToResponse.commentId);
+					const Comments = await Comment.findAll({
+						where: { newsId: idNews.newsId },
+						include: [
+							{
+								model: User,
+							},
+							{
+								model: Responses,
+								include: [
+									{
+										model: User,
+									},
+								],
+							},
+						],
+					});
+
+					res.status(200).json({
+						success: true,
+						body: {
+							UpdateResToResponse: Comments,
+							currentResToResponse: NewsResToResponse.id,
 						},
-					],
-				});
-				res.status(200).json({
-					success: true,
-					body: SendAllNewsResToResponse,
-				});
-			} else {
+					});
+				} else {
+					res.status(403).json({
+						success: false,
+						message: "لطفاً نظر خود را پر کنید .",
+					});
+				}
+			} catch (error) {
 				res.status(403).json({
 					success: false,
-					message: "لطفاً نظر خود را پر کنید .",
+					message: error.message,
 				});
 			}
-		} catch (error) {
-			res.status(403).json({
-				success: false,
-				message: error.message,
-			});
-		}
-	};
-	// Responses
-	static ResToRes = async (req, res) => {
-		try {
-			if (req.query.text !== "") {
-				await ResToRes.create({
-					ResToRes_Content: req.query.text,
-					resToResponsesId: req.query.resToResId,
-					userId: req.user.id,
-				});
-				const SendAllNewsResToRes = await ResToRes.findAll({
-					include: [
-						{
-							model: User,
-							attributes: ["id", "User_FirstName", "User_LastName", "User_Img"], // Specify the attributes you want from User
-						},
-					],
-				});
-				res.status(200).json({
-					success: true,
-					body: SendAllNewsResToRes,
-				});
-			} else {
-				res.status(403).json({
-					success: false,
-					message: "لطفاً نظر خود را پر کنید .",
-				});
-			}
-		} catch (error) {
-			res.status(403).json({
-				success: false,
-				message: error.message,
-			});
 		}
 	};
 	// COMMENT
@@ -1804,13 +1779,7 @@ export default class NewsControllers {
 					offset: CountAlllocal.length <= 10 ? 0 : CountAlllocal.length - 10,
 				});
 				//
-				const Result = [
-					...countPolitic.rows,
-					...countEconomy.rows,
-					...countSocial.rows,
-					...countSport.rows,
-					...countLocal.rows,
-				];
+				const Result = [...countPolitic.rows, ...countEconomy.rows, ...countSocial.rows, ...countSport.rows, ...countLocal.rows];
 				res.status(200).json({
 					success: true,
 					body: Result,

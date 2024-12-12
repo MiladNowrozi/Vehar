@@ -5,6 +5,9 @@ import { PageMenu } from "../../components/app/header/pageMenu/PageMenu";
 import { AxiosInstance } from "../../axiosInstance.js";
 import { AnimationRed } from "../../animations/Animation.jsx";
 import { AuthContext } from "../../context/authContext.js";
+import moment from "moment";
+import("moment/locale/fa");
+moment.locale("fa");
 export const News = () => {
 	const { CurrentUser } = useContext(AuthContext);
 	const [news, setNews] = useState({
@@ -14,12 +17,7 @@ export const News = () => {
 		Comments: [],
 		Likes: [],
 	});
-	const [ReceiveComment, setReceiveComment] = useState([]);
-	const [ReceiveResponse, setReceiveResponse] = useState([]);
-	const [ReceiveResResponse, setReceiveResResponse] = useState([]);
-	const [ReceiveResToRes, setReceiveResToRes] = useState([]);
 	const NewsId = useLocation().pathname.split("/")[2];
-	// const [refreshKey, setRefreshKey] = useState(0);
 	useEffect(() => {
 		const FetchData = async () => {
 			try {
@@ -53,11 +51,24 @@ export const News = () => {
 	const [DateC, TimeC] = [
 		{
 			DateCreate: new Date(news.CurrentNews.createdAt)
-				.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })
+				.toLocaleDateString("fa-IR", {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+				})
 				.split("T")[0],
 		},
-		{ TimeCreate: new Date(news.CurrentNews.createdAt).toTimeString().split(" ")[0] },
+		{
+			TimeCreate: new Date(news.CurrentNews.createdAt).toTimeString().split(" ")[0],
+		},
 	];
+	const [CommentsValue, setCommentsValue] = useState("");
+	const [newResponse, setNewResponse] = useState("");
+	const [newResToRes, setNewResToRes] = useState("");
+	const [activeCommentId, setActiveCommentId] = useState(null);
+	const [activeResponseId, setActiveResponseId] = useState(null);
+	const [activeResToRes, setActiveResToRes] = useState(null);
+	// =========================
 	const SubmitComment = async (e) => {
 		e.preventDefault();
 		await AxiosInstance({
@@ -65,71 +76,102 @@ export const News = () => {
 			url: `/news/comment?text=${CommentsValue}&newsId=${news.CurrentNews.id}`,
 		})
 			.then((success) => {
-				setCommentsValue("");
-				document.getElementById("textarea-comment").value = "";
-				document.querySelector(".content-comment-form").style.display = "none";
+				setNews((prov) => ({
+					...prov,
+					Comments: success.data.body.Comments,
+				}));
 				document.querySelector(".result-send-comment").innerHTML = success.data.message;
-				setTimeout(() => {}, [5000]);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-	const [CommentsValue, setCommentsValue] = useState("");
-	const [newResponse, setNewResponse] = useState("");
-	const [newResToResponse, setNewResToResponse] = useState("");
-	const [newResToRes, setNewResToRes] = useState("");
-	const [activeCommentId, setActiveCommentId] = useState(null);
-	const [activeResponseId, setActiveResponseId] = useState(null);
-	const [activeResToResponseId, setActiveResToResponseId] = useState(null);
-	const [activeResToResId, setActiveResToResId] = useState(null);
-	//
-	const handleResponseSubmit = async (commentId) => {
-		await AxiosInstance({
-			method: "post",
-			url: `/news/responses?text=${newResponse}&commentId=${commentId}`,
-		})
-			.then((response) => {
-				setReceiveResponse(response.data.body);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-
-		setNewResponse("");
-		setActiveCommentId(null);
-	};
-	//
-	const handleResToResponseSubmit = async (resId) => {
-		await AxiosInstance({
-			method: "post",
-			url: `/news/res-to-responses?text=${newResToResponse}&resId=${resId}`,
-		})
-			.then((response) => {
-				setReceiveResResponse(response.data.body);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-
-		setNewResToResponse("");
-		setActiveResToResponseId(null);
-	};
-	//
-	const ResToRes = async (resToResId) => {
-		await AxiosInstance({
-			method: "post",
-			url: `/news/res-to-res?text=${newResToRes}&resToResId=${resToResId}`,
-		})
-			.then((response) => {
+				setCommentsValue("");
+				setNewResponse("");
 				setNewResToRes("");
-				setActiveResToResId(null);
-				setReceiveResToRes(response.data.body);
+				setActiveCommentId(null);
+				setActiveResponseId(null);
+				setActiveResToRes(null);
+				const GoToResponse = document.getElementById(success.data.body?.newCommentId + "comment");
+				if (GoToResponse) {
+					setTimeout(() => {
+						GoToResponse.scrollIntoView({
+							behavior: "smooth",
+						});
+					}, 1000);
+				}
+				if (GoToResponse) {
+					setTimeout(() => {
+						document.querySelector(".result-send-comment").innerHTML = "";
+					}, 5000);
+				} else {
+					setTimeout(() => {
+						document.querySelector(".result-send-comment").innerHTML = "";
+					}, 5000);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
+	// =========================
+	const SubmitResponse = async (commentId) => {
+		await AxiosInstance({
+			method: "post",
+			url: `/news/responses?type=response&text=${newResponse}&commentId=${commentId}`,
+		})
+			.then((response) => {
+				setNews((prov) => ({
+					...prov,
+					Comments: response.data.body.UpdateResponses,
+				}));
+				document.getElementById(commentId + "container-responses").style.display = "block";
+				setCommentsValue("");
+				setNewResponse("");
+				setNewResToRes("");
+				setActiveCommentId(null);
+				setActiveResponseId(null);
+				setActiveResToRes(null);
+				setTimeout(() => {
+					const GoToResponse = document.getElementById(response.data.body.currentResponses + "response");
+					if (GoToResponse) {
+						GoToResponse.scrollIntoView({
+							behavior: "smooth",
+						});
+					}
+				}, 1000);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+	// =========================
+	const SubmitResponseToRes = async (responseId, i) => {
+		await AxiosInstance({
+			method: "post",
+			url: `/news/responses?type=ResToResponse&text=${newResToRes}&ResToResponseId=${responseId}`,
+		})
+			.then((response) => {
+				setNews((prov) => ({
+					...prov,
+					Comments: response.data.body.UpdateResToResponse,
+				}));
+				document.getElementById(i === "sub-res" ? responseId + "sub-res" : responseId + "response").style.display = "block";
+				setCommentsValue("");
+				setNewResponse("");
+				setNewResToRes("");
+				setActiveCommentId(null);
+				setActiveResponseId(null);
+				setActiveResToRes(null);
+				setTimeout(() => {
+					const GoToResponse = document.getElementById(response.data.body.currentResToResponse + "sub-res");
+					if (GoToResponse) {
+						GoToResponse.scrollIntoView({
+							behavior: "smooth",
+						});
+					}
+				}, 1000);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<Fragment>
 			<div className="bodyHome">
@@ -156,9 +198,19 @@ export const News = () => {
 															</Link>
 														</div>
 														<div className="RoutingNews-left">
-															<h1 className="RoutingNewsHeader-left" dangerouslySetInnerHTML={{ __html: e.News_Titre }}></h1>
+															<h1
+																className="RoutingNewsHeader-left"
+																dangerouslySetInnerHTML={{
+																	__html: e.News_Titre,
+																}}
+															></h1>
 															<Link to={`/news/${e.id}`} className="titleNews-left">
-																<h1 className="HeadlineNewsHeader-left" dangerouslySetInnerHTML={{ __html: e.News_Title }}></h1>
+																<h1
+																	className="HeadlineNewsHeader-left"
+																	dangerouslySetInnerHTML={{
+																		__html: e.News_Title,
+																	}}
+																></h1>
 															</Link>
 														</div>
 													</div>
@@ -201,10 +253,18 @@ export const News = () => {
 												<div className="News_Result">
 													<div className="Title_Result">
 														<h6>{news.CurrentNews.News_Titre}</h6>
-														<h1 dangerouslySetInnerHTML={{ __html: news.CurrentNews.News_Title }}></h1>
+														<h1
+															dangerouslySetInnerHTML={{
+																__html: news.CurrentNews.News_Title,
+															}}
+														></h1>
 													</div>
 													<div className="content-center-current-news">
-														<p dangerouslySetInnerHTML={{ __html: news.CurrentNews.News_Content }}></p>
+														<p
+															dangerouslySetInnerHTML={{
+																__html: news.CurrentNews.News_Content,
+															}}
+														></p>
 													</div>
 												</div>
 											</section>
@@ -234,7 +294,12 @@ export const News = () => {
 															<div>
 																<h1 className="RoutingNewsHeader-Right">{News.News_Titre}</h1>
 																<Link to={`/news/${News.id}`} className="titleNews-Right">
-																	<h1 className="HeadlineNewsHeader-Right" dangerouslySetInnerHTML={{ __html: News.News_Title }}></h1>
+																	<h1
+																		className="HeadlineNewsHeader-Right"
+																		dangerouslySetInnerHTML={{
+																			__html: News.News_Title,
+																		}}
+																	></h1>
 																</Link>
 															</div>
 														</div>
@@ -248,340 +313,282 @@ export const News = () => {
 						</div>
 					</div>
 				</div>
-				{news.Comments.length > 0 && (
+				{news.Comments?.length > 0 && (
 					<div className="container-comments">
-						{news.Comments.map((e, i) => (
-							<div key={i} className="content-comments">
+						{news.Comments.map((comment, i) => (
+							<div key={i} id={comment.id + "comment"} className="content-comments">
 								<div className="item-comment">
 									<div className="info-user">
-										<img src={e.user.User_Img} alt="img" />
-										<p>{e.user.User_FirstName + " " + e.user.User_LastName + " :"}</p>
+										<img src={comment.user.User_Img} alt="img" />
+										<p>{comment.user.User_FirstName + " " + comment.user.User_LastName}</p>
 									</div>
 									<div className="text-comment">
-										<p>{e.Comment_Content}</p>
+										<p>{comment.Comment_Content}</p>
 									</div>
 									<div className="btn-reply-and-likes">
 										<button
 											type="button"
 											onClick={() => {
-												activeCommentId === e.id ? setActiveCommentId("") : setActiveCommentId(e.id);
-												setActiveResponseId("");
-												setActiveResToResId("");
-												setActiveResToResponseId("");
+												activeCommentId === comment.id ? setActiveCommentId(null) : setActiveCommentId(comment.id);
+												setCommentsValue("");
+												setNewResponse("");
+												setNewResToRes("");
+												setActiveResponseId(null);
+												setActiveResToRes(null);
 											}}
 										>
 											پاسخ
 										</button>
-										<div className="like-comment">
-											<section className="like-up">
-												<div
-													onClick={async () => {
-														await AxiosInstance({
-															method: "post",
-															url: `/news/like?type=comment&id=${e.id}`,
-														})
-															.then((success) => {
-																document.getElementById("like-up" + e.id).textContent = success.data.body.Like_Comment;
-																document.getElementById("like-down" + e.id).textContent = success.data.body.UnLike_Comment;
-																document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
-															})
-															.catch((err) => {
-																console.log(err);
-															});
+										{comment.responses.length > 0 && (
+											<div className="div-fa-comment">
+												<span>{comment.responses.length}</span>
+												<span
+													onClick={() => {
+														if (document.getElementById(comment.id + "container-responses").style.display !== "none") {
+															document.getElementById(comment.id + "container-responses").style.display = "none";
+														} else {
+															document.getElementById(comment.id + "container-responses").style.display = "block";
+														}
 													}}
-													className="fa fa-thumbs-up"
-												></div>
-												<p id={"like-up" + e.id} className="like-up">
-													{e.Like_Comment}
-												</p>
-											</section>
-											<section className="like-down">
-												<div
-													className="fa fa-thumbs-down"
-													onClick={async () => {
-														await AxiosInstance({
-															method: "post",
-															url: `/news/like?type=uncomment&id=${e.id}`,
-														})
-															.then((success) => {
-																document.getElementById("like-up" + e.id).textContent = success.data.body.Like_Comment;
-																document.getElementById("like-down" + e.id).textContent = success.data.body.UnLike_Comment;
-																document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+													className="fa fa-comments"
+												></span>
+											</div>
+										)}
+										<div className="like-comment-container">
+											<div className="date-comment-content">
+												<p>{moment(comment.createdAt).fromNow()}</p>
+											</div>
+											<div className="like-comment-content">
+												<section className="like-up">
+													<div
+														onClick={async () => {
+															await AxiosInstance({
+																method: "post",
+																url: `/news/like?type=comment&id=${comment.id}`,
 															})
-															.catch((err) => {
-																console.log(err);
-															});
-													}}
-												></div>
-												<p id={"like-down" + e.id} className="like-down">
-													{e.UnLike_Comment}
-												</p>
-											</section>
+																.then((success) => {
+																	document.getElementById("like-up" + comment.id).textContent = success.data.body.Like_Comment;
+																	document.getElementById("like-down" + comment.id).textContent = success.data.body.UnLike_Comment;
+																	document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+																})
+																.catch((err) => {
+																	console.log(err);
+																});
+														}}
+														className="fa fa-thumbs-up"
+													></div>
+													<p id={"like-up" + comment.id} className="like-up">
+														{comment.Like_Comment}
+													</p>
+												</section>
+												<section className="like-down">
+													<div
+														className="fa fa-thumbs-down"
+														onClick={async () => {
+															await AxiosInstance({
+																method: "post",
+																url: `/news/like?type=uncomment&id=${comment.id}`,
+															})
+																.then((success) => {
+																	document.getElementById("like-up" + comment.id).textContent = success.data.body.Like_Comment;
+																	document.getElementById("like-down" + comment.id).textContent = success.data.body.UnLike_Comment;
+																	document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+																})
+																.catch((err) => {
+																	console.log(err);
+																});
+														}}
+													></div>
+													<p id={"like-down" + comment.id} className="like-down">
+														{comment.UnLike_Comment}
+													</p>
+												</section>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div className="question">
 									<div className="container-reply">
-										{activeCommentId === e.id && (
+										{activeCommentId === comment.id && (
 											<div className="reply-match-id-comment">
 												<textarea
 													value={newResponse}
 													onChange={(e) => {
 														setNewResponse(e.target.value);
 													}}
-													placeholder={`پاسخ به ${e.user.User_FirstName + " " + e.user.User_LastName + " :"}`}
+													placeholder={`پاسخ به ${comment.user.User_FirstName + " " + comment.user.User_LastName}`}
 												></textarea>
-												<button type="button" onClick={() => handleResponseSubmit(e.id)}>
+												<button
+													type="button"
+													onClick={() => {
+														SubmitResponse(comment.id);
+													}}
+												>
 													ارسال
 												</button>
 											</div>
 										)}
 									</div>
-									<div className="container-responses">
-										{e.responses.length > 0 && (
+									<div style={{ display: "none" }} id={comment.id + "container-responses"} className="container-responses">
+										{comment.responses.length > 0 && (
 											<div className="content-response">
-												<div className="title-saying">
-													<h4>
-														بحث با <p>{e.user.User_FirstName + " " + e.user.User_LastName}</p>
-													</h4>
-												</div>
-												{e.responses.map((response, index) => (
-													<div key={index} className="content-map-responses">
-														<div className="item-map-responses">
-															<div className="info-user-response">
-																<img src={response.user.User_Img} alt="img" />
-																<p>{response.user.User_FirstName + " " + response.user.User_LastName + " :"}</p>
-															</div>
-															<div className="text-comment-response">
-																<p>{response.Responses_Content}</p>
-															</div>
-															<div className="reply-to-response">
-																<button
-																	type="button"
-																	onClick={() => {
-																		activeResponseId === response.id ? setActiveResponseId("") : setActiveResponseId(response.id);
-																		setActiveResToResId("");
-																		setActiveCommentId("");
-																		setActiveResToResponseId("");
-																	}}
-																>
-																	پاسخ
-																</button>
-															</div>
-															<div className="container-reply">
-																{activeResponseId === response.id && (
-																	<div className="reply-match-id-comment">
-																		<textarea
-																			value={newResToResponse}
-																			onChange={(e) => {
-																				setNewResToResponse(e.target.value);
-																			}}
-																			placeholder={`پاسخ به ${response.user.User_FirstName + " " + response.user.User_LastName + " :"}`}
-																		></textarea>
-																		<button type="button" onClick={() => handleResToResponseSubmit(response.id)}>
-																			ارسال
-																		</button>
-																	</div>
-																)}
-															</div>
-														</div>
-														<div className="container-res-to-responses">
-															{(ReceiveResResponse.length === 0 &&
-																response.resToResponses.length > 0 &&
-																response.resToResponses.map((resToResponses, index) => (
-																	<div key={index} className="content-map-res">
+												{comment.responses.map(
+													(response1, index) =>
+														response1.commentId === comment.id &&
+														response1.ResponsesToRes === null && (
+															<div key={index} id={response1.id + "response"} className="content-map-responses">
+																<div className={response1.userId === comment.userId ? "item-map-responses-main" : "item-map-responses"}>
+																	<div id="info-user-response" className="info-user-response">
+																		<img src={response1.user.User_Img} alt="img" />
 																		<div>
-																			{resToResponses.responsesId === response.id && (
-																				<div>
-																					<div className="info-user-res">
-																						<img src={resToResponses.user.User_Img} alt="img" />
-																						<p>{resToResponses.user.User_FirstName + " " + resToResponses.user.User_LastName + " :"}</p>
+																			<p>{response1.user.User_FirstName + " " + response1.user.User_LastName}</p>
+																			در پاسخ به
+																			<p
+																				onClick={() => {
+																					const section = document.getElementById(
+																						response1.commentId === comment.id ? comment.id + "comment" : response1.id + "response"
+																					);
+																					if (section) {
+																						section.scrollIntoView({
+																							behavior: "smooth",
+																						});
+																						section.children[0].children[0].style.backgroundColor = "#0000009c";
+																					}
+																					setTimeout(() => {
+																						section.children[0].children[0].style.backgroundColor = "#09008659";
+																					}, 1000);
+																				}}
+																			>
+																				{comment.user.User_FirstName + " " + comment.user.User_LastName}
+																			</p>
+																		</div>
+																	</div>
+																	<div className="text-comment-response">
+																		<p>{response1.Responses_Content}</p>
+																	</div>
+																	<div className="reply-to-response">
+																		<button
+																			type="button"
+																			onClick={() => {
+																				activeResponseId === response1.id ? setActiveResponseId(null) : setActiveResponseId(response1.id);
+																				setCommentsValue("");
+																				setNewResponse("");
+																				setNewResToRes("");
+																				setActiveCommentId(null);
+																				setActiveResToRes(null);
+																			}}
+																		>
+																			پاسخ
+																		</button>
+																		<div className="date-response-content">
+																			<p>{moment(response1.createdAt).fromNow()}</p>
+																		</div>
+																	</div>
+																	<div className="container-reply">
+																		{activeResponseId === response1.id && (
+																			<div className="reply-match-id-comment">
+																				<textarea
+																					value={newResToRes}
+																					onChange={(e) => {
+																						setNewResToRes(e.target.value);
+																					}}
+																					placeholder={`پاسخ به ${response1.user.User_FirstName + " " + response1.user.User_LastName}`}
+																				></textarea>
+																				<button type="button" onClick={() => SubmitResponseToRes(response1.id, "response")}>
+																					ارسال
+																				</button>
+																			</div>
+																		)}
+																	</div>
+																</div>
+																{comment.responses.map(
+																	(SubRes1, index) =>
+																		SubRes1.ResponsesToRes !== null && (
+																			<div key={index} id={SubRes1.id + "sub-res"} className="content-map-sub-res">
+																				<div className={SubRes1.userId === comment.userId ? "item-map-sub-res-main" : "item-map-sub-res"}>
+																					<div className="info-user-sub-res">
+																						<img src={SubRes1.user.User_Img} alt="img" />
+																						<div>
+																							<p>{SubRes1.user.User_FirstName + " " + SubRes1.user.User_LastName}</p>
+																							در پاسخ به
+																							<p
+																								onClick={() => {
+																									const section = document.getElementById(
+																										comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "sub-res"
+																									)
+																										? document.getElementById(
+																												comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "sub-res"
+																										  )
+																										: document.getElementById(
+																												comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "response"
+																										  );
+																									if (section) {
+																										section.children[0].children[0].style.backgroundColor = comment.responses.find(
+																											(e) => SubRes1.ResponsesToRes === e.id && e.userId === comment.userId
+																										)
+																											? "rgb(0, 92, 61)"
+																											: "rgb(0, 92, 61)";
+																										section.scrollIntoView({
+																											behavior: "smooth",
+																										});
+																									}
+																									setTimeout(() => {
+																										section.children[0].children[0].style.backgroundColor = comment.responses.find(
+																											(e) => SubRes1.ResponsesToRes === e.id && e.userId === comment.userId
+																										)
+																											? "rgb(0, 63, 27)"
+																											: "rgb(0, 51, 85)";
+																									}, 1000);
+																								}}
+																							>
+																								{response1.user.User_FirstName + " " + response1.user.User_LastName}
+																							</p>
+																						</div>
 																					</div>
-																					<div className="text-comment-res">
-																						<p>{resToResponses.ResToResponses_Content}</p>
+																					<div className="text-comment-sub-res">
+																						<p>{SubRes1.Responses_Content}</p>
 																					</div>
-																					<div className="reply-to-res">
+																					<div className="reply-to-sub-res">
 																						<button
 																							type="button"
 																							onClick={() => {
-																								activeResToResponseId === resToResponses.id
-																									? setActiveResToResponseId("")
-																									: setActiveResToResponseId(resToResponses.id);
-																								setActiveCommentId("");
-																								setActiveResponseId("");
-																								setActiveResToResId("");
+																								activeResToRes === SubRes1.id ? setActiveResToRes(null) : setActiveResToRes(SubRes1.id);
+																								setCommentsValue("");
+																								setNewResponse("");
 																								setNewResToRes("");
+																								setActiveCommentId(null);
+																								setActiveResponseId(null);
 																							}}
 																						>
 																							پاسخ
 																						</button>
+																						<div className="date-sub-res-content">
+																							<p>{moment(SubRes1.createdAt).fromNow()}</p>
+																						</div>
 																					</div>
-																				</div>
-																			)}
-																		</div>
-																		<div className="container-reply">
-																			{activeResToResponseId === resToResponses.id && (
-																				<div className="reply-match-id-comment">
-																					<textarea
-																						value={newResToRes}
-																						onChange={(e) => {
-																							setNewResToRes(e.target.value);
-																						}}
-																						placeholder={`پاسخ به ${
-																							resToResponses.user.User_FirstName + " " + resToResponses.user.User_LastName
-																						}`}
-																					></textarea>
-																					<button type="button" onClick={() => ResToRes(resToResponses.id)}>
-																						ارسال
-																					</button>
-																				</div>
-																			)}
-																		</div>
-																		<div className="container-res-to-res">
-																			{(ReceiveResToRes.length === 0 &&
-																				resToResponses.resToRes.length > 0 &&
-																				resToResponses.resToRes.map((resToRes, i) => (
-																					<div key={i}>
-																						{resToRes.resToResponsesId === resToResponses.id && (
-																							<div className="content-map-res-to-res">
-																								<div className="info-user-res-to-res">
-																									<img src={resToRes.user.User_Img} alt="img" />
-																									<p>{resToRes.user.User_FirstName + " " + resToRes.user.User_LastName + " :"}</p>
-																								</div>
-																								<div className="text-comment-res-to-res">
-																									<p>{resToRes.ResToRes_Content}</p>
-																								</div>
-																								<div className="reply-to-res-to-res">
-																									<button
-																										type="button"
-																										onClick={() => {
-																											activeResToResId === resToRes.id
-																												? setActiveResToResId("")
-																												: setActiveResToResId(resToRes.id);
-																											setActiveResToResponseId("");
-																											setActiveResponseId("");
-																											setActiveCommentId("");
-																										}}
-																									>
-																										پاسخ
-																									</button>
-																								</div>
-																							</div>
-																						)}
-																						{activeResToResId === resToRes.id && (
-																							<div className="reply-match-id-res-to-res">
+																					<div className="container-reply">
+																						{activeResToRes === SubRes1.id && (
+																							<div className="reply-match-id-comment">
 																								<textarea
 																									value={newResToRes}
 																									onChange={(e) => {
 																										setNewResToRes(e.target.value);
 																									}}
-																									placeholder={`پاسخ به ${
-																										resToRes.user.User_FirstName + " " + resToRes.user.User_LastName + " :"
-																									}`}
+																									placeholder={`پاسخ به ${SubRes1.user.User_FirstName + " " + SubRes1.user.User_LastName}`}
 																								></textarea>
-																								<button type="button" onClick={() => ResToRes(resToRes.id)}>
+																								<button type="button" onClick={() => SubmitResponseToRes(SubRes1.id, "sub-res")}>
 																									ارسال
 																								</button>
 																							</div>
 																						)}
 																					</div>
-																				))) ||
-																				ReceiveResToRes.map((res, i) => (
-																					<div key={i}>
-																						<div>
-																							<div className="info-user-res-to-res">
-																								<img src={res.user.User_Img} alt="img" />
-																								<p>{res.user.User_FirstName + " " + res.user.User_LastName}</p>
-																							</div>
-																							<div className="text-comment-res">
-																								<p>{res.ResToResponses_Content}</p>
-																							</div>
-																							<div className="reply-to-res">
-																								<button
-																									type="button"
-																									onClick={() => {
-																										activeResToResId === res.id ? setActiveResToResId("") : setActiveResToResId(res.id);
-																										setActiveResToResponseId("");
-																										setActiveResponseId("");
-																										setActiveCommentId("");
-																									}}
-																								>
-																									پاسخ
-																								</button>
-																							</div>
-																						</div>
-																						{activeResToResId === res.id && (
-																							<div>
-																								<div className="reply-match-id-comment">
-																									<textarea
-																										value={newResToRes}
-																										onChange={(e) => {
-																											setNewResToRes(e.target.value);
-																										}}
-																										placeholder={`پاسخ به ${res.user.User_FirstName + " " + res.user.User_LastName + " :"}`}
-																									></textarea>
-																									<button type="button" onClick={() => ResToRes(res.id)}>
-																										ارسال
-																									</button>
-																								</div>
-																							</div>
-																						)}
-																					</div>
-																				))}
-																		</div>
-																	</div>
-																))) ||
-																ReceiveResResponse.map((res, index) => (
-																	<div key={index} className="content-map-res">
-																		<div>
-																			{res.responsesId === response.id && (
-																				<div>
-																					<div className="info-user-res">
-																						<img src={res.user.User_Img} alt="img" />
-																						<p>{res.user.User_FirstName + " " + res.user.User_LastName}</p>
-																					</div>
-																					<div className="text-comment-res">
-																						<p>{res.ResToResponses_Content}</p>
-																					</div>
-																					<div className="reply-to-res">
-																						<button
-																							type="button"
-																							onClick={() => {
-																								activeResToResponseId === res.id
-																									? setActiveResToResponseId("")
-																									: setActiveResToResponseId(res.id);
-																								setActiveResponseId("");
-																								setActiveResToResId("");
-																								setActiveCommentId("");
-																							}}
-																						>
-																							پاسخ
-																						</button>
-																					</div>
 																				</div>
-																			)}
-																		</div>
-																		<div className="container-reply">
-																			{activeResToResponseId === res.id && (
-																				<div className="reply-match-id-comment">
-																					<textarea
-																						value={newResToRes}
-																						onChange={(e) => {
-																							setNewResToRes(e.target.value);
-																						}}
-																						placeholder={`پاسخ به ${response.user.User_FirstName + " " + response.user.User_LastName + " :"}`}
-																					></textarea>
-																					<button type="button" onClick={() => ResToRes(res.id)}>
-																						ارسال
-																					</button>
-																				</div>
-																			)}
-																		</div>
-																	</div>
-																))}
-														</div>
-													</div>
-												))}
+																			</div>
+																		)
+																)}
+															</div>
+														)
+												)}
 											</div>
 										)}
 									</div>
@@ -611,12 +618,13 @@ export const News = () => {
 									}}
 								></i>
 							</div>
-							<div className="result-send-comment"></div>
+							<div style={{ color: "#fff" }} className="result-send-comment"></div>
 							<div className="content-comment-form">
 								<div className="form-comment">
 									<form id="usr-form">
 										<textarea
 											id="textarea-comment"
+											value={CommentsValue}
 											onChange={(e) => {
 												setCommentsValue(e.target.value);
 											}}

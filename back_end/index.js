@@ -45,8 +45,10 @@ app.get("/get-images?", (req, res) => {
 app.post("/upload", upload.single("file"), async (req, res) => {
 	res.status(200).json({ location: `http://localhost:5000/get-images?name=${req.file.filename}` });
 });
+
 // await db.sync({ alter: true });
 // middlewares
+
 app.use("/auth", authRouter);
 app.use("/lord", AuthToken, lordRouter);
 app.use("/author", AuthToken, authorRouter);

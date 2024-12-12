@@ -67,3 +67,4 @@ Comment.hasMany(Responses, {
 		onUpdate: "SET NULL",
 	},
 });
+

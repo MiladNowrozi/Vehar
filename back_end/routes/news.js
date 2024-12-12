@@ -21,10 +21,6 @@ router.get("/sliders", NewsControllers.MainPagSliderAndChoice);
 router.get("/comment", NewsControllers.Comment);
 // CREATE RESPONSES
 router.post("/responses", NewsControllers.Responses);
-// CREATE RES TO RESPONSES
-router.post("/res-to-responses", NewsControllers.ResToResponses);
-// CREATE RES TO RES
-router.post("/res-to-res", NewsControllers.ResToRes);
 // CHOSEN STATUS COMMENT
 router.get("/status-comment", NewsControllers.GetStatusComment);
 // CHOSEN STATUS COMMENT
