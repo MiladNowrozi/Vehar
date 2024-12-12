@@ -31,6 +31,9 @@ export const Comment = db.define(
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 		},
+		Role_Comment: {
+			type: DataTypes.STRING(20),
+		},
 	},
 	{
 		validate: {
@@ -67,4 +70,3 @@ Comment.hasMany(Responses, {
 		onUpdate: "SET NULL",
 	},
 });
-

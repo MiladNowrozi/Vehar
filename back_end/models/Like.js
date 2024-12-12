@@ -13,6 +13,9 @@ export const Like = db.define(
 		UnLike_Comment: {
 			type: DataTypes.BOOLEAN,
 		},
+		Role_Like: {
+			type: DataTypes.STRING(20),
+		},
 	},
 	{ timestamps: false }
 );

@@ -27,8 +27,6 @@ export const News = () => {
 				})
 					.then((success) => {
 						const { CurrentNews, SendSpecial, SendChosen, Comments } = success.data.body;
-						console.log(success.data.body);
-
 						setNews((prov) => ({
 							...prov,
 							CurrentNews: CurrentNews,
@@ -67,7 +65,6 @@ export const News = () => {
 	const [newResToRes, setNewResToRes] = useState("");
 	const [activeCommentId, setActiveCommentId] = useState(null);
 	const [activeResponseId, setActiveResponseId] = useState(null);
-	const [activeResToRes, setActiveResToRes] = useState(null);
 	// =========================
 	const SubmitComment = async (e) => {
 		e.preventDefault();
@@ -86,24 +83,25 @@ export const News = () => {
 				setNewResToRes("");
 				setActiveCommentId(null);
 				setActiveResponseId(null);
-				setActiveResToRes(null);
-				const GoToResponse = document.getElementById(success.data.body?.newCommentId + "comment");
-				if (GoToResponse) {
-					setTimeout(() => {
+
+				setTimeout(() => {
+					const GoToResponse = document.getElementById(success.data.body.newCommentId + "comment");
+					if (GoToResponse) {
 						GoToResponse.scrollIntoView({
 							behavior: "smooth",
 						});
-					}, 1000);
-				}
-				if (GoToResponse) {
-					setTimeout(() => {
+					}
+				}, 1000);
+				setTimeout(() => {
+					const GoToResponse = document.getElementById(success.data.body.newCommentId + "comment");
+					if (GoToResponse) {
 						document.querySelector(".result-send-comment").innerHTML = "";
-					}, 5000);
-				} else {
-					setTimeout(() => {
-						document.querySelector(".result-send-comment").innerHTML = "";
-					}, 5000);
-				}
+					} else {
+						setTimeout(() => {
+							document.querySelector(".result-send-comment").innerHTML = "";
+						}, 5000);
+					}
+				}, 5000);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -126,7 +124,7 @@ export const News = () => {
 				setNewResToRes("");
 				setActiveCommentId(null);
 				setActiveResponseId(null);
-				setActiveResToRes(null);
+
 				setTimeout(() => {
 					const GoToResponse = document.getElementById(response.data.body.currentResponses + "response");
 					if (GoToResponse) {
@@ -151,15 +149,15 @@ export const News = () => {
 					...prov,
 					Comments: response.data.body.UpdateResToResponse,
 				}));
-				document.getElementById(i === "sub-res" ? responseId + "sub-res" : responseId + "response").style.display = "block";
+				document.getElementById(responseId + "response").style.display = "block";
 				setCommentsValue("");
 				setNewResponse("");
 				setNewResToRes("");
 				setActiveCommentId(null);
 				setActiveResponseId(null);
-				setActiveResToRes(null);
+
 				setTimeout(() => {
-					const GoToResponse = document.getElementById(response.data.body.currentResToResponse + "sub-res");
+					const GoToResponse = document.getElementById(response.data.body.currentResToResponse + "response");
 					if (GoToResponse) {
 						GoToResponse.scrollIntoView({
 							behavior: "smooth",
@@ -334,7 +332,6 @@ export const News = () => {
 												setNewResponse("");
 												setNewResToRes("");
 												setActiveResponseId(null);
-												setActiveResToRes(null);
 											}}
 										>
 											پاسخ
@@ -434,158 +431,92 @@ export const News = () => {
 											<div className="content-response">
 												{comment.responses.map(
 													(response1, index) =>
-														response1.commentId === comment.id &&
-														response1.ResponsesToRes === null && (
-															<div key={index} id={response1.id + "response"} className="content-map-responses">
-																<div className={response1.userId === comment.userId ? "item-map-responses-main" : "item-map-responses"}>
-																	<div id="info-user-response" className="info-user-response">
-																		<img src={response1.user.User_Img} alt="img" />
-																		<div>
-																			<p>{response1.user.User_FirstName + " " + response1.user.User_LastName}</p>
-																			در پاسخ به
-																			<p
-																				onClick={() => {
-																					const section = document.getElementById(
-																						response1.commentId === comment.id ? comment.id + "comment" : response1.id + "response"
-																					);
-																					if (section) {
-																						section.scrollIntoView({
-																							behavior: "smooth",
-																						});
-																						section.children[0].children[0].style.backgroundColor = "#0000009c";
-																					}
-																					setTimeout(() => {
-																						section.children[0].children[0].style.backgroundColor = "#09008659";
-																					}, 1000);
-																				}}
-																			>
-																				{comment.user.User_FirstName + " " + comment.user.User_LastName}
-																			</p>
-																		</div>
-																	</div>
-																	<div className="text-comment-response">
-																		<p>{response1.Responses_Content}</p>
-																	</div>
-																	<div className="reply-to-response">
-																		<button
-																			type="button"
+														response1.commentId === comment.id && (
+															<div
+																key={index}
+																id={response1.id + "response"}
+																className={
+																	response1.Role_Responses === "Lord"
+																		? "item-map-responses-Lord"
+																		: response1.Role_Responses === "OnAuthor" && response1.userId === news.CurrentNews.AuthorId
+																		? "item-map-responses-OnAuthor"
+																		: response1.Role_Responses === comment.Role_Comment
+																		? "item-map-responses-main"
+																		: "item-map-responses"
+																}
+															>
+																<div id="info-user-response" className="info-user-response">
+																	<img src={response1.user.User_Img} alt="img" />
+																	<div>
+																		<p>{response1.user.User_FirstName + " " + response1.user.User_LastName}</p>
+																		در پاسخ به
+																		<p
 																			onClick={() => {
-																				activeResponseId === response1.id ? setActiveResponseId(null) : setActiveResponseId(response1.id);
-																				setCommentsValue("");
-																				setNewResponse("");
-																				setNewResToRes("");
-																				setActiveCommentId(null);
-																				setActiveResToRes(null);
+																				const id = comment.responses.find((e) => response1.ResponsesToRes === e.id)?.id;
+																				const section = document.getElementById(id ? id + "response" : comment.id + "comment");
+																				if (section) {
+																					section.scrollIntoView({
+																						behavior: "smooth",
+																					});
+																					section.children[0].children[0].style.backgroundColor = "#0000009c";
+																				}
+																				setTimeout(() => {
+																					section.children[0].children[0].style.backgroundColor = "#09008659";
+																				}, 1000);
 																			}}
 																		>
-																			پاسخ
-																		</button>
-																		<div className="date-response-content">
-																			<p>{moment(response1.createdAt).fromNow()}</p>
-																		</div>
-																	</div>
-																	<div className="container-reply">
-																		{activeResponseId === response1.id && (
-																			<div className="reply-match-id-comment">
-																				<textarea
-																					value={newResToRes}
-																					onChange={(e) => {
-																						setNewResToRes(e.target.value);
-																					}}
-																					placeholder={`پاسخ به ${response1.user.User_FirstName + " " + response1.user.User_LastName}`}
-																				></textarea>
-																				<button type="button" onClick={() => SubmitResponseToRes(response1.id, "response")}>
-																					ارسال
-																				</button>
-																			</div>
-																		)}
+																			{comment.responses.find((e) => response1.ResponsesToRes === e.id)
+																				? comment.responses.find((e) => response1.ResponsesToRes === e.id).user.User_FirstName +
+																				  " " +
+																				  comment.responses.find((e) => response1.ResponsesToRes === e.id).user.User_LastName
+																				: comment.user.User_FirstName + " " + comment.user.User_LastName}
+																		</p>
 																	</div>
 																</div>
-																{comment.responses.map(
-																	(SubRes1, index) =>
-																		SubRes1.ResponsesToRes !== null && (
-																			<div key={index} id={SubRes1.id + "sub-res"} className="content-map-sub-res">
-																				<div className={SubRes1.userId === comment.userId ? "item-map-sub-res-main" : "item-map-sub-res"}>
-																					<div className="info-user-sub-res">
-																						<img src={SubRes1.user.User_Img} alt="img" />
-																						<div>
-																							<p>{SubRes1.user.User_FirstName + " " + SubRes1.user.User_LastName}</p>
-																							در پاسخ به
-																							<p
-																								onClick={() => {
-																									const section = document.getElementById(
-																										comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "sub-res"
-																									)
-																										? document.getElementById(
-																												comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "sub-res"
-																										  )
-																										: document.getElementById(
-																												comment.responses.find((e) => SubRes1.ResponsesToRes === e.id && e.id).id + "response"
-																										  );
-																									if (section) {
-																										section.children[0].children[0].style.backgroundColor = comment.responses.find(
-																											(e) => SubRes1.ResponsesToRes === e.id && e.userId === comment.userId
-																										)
-																											? "rgb(0, 92, 61)"
-																											: "rgb(0, 92, 61)";
-																										section.scrollIntoView({
-																											behavior: "smooth",
-																										});
-																									}
-																									setTimeout(() => {
-																										section.children[0].children[0].style.backgroundColor = comment.responses.find(
-																											(e) => SubRes1.ResponsesToRes === e.id && e.userId === comment.userId
-																										)
-																											? "rgb(0, 63, 27)"
-																											: "rgb(0, 51, 85)";
-																									}, 1000);
-																								}}
-																							>
-																								{response1.user.User_FirstName + " " + response1.user.User_LastName}
-																							</p>
-																						</div>
-																					</div>
-																					<div className="text-comment-sub-res">
-																						<p>{SubRes1.Responses_Content}</p>
-																					</div>
-																					<div className="reply-to-sub-res">
-																						<button
-																							type="button"
-																							onClick={() => {
-																								activeResToRes === SubRes1.id ? setActiveResToRes(null) : setActiveResToRes(SubRes1.id);
-																								setCommentsValue("");
-																								setNewResponse("");
-																								setNewResToRes("");
-																								setActiveCommentId(null);
-																								setActiveResponseId(null);
-																							}}
-																						>
-																							پاسخ
-																						</button>
-																						<div className="date-sub-res-content">
-																							<p>{moment(SubRes1.createdAt).fromNow()}</p>
-																						</div>
-																					</div>
-																					<div className="container-reply">
-																						{activeResToRes === SubRes1.id && (
-																							<div className="reply-match-id-comment">
-																								<textarea
-																									value={newResToRes}
-																									onChange={(e) => {
-																										setNewResToRes(e.target.value);
-																									}}
-																									placeholder={`پاسخ به ${SubRes1.user.User_FirstName + " " + SubRes1.user.User_LastName}`}
-																								></textarea>
-																								<button type="button" onClick={() => SubmitResponseToRes(SubRes1.id, "sub-res")}>
-																									ارسال
-																								</button>
-																							</div>
-																						)}
-																					</div>
-																				</div>
-																			</div>
-																		)
-																)}
+																<div className="text-comment-response">
+																	<p>{response1.Responses_Content}</p>
+																</div>
+																<div className="reply-to-response">
+																	<button
+																		type="button"
+																		onClick={() => {
+																			activeResponseId === response1.id ? setActiveResponseId(null) : setActiveResponseId(response1.id);
+																			setCommentsValue("");
+																			setNewResponse("");
+																			setNewResToRes("");
+																			setActiveCommentId(null);
+																		}}
+																	>
+																		پاسخ
+																	</button>
+																	<div className="date-response-content">
+																		<p>{moment(response1.createdAt).fromNow()}</p>
+																	</div>
+																</div>
+																<div className="container-reply">
+																	{activeResponseId === response1.id && (
+																		<div className="reply-match-id-comment">
+																			<textarea
+																				value={newResToRes}
+																				onChange={(e) => {
+																					setNewResToRes(e.target.value);
+																				}}
+																				placeholder={`پاسخ به ${response1.user.User_FirstName + " " + response1.user.User_LastName}`}
+																			></textarea>
+																			<button
+																				type="button"
+																				onClick={() =>
+																					SubmitResponseToRes(
+																						response1.id,
+																						comment.responses.find((e) => response1.ResponsesToRes === e.id)?.id ? "response" : "comment"
+																					)
+																				}
+																			>
+																				ارسال
+																			</button>
+																		</div>
+																	)}
+																</div>
 															</div>
 														)
 												)}

@@ -1,5 +1,5 @@
 // app
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import { News } from "./pages/news/News";
 import About from "./pages/about/About";
@@ -25,9 +25,7 @@ import { AuthContext } from "./context/authContext";
 import { useContext } from "react";
 
 export const App = () => {
-	// const { Lord } = useContext(AuthContext);
-	// console.log(Lord);
-	
+	const { CurrentUser } = useContext(AuthContext);
 	return (
 		<div>
 			<Routes>
@@ -40,7 +38,7 @@ export const App = () => {
 				</Route>
 				{/* lord route */}
 				<Route path="/login-register" element={<LoginAndRegister />} />
-				<Route path="/lord" element={<Lord />}>
+				<Route path="/lord" element={CurrentUser?.Role === "Lord" ? <Lord /> : <Navigate to="/login-register" />}>
 					<Route path="/lord" element={<DefaultLord />} />
 					<Route path="edit-profile" element={<EditProfile />} />
 					<Route path="create-news" element={<CreateNews />} />

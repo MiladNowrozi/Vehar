@@ -772,6 +772,7 @@ export default class NewsControllers {
 							News_Status: GetOneNews.News_Status,
 							Comment_Status: GetOneNews.Comment_Status,
 							Author: author.Author_FirstName + " " + author.Author_LastName,
+							AuthorId: author.id,
 							Category: GetOneNews.Category,
 							SubCategory: subCategory?.SubCategory,
 							createdAt: GetOneNews.createdAt,
@@ -945,6 +946,7 @@ export default class NewsControllers {
 							newsId: GetOneNews.id,
 							userId: req.user.id,
 							commentId: GetOneComment.id,
+							Role_Like: req.user.Role,
 						});
 						await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment += 1) });
 					} else {
@@ -955,6 +957,7 @@ export default class NewsControllers {
 									UnLike_Comment: false,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									Like_Comment: (GetOneComment.Like_Comment -= 1),
@@ -965,6 +968,7 @@ export default class NewsControllers {
 									Like_Comment: false,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									Like_Comment: (GetOneComment.Like_Comment -= 1),
@@ -977,6 +981,7 @@ export default class NewsControllers {
 									Like_Comment: true,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
@@ -987,6 +992,7 @@ export default class NewsControllers {
 									Like_Comment: true,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									Like_Comment: (GetOneComment.Like_Comment += 1),
@@ -1018,6 +1024,7 @@ export default class NewsControllers {
 							newsId: GetOneNews.id,
 							userId: req.user.id,
 							commentId: GetOneComment.id,
+							Role_Like: req.user.Role,
 						});
 						await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
 					} else {
@@ -1028,6 +1035,7 @@ export default class NewsControllers {
 									Like_Comment: false,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
@@ -1038,6 +1046,7 @@ export default class NewsControllers {
 									UnLike_Comment: false,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
@@ -1050,6 +1059,7 @@ export default class NewsControllers {
 									UnLike_Comment: true,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									Like_Comment: (GetOneComment.Like_Comment -= 1),
@@ -1060,6 +1070,7 @@ export default class NewsControllers {
 									UnLike_Comment: true,
 									userId: req.user.id,
 									commentId: GetOneComment.id,
+									Role_Like: req.user.Role,
 								});
 								await GetOneComment.update({
 									UnLike_Comment: (GetOneComment.UnLike_Comment += 1),
@@ -1480,6 +1491,7 @@ export default class NewsControllers {
 						newsId: req.query.newsId,
 						userId: req.user.id,
 						Comment_Status: true,
+						Role_Comment: req.user.Role,
 					});
 					const Comments = await Comment.findAll({
 						where: { newsId: newComment.newsId },
@@ -1521,6 +1533,7 @@ export default class NewsControllers {
 					newsId: req.query.newsId,
 					userId: req.user.id,
 					Comment_Status: false,
+					Role_Comment: req.user.Role,
 				});
 				res.status(200).json({
 					success: true,
@@ -1547,6 +1560,7 @@ export default class NewsControllers {
 						Responses_Content: req.query.text,
 						commentId: req.query.commentId,
 						userId: req.user.id,
+						Role_Responses: req.user.Role,
 					});
 					const idNews = await Comment.findByPk(NewsResponse.commentId);
 					const Comments = await Comment.findAll({
@@ -1594,6 +1608,7 @@ export default class NewsControllers {
 						ResponsesToRes: req.query.ResToResponseId,
 						commentId: CommentId.commentId,
 						userId: req.user.id,
+						Role_Responses: req.user.Role,
 					});
 					const idNews = await Comment.findByPk(NewsResToResponse.commentId);
 					const Comments = await Comment.findAll({

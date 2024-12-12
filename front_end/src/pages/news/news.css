@@ -551,6 +551,7 @@
 	width: 80%;
 	background-color: rgb(6, 153, 55);
 	padding: 10px;
+	/* OnUser Comment */
 	.content-response {
 		display: flex;
 		flex-direction: column;
@@ -558,266 +559,295 @@
 		background-color: rgba(152, 251, 152, 0.219);
 		padding: 10px;
 
-		.content-map-responses {
-			.item-map-responses {
-				.info-user-response {
+		.item-map-responses {
+			.info-user-response {
+				display: flex;
+				flex-direction: column;
+				background-color: rgb(0, 50, 107);
+				padding: 10px;
+				gap: 5px;
+				font-size: 12px;
+				color: #fff;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				transition: all 0.5s;
+				img {
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+				}
+				div {
 					display: flex;
-					flex-direction: column;
-					background-color: rgb(139, 0, 0);
-					padding: 10px;
 					gap: 5px;
-					font-size: 12px;
 					color: #fff;
-					border-top-left-radius: 5px;
-					border-top-right-radius: 5px;
-					transition: all 0.5s;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 50%;
-					}
-					div {
-						display: flex;
-						gap: 5px;
-						color: #fff;
-						p:last-child {
-							color: rgb(190, 211, 0);
-							font-weight: 800;
-							cursor: pointer;
-						}
-					}
-				}
-				.text-comment-response {
-					background-color: rgb(139, 0, 0);
-					padding: 10px;
-					border-top: 1px solid rgba(0, 0, 0, 0.24);
-					font-size: 13px;
-					color: #fff;
-				}
-				.reply-to-response {
-					padding: 10px;
-					background-color: rgb(139, 0, 0);
-					border-bottom-left-radius: 5px;
-					border-bottom-right-radius: 5px;
-					border-top: 1px solid rgba(255, 255, 0, 0.158);
-					display: flex;
-					justify-content: space-between;
-					gap: 10px;
-					font-size: 12px;
-					align-items: center;
-					color: #fff;
-					button {
-						width: 12%;
-						border: none;
-						border-radius: 5px;
-						padding: 3px;
+					p:last-child {
+						color: rgb(190, 211, 0);
+						font-weight: 800;
 						cursor: pointer;
-						transition: all 0.2s;
 					}
-					button:hover {
-						background-color: green;
-						color: #fff;
-					}
-				}
-				.date-response-content {
-					display: flex;
-					gap: 10px;
 				}
 			}
-			.item-map-responses-main {
-				.info-user-response {
-					display: flex;
-					flex-direction: column;
-					background-color: rgb(0, 63, 27);
-					padding: 10px;
-					gap: 5px;
-					font-size: 12px;
-					color: #fff;
-					border-top-left-radius: 5px;
-					border-top-right-radius: 5px;
-					transition: all 0.5s;
-					img {
-						width: 50px;
-						height: 50px;
-						border-radius: 50%;
-					}
-					div {
-						display: flex;
-						gap: 5px;
-						color: #fff;
-						p:last-child {
-							color: rgb(190, 211, 0);
-							font-weight: 800;
-							cursor: pointer;
-						}
-					}
+			.text-comment-response {
+				background-color: rgb(0, 50, 107);
+				padding: 10px;
+				border-top: 1px solid rgba(0, 0, 0, 0.24);
+				font-size: 13px;
+				color: #fff;
+			}
+			.reply-to-response {
+				padding: 10px;
+				background-color: rgb(0, 50, 107);
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+				border-top: 1px solid rgba(255, 255, 0, 0.158);
+				display: flex;
+				justify-content: space-between;
+				gap: 10px;
+				font-size: 12px;
+				align-items: center;
+				color: #fff;
+				button {
+					width: 12%;
+					border: none;
+					border-radius: 5px;
+					padding: 3px;
+					cursor: pointer;
+					transition: all 0.2s;
 				}
-				.text-comment-response {
-					background-color: rgb(0, 63, 27);
-					padding: 10px;
-					border-top: 1px solid rgba(0, 0, 0, 0.24);
-					font-size: 13px;
+				button:hover {
+					background-color: green;
 					color: #fff;
 				}
-				.reply-to-response {
-					padding: 10px;
-					background-color: rgb(0, 63, 27);
-					border-bottom-left-radius: 5px;
-					border-bottom-right-radius: 5px;
-					border-top: 1px solid rgba(255, 255, 0, 0.158);
-					display: flex;
-					justify-content: space-between;
-					gap: 10px;
-					font-size: 12px;
-					align-items: center;
-					color: #fff;
-					button {
-						width: 12%;
-						border: none;
-						border-radius: 5px;
-						padding: 3px;
-						cursor: pointer;
-						transition: all 0.2s;
-					}
-					button:hover {
-						background-color: green;
-						color: #fff;
-					}
-				}
-				.date-response-content {
-					display: flex;
-					gap: 10px;
-				}
+			}
+			.date-response-content {
+				display: flex;
+				gap: 10px;
 			}
 		}
-		.content-map-sub-res {
-			.item-map-sub-res {
-				.info-user-sub-res {
+		/* Lord Comment */
+		.item-map-responses-Lord {
+			position: relative;
+			.info-user-response {
+				display: flex;
+				flex-direction: column;
+				background-color: rgb(0, 63, 27);
+				padding: 10px;
+				gap: 5px;
+				font-size: 12px;
+				color: #fff;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				transition: all 0.5s;
+				img {
+					width: 60px;
+					height: 60px;
+					border-radius: 50%;
+				}
+				div {
 					display: flex;
-					flex-direction: column;
-					background-color: rgb(0, 51, 85);
-					padding: 10px;
 					gap: 5px;
-					font-size: 12px;
 					color: #fff;
-					border-top-left-radius: 5px;
-					border-top-right-radius: 5px;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 50%;
-					}
-					div {
-						display: flex;
-						gap: 5px;
-						color: #fff;
-						p:last-child {
-							color: rgb(190, 211, 0);
-							font-weight: 800;
-							cursor: pointer;
-						}
-					}
-				}
-				.text-comment-sub-res {
-					background-color: rgb(0, 51, 85);
-					padding: 10px;
-					border-top: 1px solid rgba(0, 0, 0, 0.24);
-					font-size: 13px;
-					color: #fff;
-				}
-				.reply-to-sub-res {
-					padding: 10px;
-					background-color: rgb(0, 51, 85);
-					border-bottom-left-radius: 5px;
-					border-bottom-right-radius: 5px;
-					border-top: 1px solid rgba(255, 255, 0, 0.158);
-					display: flex;
-					justify-content: space-between;
-					gap: 10px;
-					font-size: 12px;
-					align-items: center;
-					color: #fff;
-					button {
-						width: 12%;
-						border: none;
-						border-radius: 5px;
-						padding: 3px;
+					p:last-child {
+						color: rgb(190, 211, 0);
+						font-weight: 800;
 						cursor: pointer;
-						transition: all 0.2s;
 					}
-					button:hover {
-						background-color: green;
-						color: #fff;
-					}
-				}
-				.date-response-content {
-					display: flex;
-					gap: 10px;
 				}
 			}
-			.item-map-sub-res-main {
-				.info-user-sub-res {
+			.text-comment-response {
+				background-color: rgb(0, 63, 27);
+				padding: 10px;
+				border-top: 1px solid rgba(0, 0, 0, 0.24);
+				font-size: 13px;
+				color: #fff;
+			}
+			.reply-to-response {
+				padding: 10px;
+				background-color: rgb(0, 63, 27);
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+				border-top: 1px solid rgba(255, 255, 0, 0.158);
+				display: flex;
+				justify-content: space-between;
+				gap: 10px;
+				font-size: 12px;
+				align-items: center;
+				color: #fff;
+				button {
+					width: 12%;
+					border: none;
+					border-radius: 5px;
+					padding: 3px;
+					cursor: pointer;
+					transition: all 0.2s;
+				}
+				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.date-response-content {
+				display: flex;
+				gap: 10px;
+			}
+		}
+		.item-map-responses-Lord::before {
+			content: "مالک";
+			width: 40px;
+			height: 18px;
+			background-color: #eeeeee3f;
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			border-radius: 5px;
+			text-align: center;
+			font-size: 13px;
+			color: #fff;
+		}
+		/* OnAuthor Comment */
+		.item-map-responses-OnAuthor {
+			position: relative;
+			.info-user-response {
+				display: flex;
+				flex-direction: column;
+				background-color: rgb(100, 0, 0);
+				padding: 10px;
+				gap: 5px;
+				font-size: 12px;
+				color: #fff;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				transition: all 0.5s;
+				img {
+					width: 60px;
+					height: 60px;
+					border-radius: 50%;
+				}
+				div {
 					display: flex;
-					flex-direction: column;
-					background-color: rgb(0, 63, 27);
-					padding: 10px;
 					gap: 5px;
-					font-size: 12px;
 					color: #fff;
-					border-top-left-radius: 5px;
-					border-top-right-radius: 5px;
-					img {
-						width: 50px;
-						height: 50px;
-						border-radius: 50%;
-					}
-					div {
-						display: flex;
-						gap: 5px;
-						color: #fff;
-						p:last-child {
-							color: rgb(190, 211, 0);
-							font-weight: 800;
-							cursor: pointer;
-						}
-					}
-				}
-				.text-comment-sub-res {
-					background-color: rgb(0, 63, 27);
-					padding: 10px;
-					border-top: 1px solid rgba(0, 0, 0, 0.24);
-					font-size: 13px;
-					color: #fff;
-				}
-				.reply-to-sub-res {
-					padding: 10px;
-					background-color: rgb(0, 63, 27);
-					border-bottom-left-radius: 5px;
-					border-bottom-right-radius: 5px;
-					border-top: 1px solid rgba(255, 255, 0, 0.158);
-					display: flex;
-					justify-content: space-between;
-					gap: 10px;
-					font-size: 12px;
-					align-items: center;
-					color: #fff;
-					button {
-						width: 12%;
-						border: none;
-						border-radius: 5px;
-						padding: 3px;
+					p:last-child {
+						color: rgb(190, 211, 0);
+						font-weight: 800;
 						cursor: pointer;
-						transition: all 0.2s;
-					}
-					button:hover {
-						background-color: green;
-						color: #fff;
 					}
 				}
-				.date-response-content {
+			}
+			.text-comment-response {
+				background-color: rgb(100, 0, 0);
+				padding: 10px;
+				border-top: 1px solid rgba(0, 0, 0, 0.24);
+				font-size: 13px;
+				color: #fff;
+			}
+			.reply-to-response {
+				padding: 10px;
+				background-color: rgb(100, 0, 0);
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+				border-top: 1px solid rgba(255, 255, 0, 0.158);
+				display: flex;
+				justify-content: space-between;
+				gap: 10px;
+				font-size: 12px;
+				align-items: center;
+				color: #fff;
+				button {
+					width: 12%;
+					border: none;
+					border-radius: 5px;
+					padding: 3px;
+					cursor: pointer;
+					transition: all 0.2s;
+				}
+				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.date-response-content {
+				display: flex;
+				gap: 10px;
+			}
+		}
+		.item-map-responses-OnAuthor::before {
+			content: "نویسنده";
+			width: 55px;
+			height: 20px;
+			background-color: #eeeeee3f;
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			border-radius: 5px;
+			text-align: center;
+			font-size: 13px;
+			color: #fff;
+		}
+		/* OnUser Writer Comment */
+		.item-map-responses-main {
+			.info-user-response {
+				display: flex;
+				flex-direction: column;
+				background-color: rgb(0, 87, 75);
+				padding: 10px;
+				gap: 5px;
+				font-size: 12px;
+				color: #fff;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				transition: all 0.5s;
+				img {
+					width: 50px;
+					height: 50px;
+					border-radius: 50%;
+				}
+				div {
 					display: flex;
-					gap: 10px;
+					gap: 5px;
+					color: #fff;
+					p:last-child {
+						color: rgb(190, 211, 0);
+						font-weight: 800;
+						cursor: pointer;
+					}
 				}
+			}
+			.text-comment-response {
+				background-color: rgb(0, 87, 75);
+				padding: 10px;
+				border-top: 1px solid rgba(0, 0, 0, 0.24);
+				font-size: 13px;
+				color: #fff;
+			}
+			.reply-to-response {
+				padding: 10px;
+				background-color: rgb(0, 87, 75);
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+				border-top: 1px solid rgba(255, 255, 0, 0.158);
+				display: flex;
+				justify-content: space-between;
+				gap: 10px;
+				font-size: 12px;
+				align-items: center;
+				color: #fff;
+				button {
+					width: 12%;
+					border: none;
+					border-radius: 5px;
+					padding: 3px;
+					cursor: pointer;
+					transition: all 0.2s;
+				}
+				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.date-response-content {
+				display: flex;
+				gap: 10px;
 			}
 		}
 	}
