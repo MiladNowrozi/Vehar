@@ -290,6 +290,19 @@
 				transition: all 0.5s;
 			}
 		}
+		.edit-news-lord {
+			padding: 5px;
+			cursor: pointer;
+			border: none;
+			margin-right: 5px;
+			border-radius: 5px;
+			padding: 5px 10px 5px 10px;
+		}
+		.edit-news-lord:hover {
+			background-color: black;
+			color: white;
+			transition: all 0.5s;
+		}
 		.pagination {
 			width: 25%;
 			display: flex;
@@ -342,6 +355,20 @@
 			border: none;
 			border-radius: 5px;
 			cursor: pointer;
+			position: relative;
+			.count-comment {
+				width: 30px;
+				height: 30px;
+				background-color: rgb(129, 2, 2);
+				border-radius: 50%;
+				position: absolute;
+				top: -15px;
+				left: -10px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #fff;
+			}
 		}
 	}
 	.warning-delete-news {

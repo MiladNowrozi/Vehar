@@ -53,6 +53,14 @@ export const News = db.define(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
+		MainTicker: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		SubTicker: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
 		Visit_Count: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,

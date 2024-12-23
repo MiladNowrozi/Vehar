@@ -129,6 +129,22 @@
 							}
 						}
 					}
+					.loading-data-1 {
+						width: 100%;
+						display: flex;
+						flex-direction: column;
+						gap: 10px;
+						section {
+							width: 100%;
+							height: 100px;
+							padding: 10px;
+							display: flex;
+							align-items: center;
+							background-color: #0000002d;
+							justify-content: center;
+							border-radius: 5px;
+						}
+					}
 				}
 			}
 			.Result_News_Container_Center {
@@ -159,7 +175,6 @@
 							}
 						}
 						.news-path-category {
-							border-left: 1px solid rgba(0, 128, 0, 0.212);
 							padding-left: 10px;
 							padding-right: 10px;
 							.Link-news-path-category {
@@ -168,6 +183,7 @@
 							}
 						}
 						.news-path-sub-category {
+							border-right: 1px solid rgba(0, 128, 0, 0.212);
 							padding-right: 10px;
 							.Link-news-path-sub-category {
 								text-decoration: none;
@@ -175,17 +191,103 @@
 							}
 						}
 					}
-					.date-news {
+					.delete-edit-news {
+						display: flex;
+						align-items: center;
+						gap: 10px;
+						.warning-dele-news {
+							width: 50%;
+							height: 50vh;
+							display: flex;
+							flex-direction: column;
+							position: fixed;
+							left: 25%;
+							right: 25%;
+							top: 25%;
+							bottom: 25%;
+							gap: 15px;
+							padding: 20px;
+							border-radius: 10px;
+							color: #fff;
+							background-color: rgb(8, 1, 114);
+							p:first-child {
+								text-align: center;
+							}
+							span {
+								display: flex;
+								gap: 10px;
+								p:first-child {
+									color: red;
+								}
+							}
+							button {
+								width: 10%;
+								border: none;
+								border-radius: 5px;
+								padding: 2px;
+								cursor: pointer;
+								transition: all 0.5s;
+							}
+							span.btn-dele-cancel {
+								width: 100%;
+								position: absolute;
+								align-items: center;
+								justify-content: center;
+								bottom: 50px;
+								right: 0;
+								button:first-child:hover {
+									background-color: green;
+									color: #fff;
+								}
+								button:last-child:hover {
+									background-color: red;
+									color: #fff;
+								}
+							}
+						}
+						.Link-delete-news {
+							text-decoration: none;
+							display: flex;
+						}
+						.fa-edit,
+						.fa-trash {
+							border: none;
+							font-size: 15px;
+							cursor: pointer;
+							transition: all 0.3s;
+							color: green;
+						}
+						.fa-edit:hover {
+							color: darkred;
+						}
+						.fa-trash:hover {
+							color: darkred;
+						}
+					}
+					.date-eye-section {
 						display: flex;
 						gap: 10px;
-						font-size: 13px;
-						span:first-child {
+						.esy-div {
 							color: darkred;
+							display: flex;
+							align-items: center;
+							gap: 5px;
+							font-size: 12px;
 							border-left: 1px solid rgba(0, 128, 0, 0.212);
 							padding-left: 10px;
 						}
-						span:last-child {
-							color: darkred;
+						.date-news {
+							display: flex;
+							gap: 10px;
+							font-size: 13px;
+							span:first-child {
+								color: darkred;
+								border-left: 1px solid rgba(0, 128, 0, 0.212);
+								padding-left: 10px;
+							}
+							span:last-child {
+								color: darkred;
+							}
 						}
 					}
 				}
@@ -235,12 +337,13 @@
 										margin-top: 10px;
 										margin-bottom: 10px;
 									}
-									video {
+									.wp-video-shortcode {
 										width: 95%;
 										height: 100%;
 										border-radius: 15px;
 										margin-top: 10px;
 										margin-bottom: 10px;
+										display: flex;
 									}
 								}
 								.Img_Result {
@@ -257,6 +360,107 @@
 						}
 					}
 				}
+				.info-news {
+					width: 100%;
+					height: 10vh;
+					display: flex;
+					align-items: center;
+					border-top: 1px solid rgba(0, 128, 0, 0.212);
+					direction: rtl;
+					justify-content: space-between;
+					padding: 10px;
+					.info-author {
+						display: flex;
+						gap: 20px;
+						font-size: 12px;
+						align-items: center;
+						.content-info-author {
+							display: flex;
+							gap: 5px;
+							img {
+								width: 35px;
+								height: 35px;
+								border-radius: 50%;
+							}
+							section {
+								height: 5vh;
+								font-size: 11px;
+								p:first-child {
+									color: green;
+									font-weight: 800;
+								}
+							}
+						}
+						span {
+							display: flex;
+							align-items: center;
+							gap: 5px;
+							i {
+								color: darkred;
+							}
+						}
+					}
+					.left-info {
+						display: flex;
+						align-items: center;
+						gap: 20px;
+						font-size: 12px;
+						.code-news {
+							display: flex;
+							gap: 5px;
+							font-size: 12px;
+							p {
+								color: darkred;
+								/* font-weight: 300; */
+							}
+						}
+						.like-news-user {
+							display: flex;
+							align-items: center;
+							gap: 5px;
+							width: 10%;
+							color: #000;
+							font-size: 12px;
+							position: relative;
+							i {
+								font-size: 15px;
+								cursor: pointer;
+							}
+							span.need-to-login {
+								width: 160px;
+								position: absolute;
+								bottom: 25px;
+								left: -20px;
+								background-color: #000;
+								color: #fff;
+								padding: 2px 5px 2px 2px;
+								border-radius: 5px;
+								border: none;
+							}
+						}
+						.is-liked {
+							display: flex;
+							align-items: center;
+							gap: 5px;
+							font-size: 12px;
+							width: 10%;
+							color: rgb(204, 2, 2);
+							i {
+								font-size: 15px;
+								cursor: pointer;
+							}
+						}
+					}
+				}
+			}
+			.loading-data-2 {
+				width: 48%;
+				height: 50vh;
+				border-radius: 5px;
+				padding: 20px;
+				display: flex;
+				align-items: center;
+				box-shadow: 1px 1px 5px rgba(0, 128, 0, 0.425), -1px -1px 5px rgba(0, 128, 0, 0.425);
 			}
 			.Default_News_Container_Right {
 				width: 26%;
@@ -307,7 +511,6 @@
 					padding: 5px;
 					.ContainerHeaderRight {
 						width: 100%;
-						/* background-color: #eee; */
 						background-image: linear-gradient(rgba(22, 168, 3, 0), rgba(229, 245, 8, 0.288));
 						border-radius: 5px;
 						padding: 10px;
@@ -316,13 +519,10 @@
 						position: relative;
 						border-radius: 5px;
 						margin-top: 5px;
-
 						.NewsContainer-Right {
 							width: 100%;
-							/* display: flex; */
 							flex-direction: row-reverse;
 							position: relative;
-
 							.NewsContent-Right {
 								width: 100%;
 								text-align: right;
@@ -376,6 +576,22 @@
 									}
 								}
 							}
+						}
+					}
+					.loading-data-3 {
+						width: 100%;
+						display: flex;
+						flex-direction: column;
+						gap: 10px;
+						section {
+							width: 100%;
+							height: 100px;
+							padding: 10px;
+							display: flex;
+							align-items: center;
+							background-color: #0000002d;
+							justify-content: center;
+							border-radius: 5px;
 						}
 					}
 				}
@@ -448,6 +664,10 @@
 					cursor: pointer;
 					border-radius: 5px;
 					transition: all 0.3s;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 5px;
 				}
 				button[type="button"]:hover {
 					background-color: green;
@@ -509,38 +729,111 @@
 				}
 			}
 		}
-		.like-comment-container {
+
+		.container-info-comment {
 			display: flex;
-			gap: 20px;
-			padding: 5px;
-			align-items: center;
-			justify-content: center;
-			color: #000;
-			background-color: #ffffff88;
-			border-radius: 3px;
-			padding-bottom: 0px;
-			.date-comment-content {
+			gap: 5px;
+			.warning-delete-comment {
+				width: 25%;
+				height: 25vh;
 				display: flex;
-				gap: 10px;
-				color: #000;
-				font-size: 14px;
-			}
-			.like-comment-content {
-				display: flex;
-				gap: 10px;
-				.like-up,
-				.like-down {
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 50px;
+				transition: all 1s;
+				background-color: rgba(0, 92, 0, 0.973);
+				border-radius: 5px;
+				position: fixed;
+				top: 35%;
+				bottom: 35%;
+				left: 35%;
+				right: 35%;
+				color: #fff;
+				.btn-delete-comment {
+					width: 100%;
 					display: flex;
-					direction: ltr;
-					gap: 5px;
-					div {
+					align-items: center;
+					justify-content: center;
+					gap: 10px;
+					button {
+						width: 15%;
+						border: none;
+						border-radius: 5px;
+						padding: 3px;
 						cursor: pointer;
+						transition: all 0.2s;
 					}
-					.like-up {
-						color: green;
+					button:hover {
+						background-color: green;
+						color: #fff;
 					}
+				}
+			}
+			.but-delete-comment {
+				border: none;
+				cursor: pointer;
+				transition: all 0.5s;
+				border-radius: 5px;
+				outline: none;
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+			.but-delete-comment:hover {
+				background-color: green;
+				color: #fff;
+			}
+			.but-edit-comment {
+				border: none;
+				cursor: pointer;
+				transition: all 0.5s;
+				border-radius: 5px;
+				outline: none;
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+			.but-edit-comment:hover {
+				background-color: green;
+				color: #fff;
+			}
+			.like-item-container {
+				display: flex;
+				gap: 20px;
+				padding: 5px;
+				align-items: center;
+				justify-content: center;
+				flex-direction: row;
+				color: #000;
+				background-color: #ffffff88;
+				border-radius: 3px;
+				padding-bottom: 0px;
+				div {
+					display: flex;
+				}
+				.date-comment-content {
+					display: flex;
+					align-items: center;
+					gap: 5px;
+					color: #000;
+					font-size: 14px;
+				}
+				.like-comment-content {
+					display: flex;
+					gap: 10px;
+					.like-up,
 					.like-down {
-						color: red;
+						display: flex;
+						direction: ltr;
+						gap: 5px;
+						div {
+							cursor: pointer;
+						}
+						.like-up {
+							color: green;
+						}
+						.like-down {
+							color: red;
+						}
 					}
 				}
 			}
@@ -606,8 +899,64 @@
 				font-size: 12px;
 				align-items: center;
 				color: #fff;
-				button {
+				button.send-btn-response {
 					width: 12%;
+					border: none;
+					border-radius: 5px;
+					padding: 3px;
+					cursor: pointer;
+					transition: all 0.2s;
+					display: flex;
+					align-items: center;
+					gap: 3px;
+				}
+				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.edit-btn-time-response {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+				justify-content: space-between;
+				.but-delete-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-delete-response:hover {
+					background-color: green;
+					color: #fff;
+				}
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-edit-response:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.btn-delete-comment {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				button {
+					width: 15%;
 					border: none;
 					border-radius: 5px;
 					padding: 3px;
@@ -618,10 +967,6 @@
 					background-color: green;
 					color: #fff;
 				}
-			}
-			.date-response-content {
-				display: flex;
-				gap: 10px;
 			}
 		}
 		/* Lord Comment */
@@ -673,15 +1018,90 @@
 				font-size: 12px;
 				align-items: center;
 				color: #fff;
-				button {
+				button.send-btn-response {
 					width: 12%;
 					border: none;
 					border-radius: 5px;
 					padding: 3px;
 					cursor: pointer;
 					transition: all 0.2s;
+					display: flex;
+					align-items: center;
+					gap: 3px;
+				}
+				.warning-delete-response {
+					width: 25%;
+					height: 25vh;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					gap: 50px;
+					transition: all 1s;
+					background-color: rgba(0, 92, 0, 0.973);
+					border-radius: 5px;
+					position: fixed;
+					top: 35%;
+					bottom: 35%;
+					left: 35%;
+					right: 35%;
+					color: #fff;
+					font-size: 14px;
+					.btn-delete-response {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 10px;
+						button {
+							width: 15%;
+							border: none;
+							border-radius: 5px;
+							padding: 3px;
+							cursor: pointer;
+							transition: all 0.2s;
+						}
+						button:hover {
+							background-color: green;
+							color: #fff;
+						}
+					}
 				}
 				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.edit-btn-time-response {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+				justify-content: space-between;
+				.but-delete-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-delete-response:hover {
+					background-color: green;
+					color: #fff;
+				}
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-edit-response:hover {
 					background-color: green;
 					color: #fff;
 				}
@@ -689,6 +1109,19 @@
 			.date-response-content {
 				display: flex;
 				gap: 10px;
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding-left: 15px;
+					padding-right: 15px;
+				}
+				.but-edit-response:hover {
+					background-color: green;
+					color: #fff;
+				}
 			}
 		}
 		.item-map-responses-Lord::before {
@@ -753,7 +1186,7 @@
 				font-size: 12px;
 				align-items: center;
 				color: #fff;
-				button {
+				button.send-btn-response {
 					width: 12%;
 					border: none;
 					border-radius: 5px;
@@ -761,7 +1194,79 @@
 					cursor: pointer;
 					transition: all 0.2s;
 				}
+				.warning-delete-response {
+					width: 25%;
+					height: 25vh;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					gap: 50px;
+					transition: all 1s;
+					background-color: rgba(0, 92, 0, 0.973);
+					border-radius: 5px;
+					position: fixed;
+					top: 35%;
+					bottom: 35%;
+					left: 35%;
+					right: 35%;
+					color: #fff;
+					font-size: 14px;
+					.btn-delete-response {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 10px;
+						button {
+							width: 15%;
+							border: none;
+							border-radius: 5px;
+							padding: 3px;
+							cursor: pointer;
+							transition: all 0.2s;
+						}
+						button:hover {
+							background-color: green;
+							color: #fff;
+						}
+					}
+				}
 				button:hover {
+					background-color: green;
+					color: #fff;
+				}
+			}
+			.edit-btn-time-response {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+				justify-content: space-between;
+				.but-delete-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-delete-response:hover {
+					background-color: green;
+					color: #fff;
+				}
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-edit-response:hover {
 					background-color: green;
 					color: #fff;
 				}
@@ -769,6 +1274,19 @@
 			.date-response-content {
 				display: flex;
 				gap: 10px;
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding-left: 15px;
+					padding-right: 15px;
+				}
+				.but-edit-response:hover {
+					background-color: green;
+					color: #fff;
+				}
 			}
 		}
 		.item-map-responses-OnAuthor::before {
@@ -832,22 +1350,93 @@
 				font-size: 12px;
 				align-items: center;
 				color: #fff;
-				button {
+				button.send-btn-response {
 					width: 12%;
 					border: none;
 					border-radius: 5px;
 					padding: 3px;
 					cursor: pointer;
 					transition: all 0.2s;
+					display: flex;
+					align-items: center;
+					gap: 3px;
+				}
+				.warning-delete-response {
+					width: 25%;
+					height: 25vh;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					gap: 50px;
+					transition: all 1s;
+					background-color: rgba(0, 92, 0, 0.973);
+					border-radius: 5px;
+					position: fixed;
+					top: 35%;
+					bottom: 35%;
+					left: 35%;
+					right: 35%;
+					color: #fff;
+					font-size: 14px;
+					.btn-delete-response {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 10px;
+						button {
+							width: 15%;
+							border: none;
+							border-radius: 5px;
+							padding: 3px;
+							cursor: pointer;
+							transition: all 0.2s;
+						}
+						button:hover {
+							background-color: green;
+							color: #fff;
+						}
+					}
 				}
 				button:hover {
 					background-color: green;
 					color: #fff;
 				}
 			}
-			.date-response-content {
+			.edit-btn-time-response {
 				display: flex;
-				gap: 10px;
+				gap: 5px;
+				align-items: center;
+				justify-content: space-between;
+				.but-delete-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-delete-response:hover {
+					background-color: green;
+					color: #fff;
+				}
+				.but-edit-response {
+					border: none;
+					cursor: pointer;
+					transition: all 0.5s;
+					border-radius: 5px;
+					outline: none;
+					padding: 2px;
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+				.but-edit-response:hover {
+					background-color: green;
+					color: #fff;
+				}
 			}
 		}
 	}
@@ -869,16 +1458,7 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 10px;
-		.like-news-user {
-			display: flex;
-			gap: 10px;
-			width: 10%;
-			i {
-				font-size: 25px;
-				color: white;
-				cursor: pointer;
-			}
-		}
+
 		.content-comment-form {
 			width: 100%;
 			.form-comment {
@@ -915,6 +1495,42 @@
 			}
 		}
 	}
+	.content-login-and-register {
+		width: 100%;
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		font-size: 12px;
+		.Link {
+			width: 14%;
+			text-decoration: none;
+			button {
+				width: 100%;
+				border: none;
+				border-radius: 5px;
+				transition: all 0.5s;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: darkred;
+				color: #fff;
+			}
+		}
+	}
+}
+.fa-arrow-circle-up {
+	position: fixed;
+	right: 50px;
+	bottom: 50px;
+	font-size: 20px;
+	cursor: pointer;
+	color: green;
+	background-color: #000;
+	padding: 10px;
+	border-radius: 50%;
+	z-index: 1;
 }
 .img {
 	width: 300px;

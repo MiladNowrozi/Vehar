@@ -1,237 +1,273 @@
 .Animation-Circle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .circle-green1 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #23d100;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #23d100;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
 }
 
 .circle-green2 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #23d100;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 1s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #23d100;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 1s;
 }
 
 .circle-green3 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #23d100;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 2s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #23d100;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 2s;
 }
 
 .circle-green4 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #23d100;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 3s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #23d100;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 3s;
 }
 
 .circle-yellow1 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: yellow;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: yellow;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
 }
 
 .circle-yellow2 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: yellow;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 1s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: yellow;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 1s;
 }
 
 .circle-yellow3 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: yellow;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 2s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: yellow;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 2s;
 }
 
 .circle-yellow4 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: yellow;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 3s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: yellow;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 3s;
 }
 .circle-red1 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: red;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: red;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
 }
 
 .circle-red2 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: red;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 1s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: red;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 1s;
 }
 
 .circle-red3 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: red;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 2s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: red;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 2s;
 }
 
 .circle-red4 {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: red;
-  position: absolute;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite; /* Chrome, Safari, Opera */
-  -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
-  animation: scaler 4s infinite;
-  animation-timing-function: linear;
-  -webkit-animation-delay: 3s;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: red;
+	position: absolute;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-moz-animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite; /* Chrome, Safari, Opera */
+	-webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+	animation: scaler 4s infinite;
+	animation-timing-function: linear;
+	-webkit-animation-delay: 3s;
+}
+
+.container-loading {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	.item {
+		border-radius: 50%;
+		background-color: #eee;
+	}
+	.item:nth-child(1) {
+		animation: loading-animation 0.5s 0.1s infinite alternate;
+	}
+	.item:nth-child(2) {
+		animation: loading-animation 0.5s 0.2s infinite alternate;
+	}
+	.item:nth-child(3) {
+		animation: loading-animation 0.5s 0.3s infinite alternate;
+	}
+	.item:nth-child(4) {
+		animation: loading-animation 0.5s 0.4s infinite alternate;
+	}
 }
 
 @-webkit-keyframes scaler {
-  0% {
-    -webkit-transform: scale(1);
-  }
+	0% {
+		-webkit-transform: scale(1);
+	}
 
-  33% {
-    -webkit-transform: scale(4);
-    opacity: 0.2;
-  }
+	33% {
+		-webkit-transform: scale(4);
+		opacity: 0.2;
+	}
 
-  67% {
-    -webkit-transform: scale(7);
-    opacity: 0.1;
-  }
+	67% {
+		-webkit-transform: scale(7);
+		opacity: 0.1;
+	}
 
-  100% {
-    -webkit-transform: scale(10);
-    opacity: 0;
-  }
+	100% {
+		-webkit-transform: scale(10);
+		opacity: 0;
+	}
 }
 
 @-moz-keyframes scaler {
-  0% {
-    -moz-transform: scale(1);
-  }
+	0% {
+		-moz-transform: scale(1);
+	}
 
-  33% {
-    -moz-transform: scale(4);
-    opacity: 0.2;
-  }
+	33% {
+		-moz-transform: scale(4);
+		opacity: 0.2;
+	}
 
-  67% {
-    -moz-transform: scale(7);
-    opacity: 0.1;
-  }
+	67% {
+		-moz-transform: scale(7);
+		opacity: 0.1;
+	}
 
-  100% {
-    -moz-transform: scale(10);
-    opacity: 0;
-  }
+	100% {
+		-moz-transform: scale(10);
+		opacity: 0;
+	}
 }
 
 @keyframes scaler {
-  0% {
-    transform: scale(1);
-  }
+	0% {
+		transform: scale(1);
+	}
 
-  33% {
-    transform: scale(4);
-    opacity: 0.2;
-  }
+	33% {
+		transform: scale(4);
+		opacity: 0.2;
+	}
 
-  67% {
-    transform: scale(7);
-    opacity: 0.1;
-  }
+	67% {
+		transform: scale(7);
+		opacity: 0.1;
+	}
 
-  100% {
-    transform: scale(10);
-    opacity: 0;
-  }
+	100% {
+		transform: scale(10);
+		opacity: 0;
+	}
+}
+
+@keyframes loading-animation {
+	0% {
+		width: 20px;
+		height: 20px;
+	}
+
+	100% {
+		width: 30px;
+		height: 30px;
+	}
 }

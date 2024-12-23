@@ -5,7 +5,6 @@ import { AxiosInstance } from "../../../../../axiosInstance.js";
 
 export const ListAuthors = () => {
 	const [ReceiveAllAuthor, setReceiveAllAuthor] = useState([]);
-	console.log(ReceiveAllAuthor);
 
 	const [input, setInput] = useState({
 		Author_FirstName: "",

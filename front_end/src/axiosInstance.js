@@ -37,7 +37,7 @@ AxiosInstance.interceptors.response.use(
 					// Attempt to refresh the token
 					const response = await axios.post("http://localhost:5000/auth/refresh-token", {
 						refreshToken: JSON.parse(token)?.refreshToken,
-						Role: JSON.parse(token)?.Role,
+						Role: JSON.parse(token)?.Info.Role,
 					});
 					localStorage.setItem("user", JSON.stringify(response.data?.body));
 					// Update the original request with the new token

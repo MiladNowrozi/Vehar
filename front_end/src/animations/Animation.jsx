@@ -1,6 +1,6 @@
 import "./animation.css";
 
-const AnimationGreen = () => {
+export const AnimationGreen = () => {
 	return (
 		<div className="Animation-Circle">
 			<div className="circle-green1"></div>
@@ -30,5 +30,13 @@ export const AnimationRed = () => {
 		</div>
 	);
 };
-
-export default AnimationGreen;
+export const AnimationLoading = () => {
+	return (
+		<div class="container-loading">
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+		</div>
+	);
+};

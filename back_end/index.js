@@ -53,7 +53,7 @@ app.use("/auth", authRouter);
 app.use("/lord", AuthToken, lordRouter);
 app.use("/author", AuthToken, authorRouter);
 app.use("/user", AuthToken, usersRouter);
-app.use("/news", AuthToken, newsRouter);
+app.use("/news", newsRouter);
 app.use("*", (req, res) => {
 	res.status(404).send("چنین مسیری یافت نشد!");
 });

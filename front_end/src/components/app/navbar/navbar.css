@@ -13,7 +13,7 @@
 	.NavbarLogo {
 		width: 90px;
 		height: 65px;
-		background: url(../navbar/logo/VeharGreen.svg) no-repeat;
+		background: url(../navbar/logo/VeharYellow.svg) no-repeat;
 		background-size: 100px;
 		position: absolute;
 		right: 20px;
@@ -28,35 +28,11 @@
 			right: 18px;
 		}
 	}
-	.DisplayNone-AnimationGreen {
-		display: none;
-	}
 	.animation-logo-yellow {
 		display: none;
 	}
-
-	.NavbarLogoAddScroll {
-		width: 120px;
-		height: 60px;
-		background: url(../navbar/logo/VeharYellow.svg) no-repeat;
-		background-size: 80px;
-		display: inline-block;
-		position: absolute;
-		right: 0px;
-		top: 2px;
-		border-radius: 50px;
-		cursor: pointer;
-		background-position-y: -6px;
-		transition: all 1s;
-		.animation-logo-yellow {
-			display: block;
-			position: absolute;
-			top: 10px;
-			right: 60px;
-		}
-	}
-
 	.input-search-home-page {
+		display: flex;
 		.searchSvg {
 			width: 30px;
 			height: 30px;
@@ -68,49 +44,219 @@
 			margin-right: 2px;
 			background-color: #fff;
 		}
-		form > input {
-			width: 200px;
-			text-align: right;
-			padding: 7px;
-			border-radius: 5px;
-			outline: none;
-			border: none;
-			padding-right: 15px;
-			font-size: 10px;
-			font-weight: 350;
-			&::placeholder {
-				color: red;
-				font-size: 12px;
-				margin-right: 5px;
-			}
-		}
-		form {
+		.recommend-container {
+			width: 100%;
+			height: 100vh;
+			direction: rtl;
+			background-color: rgba(37, 37, 37, 0.671);
+			position: fixed;
+			bottom: 0;
+			top: 0;
+			left: 0;
+			right: 0;
 			display: flex;
-			align-items: center;
-			position: absolute;
-			left: 100px;
+			justify-content: center;
+			z-index: 1;
+			.content-recommend {
+				width: 60%;
+				height: 100vh;
+				overflow-y: auto;
+				scrollbar-width: thin;
+				bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				background-color: #eee;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 10px;
+				gap: 10px;
+				position: relative;
+				border-radius: 10px;
+				.inputs {
+					width: 80%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 10px;
+					padding: 10px;
+					input {
+						outline: none;
+						border-radius: 5px;
+						border: none;
+						font-size: 12px;
+						padding: 5px;
+					}
+					i {
+						position: absolute;
+						left: 15px;
+						cursor: pointer;
+					}
+				}
+			}
+			.content-result-search {
+				width: 80%;
+				padding: 10px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 5px;
+				.container-map-search {
+					width: 100%;
+					padding: 10px;
+					background-color: rgba(0, 253, 13, 0.253);
+					border-radius: 5px;
+					.content-map-search {
+						.text-title-and-titre {
+							border-bottom: 1px solid rgba(0, 4, 253, 0.253);
+							display: flex;
+							padding: 10px;
+							align-items: center;
+							gap: 10px;
+							font-size: 13px;
+							img {
+								width: 50px;
+								height: 50px;
+								border-radius: 50%;
+							}
+						}
+						.info-news-search {
+							display: flex;
+							gap: 10px;
+							font-size: 12px;
+							padding: 10px;
+							p:nth-child(1) {
+								border-left: 1px solid rgba(0, 4, 253, 0.253);
+								padding-left: 10px;
+							}
+							p:nth-child(2) {
+								border-left: 1px solid rgba(0, 4, 253, 0.253);
+								padding-left: 10px;
+							}
+							p:nth-child(3) {
+								border-left: 1px solid rgba(0, 4, 253, 0.253);
+								padding-left: 10px;
+							}
+						}
+					}
+				}
+				.pagination {
+					width: 50%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 5px;
+					button {
+						width: 20%;
+						height: 35px;
+						border: none;
+						border-radius: 5%;
+						background-color: aqua;
+						cursor: pointer;
+						border-radius: 5px;
+					}
+					span {
+						height: 35px;
+						font-weight: 300;
+						font-size: 25px;
+						text-align: center;
+						color: white;
+						background-color: black;
+						display: flex;
+						align-items: center;
+						padding: 5px;
+						border-radius: 5px;
+					}
+				}
+			}
 		}
 	}
 	.formContent {
+		width: 30%;
 		display: flex;
 		align-items: center;
-	}
-	.input-search-home-page {
-		width: 10%;
-		display: flex;
-		align-items: center;
-		.login-icon {
-			margin-left: 12px;
-			display: flex;
-			align-items: center;
-			.fa-sign-in {
-				cursor: pointer;
-				color: green;
+		justify-content: space-between;
+		.fa-sign-in {
+			color: yellow;
+		}
+		.login-logout {
+			margin-top: 8px;
+			margin-left: 10px;
+			.logout-icon {
+				margin-left: 5px;
+				.fa-user-check {
+					cursor: pointer;
+					color: yellow;
+				}
+				.fa-user-check:hover ~ .content-logout {
+					visibility: visible;
+				}
+				.content-logout {
+					width: 10%;
+					background-color: rgb(43, 175, 61);
+					display: flex;
+					flex-direction: column;
+					border-radius: 5px;
+					position: absolute;
+					direction: rtl;
+					padding: 5px;
+					z-index: 1;
+					gap: 10px;
+					font-weight: 300;
+					visibility: hidden;
+					transition: all 1s;
+					.img-user {
+						width: 50px;
+						height: 50px;
+						.img {
+							width: 100%;
+							height: 100%;
+							background-size: cover;
+							border-radius: 30px;
+						}
+					}
+					.firstName-user {
+						font-size: 15px;
+					}
+					.btn-logout {
+						width: 100%;
+						padding: 5px;
+						cursor: pointer;
+						border: none;
+						border-radius: 5px;
+						display: inline-flex;
+						align-items: center;
+						gap: 30px;
+					}
+				}
+				.content-logout:hover {
+					visibility: visible;
+				}
+				.content-logout:after {
+					content: "";
+					width: 10px;
+					height: 10px;
+					background-color: rgb(43, 175, 61);
+					position: absolute;
+					top: 0;
+					left: 5px;
+					margin-top: -4px;
+					transform: rotate(45deg);
+				}
 			}
 		}
 	}
+	.full-time {
+		width: 15%;
+		font-size: 12px;
+		display: flex;
+		gap: 5px;
+		direction: rtl;
+		font-weight: 500;
+		color: #fff;
+	}
 	.NavbarMenuText {
-		width: 100%;
 		display: flex;
 		justify-content: flex-end;
 		margin-right: 10%;
@@ -118,7 +264,7 @@
 			display: flex;
 			gap: 5px;
 			.options-navbar > h6:hover {
-				color: rgb(255, 0, 255);
+				color: yellow;
 				transition: all 0.3s;
 			}
 			.options-navbar > h6 {
@@ -126,7 +272,7 @@
 				display: inline-block;
 				margin-left: 15px;
 				cursor: pointer;
-				color: #ff0000;
+				color: #fff;
 				font-weight: 300;
 				font-size: 14px;
 				transition: color 0.3s;
@@ -142,82 +288,14 @@
 	}
 
 	.SloganVehar {
-		width: 15%;
 		height: 30px;
-		position: absolute;
-		left: 360px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-family: Vazirmatn;
-		font-weight: 400;
-		font-size: 15px;
-		color: rgb(29, 175, 0);
-	}
-	.login-logout {
-		margin-top: 8px;
-		margin-left: 10px;
-		.logout-icon {
-			margin-left: 12px;
-			.fa-user-check {
-				cursor: pointer;
-				color: rgb(180, 3, 3);
-			}
-			.fa-user-check:hover ~ .content-logout {
-				visibility: visible;
-			}
-			.content-logout {
-				width: 10%;
-				background-color: rgb(43, 175, 61);
-				display: flex;
-				flex-direction: column;
-				border-radius: 5px;
-				position: absolute;
-				direction: rtl;
-				padding: 5px;
-				z-index: 1;
-				gap: 10px;
-				font-weight: 300;
-				visibility: hidden;
-				transition: all 1s;
-				.img-user {
-					width: 50px;
-					height: 50px;
-					.img {
-						width: 100%;
-						height: 100%;
-						background-size: cover;
-						border-radius: 30px;
-					}
-				}
-				.firstName-user {
-					font-size: 15px;
-				}
-				.btn-logout {
-					width: 100%;
-					padding: 5px;
-					cursor: pointer;
-					border: none;
-					border-radius: 5px;
-					display: inline-flex;
-					align-items: center;
-					gap: 30px;
-				}
-			}
-			.content-logout:hover {
-				visibility: visible;
-			}
-			.content-logout:after {
-				content: "";
-				width: 10px;
-				height: 10px;
-				background-color: rgb(43, 175, 61);
-				position: absolute;
-				top: 0;
-				left: 5px;
-				margin-top: -4px;
-				transform: rotate(45deg);
-			}
-		}
+		direction: rtl;
+		font-weight: 600;
+		gap: 5px;
+		font-size: 12px;
+		color: yellow;
 	}
 }

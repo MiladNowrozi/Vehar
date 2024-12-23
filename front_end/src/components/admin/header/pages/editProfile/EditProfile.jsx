@@ -18,7 +18,10 @@ export const EditProfile = () => {
 		<>
 			<div className="admin-edit-page">
 				<div className="admin-image-profile-edit">
-					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/110px-User_icon_2.svg.png" alt="admin" />
+					<img
+						src="http://localhost:5000/get-images?name=/2024/09/%DB%B2%DB%B0%DB%B2%DB%B4%DB%B0%DB%B9%DB%B1%DB%B4_%DB%B2%DB%B2%DB%B1%DB%B7%DB%B1%DB%B1-scaled.jpg"
+						alt="admin"
+					/>
 					<form action="/">
 						<label htmlFor="file">انتخاب تصویر</label>
 						<input type="file" id="myfile" name="myfile" onChange={(e) => setFile(e.target.files[0])} />

@@ -28,17 +28,13 @@ export const AuthContextProvider = ({ children }) => {
 				},
 			});
 			if (res.data.success) {
-				if (res.data.body.Role === "OnAuthor") {
+				if (res.data.body.Info.Role === "Lord" || res.data.body.Info.Role === "OnAuthor") {
 					setCurrentUser(res.data.body);
-					navigate("/author");
+					navigate("/admin");
 				}
-				if (res.data.body.Role === "Lord") {
+				if (res.data.body.Info.Role === "OnUser") {
 					setCurrentUser(res.data.body);
-					navigate("/lord");
-				}
-				if (res.data.body.Role === "OnUser") {
-					setCurrentUser(res.data.body);
-					navigate("/");
+					navigate("/user");
 				}
 			} else {
 				showWarningLogin.innerHTML = `<p style="color:green;">${res.data.message}`;
@@ -46,9 +42,7 @@ export const AuthContextProvider = ({ children }) => {
 			}
 		} catch (err) {
 			showWarningLogin.innerHTML = `<p style="color:red;">${
-				err.response.data.message === undefined
-					? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
-					: err.response.data.message
+				err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
 			}</p>`;
 			WarningTime();
 		}

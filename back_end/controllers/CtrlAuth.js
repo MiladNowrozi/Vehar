@@ -100,10 +100,9 @@ export const RefreshToken = async (req, res) => {
 	if (!refreshToken || refreshToken === undefined) {
 		return res.sendStatus(401);
 	}
-
 	try {
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-			if (err) {
+			if (err || Role !== user.Role) {
 				return res.status(401).json({
 					success: false,
 					message: "invalid server RefreshToken",
@@ -112,73 +111,93 @@ export const RefreshToken = async (req, res) => {
 
 			if (Role === "OnUser") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, User_UserName: user.User_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, User_UserName: user.User_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "5s",
 					}
 				);
+				const UserInfo = await User.findByPk(user.id);
 				res.status(200).json({
 					success: true,
 					body: {
-						Role: "OnUser",
 						refreshToken: refreshToken,
 						accessToken: accessToken,
+						Info: {
+							Id: UserInfo.id,
+							Role: UserInfo.Role,
+							Img: UserInfo.User_Img,
+							FirstName: UserInfo.User_FirstName,
+							LastName: UserInfo.User_LastName,
+						},
 					},
 				});
 			}
 			if (Role === "OnAuthor") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, Author_UserName: user.Author_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Author_FirstName, LastName: user.Author_LastName, Author_UserName: user.Author_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, Author_UserName: user.Author_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Author_FirstName, LastName: user.Author_LastName, Author_UserName: user.Author_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "5s",
 					}
 				);
+				const AuthorInfo = await Author.findByPk(user.id);
 				res.status(200).json({
 					success: true,
 					body: {
-						Role: "OnAuthor",
 						refreshToken: refreshToken,
 						accessToken: accessToken,
+						Info: {
+							Role: AuthorInfo.Role,
+							Id: AuthorInfo.id,
+							FirstName: AuthorInfo.Author_FirstName,
+							LastName: AuthorInfo.Author_LastName,
+						},
 					},
 				});
 			}
 			if (Role === "Lord") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, Lord_UserName: user.Lord_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Lord_FirstName, LastName: user.Lord_LastName, Lord_UserName: user.Lord_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, Lord_UserName: user.Lord_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Lord_FirstName, LastName: user.Lord_LastName, Lord_UserName: user.Lord_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "5s",
 					}
 				);
+				const LordInfo = await Lord.findByPk(user.id);
 				res.status(200).json({
 					success: true,
 					body: {
-						Role: "Lord",
 						refreshToken: refreshToken,
 						accessToken: accessToken,
+						Info: {
+							Id: LordInfo.id,
+							Role: LordInfo.Role,
+							Img: LordInfo.Lord_Img,
+							FirstName: LordInfo.Lord_FirstName,
+							LastName: LordInfo.Lord_LastName,
+						},
 					},
 				});
 			}
@@ -386,14 +405,22 @@ export const Login = async (req, res) => {
 					} else {
 						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
 						const refreshToken = jwt.sign(
-							{ id: ExistUser.id, Role: ExistUser.Role, User_UserName: ExistUser.User_UserName },
+							{
+								id: ExistUser.id,
+								Role: ExistUser.Role,
+								UserName: ExistUser.User_UserName,
+							},
 							process.env.REFRESH_TOKEN_SECRET,
 							{
 								expiresIn: "1h",
 							}
 						);
 						const accessToken = jwt.sign(
-							{ id: ExistUser.id, Role: ExistUser.Role, User_UserName: ExistUser.User_UserName },
+							{
+								id: ExistUser.id,
+								Role: ExistUser.Role,
+								UserName: ExistUser.User_UserName,
+							},
 							process.env.REFRESH_TOKEN_SECRET,
 							{
 								expiresIn: "5s",
@@ -405,7 +432,13 @@ export const Login = async (req, res) => {
 							body: {
 								accessToken: accessToken,
 								refreshToken: refreshToken,
-								Role: "OnUser",
+								Info: {
+									Id: ExistUser.id,
+									Role: ExistUser.Role,
+									Img: ExistUser.User_Img,
+									FirstName: ExistUser.User_FirstName,
+									LastName: ExistUser.User_LastName,
+								},
 							},
 							success: true,
 						});
@@ -464,14 +497,23 @@ export const Login = async (req, res) => {
 					} else {
 						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
 						const refreshToken = jwt.sign(
-							{ id: ExistAuthor.id, Role: ExistAuthor.Role, Author_UserName: ExistAuthor.Author_UserName },
+							{
+								id: ExistAuthor.id,
+								Role: ExistAuthor.Role,
+								UserName: ExistAuthor.Author_UserName,
+							},
 							process.env.REFRESH_TOKEN_SECRET,
 							{
 								expiresIn: "1h",
 							}
 						);
 						const accessToken = jwt.sign(
-							{ id: ExistAuthor.id, Role: ExistAuthor.Role, Author_UserName: ExistAuthor.Author_UserName },
+							{
+								id: ExistAuthor.id,
+								Role: ExistAuthor.Role,
+
+								UserName: ExistAuthor.Author_UserName,
+							},
 							process.env.REFRESH_TOKEN_SECRET,
 							{
 								expiresIn: "5m",
@@ -483,7 +525,13 @@ export const Login = async (req, res) => {
 							body: {
 								accessToken: accessToken,
 								refreshToken: refreshToken,
-								Role: "OnAuthor",
+								Info: {
+									Id: ExistAuthor.id,
+									Role: ExistAuthor.Role,
+									Img: ExistAuthor.Author_Img,
+									FirstName: ExistAuthor.Author_FirstName,
+									LastName: ExistAuthor.Author_LastName,
+								},
 							},
 							success: true,
 						});
@@ -504,28 +552,41 @@ export const Login = async (req, res) => {
 				if (isPasswordCurrent) {
 					// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
 					const refreshToken = jwt.sign(
-						{ id: ExistLord.id, Role: ExistLord.Role, Lord_UserName: ExistLord.Lord_UserName },
+						{
+							id: ExistLord.id,
+							Role: ExistLord.Role,
+							UserName: ExistLord.Lord_UserName,
+						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
 							expiresIn: "1h",
 						}
 					);
 					const accessToken = jwt.sign(
-						{ id: ExistLord.id, Role: ExistLord.Role, Lord_UserName: ExistLord.Lord_UserName },
+						{
+							id: ExistLord.id,
+							Role: ExistLord.Role,
+							UserName: ExistLord.Lord_UserName,
+						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
 							expiresIn: "5m",
 						}
 					);
 					// Store refresh token with expiration time
-
 					res.status(200).json({
+						success: true,
 						body: {
 							accessToken: accessToken,
 							refreshToken: refreshToken,
-							Role: "Lord",
+							Info: {
+								Id: ExistLord.id,
+								Role: ExistLord.Role,
+								Img: ExistLord.Lord_Img,
+								FirstName: ExistLord.Lord_FirstName,
+								LastName: ExistLord.Lord_LastName,
+							},
 						},
-						success: true,
 					});
 				} else {
 					res.status(404).json({

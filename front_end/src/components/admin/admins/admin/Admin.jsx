@@ -2,9 +2,9 @@ import { Outlet } from "react-router-dom";
 import { NavbarAdmin } from "../../navbar/Navbar";
 import { MenuLord } from "../../menu/Menu";
 
-import "./lord.css";
+import "./admin.css";
 
-export const Lord = () => {
+export const Admin = () => {
 	return (
 		<div className="container-admin">
 			<NavbarAdmin />

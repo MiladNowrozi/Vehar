@@ -1,8 +1,11 @@
 import "./listNews.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MenuLord } from "../../../menu/Menu";
 import { AxiosInstance } from "../../../../../axiosInstance";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../../../../context/authContext";
 export const ListNews = () => {
+	const { CurrentUser } = useContext(AuthContext);
 	const [ReceiveAllNews, setReceiveAllNews] = useState({
 		News: [],
 		Limit: 20,
@@ -12,10 +15,13 @@ export const ListNews = () => {
 		Search: null,
 		SearchById: null,
 	});
+	console.log(ReceiveAllNews);
+	
 	const [NewsStatus, setNewsStatus] = useState({
 		Comments: [],
 		Count: [],
 	});
+
 	window.addEventListener("load", () => {
 		LodNews();
 		fetchData();
@@ -23,7 +29,7 @@ export const ListNews = () => {
 	const LodNews = async () => {
 		await AxiosInstance({
 			method: "get",
-			url: `news/search-news?currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}&search=${ReceiveAllNews.Search}&searchbyid=${ReceiveAllNews.SearchById}`,
+			url: `news/search-admin?currentpage=${ReceiveAllNews.CurrentPage}&limit=${ReceiveAllNews.Limit}&search=${ReceiveAllNews.Search}&searchbyid=${ReceiveAllNews.SearchById}`,
 			withCredentials: true,
 		})
 			.then((success) => {
@@ -59,7 +65,7 @@ export const ListNews = () => {
 			});
 	};
 	useEffect(() => {
-		<MenuLord onAction={LodNews()} />;
+		<MenuLord onAction={(LodNews(), fetchData())} />;
 	}, []);
 
 	const [IdDeletedNews, setIdDeletedNews] = useState(null);
@@ -99,25 +105,6 @@ export const ListNews = () => {
 			console.log(error);
 		}
 	};
-
-	const handleCancelNews = async (Cancel) => {
-		try {
-			await AxiosInstance({
-				method: "put",
-				url: `news/put${Cancel.target.id}`,
-				withCredentials: true,
-			})
-				.then((success) => {
-					setReceiveAllNews(success.data.body);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
 	const fetchData = async () => {
 		try {
 			await AxiosInstance({
@@ -223,13 +210,11 @@ export const ListNews = () => {
 							<th>کد خبر</th>
 						</tr>
 					</thead>
-					{(NewsStatus.Comments.length !== 0 &&
+					{(NewsStatus.Comments.length > 0 &&
 						NewsStatus.Comments.map((e, i) => {
 							const [DateC, TimeC] = [
 								{
-									DateCreate: new Date(e.createdAt)
-										.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })
-										.split("T")[0],
+									DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0],
 								},
 								{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
 							];
@@ -312,20 +297,36 @@ export const ListNews = () => {
 											>
 												قبول
 											</button>
-											<button className="cancel-comment">رد</button>
+											<button
+												className="cancel-comment"
+												onClick={async () => {
+													await AxiosInstance({
+														method: "delete",
+														url: `news/comments-delete?id=${e.id}&type=Comment`,
+														withCredentials: true,
+													})
+														.then((success) => {
+															fetchData();
+															document.getElementById("success-verification").style.display = "unset";
+															document.getElementById("success-verification").innerHTML = success.data.message;
+															setTimeout(() => {
+																document.getElementById("success-verification").style.display = "none";
+																document.getElementById("success-verification").innerHTML = "";
+															}, 3000);
+														})
+														.catch((err) => {
+															console.log(err);
+														});
+												}}
+											>
+												رد
+											</button>
 										</td>
 									</tr>
 								</tbody>
 							);
 						})) ||
 						"لیست خبر های منتشر نشده خالی است ."}
-					<thead>
-						<tr>
-							<td>
-								<span style={{ color: "white" }} id="empty-news"></span>
-							</td>
-						</tr>
-					</thead>
 				</table>
 			</div>
 			<div id="content-add-news" className="content-add-news">
@@ -335,7 +336,7 @@ export const ListNews = () => {
 						<label htmlFor="search"> جستجو در تیتر و عنوان؛</label>
 						<input
 							onChange={(e) => {
-								ReceiveAllNews.Search = e.target.value !== "" ? e.target.value : null;
+								ReceiveAllNews.Search = e.target.value.length > 3 ? e.target.value : null;
 								LodNews();
 							}}
 							type="search"
@@ -362,6 +363,7 @@ export const ListNews = () => {
 							fetchData();
 						}}
 					>
+						<span className="count-comment">{NewsStatus.Comments.length}</span>
 						نظرات
 					</button>
 				</div>
@@ -380,9 +382,7 @@ export const ListNews = () => {
 					{ReceiveAllNews.News.map((e) => {
 						const [DateC, TimeC] = [
 							{
-								DateCreate: new Date(e.createdAt)
-									.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })
-									.split("T")[0],
+								DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0],
 							},
 							{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
 						];
@@ -430,9 +430,9 @@ export const ListNews = () => {
 										>
 											حذف
 										</button>
-										<button id={e.id} onClick={handleCancelNews} className="cancel-news">
-											ویرایش
-										</button>
+										<Link to={`/admin/create-news?id=${e.id}`}>
+											<button className="edit-news-lord">ویرایش</button>
+										</Link>
 									</td>
 								</tr>
 							</tbody>

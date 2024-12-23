@@ -10,6 +10,15 @@
 		flex-direction: column;
 		align-items: flex-end;
 		gap: 5px;
+		.limit-characters {
+			color: red;
+			background-color: #fff;
+			padding: 1px 5px 1px 5px;
+			font-size: 12px;
+			margin-right: 5px;
+			border-radius: 2px;
+			border: none;
+		}
 		&.input-news-admin > input[type="text"] {
 			width: 60%;
 			height: 35px;
@@ -106,6 +115,9 @@
 					text-align: center;
 					padding-bottom: 5px;
 					background-color: #eee;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
 					h3 {
 						margin-bottom: 5px;
 						font-weight: 450;
@@ -137,11 +149,11 @@
 					}
 					.branch-Create-content {
 						width: 100%;
-						height: 8vh;
+						height: 10vh;
 						display: flex;
 						flex-direction: column;
 						gap: 5px;
-						justify-content: space-around;
+						justify-content: center;
 						border-radius: 5px;
 						align-items: center;
 						.btn-create-sub-category {
@@ -149,6 +161,7 @@
 							display: flex;
 							justify-content: center;
 							gap: 5px;
+							position: relative;
 							input[type="button"] {
 								border: none;
 								background-color: white;
@@ -162,6 +175,14 @@
 								background-color: white;
 								border-radius: 5px;
 							}
+						}
+						.warning-add-subCategory {
+							background-color: #000;
+							padding: 2px 5px 2px 5px;
+							position: absolute;
+							top: -30px;
+							border-radius: 5px;
+							color: #fff;
 						}
 					}
 					input[type="button"] {
@@ -247,7 +268,9 @@
 				.add-to-slider-self-news,
 				.add-to-chosen-self-news,
 				.add-to-self-page-note,
-				.add-to-main-page-note {
+				.add-to-main-page-note,
+				.add-main-ticker-news,
+				.add-sub-ticker-news {
 					display: flex;
 					justify-content: center;
 					align-items: center;
