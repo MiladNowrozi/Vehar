@@ -32,36 +32,29 @@ export const News = () => {
 	const [DeleteComment, setDeleteComment] = useState({
 		id: null,
 		type: "",
+		newsId: null,
+		commentId: null,
 	});
 
 	const { CurrentUser } = useContext(AuthContext);
 	const [news, setNews] = useState({
-		CurrentNews: [],
-		SendSpecial: [],
-		SendChosen: [],
-		Comments: [],
-		Likes: [],
-		IsLiked: [],
+		GetSelectedSpecial: [],
+		GetSelectedNews: [],
+		GetSelectedChosen: [],
 	});
+	console.log(news);
+
 	const NewsId = useLocation().pathname.split("/")[2];
 	useEffect(() => {
 		const FetchData = async () => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get?id=${NewsId}`,
+					url: `/news/get?id=${NewsId}&userId=${CurrentUser && CurrentUser.Info.Id}&role=${CurrentUser && CurrentUser.Info.Role}`,
 				})
 					.then((success) => {
-						const { CurrentNews, SendSpecial, SendChosen, Comments, IsLiked } = success.data.body;
-						setNews((prov) => ({
-							...prov,
-							CurrentNews: CurrentNews,
-							SendSpecial: SendSpecial,
-							SendChosen: SendChosen,
-							Comments: Comments,
-							Likes: success.data.body.Likes,
-							IsLiked: IsLiked,
-						}));
+						const { GetSelectedSpecial, GetSelectedNews, GetSelectedChosen } = success.data.body;
+						setNews({ ...news, GetSelectedSpecial: GetSelectedSpecial, GetSelectedNews: GetSelectedNews, GetSelectedChosen: GetSelectedChosen });
 					})
 					.catch((err) => {
 						console.log(err);
@@ -74,7 +67,7 @@ export const News = () => {
 	}, [NewsId]);
 	const [DateC, TimeC] = [
 		{
-			DateCreate: new Date(news.CurrentNews.createdAt)
+			DateCreate: new Date(news.GetSelectedNews.createdAt)
 				.toLocaleDateString("fa-IR", {
 					year: "numeric",
 					month: "long",
@@ -83,7 +76,7 @@ export const News = () => {
 				.split("T")[0],
 		},
 		{
-			TimeCreate: new Date(news.CurrentNews.createdAt).toTimeString().split(" ")[0],
+			TimeCreate: new Date(news.GetSelectedNews.createdAt).toTimeString().split(" ")[0],
 		},
 	];
 	const [CommentsValue, setCommentsValue] = useState("");
@@ -97,13 +90,16 @@ export const News = () => {
 		if (CurrentUser) {
 			await AxiosInstance({
 				method: "get",
-				url: `/news/comment?text=${CommentsValue}&newsId=${news.CurrentNews.id}`,
+				url: `/news/comment?text=${CommentsValue}&newsId=${news.GetSelectedNews.id}`,
 			})
 				.then((success) => {
-					setNews((prov) => ({
-						...prov,
-						Comments: success.data.body.Comments,
-					}));
+					setNews({
+						...news,
+						GetSelectedNews: {
+							...news.GetSelectedNews,
+							comments: success.data.body.Comments,
+						},
+					});
 					document.querySelector(".result-send-comment").innerHTML = success.data.message;
 					setCommentsValue("");
 					setNewResponse("");
@@ -147,54 +143,102 @@ export const News = () => {
 			url: `/news/comments-edit?text=${editComment.content}&commentId=${editComment.id}&type=${editComment.type}`,
 		})
 			.then((success) => {
-				setNews((prov) => ({
-					...prov,
-					Comments: success.data.body.Comments ? success.data.body.Comments : success.data.body.Response,
-				}));
-				document.querySelector(".result-send-comment").innerHTML = success.data.body.Comments ? success.data.message : "";
-				setEditComment({ ...editComment, id: null, type: "", content: "" });
-				success.data.body.Comments &&
-					setTimeout(() => {
-						const GoToResponse = document.getElementById(success.data.body.UpdCommentId + "comment");
-						if (GoToResponse) {
-							GoToResponse.scrollIntoView({
-								behavior: "smooth",
-							});
-						}
-					}, 1000);
+				if (success.data.body.Type === "Comment") {
+					setNews({
+						...news,
+						GetSelectedNews: {
+							...news.GetSelectedNews,
+							comments: news.GetSelectedNews.comments.map((e) => (e.id === success.data.body.UpdCommentId ? (e = success.data.body.Comment) : e)),
+						},
+					});
+					document.querySelector(".result-send-comment").innerHTML = success.data.body.Comment ? success.data.message : "";
+					setEditComment({ ...editComment, id: null, type: "", content: "" });
+					success.data.body.Comments &&
+						setTimeout(() => {
+							const GoToResponse = document.getElementById(success.data.body.UpdCommentId + "comment");
+							if (GoToResponse) {
+								GoToResponse.scrollIntoView({
+									behavior: "smooth",
+								});
+							}
+						}, 1000);
+				} else {
+					setNews({
+						...news,
+						GetSelectedNews: {
+							...news.GetSelectedNews,
+							comments: news.GetSelectedNews.comments.map((e) => ({
+								...e,
+								responses: e.responses.map((e) => (e.id === success.data.body.UpdResponseId ? (e = success.data.body.Response) : e)),
+							})),
+						},
+					});
+					setEditComment({ ...editComment, id: null, type: "", content: "" });
+					success.data.body.Response &&
+						setTimeout(() => {
+							const GoToResponse = document.getElementById(success.data.body.UpdResponseId + "response");
+							if (GoToResponse) {
+								GoToResponse.scrollIntoView({
+									behavior: "smooth",
+								});
+							}
+						}, 1000);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 	// =========================
-	const CommentDelete = async (id, type) => {
+	const CommentDelete = async () => {
 		await AxiosInstance({
 			method: "delete",
-			url: `/news/comments-delete?type=${type}&id=${id}`,
+			url: `/news/comments-delete?type=${DeleteComment.type}&id=${DeleteComment.id}&newsId=${DeleteComment.newsId}&commentId=${DeleteComment.commentId}`,
 		})
 			.then((success) => {
-				setNews((prov) => ({
-					...prov,
-					Comments: success.data.body.Response ? success.data.body.Response : success.data.body.Comments,
-				}));
-				setDeleteComment({ ...DeleteComment, id: "", type: "" });
+				if (success.data.body.Type === "Comment") {
+					setNews({
+						...news,
+						GetSelectedNews: {
+							...news.GetSelectedNews,
+							comments: success.data.body.Comments,
+						},
+					});
+					setDeleteComment({ ...DeleteComment, id: "", type: "", commentId: null, newsId: null });
+				} else {
+					setNews({
+						...news,
+						GetSelectedNews: {
+							...news.GetSelectedNews,
+							comments: news.GetSelectedNews.comments.map((e) =>
+								e.id === success.data.body.CommentId ? { ...e, responses: success.data.body.Response } : e
+							),
+						},
+					});
+					setDeleteComment({ ...DeleteComment, id: "", type: "", commentId: null, newsId: null });
+				}
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 	// =========================
+
 	const SubmitResponse = async (commentId) => {
 		await AxiosInstance({
 			method: "post",
 			url: `/news/responses?type=response&text=${newResponse}&commentId=${commentId}`,
 		})
 			.then((response) => {
-				setNews((prov) => ({
-					...prov,
-					Comments: response.data.body.UpdateResponses,
-				}));
+				setNews({
+					...news,
+					GetSelectedNews: {
+						...news.GetSelectedNews,
+						comments: news.GetSelectedNews.comments.map((e) =>
+							e.id === response.data.body.CommentId ? { ...e, responses: response.data.body.UpdateResponses } : e
+						),
+					},
+				});
 				document.getElementById(commentId + "container-responses").style.display = "block";
 				setCommentsValue("");
 				setNewResponse("");
@@ -216,16 +260,21 @@ export const News = () => {
 			});
 	};
 	// =========================
-	const SubmitResponseToRes = async (responseId, i) => {
+	const SubmitResponseToRes = async (responseId) => {
 		await AxiosInstance({
 			method: "post",
 			url: `/news/responses?type=ResToResponse&text=${newResToRes}&ResToResponseId=${responseId}`,
 		})
 			.then((response) => {
-				setNews((prov) => ({
-					...prov,
-					Comments: response.data.body.UpdateResToResponse,
-				}));
+				setNews({
+					...news,
+					GetSelectedNews: {
+						...news.GetSelectedNews,
+						comments: news.GetSelectedNews.comments.map((e) =>
+							e.id === response.data.body.CommentId ? { ...e, responses: response.data.body.UpdateResToResponse } : e
+						),
+					},
+				});
 				document.getElementById(responseId + "response").style.display = "block";
 				setCommentsValue("");
 				setNewResponse("");
@@ -283,15 +332,16 @@ export const News = () => {
 									<AnimationRed />
 								</div>
 								<div className="ContainerLeft">
-									{(news.SendSpecial.length > 0 &&
-										news.SendSpecial.sort((a, b) => b.id - a.id).map((e, i) => (
+									{(news.GetSelectedSpecial.length > 0 &&
+										news.GetSelectedSpecial.sort((a, b) => b.id - a.id).map((e, i) => (
 											<div key={i} className="ContainerHeaderLeft">
+												{console.log(e.id)}
 												<div className="NewsContainer-left">
 													<div className="NewsContent-left">
 														<div className="NewsItems-left">
 															<div className="img-content-left">
 																<Link to={`/news/${e.id}`} className="ImgNews-left">
-																	<img className="imgStyleHeader-left" src={e.News_Images} alt="imgs" />
+																	<img className="imgStyleHeader-left" src={e.Default_Image} alt="imgs" />
 																</Link>
 															</div>
 															<div className="RoutingNews-left">
@@ -338,7 +388,8 @@ export const News = () => {
 									)}
 								</div>
 							</div>
-							{(news.CurrentNews.Category && (
+
+							{(news.GetSelectedNews.id && (
 								<div className="Result_News_Container_Center">
 									<div className="content-info-news">
 										<div className="path-news">
@@ -348,44 +399,44 @@ export const News = () => {
 												</Link>
 											</div>
 											<div className="news-path-category">
-												<Link to={`/?cat=${news.CurrentNews.Category}`} className="Link-news-path-category">
-													{(news.CurrentNews.Category === "politic" && "سیاست") ||
-														(news.CurrentNews.Category === "economy" && "اقتصاد") ||
-														(news.CurrentNews.Category === "social" && "جامعه") ||
-														(news.CurrentNews.Category === "sport" && "ورزش") ||
-														(news.CurrentNews.Category === "local" && "بومی")}
+												<Link to={`/?cat=${news.GetSelectedNews.Category}`} className="Link-news-path-category">
+													{(news.GetSelectedNews.Category === "politic" && "سیاست") ||
+														(news.GetSelectedNews.Category === "economy" && "اقتصاد") ||
+														(news.GetSelectedNews.Category === "social" && "جامعه") ||
+														(news.GetSelectedNews.Category === "sport" && "ورزش") ||
+														(news.GetSelectedNews.Category === "local" && "بومی")}
 												</Link>
 											</div>
-											{news.CurrentNews.SubCategoryName && (
+											{news.GetSelectedNews.subCategoryName && (
 												<div className="news-path-sub-category">
-													<Link className="Link-news-path-sub-category">{news.CurrentNews.SubCategoryName}</Link>
+													<Link className="Link-news-path-sub-category">{news.GetSelectedNews.SubCategoryName}</Link>
 												</div>
 											)}
 										</div>
-										{(CurrentUser?.Info.Role === news.CurrentNews.Author.Role && CurrentUser?.Info.Id === news.CurrentNews.Author.Id && (
+										{(CurrentUser?.Info.Role === news.GetSelectedNews.admin.Role && CurrentUser?.Info.Id === news.GetSelectedNews.admin.id && (
 											<section className="delete-edit-news">
-												<Link className="Link-delete-news" to={`/admin/create-news?id=${news.CurrentNews.id}`}>
+												<Link className="Link-delete-news" to={`/admin/create-news?id=${news.GetSelectedNews.id}`}>
 													<button className="fa fa-edit"></button>
 												</Link>
-												<button onClick={() => setDeleteNews(news.CurrentNews.id)} className="fa fa-trash"></button>
+												<button onClick={() => setDeleteNews(news.GetSelectedNews.id)} className="fa fa-trash"></button>
 												{DeleteNews && (
 													<div className="warning-dele-news">
 														<p>{fa10}</p>
 														<span>
 															<p>{fa7}</p>
-															<p>{news.CurrentNews.id}</p>
+															<p>{news.GetSelectedNews.id}</p>
 														</span>
 														<span>
 															<p>{fa5}</p>
-															<p>{news.CurrentNews.Author.Name}</p>
+															<p>{news.GetSelectedNews.admin.Admin_FirstName + " " + news.GetSelectedNews.admin.Admin_LastName}</p>
 														</span>
 														<span>
 															<p>{fa8}</p>
-															<p>{news.CurrentNews.News_Titre}</p>
+															<p>{news.GetSelectedNews.News_Titre}</p>
 														</span>
 														<span>
 															<p>{fa9}</p>
-															<p>{news.CurrentNews.News_Title}</p>
+															<p>{news.GetSelectedNews.News_Title}</p>
 														</span>
 														<span className="btn-dele-cancel">
 															<button onClick={() => setDeleteNews(null)}>{fa3}</button>
@@ -397,7 +448,7 @@ export const News = () => {
 										)) ||
 											(CurrentUser?.Info.Role === "Lord" && (
 												<section className="delete-edit-news">
-													<Link className="Link-delete-news" to={`/admin/create-news?id=${news.CurrentNews.id}`}>
+													<Link className="Link-delete-news" to={`/admin/create-news?id=${news.GetSelectedNews.id}`}>
 														<button className="fa fa-edit"></button>
 													</Link>
 													<button className="fa fa-trash"></button>
@@ -405,7 +456,7 @@ export const News = () => {
 											))}
 										<section className="date-eye-section">
 											<div className="esy-div">
-												{news.CurrentNews.Visit_Count}
+												{news.GetSelectedNews.Visit_Count}
 												<p className="fa fa-eye"></p>
 											</div>
 											<div className="date-news">
@@ -419,17 +470,17 @@ export const News = () => {
 											<section className="Section_News_Result">
 												<div className="News_Result">
 													<div className="Title_Result">
-														<h6>{news.CurrentNews.News_Titre}</h6>
+														<h6>{news.GetSelectedNews.News_Titre}</h6>
 														<h1
 															dangerouslySetInnerHTML={{
-																__html: news.CurrentNews.News_Title,
+																__html: news.GetSelectedNews.News_Title,
 															}}
 														></h1>
 													</div>
 													<div className="content-center-current-news">
 														<p
 															dangerouslySetInnerHTML={{
-																__html: news.CurrentNews.News_Content,
+																__html: news.GetSelectedNews.News_Content,
 															}}
 														></p>
 													</div>
@@ -440,35 +491,44 @@ export const News = () => {
 									<div className="info-news">
 										<div className="info-author">
 											<div className="content-info-author">
-												<img src={news.CurrentNews.Author.Img} alt="img" />
+												<img src={news.GetSelectedNews.admin.Default_Image} alt="img" />
 												<section>
-													<p>{news.CurrentNews.Author.Role === "Lord" ? fa6 : fa5}</p>
-													<p>{news.CurrentNews.Author.Name}</p>
+													<p>{news.GetSelectedNews.admin.Role === "Lord" ? fa6 : fa5}</p>
+													<p>{news.GetSelectedNews.admin.Admin_FirstName + " " + news.GetSelectedNews.admin.Admin_LastName}</p>
 												</section>
 											</div>
 											<span>
 												<i className="fas fa-calendar-alt"></i>
-												<span>{moment(news.CurrentNews.createdAt).fromNow()}</span>
+												<span>{moment(news.GetSelectedNews.createdAt).fromNow()}</span>
 											</span>
 										</div>
 										<div className="left-info">
 											<div className="code-news">
 												{fa7}
-												<p>{+" " + news.CurrentNews.id}</p>
+												<p>{+" " + news.GetSelectedNews.id}</p>
 											</div>
-											<div className={news.IsLiked?.Like_News ? "is-liked" : "like-news-user"}>
-												<span id="refresh-like">{news.Likes.Like_Count}</span>
+											<div className={news.GetSelectedNews.likes[0]?.Like_News ? "is-liked" : "like-news-user"}>
+												<span>{news.GetSelectedNews.Like_Count}</span>
 												<i
 													className="fa fa-heart"
 													onClick={async () => {
 														if (CurrentUser) {
 															await AxiosInstance({
 																method: "post",
-																url: `/news/like?type=news&id=${news.CurrentNews.id}`,
+																url: `/news/like-news?id=${news.GetSelectedNews.id}`,
 															})
 																.then((success) => {
-																	setNews({ ...news, IsLiked: success.data.body.IsLiked });
-																	document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+																	setNews({
+																		...news,
+																		GetSelectedNews: {
+																			...news.GetSelectedNews,
+																			Like_Count: success.data.body.news.Like_Count,
+																			likes: news.GetSelectedNews.likes.map((e) => ({
+																				...e,
+																				Like_News: success.data.body.Like_News,
+																			})),
+																		},
+																	});
 																})
 																.catch((err) => {
 																	console.log(err);
@@ -506,15 +566,15 @@ export const News = () => {
 									<AnimationRed />
 								</div>
 								<div className="ContainerRight">
-									{news.SendChosen.length > 0 ? (
-										news.SendChosen.sort((a, b) => a.id - b.id).map((News, i) => (
+									{news.GetSelectedChosen.length > 0 ? (
+										news.GetSelectedChosen.sort((a, b) => a.id - b.id).map((News, i) => (
 											<div key={i} className="ContainerHeaderRight">
 												<div className="NewsContainer-Right">
 													<div className="NewsContent-Right">
 														<div className="NewsItems-Right">
 															<div className="img-content-Right">
 																<Link to={`/news/${News.id}`} className="ImgNews-Right">
-																	<img className="imgStyleHeader-Right" src={News.News_Images} alt="imgs" />
+																	<img className="imgStyleHeader-Right" src={News.Default_Image} alt="imgs" />
 																</Link>
 															</div>
 															<div className="RoutingNews-Right">
@@ -562,13 +622,13 @@ export const News = () => {
 						</div>
 					</div>
 				</div>
-				{news.Comments?.length > 0 && (
+				{news.GetSelectedNews.comments?.length > 0 && (
 					<div className="container-comments">
-						{news.Comments.map((comment, i) => (
+						{news.GetSelectedNews.comments.map((comment, i) => (
 							<div key={i} id={comment.id + "comment"} className="content-comments">
 								<div className="item-comment">
 									<div className="info-user">
-										<img src={comment.user.User_Img} alt="img" />
+										<img src={comment.user.Default_Image} alt="img" />
 										<p>{comment.user.User_FirstName + " " + comment.user.User_LastName}</p>
 									</div>
 									<div className="text-comment">
@@ -607,7 +667,7 @@ export const News = () => {
 											<button
 												className="but-delete-comment"
 												onClick={() => {
-													setDeleteComment({ ...DeleteComment, id: comment.id, type: "Comment" });
+													setDeleteComment({ ...DeleteComment, id: comment.id, type: "Comment", commentId: null, newsId: news.GetSelectedNews.id });
 												}}
 											>
 												{fa2}
@@ -618,18 +678,12 @@ export const News = () => {
 													<div className="btn-delete-comment">
 														<button
 															onClick={() => {
-																setDeleteComment({ ...DeleteComment, id: null, type: "" });
+																setDeleteComment({ ...DeleteComment, id: null, type: "", commentId: null, newsId: null });
 															}}
 														>
 															{fa3}
 														</button>
-														<button
-															onClick={() => {
-																CommentDelete(DeleteComment.id, DeleteComment.type);
-															}}
-														>
-															{fa2}
-														</button>
+														<button onClick={() => CommentDelete()}>{fa2}</button>
 													</div>
 												</div>
 											)}
@@ -659,18 +713,35 @@ export const News = () => {
 															onClick={async () => {
 																await AxiosInstance({
 																	method: "post",
-																	url: `/news/like?type=comment&id=${comment.id}`,
+																	url: `/news/like-comment?status=like&id=${comment.id}`,
 																})
 																	.then((success) => {
-																		document.getElementById("like-up" + comment.id).textContent = success.data.body.Like_Comment;
-																		document.getElementById("like-down" + comment.id).textContent = success.data.body.UnLike_Comment;
-																		document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+																		setNews({
+																			...news,
+																			GetSelectedNews: {
+																				...news.GetSelectedNews,
+																				comments: news.GetSelectedNews.comments.map((e) =>
+																					e.id === success.data.CommentId
+																						? {
+																								...e,
+																								Like_Comment: success.data.body.comment.Like_Comment,
+																								UnLike_Comment: success.data.body.comment.UnLike_Comment,
+																								likes: e.likes.map((e) => ({
+																									...e,
+																									Like_Comment: success.data.body.Like_Comment,
+																									UnLike_Comment: success.data.body.UnLike_Comment,
+																								})),
+																						  }
+																						: e
+																				),
+																			},
+																		});
 																	})
 																	.catch((err) => {
 																		console.log(err);
 																	});
 															}}
-															className="fa fa-thumbs-up"
+															className={comment.likes?.[0]?.Like_Comment ? "color-like fa fa-thumbs-up" : "fa fa-thumbs-up"}
 														></div>
 														<p id={"like-up" + comment.id} className="like-up">
 															{comment.Like_Comment}
@@ -678,16 +749,33 @@ export const News = () => {
 													</section>
 													<section className="like-down">
 														<div
-															className="fa fa-thumbs-down"
+															className={comment.likes?.[0]?.UnLike_Comment ? "color-unlike fa fa-thumbs-down" : "fa fa-thumbs-down"}
 															onClick={async () => {
 																await AxiosInstance({
 																	method: "post",
-																	url: `/news/like?type=uncomment&id=${comment.id}`,
+																	url: `/news/like-comment?status=unlike&id=${comment.id}`,
 																})
 																	.then((success) => {
-																		document.getElementById("like-up" + comment.id).textContent = success.data.body.Like_Comment;
-																		document.getElementById("like-down" + comment.id).textContent = success.data.body.UnLike_Comment;
-																		document.getElementById("refresh-like").textContent = success.data.body.Like_Count;
+																		setNews({
+																			...news,
+																			GetSelectedNews: {
+																				...news.GetSelectedNews,
+																				comments: news.GetSelectedNews.comments.map((e) =>
+																					e.id === success.data.CommentId
+																						? {
+																								...e,
+																								Like_Comment: success.data.body.comment.Like_Comment,
+																								UnLike_Comment: success.data.body.comment.UnLike_Comment,
+																								likes: e.likes.map((e) => ({
+																									...e,
+																									Like_Comment: success.data.body.Like_Comment,
+																									UnLike_Comment: success.data.body.UnLike_Comment,
+																								})),
+																						  }
+																						: e
+																				),
+																			},
+																		});
 																	})
 																	.catch((err) => {
 																		console.log(err);
@@ -737,7 +825,7 @@ export const News = () => {
 																className={
 																	Response.Role_Responses === "Lord"
 																		? "item-map-responses-Lord"
-																		: Response.Role_Responses === "OnAuthor" && Response.userId === news.CurrentNews.AuthorId
+																		: Response.Role_Responses === "Author" && Response.userId === news.GetSelectedNews.AuthorId
 																		? "item-map-responses-OnAuthor"
 																		: Response.Role_Responses === comment.Role_Comment
 																		? "item-map-responses-main"
@@ -745,7 +833,7 @@ export const News = () => {
 																}
 															>
 																<div id="info-user-response" className="info-user-response">
-																	<img src={Response.user.User_Img} alt="img" />
+																	<img src={Response.user.Default_Image} alt="img" />
 																	<div>
 																		<p>{Response.user.User_FirstName + " " + Response.user.User_LastName}</p>
 																		در پاسخ به
@@ -805,7 +893,13 @@ export const News = () => {
 																		<button
 																			className="but-delete-response"
 																			onClick={() => {
-																				setDeleteComment({ ...DeleteComment, id: Response.id, type: "Response" });
+																				setDeleteComment({
+																					...DeleteComment,
+																					id: Response.id,
+																					type: "Response",
+																					newsId: null,
+																					commentId: Response.commentId,
+																				});
 																			}}
 																		>
 																			{fa2}
@@ -834,18 +928,12 @@ export const News = () => {
 																				<div className="btn-delete-response">
 																					<button
 																						onClick={() => {
-																							setDeleteComment({ ...DeleteComment, id: null, type: "" });
+																							setDeleteComment({ ...DeleteComment, id: null, type: "", commentId: null, newsId: null });
 																						}}
 																					>
 																						{fa3}
 																					</button>
-																					<button
-																						onClick={() => {
-																							CommentDelete(DeleteComment.id, DeleteComment.type);
-																						}}
-																					>
-																						{fa2}
-																					</button>
+																					<button onClick={() => CommentDelete()}>{fa2}</button>
 																				</div>
 																			</div>
 																		)}
@@ -909,7 +997,7 @@ export const News = () => {
 								</Link>
 							</div>
 						)}
-						{(news.CurrentNews.Comment_Status === false && (
+						{(news.GetSelectedNews.Comment_Status === false && (
 							<div className="content-comment-form">
 								<div className="form-comment">
 									<form id="usr-form">

@@ -28,11 +28,11 @@ export const AuthContextProvider = ({ children }) => {
 				},
 			});
 			if (res.data.success) {
-				if (res.data.body.Info.Role === "Lord" || res.data.body.Info.Role === "OnAuthor") {
+				if (res.data.body.Info.Role === "Lord" || res.data.body.Info.Role === "Admin") {
 					setCurrentUser(res.data.body);
 					navigate("/admin");
 				}
-				if (res.data.body.Info.Role === "OnUser") {
+				if (res.data.body.Info.Role === "User") {
 					setCurrentUser(res.data.body);
 					navigate("/user");
 				}

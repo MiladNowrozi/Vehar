@@ -46,7 +46,7 @@ export const LoginAndRegister = () => {
 		}).length;
 		showWarningRegister.style.visibility = "visible";
 		!username_register_validation[2]
-			? (showWarningRegister.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل بک حرف کوچگ باشد!</p>`)
+			? (showWarningRegister.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل بک حرف کوچک باشد!</p>`)
 			: (showWarningRegister.style.visibility = "visible");
 		!username_register_validation[0]
 			? (showWarningRegister.innerHTML = `<p style="color: red;">نام کاربری باید حداقل 8 کاراکتر باشد !</p>`)
@@ -357,12 +357,24 @@ export const LoginAndRegister = () => {
 						<div className="username-forgot">
 							<label htmlFor="username_forgot">نام کاربری جدید</label>
 							<i className="fas fa-user"></i>
-							<input type="username" name="username_forgot" placeholder="نام کاربری جدید..." id="username_forgot" onChange={forgotUsernameChangHandle} />
+							<input
+								type="username"
+								name="username_forgot"
+								placeholder="نام کاربری جدید..."
+								id="username_forgot"
+								onChange={forgotUsernameChangHandle}
+							/>
 						</div>
 						<div className="password-forgot">
 							<label htmlFor="password_forgot">رمز عبور جدید :</label>
 							<i className="fas fa-lock"></i>
-							<input type="password" name="password_forgot" placeholder="رمز عبور جدید ..." id="password_forgot" onChange={forgotPasswordChangHandle} />
+							<input
+								type="password"
+								name="password_forgot"
+								placeholder="رمز عبور جدید ..."
+								id="password_forgot"
+								onChange={forgotPasswordChangHandle}
+							/>
 						</div>
 					</div>
 					<div id="submit-warning-forgot"></div>
@@ -405,17 +417,35 @@ export const LoginAndRegister = () => {
 						</div>
 						<div className="lastName-register">
 							<label htmlFor="lastName_register">نام خانوادگی :</label>
-							<input type="text" name="lastName_register" placeholder="نام خانوادگی ..." id="lastName_register" onChange={LoginAndRegisterChangHandle} />
+							<input
+								type="text"
+								name="lastName_register"
+								placeholder="نام خانوادگی ..."
+								id="lastName_register"
+								onChange={LoginAndRegisterChangHandle}
+							/>
 						</div>
 						<div className="username-register">
 							<label htmlFor="username_register">نام کاربری :</label>
 							<i className="fas fa-user"></i>
-							<input type="username" name="username_register" placeholder="نام کاربری ..." id="username_register" onChange={UsernameRegisterChangHandle} />
+							<input
+								type="username"
+								name="username_register"
+								placeholder="نام کاربری ..."
+								id="username_register"
+								onChange={UsernameRegisterChangHandle}
+							/>
 						</div>
 						<div className="password-register">
 							<label htmlFor="password_register">رمز عبور :</label>
 							<i className="fas fa-lock"></i>
-							<input type="password" name="password_register" placeholder="رمز عبور ..." id="password_register" onChange={LoginAndRegisterChangHandle} />
+							<input
+								type="password"
+								name="password_register"
+								placeholder="رمز عبور ..."
+								id="password_register"
+								onChange={LoginAndRegisterChangHandle}
+							/>
 						</div>
 						<div className="email-register">
 							<label htmlFor="email_register">ایمیل :</label>

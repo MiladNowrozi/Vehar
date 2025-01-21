@@ -1,0 +1,237 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+.user-container {
+	width: 100%;
+	height: 100%;
+	.user-content-container {
+		width: 80%;
+		height: 100%;
+		background-color: green;
+		padding: 10px;
+		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
+		color: #fff;
+		position: relative;
+		h5 {
+			text-align: center;
+			font-size: 16px;
+		}
+		.user-profile-content {
+			display: flex;
+			flex-direction: column;
+			padding: 10px;
+			border-radius: 5px;
+			.user-image-profile {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 15px;
+				img {
+					width: 100px;
+					height: 100px;
+					border-radius: 50%;
+				}
+			}
+			.user-other-profile {
+				width: 50%;
+				padding: 10px;
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+				border-radius: 10px;
+				background-color: rgba(0, 255, 255, 0.5);
+				/* font-size: 12px; */
+				div:nth-child(2) {
+					background-color: #0000002c;
+					padding: 5px;
+					border-radius: 5px;
+					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					p {
+						font-size: 12px;
+					}
+					button {
+						width: auto;
+						border: none;
+						padding: 2px 5px 2px 5px;
+						border-radius: 5px;
+						color: red;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+		.btn-going-to-edit-user {
+			width: 10%;
+			padding: 5px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			position: absolute;
+			transition: all 0.3s;
+			font-size: 12px;
+			left: 15px;
+			bottom: 15px;
+		}
+		.btn-going-to-edit-user:hover {
+			background-color: yellow;
+		}
+	}
+	/* edit part */
+	.user-edit-content-container {
+		width: 80%;
+		height: 100%;
+		background-color: green;
+		padding: 10px;
+		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		color: #fff;
+		h5 {
+			text-align: center;
+			font-size: 16px;
+		}
+		.user-edit-profile-content {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			.user-edit-image-profile {
+				display: flex;
+				flex-direction: column;
+				gap: 30px;
+				label {
+					width: 100px;
+					height: 100px;
+					background-color: #fff;
+					font-size: 12px;
+					text-align: center;
+					border-radius: 50%;
+					color: #000;
+					cursor: pointer;
+					transition: all 0.3s;
+					position: relative;
+					p {
+						width: 100px;
+						height: 50px;
+						position: absolute;
+						padding: 15px;
+						bottom: 0px;
+						font-size: 10px;
+						border-bottom-right-radius: 100px;
+						border-bottom-left-radius: 100px;
+						color: #fff;
+						background: linear-gradient(to bottom, rgba(10, 130, 0, 0) 0%, rgba(57, 85, 35, 0.4) 50%);
+					}
+					p:hover {
+						background: linear-gradient(to bottom, rgba(10, 130, 0.1, 0.1) 0%, rgba(57, 85, 35, 0.4) 50%);
+					}
+					img {
+						width: 100px;
+						height: 100px;
+						border-radius: 50%;
+					}
+				}
+			}
+			.user-edit-inputs-profile {
+				background-color: red;
+				width: 50%;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				padding: 10px;
+				background-color: rgba(0, 255, 255, 0.5);
+				border-radius: 10px;
+				font-size: 12px;
+				.user-edit-name-input,
+				.user-edit-email-input {
+					width: 50%;
+					display: flex;
+					gap: 10px;
+					flex-direction: column;
+					position: relative;
+					p {
+						background-color: #fff;
+						font-size: 12px;
+						color: red;
+						padding: 1px 5px 1px 5px;
+						border-radius: 5px;
+					}
+					input {
+						height: 25px;
+						outline: none;
+						padding: 2px 5px 2px 5px;
+						font-size: 12px;
+						border-radius: 5px;
+						border: none;
+					}
+				}
+				.user-edit-email-input {
+					button {
+						border: none;
+						padding: 2px 5px 2px 5px;
+						cursor: pointer;
+						transition: all 0.5s;
+						border-radius: 5px;
+						position: absolute;
+						left: 10px;
+						background-color: darkred;
+						color: #fff;
+					}
+				}
+			}
+			.user-edit-other-profile {
+				width: 50%;
+				background-color: rgba(0, 255, 255, 0.5);
+				padding: 10px;
+				font-size: 13px;
+				display: flex;
+				flex-direction: column;
+				border-radius: 10px;
+				.user-edit-name-other,
+				.user-edit-password-other {
+					width: 50%;
+					display: flex;
+					flex-direction: column;
+					gap: 5px;
+					input {
+						height: 25px;
+						outline: none;
+						padding: 2px 5px 2px 5px;
+						font-size: 12px;
+						border-radius: 5px;
+						border: none;
+					}
+				}
+			}
+		}
+		position: relative;
+		.btn-action-edit {
+			width: 20%;
+			display: flex;
+			gap: 5px;
+			padding: 5px;
+			margin-top: 50px;
+			position: absolute;
+			left: 15px;
+			bottom: 15px;
+			button {
+				width: 50%;
+				padding: 5px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: all 0.3s;
+				font-size: 12px;
+			}
+			button:hover {
+				background-color: yellow;
+			}
+		}
+	}
+}

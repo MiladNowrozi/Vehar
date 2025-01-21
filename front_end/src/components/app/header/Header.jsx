@@ -39,6 +39,8 @@ function Header() {
 				withCredentials: true,
 			})
 				.then((success) => {
+					console.log(success.data.body);
+
 					SetSliderNews((prev) => ({
 						...prev,
 						SpecialNews: success.data.body.SpecialNews,
@@ -88,7 +90,6 @@ function Header() {
 		}, Timer);
 		return () => clearInterval(interval);
 	}, [Urls, TickerNews.length, Timer]);
-console.log(SliderNews);
 
 	return (
 		<Fragment>
@@ -161,7 +162,7 @@ console.log(SliderNews);
 								{SliderNews.SliderNews.sort((a, b) => b.id - a.id).map((e, i) => (
 									<div key={e.id} className={"milad imgCenter" + i}>
 										<Link className="link-slider-img" to={`/news/${e.id}`}>
-											<img src={e.News_Images} alt="img" />
+											<img src={e.Default_Image} alt="img" />
 										</Link>
 										<div className="TextImgCenter">
 											<div className="TextImg-1">
@@ -208,7 +209,7 @@ console.log(SliderNews);
 						{SliderNews.ChoiceNews.map((e, i) => (
 							<div key={i} className="Content-Gallery">
 								<Link to={`/news/${e.id}`} className="HeadlineNewsHeader-Gallery">
-									<img src={e.News_Images} alt="img" />
+									<img src={e.Default_Image} alt="img" />
 								</Link>
 								<div className="Content-Texts-Dallery">
 									<p className="RoutingNewsHeader-Gallery"> به این جمع بپیوندید!</p>
@@ -254,7 +255,7 @@ console.log(SliderNews);
 								{SliderNews.SubNoteNews.map((e, i) => (
 									<div key={i} className="content-note">
 										<div key={i} className="content-writer">
-											<img src={e.News_Images} alt="img" />
+											<img src={e.Default_Image} alt="img" />
 										</div>
 										<div className="content-write">
 											<div className="titre-note">
@@ -367,7 +368,7 @@ console.log(SliderNews);
 												<div className="img-content">
 													<div className="ImgNews">
 														<Link to={`/news/${News.id}`} className="HeadlineNewsHeader">
-															<img className="imgStyleHeader" src={News.News_Images} alt="imgs" />
+															<img className="imgStyleHeader" src={News.Default_Image} alt="imgs" />
 														</Link>
 													</div>
 												</div>

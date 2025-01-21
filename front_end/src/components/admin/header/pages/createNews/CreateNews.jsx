@@ -1,7 +1,7 @@
 /** @format */
 import React, { useContext, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import "./createnews.css";
 import { AuthContext } from "../../../../../context/authContext";
@@ -9,38 +9,18 @@ import { AxiosInstance } from "../../../../../axiosInstance.js";
 
 export const CreateNews = () => {
 	const NewsId = useLocation().search;
-	const [editNews, setEditNews] = useState({
-		id: null,
-		News_Titre: "",
-		News_Title: "",
-		News_Describe: "",
-		News_Content: "",
-		News_Images: null,
-		Comment_Status: false,
-		MainPageSlider: false,
-		MainPageColumn: false,
-		SubPageSlider: false,
-		SubPageColumn: false,
-		MainNote: false,
-		SubNote: false,
-		MainTicker: false,
-		SubTicker: false,
-		Category: "",
-		SubCategoryId: null,
-		createdAt: null,
-		updatedAt: null,
-		Author: "",
-		AuthorId: null,
-	});
+	const [editNews, setEditNews] = useState([]);
+	console.log(editNews);
 
-	const navigate = useNavigate();
+	const { CurrentUser } = useContext(AuthContext);
+
 	const [input, setInput] = useState({
 		id: null,
 		News_Titre: "",
 		News_Title: "",
 		News_Describe: "",
 		News_Content: "",
-		News_Images: null,
+		Default_Image: null,
 		Comment_Status: false,
 		MainPageSlider: false,
 		MainPageColumn: false,
@@ -54,8 +34,7 @@ export const CreateNews = () => {
 		SubCategoryId: null,
 		createdAt: null,
 		updatedAt: null,
-		Author: "",
-		AuthorId: null,
+		AuthorId: CurrentUser.Info.Id,
 	});
 
 	useEffect(() => {
@@ -63,10 +42,10 @@ export const CreateNews = () => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get${NewsId}`,
+					url: `/news/get${NewsId}&userId=${CurrentUser ? CurrentUser.Info.Id : 0}`,
 				})
 					.then((success) => {
-						setEditNews(success.data.body.CurrentNews);
+						setEditNews(success.data.body.GetSelectedNews);
 					})
 					.catch((err) => {
 						console.log(err);
@@ -77,30 +56,29 @@ export const CreateNews = () => {
 		};
 		FetchData();
 	}, [NewsId]);
-	const { CurrentUser } = useContext(AuthContext);
 
-	const handelChange = (e) => {
-		setInput((prev) => ({
-			...prev,
-			[e.target.name]: e.target.value,
-			AuthorId: CurrentUser && CurrentUser.Info.Role === "Lord" ? CurrentUser.Info.id : navigate("/login-register"),
-		}));
-	};
+	// const handelChange = (e) => {
+	// 	setInput((prev) => ({
+	// 		...prev,
+	// 		[e.target.name]: e.target.value,
+	// 		AuthorId: CurrentUser && CurrentUser.Info.Role === "Lord" ? CurrentUser.Info.id : navigate("/login-register"),
+	// 	}));
+	// };
 
-	const handelEditorChange = (e) => {
-		const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
-		const imageUrls = [];
-		let match;
-		while ((match = imgRegex.exec(e)) !== null) {
-			imageUrls.push(match[1]);
-		}
+	// const handelEditorChange = (e) => {
+	// 	const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
+	// 	const imageUrls = [];
+	// 	let match;
+	// 	while ((match = imgRegex.exec(e)) !== null) {
+	// 		imageUrls.push(match[1]);
+	// 	}
 
-		setInput((prev) => ({
-			...prev,
-			Editor: e,
-			Images: imageUrls.toString(),
-		}));
-	};
+	// 	setInput((prev) => ({
+	// 		...prev,
+	// 		Editor: e,
+	// 		Images: imageUrls.toString(),
+	// 	}));
+	// };
 
 	// const handleChangeCategory = (e) => {
 	// 	const ele = document.getElementsByName("HandleCheckboxCategory");
@@ -130,24 +108,24 @@ export const CreateNews = () => {
 	// 		}));
 	// 	}
 	// };
-	const handleChangeSubCategory = (e) => {
-		const ele = document.getElementsByName("HandleCheckboxSubCategory");
-		if (document.getElementById(e.target.id).checked) {
-			setInput((prev) => ({
-				...prev,
-				SubCategoryId: e.target.id.match(/(\d+)/)[0],
-			}));
-			for (let i = 0; i < ele.length; i++) {
-				ele[i].checked = false;
-				document.getElementById(e.target.id).checked = true;
-			}
-		} else {
-			setInput((prev) => ({
-				...prev,
-				SubCategoryId: "",
-			}));
-		}
-	};
+	// const handleChangeSubCategory = (e) => {
+	// 	const ele = document.getElementsByName("HandleCheckboxSubCategory");
+	// 	if (document.getElementById(e.target.id).checked) {
+	// 		setInput((prev) => ({
+	// 			...prev,
+	// 			SubCategoryId: e.target.id.match(/(\d+)/)[0],
+	// 		}));
+	// 		for (let i = 0; i < ele.length; i++) {
+	// 			ele[i].checked = false;
+	// 			document.getElementById(e.target.id).checked = true;
+	// 		}
+	// 	} else {
+	// 		setInput((prev) => ({
+	// 			...prev,
+	// 			SubCategoryId: "",
+	// 		}));
+	// 	}
+	// };
 
 	const handleSubmit = async () => {
 		if (input.News_Title === "" && input.News_Describe === "" && input.News_Content === "" && input.Category === "") {
@@ -268,6 +246,7 @@ export const CreateNews = () => {
 		],
 		GetSubCategories: [],
 	});
+
 	const [valueSubCategory, setValueSubCategory] = useState({
 		SubCategory: "",
 		Category: "",
@@ -365,7 +344,6 @@ export const CreateNews = () => {
 			...prev,
 			SetGetSubCategoryId: Delete.target.id,
 		}));
-		console.log(Delete);
 
 		document.getElementById("warning-delete-SubCategory").style.display = "flex";
 		document.getElementById(
@@ -486,7 +464,7 @@ export const CreateNews = () => {
 							toolbar: [
 								"ltr rtl preview undo redo blocks fontfamily fontsize bold italic underline strikethrough link image media table mergetags addcomment showcomments spellcheckdialog a11ycheck typography align lineheight checklist numlist bullist indent outdent emoticons charmap removeformat",
 							],
-							images_upload_url: "http://localhost:5000/upload",
+							images_upload_url: "http://localhost:5000/news/create",
 							automatic_uploads: true,
 						}}
 					/>
@@ -498,28 +476,27 @@ export const CreateNews = () => {
 							<div className="server-category">
 								{/* receive Categories from server */}
 								<div className="content-add-category">
-									{Categories.GetCategories.length !== 0 &&
-										Categories.GetCategories.map((Category, i) => {
-											return (
-												<div key={i} className="add-Category">
-													<label htmlFor={Category.id}>
-														<input
-															name="HandleCheckboxCategory"
-															onChange={(e) =>
-																editNews.Category
-																	? setEditNews({ ...editNews, Category: e.target.checked === true && Category.id })
-																	: setInput({ ...input, Category: e.target.checked === true && Category.id })
-															}
-															type="radio"
-															id={Category.id}
-															className="button-category"
-															checked={editNews.id ? editNews.Category === Category.id : input.Category === Category.id}
-														/>
-														{Category.name}
-													</label>
-												</div>
-											);
-										})}
+									{Categories.GetCategories.map((Category, i) => {
+										return (
+											<div key={i} className="add-Category">
+												<label htmlFor={Category.id}>
+													<input
+														name="HandleCheckboxCategory"
+														onChange={(e) =>
+															editNews.id
+																? setEditNews({ ...editNews, Category: e.target.checked === true && Category.id })
+																: setInput({ ...input, Category: e.target.checked === true && Category.id })
+														}
+														type="radio"
+														id={Category.id}
+														className="button-category"
+														checked={editNews.id ? editNews.Category === Category.id : input.Category === Category.id}
+													/>
+													{Category.name}
+												</label>
+											</div>
+										);
+									})}
 								</div>
 								<div id="subcategory-content" className="Create-SubCategory">
 									<h3>
@@ -548,12 +525,14 @@ export const CreateNews = () => {
 														<div key={i} className="btn-checkbox-subC">
 															<label htmlFor={SubCategory.id + "SubCategory"} className="content-checkbox">
 																<input
-																	checked={editNews.SubCategoryId === SubCategory.id}
+																	checked={editNews.id ? editNews.subCategoryId === SubCategory.id : input.SubCategoryId === SubCategory.id}
 																	onChange={(e) =>
-																		setEditNews({
-																			...editNews,
-																			SubCategoryId: e.target.checked ? SubCategory.id : false,
-																		})
+																		editNews.id
+																			? setEditNews({
+																					...editNews,
+																					subCategoryId: e.target.checked && SubCategory.id,
+																			  })
+																			: setInput({ ...input, SubCategoryId: e.target.checked && SubCategory.id })
 																	}
 																	type="radio"
 																	id={SubCategory.id + "SubCategory"}

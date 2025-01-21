@@ -7,11 +7,11 @@ export const ListAuthors = () => {
 	const [ReceiveAllAuthor, setReceiveAllAuthor] = useState([]);
 
 	const [input, setInput] = useState({
-		Author_FirstName: "",
-		Author_LastName: "",
-		Author_UserName: "",
-		Author_Password: "",
-		Author_Email: "",
+		Admin_FirstName: "",
+		Admin_LastName: "",
+		Admin_UserName: "",
+		Admin_Password: "",
+		Admin_Email: "",
 	});
 
 	const AuthorChangHandle = (e) => {
@@ -25,7 +25,7 @@ export const ListAuthors = () => {
 	const UsernameAuthorChangHandle = (e) => {
 		const { value } = e.target;
 		const showWarningAuthor = document.getElementById("submit-warning-author");
-		const Author_UserName_validation = [
+		const Admin_UserName_validation = [
 			/.{8,}/.test(value),
 			/^[\w@#$%&]*$/.test(value),
 			/[a-z]/.test(value),
@@ -33,42 +33,42 @@ export const ListAuthors = () => {
 			/[0-9]/.test(value),
 			/[@#$%&]/.test(value),
 		];
-		const countInvalid = Author_UserName_validation.filter((e) => {
+		const countInvalid = Admin_UserName_validation.filter((e) => {
 			return e === false;
 		}).length;
 		showWarningAuthor.style.display = "flex";
-		!Author_UserName_validation[2]
+		!Admin_UserName_validation[2]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل بک حرف کوچگ باشد!</p>`)
 			: (showWarningAuthor.style.display = "flex");
-		!Author_UserName_validation[0]
+		!Admin_UserName_validation[0]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید حداقل 8 کاراکتر باشد !</p>`)
 			: (showWarningAuthor.style.display = "flex");
-		!Author_UserName_validation[4]
+		!Admin_UserName_validation[4]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یک عدد باشد!</p>`)
 			: (showWarningAuthor.style.display = "flex");
-		!Author_UserName_validation[3]
+		!Admin_UserName_validation[3]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یک حرف بزرگ باشد!</p>`)
 			: (showWarningAuthor.style.display = "flex");
-		!Author_UserName_validation[5]
+		!Admin_UserName_validation[5]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید حداقل شامل یکی از نمادهای @#$%& باشد!</p>`)
 			: (showWarningAuthor.style.display = "flex");
-		!Author_UserName_validation[1]
+		!Admin_UserName_validation[1]
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">نام کاربری باید از کاراکتر های انگلیسی تشکیل شود!</p>`)
 			: (showWarningAuthor.style.display = "flex");
 
 		countInvalid === 6 && (showWarningAuthor.style.display = "none");
 		countInvalid === 0 && (showWarningAuthor.style.display = "none");
-		setInput((prev) => ({ ...prev, Author_UserName: countInvalid === 0 ? value : "" }));
+		setInput((prev) => ({ ...prev, Admin_UserName: countInvalid === 0 ? value : "" }));
 	};
 
 	const EmailAuthorChangHandle = (e) => {
 		const { value } = e.target;
 		const showWarningAuthor = document.getElementById("submit-warning-author");
-		const Author_Email_validation = /^.+@gmail\.com+[\S]?$/.test(value);
+		const Admin_Email_validation = /^.+@gmail\.com+[\S]?$/.test(value);
 		showWarningAuthor.style.display = "flex";
-		!Author_Email_validation && value !== ""
+		!Admin_Email_validation && value !== ""
 			? (showWarningAuthor.innerHTML = `<p style="color: red;">ایمیل باید به @gmail.com ختم شود!</p>`)
-			: (showWarningAuthor.style.display = "none") && setInput((prev) => ({ ...prev, Author_Email: value }));
+			: (showWarningAuthor.style.display = "none") && setInput((prev) => ({ ...prev, Admin_Email: value }));
 	};
 
 	const handelSubmitAuthor = async (e) => {
@@ -79,18 +79,18 @@ export const ListAuthors = () => {
 				showWarningAuthor.style.display = "none";
 			}, 5000);
 		};
-		const Author_FirstName = document.forms["CreateAuthor"]["Author_FirstName"];
-		const Author_LastName = document.forms["CreateAuthor"]["Author_LastName"];
-		const Author_UserName = document.forms["CreateAuthor"]["Author_UserName"];
-		const Author_Password = document.forms["CreateAuthor"]["Author_Password"];
-		const Author_Email = document.forms["CreateAuthor"]["Author_Email"];
+		const Admin_FirstName = document.forms["CreateAuthor"]["Admin_FirstName"];
+		const Admin_LastName = document.forms["CreateAuthor"]["Admin_LastName"];
+		const Admin_UserName = document.forms["CreateAuthor"]["Admin_UserName"];
+		const Admin_Password = document.forms["CreateAuthor"]["Admin_Password"];
+		const Admin_Email = document.forms["CreateAuthor"]["Admin_Email"];
 		const showWarningAuthor = document.getElementById("submit-warning-author");
 		const DataAuthorCheck = [
-			input.Author_FirstName === "",
-			input.Author_LastName === "",
-			input.Author_UserName === "",
-			input.Author_Password === "",
-			input.Author_Email === "",
+			input.Admin_FirstName === "",
+			input.Admin_LastName === "",
+			input.Admin_UserName === "",
+			input.Admin_Password === "",
+			input.Admin_Email === "",
 		].filter((v) => {
 			return v === true;
 		});
@@ -98,22 +98,22 @@ export const ListAuthors = () => {
 			try {
 				await AxiosInstance({
 					method: "post",
-					url: "author/create",
+					url: "admin/create",
 					withCredentials: true,
 					data: {
-						Author_FirstName: input.Author_FirstName,
-						Author_LastName: input.Author_LastName,
-						Author_UserName: input.Author_UserName,
-						Author_Password: input.Author_Password,
-						Author_Email: input.Author_Email,
+						Admin_FirstName: input.Admin_FirstName,
+						Admin_LastName: input.Admin_LastName,
+						Admin_UserName: input.Admin_UserName,
+						Admin_Password: input.Admin_Password,
+						Admin_Email: input.Admin_Email,
 					},
 				})
 					.then((success) => {
-						document.getElementById("Author_FirstName").value = "";
-						document.getElementById("Author_LastName").value = "";
-						document.getElementById("Author_UserName").value = "";
-						document.getElementById("Author_Password").value = "";
-						document.getElementById("Author_Email").value = "";
+						document.getElementById("Admin_FirstName").value = "";
+						document.getElementById("Admin_LastName").value = "";
+						document.getElementById("Admin_UserName").value = "";
+						document.getElementById("Admin_Password").value = "";
+						document.getElementById("Admin_Email").value = "";
 						setReceiveAllAuthor(success.data.body);
 						document.getElementById("empty-author").innerHTML = "";
 						showWarningAuthor.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
@@ -144,46 +144,46 @@ export const ListAuthors = () => {
 				}, 5000);
 			} else {
 				const showWarningAuthor = document.getElementById("submit-warning-author");
-				if (input.Author_FirstName === "") {
+				if (input.Admin_FirstName === "") {
 					showWarningAuthor.style.display = "flex";
 					showWarningAuthor.textContent = "لطفاً فیلد نام را پر کنید!";
-					Author_FirstName.focus(); // Set focus on the name input
+					Admin_FirstName.focus(); // Set focus on the name input
 					setTimeout(() => {
 						showWarningAuthor.style.display = "none";
 					}, 5000);
 					return false;
 				}
-				if (input.Author_LastName === "") {
+				if (input.Admin_LastName === "") {
 					showWarningAuthor.style.display = "flex";
 					showWarningAuthor.textContent = "لطفاً فیلد نام خانوادگی را پر کنید!";
-					Author_LastName.focus(); // Set focus on the name input
+					Admin_LastName.focus(); // Set focus on the name input
 					setTimeout(() => {
 						showWarningAuthor.style.display = "none";
 					}, 5000);
 					return false;
 				}
-				if (input.Author_UserName === "") {
+				if (input.Admin_UserName === "") {
 					showWarningAuthor.style.display = "flex";
 					showWarningAuthor.textContent = "لطفاً فیلد نام کاربری را پر کنید!";
-					Author_UserName.focus(); // Set focus on the name input
+					Admin_UserName.focus(); // Set focus on the name input
 					setTimeout(() => {
 						showWarningAuthor.style.display = "none";
 					}, 5000);
 					return false;
 				}
-				if (input.Author_Password === "") {
+				if (input.Admin_Password === "") {
 					showWarningAuthor.style.display = "flex";
 					showWarningAuthor.textContent = "لطفاً فیلد رمز عبور را پر کنید!";
-					Author_Password.focus(); // Set focus on the name input
+					Admin_Password.focus(); // Set focus on the name input
 					setTimeout(() => {
 						showWarningAuthor.style.display = "none";
 					}, 5000);
 					return false;
 				}
-				if (input.Author_Email === "") {
+				if (input.Admin_Email === "") {
 					showWarningAuthor.style.display = "flex";
 					showWarningAuthor.textContent = "لطفاً فیلد ایمیل را پر کنید!";
-					Author_Email.focus(); // Set focus on the name input
+					Admin_Email.focus(); // Set focus on the name input
 					setTimeout(() => {
 						showWarningAuthor.style.display = "none";
 					}, 5000);
@@ -197,7 +197,7 @@ export const ListAuthors = () => {
 		const res = async () => {
 			await AxiosInstance({
 				method: "get",
-				url: "author/get-all",
+				url: "admin/get-all",
 				withCredentials: true,
 			})
 				.then(async (success) => {
@@ -229,7 +229,7 @@ export const ListAuthors = () => {
 		try {
 			await AxiosInstance({
 				method: "delete",
-				url: `author/delete${IdDeletedAuthor}`,
+				url: `admin/delete?id=${IdDeletedAuthor}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -249,8 +249,8 @@ export const ListAuthors = () => {
 	const handleCancelAuthor = async (Cancel) => {
 		try {
 			await AxiosInstance({
-				method: "put",
-				url: `author/cancel${Cancel.target.id}`,
+				method: "post",
+				url: `admin/dismissal?id=${Cancel.target.id}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -300,15 +300,16 @@ export const ListAuthors = () => {
 								<tr className="map-author">
 									<td className="img-profile-author">
 										<img
-											src={e.Author_Img ? e.Author_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
+											src={e.Admin_Img ? e.Admin_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
 											alt="img-profile"
 										/>
 									</td>
-									<td className="td-info">{e.Author_FirstName + " " + e.Author_LastName}</td>
-									<td className="td-info">{e.emailAuthor}</td>
-									<td className={e.Role !== "OnAuthor" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
-										{e.Role === "OnAuthor" && "نصب"}
-										{e.Role === "OffAuthor" && "عزل"}
+									<td className="td-info">{e.Admin_FirstName + " " + e.Admin_LastName}</td>
+									{console.log(e)}
+									<td className="td-info">{e.emailAdmin.EmailAdmin}</td>
+									<td className={e.Role !== "Admin" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
+										{e.Role === "Admin" && "نصب"}
+										{e.Role === "!Admin" && "عزل"}
 										{e.Role === "Lord" && "مالک"}
 									</td>
 									<td className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</td>
@@ -320,7 +321,7 @@ export const ListAuthors = () => {
 									</td>
 									<td className="ffff">
 										{e.Role !== "Lord" && (
-											<button id={e.id} name={e.Author_FirstName + " " + e.Author_LastName} onClick={handleDeletedAuthor} className="delete-author">
+											<button id={e.id} name={e.Admin_FirstName + " " + e.Admin_LastName} onClick={handleDeletedAuthor} className="delete-author">
 												حذف
 											</button>
 										)}
@@ -348,27 +349,33 @@ export const ListAuthors = () => {
 						<form name="CreateAuthor" className="author-form" id="author-form" action="">
 							<div className="author-input">
 								<div className="firstName-author">
-									<label htmlFor="Author_FirstName">نام :</label>
-									<input type="text" name="Author_FirstName" placeholder="نام ..." id="Author_FirstName" onChange={AuthorChangHandle} />
+									<label htmlFor="Admin_FirstName">نام :</label>
+									<input type="text" name="Admin_FirstName" placeholder="نام ..." id="Admin_FirstName" onChange={AuthorChangHandle} />
 								</div>
 								<div className="lastName-author">
-									<label htmlFor="Author_LastName">نام خانوادگی :</label>
-									<input type="text" name="Author_LastName" placeholder="نام خانوادگی ..." id="Author_LastName" onChange={AuthorChangHandle} />
+									<label htmlFor="Admin_LastName">نام خانوادگی :</label>
+									<input type="text" name="Admin_LastName" placeholder="نام خانوادگی ..." id="Admin_LastName" onChange={AuthorChangHandle} />
 								</div>
 								<div className="username-author">
-									<label htmlFor="Author_UserName">نام کاربری :</label>
+									<label htmlFor="Admin_UserName">نام کاربری :</label>
 									<i className="fas fa-user"></i>
-									<input type="username" name="Author_UserName" placeholder="نام کاربری ..." id="Author_UserName" onChange={UsernameAuthorChangHandle} />
+									<input
+										type="username"
+										name="Admin_UserName"
+										placeholder="نام کاربری ..."
+										id="Admin_UserName"
+										onChange={UsernameAuthorChangHandle}
+									/>
 								</div>
 								<div className="password-author">
-									<label htmlFor="Author_Password">رمز عبور :</label>
+									<label htmlFor="Admin_Password">رمز عبور :</label>
 									<i className="fas fa-lock"></i>
-									<input type="password" name="Author_Password" placeholder="رمز عبور ..." id="Author_Password" onChange={AuthorChangHandle} />
+									<input type="password" name="Admin_Password" placeholder="رمز عبور ..." id="Admin_Password" onChange={AuthorChangHandle} />
 								</div>
 								<div className="email-author">
-									<label htmlFor="Author_Email">ایمیل :</label>
+									<label htmlFor="Admin_Email">ایمیل :</label>
 									<i className="fas fa-envelope"></i>
-									<input type="email" name="Author_Email" placeholder="ایمیل ..." id="Author_Email" onChange={EmailAuthorChangHandle} />
+									<input type="email" name="Admin_Email" placeholder="ایمیل ..." id="Admin_Email" onChange={EmailAuthorChangHandle} />
 								</div>
 							</div>
 							<div className="other-info-author">

@@ -1,7 +1,6 @@
 .Container-footer {
 	width: 100%;
 	height: 80px;
-	margin-top: 10px;
 	background-color: green;
 	display: flex;
 	flex-direction: row;

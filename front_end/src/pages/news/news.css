@@ -210,6 +210,7 @@
 							border-radius: 10px;
 							color: #fff;
 							background-color: rgb(8, 1, 114);
+							z-index: 1;
 							p:first-child {
 								text-align: center;
 							}
@@ -411,7 +412,6 @@
 							font-size: 12px;
 							p {
 								color: darkred;
-								/* font-weight: 300; */
 							}
 						}
 						.like-news-user {
@@ -825,6 +825,10 @@
 						display: flex;
 						direction: ltr;
 						gap: 5px;
+						.color-unlike,
+						.color-like {
+							color: #fff;
+						}
 						div {
 							cursor: pointer;
 						}
@@ -1448,6 +1452,7 @@
 	justify-content: center;
 	align-items: center;
 	margin-top: 10px;
+	margin-bottom: 10px;
 	direction: rtl;
 	.content {
 		width: 48%;

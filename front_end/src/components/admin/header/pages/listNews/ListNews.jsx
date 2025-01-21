@@ -16,7 +16,7 @@ export const ListNews = () => {
 		SearchById: null,
 	});
 	console.log(ReceiveAllNews);
-	
+
 	const [NewsStatus, setNewsStatus] = useState({
 		Comments: [],
 		Count: [],
@@ -228,7 +228,7 @@ export const ListNews = () => {
 									<tr className="map-comment">
 										<td className="count-comment">{i + 1}</td>
 										<td className="img-user-comment">
-											<img src={e.user.User_Img} alt="img" />
+											<img src={e.user.Default_Image} alt="img" />
 										</td>
 										<td
 											onClick={() => {
@@ -237,7 +237,7 @@ export const ListNews = () => {
 												setSelectComment({
 													id: e.id,
 													name: e.user.User_FirstName + " " + e.user.User_LastName,
-													img: e.user.User_Img,
+													img: e.user.Default_Image,
 													titre: e.news.News_Titre,
 													title: e.news.News_Title,
 													comment: e.Comment_Content,

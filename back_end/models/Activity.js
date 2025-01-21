@@ -1,23 +1,25 @@
-import { DataTypes } from "@sequelize/core";
+import { Op } from "@sequelize/core";
 import db from "../db.js";
-import { News } from "./News.js";
+import cron from "node-cron";
 
-export const Activity = db.define("Activity", {
-	Active_Like: {
-		type: DataTypes.BOOLEAN,
-		allowNull: false,
-	},
-	Active_Comment: {
-		type: DataTypes.STRING(255),
-		allowNull: false,
-	},
-});
+export const Activity = db.define("Activity");
 
-News.hasMany(Activity, {
-	foreignKey: {
-		unique: true,
-		allowNull: true,
-		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
-	},
+const deleteOldRecords = async () => {
+	const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+
+	try {
+		await Activity.destroy({
+			where: {
+				createdAt: {
+					[Op.lt]: threeDaysAgo,
+				},
+			},
+		});
+	} catch (error) {
+		console.error("Error deleting old records:", error);
+	}
+};
+
+cron.schedule("0 0 * * *", () => {
+	deleteOldRecords();
 });

@@ -1,0 +1,232 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+/* Default style */
+.container-user-panel {
+	width: 100%;
+	height: 100vh;
+	.content-user-panel {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 5px;
+		justify-content: space-between;
+
+		/* Navbar style */
+		.include-navbar {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: green;
+			.container-nav {
+				.content-nav {
+					.login-logout {
+						margin-top: 8px;
+						margin-left: 10px;
+						.logout-icon {
+							margin-left: 5px;
+							.fa-user-check {
+								cursor: pointer;
+								color: yellow;
+							}
+							.fa-user-check:hover ~ .content-logout {
+								visibility: visible;
+							}
+							.content-logout {
+								width: 10%;
+								background-color: rgb(172, 146, 1);
+								display: flex;
+								flex-direction: column;
+								border-radius: 5px;
+								position: absolute;
+								direction: rtl;
+								padding: 5px;
+								z-index: 1;
+								gap: 5px;
+								font-weight: 300;
+								visibility: hidden;
+								transition: all 1s;
+								.content-info-user {
+									width: 100px;
+									display: flex;
+									flex-direction: column;
+									gap: 5px;
+									img {
+										width: 40px;
+										height: 40px;
+										background-size: cover;
+										border-radius: 30px;
+									}
+									span {
+										font-weight: 500;
+										font-size: 12px;
+										color: #fff;
+									}
+								}
+								.link-logout,
+								.Link-home {
+									width: 100%;
+									padding: 5px;
+									cursor: pointer;
+									border: none;
+									background-color: #eee;
+									text-decoration: none;
+									border-radius: 5px;
+									display: inline-flex;
+									align-items: center;
+									gap: 5px;
+									font-size: 12px;
+									transition: background 0.3s;
+									color: #000;
+								}
+								.Link-home:hover {
+									background-color: yellow;
+								}
+								.link-logout:hover {
+									background-color: yellow;
+								}
+							}
+							.content-logout:hover {
+								visibility: visible;
+							}
+							.content-logout:after {
+								content: "";
+								width: 10px;
+								height: 10px;
+								background-color: rgb(172, 146, 1);
+								position: absolute;
+								top: 0;
+								left: 5px;
+								margin-top: -4px;
+								transform: rotate(45deg);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/* Header style */
+		.include-header {
+			width: 100%;
+			height: 100%;
+			.header {
+				height: 100%;
+				display: flex;
+				direction: rtl;
+				align-items: center;
+				justify-content: space-between;
+				gap: 5px;
+				/* Menu style */
+				.menu-user {
+					width: 15%;
+					height: 100%;
+					background-color: green;
+					display: flex;
+					transition: all 0.5s;
+					flex-direction: column;
+					align-items: center;
+					direction: ltr;
+					gap: 5px;
+					border-radius: 5px;
+					padding: 15px;
+					a {
+						list-style-type: none;
+						text-decoration: none;
+					}
+					.navbar-menu-user {
+						width: 100%;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						position: relative;
+						font-family: Vazirmatn;
+						font-size: 12px;
+						user-select: none;
+						border-radius: 5px;
+						gap: 5px;
+						.animation {
+							width: 60px;
+							height: 48px;
+							.logo-site {
+								width: 60px;
+								height: 42px;
+								display: inline-block;
+								background-size: 70px;
+								background-image: url(/public/VeharYellow.ico);
+								background-repeat: no-repeat;
+							}
+							.animate {
+								position: absolute;
+								top: 5px;
+							}
+						}
+						h1 {
+							color: white;
+							font-size: 12px;
+							margin-top: 10%;
+						}
+					}
+					.header-menu-user {
+						width: 100%;
+						/* height: 84vh; */
+						background-color: rgb(48, 204, 0);
+						display: flex;
+						flex-direction: column;
+						gap: 6px;
+						padding: 5px;
+						border-radius: 5px;
+						overflow-y: auto;
+						direction: rtl;
+						scrollbar-width: thin;
+						&.header-menu-user a > button {
+							width: 100%;
+							height: 40px;
+							font-family: Vazirmatn;
+							display: flex;
+							gap: 10px;
+							align-items: center;
+							border-radius: 5px;
+							border: none;
+							cursor: pointer;
+							padding: 5px;
+							position: relative;
+							font-size: 13px;
+						}
+						&.header-menu-user a,
+						i {
+							text-decoration: none;
+							font-size: 15px;
+						}
+
+						&.header-menu-user a > button:hover {
+							background-color: aqua;
+							border-radius: 5px;
+							transition: all 0.1s;
+							color: rgb(214, 3, 3);
+							transition: all 0.4s;
+						}
+					}
+				}
+				.content-header {
+					width: 85%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					/* overflow-y: auto; */
+				}
+			}
+		}
+
+		/* Footer style */
+		.include-footer {
+			width: 100%;
+		}
+	}
+}

@@ -194,7 +194,7 @@
 				}
 				.content-logout {
 					width: 10%;
-					background-color: rgb(43, 175, 61);
+					background-color: rgb(172, 146, 1);
 					display: flex;
 					flex-direction: column;
 					border-radius: 5px;
@@ -202,32 +202,49 @@
 					direction: rtl;
 					padding: 5px;
 					z-index: 1;
-					gap: 10px;
+					gap: 5px;
 					font-weight: 300;
 					visibility: hidden;
 					transition: all 1s;
-					.img-user {
-						width: 50px;
+					.content-info-user {
+						width: 100px;
 						height: 50px;
-						.img {
-							width: 100%;
-							height: 100%;
+						display: flex;
+						flex-direction: column;
+						gap: 5px;
+						img {
+							width: 30px;
+							height: 30px;
 							background-size: cover;
-							border-radius: 30px;
+							border-radius: 100px;
+						}
+						span {
+							font-weight: 500;
+							font-size: 12px;
+							color: #fff;
 						}
 					}
-					.firstName-user {
-						font-size: 15px;
-					}
-					.btn-logout {
+					.link-logout,
+					.Link-home {
 						width: 100%;
 						padding: 5px;
 						cursor: pointer;
 						border: none;
+						background-color: #eee;
+						text-decoration: none;
 						border-radius: 5px;
 						display: inline-flex;
 						align-items: center;
-						gap: 30px;
+						gap: 5px;
+						font-size: 12px;
+						transition: background 0.3s;
+						color: #000;
+					}
+					.Link-home:hover {
+						background-color: yellow;
+					}
+					.link-logout:hover {
+						background-color: yellow;
 					}
 				}
 				.content-logout:hover {
@@ -237,7 +254,7 @@
 					content: "";
 					width: 10px;
 					height: 10px;
-					background-color: rgb(43, 175, 61);
+					background-color: rgb(172, 146, 1);
 					position: absolute;
 					top: 0;
 					left: 5px;

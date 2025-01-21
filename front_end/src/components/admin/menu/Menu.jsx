@@ -50,16 +50,9 @@ export const MenuLord = () => {
 					</button>
 				</Link>
 				{CurrentUser.Info.Role === "Lord" && (
-					<Link to={"list-users"}>
+					<Link to={"history"}>
 						<button>
-							<i className="fas fa-envelope"></i>ایمیل های دریافتی
-						</button>
-					</Link>
-				)}
-				{CurrentUser.Info.Role === "Lord" && (
-					<Link to={"list-users"}>
-						<button>
-							<i className="fas fa-cog"></i>تنظیمات پایگاه وهار
+							<i className="fas fa-history"></i>خبر های اخیر
 						</button>
 					</Link>
 				)}

@@ -5,9 +5,12 @@ import fs from "fs";
 import { Like } from "../models/Like.js";
 import { Comment } from "../models/Comment.js";
 import { User } from "../models/User.js";
+import { Files } from "../models/Files.js";
 import { Responses } from "../models/Responses.js";
-import { Author } from "../models/Author.js";
+import { Admin } from "../models/Admins.js";
 import { SubCategory } from "../models/SubCategory.js";
+import jwt from "jsonwebtoken";
+import { Activity } from "../models/Activity.js";
 
 // fs.readFile("News.json", "utf8", (err, data) => {
 // 	if (err) {
@@ -16,7 +19,7 @@ import { SubCategory } from "../models/SubCategory.js";
 // 	}
 // 	const users = JSON.parse(data);
 
-//  http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
+// 	http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
 // 	// Access the data
 // 	users.slice(80, 100).forEach(async (user) => {
 // 		const imgRegex = /http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹][^x<>]+.jpg/gi;
@@ -26,17 +29,18 @@ import { SubCategory } from "../models/SubCategory.js";
 // 			imageUrls.push(match[0]);
 // 		}
 // 		try {
-// 			await News.create({
+// 			const k = await News.create({
 // 				News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
 // 				News_Title: user.title.rendered,
 // 				News_Describe: user.excerpt.rendered,
 // 				News_Content: user.content.rendered,
+// 				Default_Image: imageUrls[0].toString(),
 // 				createdAt: new Date(user.date),
-// 				News_Images: imageUrls[0].toString(),
 // 				Category: "local",
 // 				subCategoryId: 5,
 // 				authorId: 1,
 // 			});
+
 // 			console.log("yes");
 // 		} catch (error) {
 // 			console.log(error.message);
@@ -46,24 +50,31 @@ import { SubCategory } from "../models/SubCategory.js";
 
 export default class NewsControllers {
 	static CreateNews = async (req, res) => {
+		console.log(req.user);
+
 		try {
 			const NewsExist = await News.findOne({
 				where: {
-					[Op.or]: [{ News_Titre: req.body.Titre }, { News_Title: req.body.Title }, { News_Describe: req.body.Description }],
+					[Op.or]: [{ News_Titre: req.body.News_Titre }, { News_Title: req.body.News_Title }, { News_Describe: req.body.News_Describe }],
 				},
 			});
 			if (NewsExist === null) {
 				try {
 					await News.create({
-						News_Titre: req.body.Titre,
-						News_Title: req.body.Title,
-						News_Describe: req.body.Description,
-						News_Content: req.body.Editor,
-						News_Images: req.body.Images,
-						News_Status: req.body.NewsStatus,
+						News_Titre: req.body.News_Titre,
+						News_Title: req.body.News_Title,
+						News_Describe: req.body.News_Describe,
+						News_Content: req.body.News_Content,
+						Default_Image: req.body.Default_Image,
 						Comment_Status: req.body.Comment_Status,
-						MainColumn: req.body.MainColumn,
-						MainSubColumn: req.body.SubColumn,
+						MainPageColumn: req.body.MainPageColumn,
+						MainPageSlider: req.body.MainPageSlider,
+						SubPageSlider: req.body.SubPageSlider,
+						SubPageColumn: req.body.SubPageColumn,
+						MainNote: req.body.MainNote,
+						SubNote: req.body.SubNote,
+						MainTicker: req.body.MainTicker,
+						SubTicker: req.body.SubTicker,
 						Category: req.body.CategoryId,
 						subCategoryId: req.body.SubCategoryId,
 						authorId: req.body.AuthorId,
@@ -91,467 +102,6 @@ export default class NewsControllers {
 				message: error.message,
 			});
 		}
-		//  else if (req.body.Category === "cultural-and-artistic") {
-		//   try {
-		//     const NewsExist = await CulturalAndArtistic.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await CulturalAndArtistic.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "political-and-social") {
-		//   try {
-		//     const NewsExist = await PoliticalAndSocial.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await PoliticalAndSocial.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "special-news") {
-		//   try {
-		//     const NewsExist = await SpecialNews.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await SpecialNews.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "full-viewers") {
-		//   try {
-		//     const NewsExist = await FullViewers.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await FullViewers.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "important-news") {
-		//   try {
-		//     const NewsExist = await ImportantNews.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await ImportantNews.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "dialogue") {
-		//   try {
-		//     const NewsExist = await Dialogue.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await Dialogue.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "mahdism") {
-		//   try {
-		//     const NewsExist = await Mahdism.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await Mahdism.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "notes") {
-		//   try {
-		//     const NewsExist = await Notes.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await Notes.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "chosen") {
-		//   try {
-		//     const NewsExist = await Chosen.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await Chosen.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		// } else if (req.body.Category === "reading") {
-		//   try {
-		//     const NewsExist = await Reading.findOne({
-		//       where: {
-		//         [Op.or]: [
-		//           { title: req.body.Title },
-		//           { Description: req.body.Description },
-		//           { content: req.body.Editor },
-		//         ],
-		//       },
-		//     });
-		//     if (NewsExist === null) {
-		//       try {
-		//         await Reading.create({
-		//           title: req.body.Title,
-		//           Description: req.body.Description,
-		//           content: req.body.Editor,
-		//           category: req.body.Category,
-		//           images: req.body.Images,
-		//           userId: req.body.UserId,
-		//           subColumn: req.body.SubColumn,
-		//         });
-		//         res.status(200).json({
-		//           success: true,
-		//           message: "خبر با موفقیت ذخیره شد!",
-		//         });
-		//       } catch (e) {
-		//         res.status(412).json({
-		//           success: false,
-		//           message: e.errors[0].message,
-		//         });
-		//       }
-		//     } else {
-		//       res.status(412).json({
-		//         success: false,
-		//         message: "این خبر قبلاً منتشر شده است!",
-		//       });
-		//     }
-		//   } catch (error) {
-		//     res.status(404).json({
-		//       success: false,
-		//       message: "متاسفانه عملیات بررسی خبر موجود ناموفق بود، لطفاً با پشتیبانی تماس بگیرید!",
-		//     });
-		//   }
-		//   // try {
-		//   //   await News.create({
-		//   //     title: req.body.Title,
-		//   //     Description: req.body.Description,
-		//   //     content: req.body.Editor,
-		//   //     category: req.body.Category,
-		//   //     images: req.body.Images,
-		//   //     userId: req.body.UserId,
-		//   //     subColumn: req.body.SubColumn,
-		//   //   });
-		//   //   res.status(200).json({
-		//   //     success: true,
-		//   //     message: "خبر با موفقیت ذخیره شد!",
-		//   //   });
-		//   // } catch (e) {
-		//   //   res.status(412).json({
-		//   //     success: false,
-		//   //     message: e.errors[0].message,
-		//   //   });
-		//   // }
-		// }
 	};
 	// SEARCH NEWS BY ID OR TITLE
 	static GetAllNews = async (req, res) => {
@@ -594,14 +144,14 @@ export default class NewsControllers {
 							model: SubCategory,
 						},
 						{
-							model: Author,
+							model: Admin,
 						},
 					],
 				});
 
 				// const ResultSearchId = await Promise.all(
 				// 	GetAllResult.rows.map(async (i) => {
-				// 		const author = await i.getAuthor({ raw: true });
+				// 		const author = await i.getAdmin({ raw: true });
 				// 		const subCategory = await i.getSubCategory({ raw: true });
 				// 		return {
 				// 			id: i.id,
@@ -609,10 +159,10 @@ export default class NewsControllers {
 				// 			News_Title: i.News_Title,
 				// 			News_Describe: i.News_Describe,
 				// 			News_Content: i.News_Content,
-				// 			News_Images: i.News_Images,
+				// 			Default_Image: i.Default_Image,
 				// 			News_Status: i.News_Status,
 				// 			Comment_Status: i.Comment_Status,
-				// 			Author: author.Author_FirstName + " " + author.Author_LastName,
+				// 			Author: author.Admin_FirstName + " " + author.Admin_LastName,
 				// 			Category: i.Category,
 				// 			SubCategory: subCategory?.SubCategory,
 				// 			createdAt: i.createdAt,
@@ -655,7 +205,7 @@ export default class NewsControllers {
 				},
 				include: [
 					{
-						model: Author,
+						model: Admin,
 					},
 					{
 						model: SubCategory,
@@ -681,7 +231,7 @@ export default class NewsControllers {
 					},
 					include: [
 						{
-							model: Author,
+							model: Admin,
 						},
 						{
 							model: SubCategory,
@@ -703,8 +253,6 @@ export default class NewsControllers {
 					message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
 				});
 			} catch (e) {
-				console.log(e);
-
 				res.status(500).json({
 					success: false,
 					body: null,
@@ -725,7 +273,7 @@ export default class NewsControllers {
 
 				const ResultSearchId = await Promise.all(
 					GetAllResult.rows.map(async (i) => {
-						const author = await i.getAuthor({ raw: true });
+						const author = await i.getAdmin({ raw: true });
 						const subCategory = await i.getSubCategory({ raw: true });
 						return {
 							id: i.id,
@@ -733,10 +281,10 @@ export default class NewsControllers {
 							News_Title: i.News_Title,
 							News_Describe: i.News_Describe,
 							News_Content: i.News_Content,
-							News_Images: i.News_Images,
+							Default_Image: i.Default_Image,
 							News_Status: i.News_Status,
 							Comment_Status: i.Comment_Status,
-							Author: author.Author_FirstName + " " + author.Author_LastName,
+							Author: author.Admin_FirstName + " " + author.Admin_LastName,
 							Category: i.Category,
 							SubCategory: subCategory?.SubCategory,
 							createdAt: i.createdAt,
@@ -782,7 +330,7 @@ export default class NewsControllers {
 
 			const ResultSearchTitle = await Promise.all(
 				SearchInNewsByTitle.rows.map(async (i) => {
-					const author = await i.getAuthor({ raw: true });
+					const author = await i.getAdmin({ raw: true });
 					const subCategory = await i.getSubCategory({ raw: true });
 					return {
 						id: i.id,
@@ -790,10 +338,10 @@ export default class NewsControllers {
 						News_Title: i.News_Title,
 						News_Describe: i.News_Describe,
 						News_Content: i.News_Content,
-						News_Images: i.News_Images,
+						Default_Image: i.Default_Image,
 						News_Status: i.News_Status,
 						Comment_Status: i.Comment_Status,
-						Author: author.Author_FirstName + " " + author.Author_LastName,
+						Author: author.Admin_FirstName + " " + author.Admin_LastName,
 						Category: i.Category,
 						SubCategory: subCategory?.SubCategory,
 						createdAt: i.createdAt,
@@ -826,86 +374,86 @@ export default class NewsControllers {
 	// GET ONE NEWS
 	static GteNews = async (req, res) => {
 		try {
-			const GetOneNews = await News.findByPk(req.query.id);
-			const GetOneComment = await Comment.findOne({ newsId: GetOneNews.id });
-			if (GetOneNews !== null) {
-				await GetOneNews.update({ Visit_Count: (GetOneNews.Visit_Count += 1) });
-				const author = await GetOneNews.getAuthor({ raw: true });
-				const subCategory = await GetOneNews.getSubCategory({ raw: true });
+			const SelectedNews = await News.findByPk(req.query.id);
+			if (SelectedNews !== null) {
+				await SelectedNews.update({ Visit_Count: (SelectedNews.Visit_Count += 1) });
+
+				if (req.query.userId && req.query.role === "User") {
+					const CheckHistory = await Activity.findOne({ where: { newsId: req.query.id, userId: req.query.userId } });
+					if (!CheckHistory) {
+						await Activity.create({ newsId: req.query.id, userId: req.query.userId });
+					}
+				}
+
 				//
-				const CountSpecial = await News.findAll({ where: { Category: GetOneNews.Category, SubPageSlider: true } });
-				const SendSpecial = await News.findAll({
-					where: { Category: GetOneNews.Category, SubPageSlider: true },
-					limit: CountSpecial.length <= 5 ? CountSpecial.length : 5,
-					offset: CountSpecial.length <= 5 ? 0 : CountSpecial.length - 5,
+				const CountSpecial = await News.findAndCountAll({ where: { Category: SelectedNews.Category, MainPageSlider: true } });
+				const CountChosen = await News.findAndCountAll({ where: { Category: SelectedNews.Category, MainPageColumn: true } });
+
+				const SelectedSpecial = await News.findAll({
+					where: { Category: SelectedNews.Category, SubPageSlider: true },
+					limit: CountSpecial.count <= 5 ? CountSpecial.count : 5,
+					offset: CountSpecial.count <= 5 ? 0 : CountSpecial.count - 5,
+				});
+				const SelectedChosen = await News.findAll({
+					where: { Category: SelectedNews.Category, SubPageSlider: true },
+					limit: CountChosen.count <= 5 ? CountChosen.count : 5,
+					offset: CountChosen.count <= 5 ? 0 : CountChosen.count - 5,
 				});
 				//
-				const CountChosen = await News.findAll({ where: { Category: GetOneNews.Category, SubPageColumn: true } });
-				const SendChosen = await News.findAll({
-					where: { Category: GetOneNews.Category, SubPageColumn: true },
-					limit: CountChosen.length <= 5 ? CountChosen.length : 5,
-					offset: CountChosen.length <= 5 ? 0 : CountChosen.length - 5,
-				});
-				const Comments = await Comment.findAll({
-					where: { newsId: req.query.id, Comment_Status: true },
+
+				const SelectNews = await News.findOne({
+					where: { id: SelectedNews.id },
 					include: [
 						{
-							model: User,
+							model: Admin,
 						},
 						{
-							model: Responses,
+							model: SubCategory,
+							required: false,
+						},
+						{
+							model: Like,
+							where: {
+								userId: req.query.userId,
+							},
+							attributes: ["Like_News"],
+							required: false,
+						},
+						{
+							model: Comment,
+							required: false,
 							include: [
 								{
+									model: Like,
+									where: {
+										userId: req.query.userId,
+									},
+									attributes: ["Like_Comment", "UnLike_Comment"],
+									required: false,
+								},
+								{
 									model: User,
+								},
+								{
+									model: Responses,
+									required: false,
+									include: [
+										{
+											model: User,
+										},
+									],
 								},
 							],
 						},
 					],
 				});
-				const IsLiked = req.user ? await Like.findOne({ where: { userId: req.user.id, newsId: GetOneNews.id } }) : [];
 				// ==========================================
 				res.status(200).json({
 					success: true,
 					body: {
-						CurrentNews: {
-							id: GetOneNews.id,
-							News_Titre: GetOneNews.News_Titre,
-							News_Title: GetOneNews.News_Title,
-							News_Describe: GetOneNews.News_Describe,
-							News_Content: GetOneNews.News_Content,
-							News_Images: GetOneNews.News_Images,
-							Comment_Status: GetOneNews.Comment_Status,
-							MainPageSlider: GetOneNews.MainPageSlider,
-							MainPageColumn: GetOneNews.MainPageColumn,
-							SubPageSlider: GetOneNews.SubPageSlider,
-							SubPageColumn: GetOneNews.SubPageColumn,
-							MainNote: GetOneNews.MainNote,
-							SubNote: GetOneNews.SubNote,
-							Category: GetOneNews.Category,
-							Category: GetOneNews.Category,
-							MainTicker: GetOneNews.MainTicker,
-							SubTicker: GetOneNews.SubTicker,
-							SubCategoryId: subCategory?.id,
-							SubCategoryName: subCategory?.SubCategory,
-							Visit_Count: GetOneNews.Visit_Count,
-							createdAt: GetOneNews.createdAt,
-							updatedAt: GetOneNews.updatedAt,
-							Author: {
-								Id: author.id,
-								Role: author.Role,
-								Img: author?.Author_Img,
-								Name: author.Author_FirstName + " " + author.Author_LastName,
-							},
-						},
-						Likes: {
-							Like_Count: GetOneNews.Like_Count,
-							Like_Comment: GetOneComment ? GetOneComment.Like_Comment : 0,
-							UnLike_Comment: GetOneComment ? GetOneComment.UnLike_Comment : 0,
-						},
-						SendSpecial: SendSpecial,
-						SendChosen: SendChosen,
-						Comments: Comments,
-						IsLiked: IsLiked,
+						GetSelectedSpecial: SelectedSpecial,
+						GetSelectedNews: SelectNews,
+						GetSelectedChosen: SelectedChosen,
 					},
 					message: "خبر با موفقیت دریافت شد!",
 				});
@@ -934,7 +482,7 @@ export default class NewsControllers {
 					News_Title: req.body.News_Title,
 					News_Describe: req.body.News_Describe,
 					News_Content: req.body.News_Content,
-					News_Images: req.body.News_Images,
+					Default_Image: req.body.Default_Image,
 					Comment_Status: req.body.Comment_Status,
 					MainPageSlider: req.body.MainPageSlider,
 					MainPageColumn: req.body.MainPageColumn,
@@ -943,7 +491,7 @@ export default class NewsControllers {
 					MainNote: req.body.MainNote,
 					SubNote: req.body.SubNote,
 					Category: req.body.Category,
-					subCategoryId: req.body.SubCategoryId,
+					subCategoryId: req.body.subCategoryId,
 					authorId: req.body.AuthorId,
 				});
 				res.status(200).json({
@@ -992,210 +540,226 @@ export default class NewsControllers {
 		}
 	};
 	// LIKE NEWS
-	static NewsLike = async (req, res) => {
+	static LikeNews = async (req, res) => {
 		const fa1 = "شما مدیر هستید .";
-		if (req.user.Role === "Lord" || req.user.Role === "OnAuthor") {
+		if (req.user.Role === "Lord" || req.user.Role === "Admin") {
 			res.status(403).json({
 				success: false,
 				message: fa1,
 			});
 		} else {
 			try {
-				if (req.query.type === "news") {
-					const GetOneNews = await News.findByPk(req.query.id);
-					const GetOneComment = await Comment.findOne({ newsId: GetOneNews.id });
-					if (GetOneNews !== null) {
-						const LikeCachk = await Like.findOne({ where: { userId: req.user.id, newsId: GetOneNews.id } });
-						if (LikeCachk === null) {
-							await Like.create({ Like_News: true, userId: req.user.id, newsId: GetOneNews.id });
+				const GetOneNews = await News.findByPk(req.query.id);
+				if (GetOneNews) {
+					const LikeCachk = await Like.findOne({ where: { newsId: GetOneNews.id, userId: req.user.id } });
+					if (LikeCachk) {
+						if (LikeCachk.Like_News) {
+							await LikeCachk.update({ Like_News: false });
+							await GetOneNews.update({ Like_Count: (GetOneNews.Like_Count -= 1) });
+							const ResultLike = await Like.findOne({
+								where: { newsId: GetOneNews.id, userId: req.user.id },
+								attributes: ["Like_News"],
+								include: [{ model: News, attributes: ["Like_Count"] }],
+							});
+							res.status(200).json({
+								body: ResultLike,
+							});
+						} else {
+							await LikeCachk.update({ Like_News: true });
 							await GetOneNews.update({ Like_Count: (GetOneNews.Like_Count += 1) });
-						} else {
-							if (LikeCachk.Like_News === true) {
-								await LikeCachk.update({ Like_News: false });
-								await GetOneNews.update({ Like_Count: (GetOneNews.Like_Count -= 1) });
-							} else {
-								await LikeCachk.update({ Like_News: true });
-								await GetOneNews.update({ Like_Count: (GetOneNews.Like_Count += 1) });
-							}
-						}
-
-						const IsLiked = await Like.findOne({ where: { userId: req.user.id, newsId: GetOneNews.id } });
-						res.status(200).json({
-							body: {
-								Like_Count: GetOneNews.Like_Count,
-								Like_Comment: GetOneComment && GetOneComment.Like_Comment,
-								UnLike_Comment: GetOneComment && GetOneComment.UnLike_Comment,
-								IsLiked: IsLiked,
-							},
-						});
-					} else {
-						res.status(403).json({
-							success: false,
-							message: "News not find!",
-						});
-					}
-				} else if (req.query.type === "comment") {
-					const GetOneComment = await Comment.findByPk(req.query.id);
-					-7;
-					const GetOneNews = await News.findByPk(GetOneComment.newsId);
-					if (GetOneComment !== null) {
-						const LikeCachk = await Like.findOne({ where: { commentId: GetOneComment.id, userId: req.user.id } });
-						if (LikeCachk === null) {
-							await Like.create({
-								Like_Comment: true,
-								newsId: GetOneNews.id,
-								userId: req.user.id,
-								commentId: GetOneComment.id,
-								Role_Like: req.user.Role,
+							const ResultLike = await Like.findOne({
+								where: { newsId: GetOneNews.id, userId: req.user.id },
+								attributes: ["Like_News"],
+								include: [{ model: News, attributes: ["Like_Count"] }],
 							});
-							await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment += 1) });
-						} else {
-							if (LikeCachk.Like_Comment === true) {
-								if (LikeCachk.UnLike_Comment === true) {
-									await LikeCachk.update({
-										Like_Comment: false,
-										UnLike_Comment: false,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										Like_Comment: (GetOneComment.Like_Comment -= 1),
-										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
-									});
-								} else {
-									await LikeCachk.update({
-										Like_Comment: false,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										Like_Comment: (GetOneComment.Like_Comment -= 1),
-									});
-								}
-							} else {
-								if (LikeCachk.UnLike_Comment === true) {
-									await LikeCachk.update({
-										UnLike_Comment: false,
-										Like_Comment: true,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
-										Like_Comment: (GetOneComment.Like_Comment += 1),
-									});
-								} else {
-									await LikeCachk.update({
-										Like_Comment: true,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										Like_Comment: (GetOneComment.Like_Comment += 1),
-									});
-								}
-							}
-						}
-						res.status(200).json({
-							body: {
-								Like_Count: GetOneNews.Like_Count,
-								Like_Comment: GetOneComment.Like_Comment,
-								UnLike_Comment: GetOneComment.UnLike_Comment,
-							},
-						});
-					} else {
-						res.status(403).json({
-							success: false,
-							message: "Comment not find!",
-						});
-					}
-				} else if (req.query.type === "uncomment") {
-					const GetOneComment = await Comment.findByPk(req.query.id);
-					const GetOneNews = await News.findByPk(GetOneComment.newsId);
-					if (GetOneComment !== null) {
-						const LikeCachk = await Like.findOne({ where: { commentId: GetOneComment.id, userId: req.user.id } });
-						if (LikeCachk === null) {
-							await Like.create({
-								UnLike_Comment: true,
-								newsId: GetOneNews.id,
-								userId: req.user.id,
-								commentId: GetOneComment.id,
-								Role_Like: req.user.Role,
+							res.status(200).json({
+								body: ResultLike,
 							});
-							await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
-						} else {
-							if (LikeCachk.UnLike_Comment === true) {
-								if (LikeCachk.Like_Comment === true) {
-									await LikeCachk.update({
-										UnLike_Comment: false,
-										Like_Comment: false,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
-										Like_Comment: (GetOneComment.Like_Comment -= 1),
-									});
-								} else {
-									await LikeCachk.update({
-										UnLike_Comment: false,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
-									});
-								}
-							} else {
-								if (LikeCachk.Like_Comment === true) {
-									await LikeCachk.update({
-										Like_Comment: false,
-										UnLike_Comment: true,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										Like_Comment: (GetOneComment.Like_Comment -= 1),
-										UnLike_Comment: (GetOneComment.UnLike_Comment += 1),
-									});
-								} else {
-									await LikeCachk.update({
-										UnLike_Comment: true,
-										userId: req.user.id,
-										commentId: GetOneComment.id,
-										Role_Like: req.user.Role,
-									});
-									await GetOneComment.update({
-										UnLike_Comment: (GetOneComment.UnLike_Comment += 1),
-									});
-								}
-							}
 						}
-						res.status(200).json({
-							body: {
-								Like_Count: GetOneNews.Like_Count,
-								Like_Comment: GetOneComment.Like_Comment,
-								UnLike_Comment: GetOneComment.UnLike_Comment,
-							},
-						});
 					} else {
-						res.status(403).json({
-							success: false,
-							message: "Comment not find!",
+						await Like.create({ Like_News: true, userId: req.user.id, newsId: GetOneNews.id });
+						await GetOneNews.update({ Like_Count: (GetOneNews.Like_Count += 1) });
+						const ResultLike = await Like.findOne({
+							where: { newsId: GetOneNews.id, userId: req.user.id },
+							attributes: ["Like_News"],
+							include: [{ model: News, attributes: ["Like_Count"] }],
+						});
+						res.status(200).json({
+							body: ResultLike,
 						});
 					}
 				} else {
 					res.status(403).json({
 						success: false,
-						message: "invalid request server!",
+						message: "News not find!",
 					});
+				}
+			} catch (error) {
+				res.status(403).json({
+					success: false,
+					message: error.message,
+				});
+			}
+		}
+	};
+	// LIKE COMMENT
+	static LikeComment = async (req, res) => {
+		const fa1 = "شما مدیر هستید .";
+		if (req.user.Role === "Lord" || req.user.Role === "Admin") {
+			res.status(403).json({
+				success: false,
+				message: fa1,
+			});
+		} else {
+			try {
+				const GetOneComment = await Comment.findByPk(req.query.id);
+				if (GetOneComment) {
+					if (req.query.status === "like") {
+						const LikeCachk = await Like.findOne({ where: { userId: req.user.id, commentId: GetOneComment.id } });
+						if (LikeCachk) {
+							if (LikeCachk.Like_Comment) {
+								if (LikeCachk.UnLike_Comment) {
+									await LikeCachk.update({ UnLike_Comment: false });
+									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["UnLike_Comment", "Like_Comment"],
+										include: [
+											{ model: Comment, required: false, include: [{ Like, required: false }], attributes: ["UnLike_Comment", "Like_Comment"] },
+										],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								} else {
+									await LikeCachk.update({ Like_Comment: false });
+									await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["Like_Comment", "UnLike_Comment"],
+										include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								}
+							} else {
+								if (LikeCachk.UnLike_Comment) {
+									await LikeCachk.update({ UnLike_Comment: false });
+									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["UnLike_Comment", "Like_Comment"],
+										include: [{ model: Comment, attributes: ["UnLike_Comment", "Like_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								} else {
+									await LikeCachk.update({ Like_Comment: true });
+									await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment += 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["Like_Comment", "UnLike_Comment"],
+										include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								}
+							}
+						} else {
+							await Like.create({ Like_Comment: true, userId: req.user.id, commentId: GetOneComment.id });
+							await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment += 1) });
+							const ResultLike = await Like.findOne({
+								where: { commentId: GetOneComment.id, userId: req.user.id },
+								attributes: ["Like_Comment", "UnLike_Comment"],
+								include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comment"] }],
+							});
+							res.status(200).json({
+								body: ResultLike,
+								CommentId: GetOneComment.id,
+							});
+						}
+					} else if (req.query.status === "unlike") {
+						const LikeCachk = await Like.findOne({ where: { userId: req.user.id, commentId: GetOneComment.id } });
+						if (LikeCachk) {
+							if (LikeCachk.UnLike_Comment) {
+								if (LikeCachk.Like_Comment) {
+									await LikeCachk.update({ Like_Comment: false });
+									await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["Like_Comment", "UnLike_Comments"],
+										include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comments"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								} else {
+									await LikeCachk.update({ UnLike_Comment: false });
+									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["UnLike_Comment", "Like_Comment"],
+										include: [{ model: Comment, attributes: ["UnLike_Comment", "Like_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								}
+							} else {
+								if (LikeCachk.Like_Comment) {
+									await LikeCachk.update({ Like_Comment: false });
+									await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment -= 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["Like_Comment", "UnLike_Comment"],
+										include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								} else {
+									await LikeCachk.update({ UnLike_Comment: true });
+									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
+									const ResultLike = await Like.findOne({
+										where: { commentId: GetOneComment.id, userId: req.user.id },
+										attributes: ["UnLike_Comment", "Like_Comment"],
+										include: [{ model: Comment, attributes: ["UnLike_Comment", "Like_Comment"] }],
+									});
+									res.status(200).json({
+										body: ResultLike,
+										CommentId: GetOneComment.id,
+									});
+								}
+							}
+						} else {
+							await Like.create({ UnLike_Comment: true, userId: req.user.id, commentId: GetOneComment.id });
+							await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
+							const ResultLike = await Like.findOne({
+								where: { commentId: GetOneComment.id, userId: req.user.id },
+								attributes: ["Like_Comment", "UnLike_Comment"],
+								include: [{ model: Comment, attributes: ["Like_Comment", "UnLike_Comment"] }],
+							});
+							res.status(200).json({
+								body: ResultLike,
+								CommentId: GetOneComment.id,
+							});
+						}
+					} else {
+						res.status(403).json({
+							success: false,
+							message: "Comment not find!",
+						});
+					}
 				}
 			} catch (error) {
 				res.status(403).json({
@@ -1212,7 +776,7 @@ export default class NewsControllers {
 				const MostVisitedNews = await News.findAll({
 					where: { Category: req.query.cat },
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1222,7 +786,7 @@ export default class NewsControllers {
 				const MostVisitedNews = await News.findAll({
 					where: { Category: req.query.cat },
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1232,7 +796,7 @@ export default class NewsControllers {
 				const MostVisitedNews = await News.findAll({
 					where: { Category: req.query.cat },
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1242,7 +806,7 @@ export default class NewsControllers {
 				const MostVisitedNews = await News.findAll({
 					where: { Category: req.query.cat },
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1252,7 +816,7 @@ export default class NewsControllers {
 				const MostVisitedNews = await News.findAll({
 					where: { Category: req.query.cat },
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1261,7 +825,7 @@ export default class NewsControllers {
 			} else {
 				const MostVisitedNews = await News.findAll({
 					order: [["Visit_Count", "DESC"]], // Order by visitCount in descending order
-					limit: 15, // Limit to the top 10 most visited posts
+					limit: 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -1284,96 +848,56 @@ export default class NewsControllers {
 				const SubNoteCount = await News.findAndCountAll({ where: { Category: req.query.cat, SubNote: true } });
 
 				const SubNoteNews = await News.findAll({
-					where: { Category: req.query.cat, SubNote: true }, // Limit to the top 10 most visited posts
+					where: { Category: req.query.cat, SubNote: true },
 					limit: 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
 				});
 				const ChoiceNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageColumn: true },
-					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6, // Limit to the top 10 most visited posts
+					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6,
 					offset: ChoiceCount.count <= 6 ? 0 : ChoiceCount.count - 6,
 				});
 				const SliderNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
-					limit: 3, // Limit to the top 10 most visited posts
+					limit: 3,
 					offset: SliderCount.count - 3,
 				});
 				const SpecialNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
-					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15, // Limit to the top 10 most visited posts
+					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
 					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
 				});
-				const Result = await Promise.all(
-					SpecialNews.map(async (i) => {
-						const author = await i.getAuthor({ raw: true });
-						const subCategory = await i.getSubCategory({ raw: true });
-						return {
-							id: i.id,
-							News_Titre: i.News_Titre,
-							News_Title: i.News_Title,
-							News_Describe: i.News_Describe,
-							News_Content: i.News_Content,
-							News_Images: i.News_Images,
-							News_Status: i.News_Status,
-							Comment_Status: i.Comment_Status,
-							Author: author.Author_FirstName + " " + author.Author_LastName,
-							Category: i.Category,
-							SubCategory: subCategory?.SubCategory,
-							createdAt: i.createdAt,
-						};
-					})
-				);
 				res.status(200).json({
 					success: true,
-					body: { SpecialNews: Result, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
+					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
 				});
 			} else {
 				const SliderCount = await News.findAndCountAll({ where: { SubPageSlider: true } });
 				const ChoiceCount = await News.findAndCountAll({ where: { SubPageColumn: true } });
 				const SubNoteCount = await News.findAndCountAll({ where: { SubNote: true } });
 				const SubNoteNews = await News.findAll({
-					where: { SubNote: true }, // Limit to the top 10 most visited posts
+					where: { SubNote: true },
 					limit: 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
 				});
 				const ChoiceNews = await News.findAll({
 					where: { SubPageColumn: true },
-					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6, // Limit to the top 10 most visited posts
+					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6,
 					offset: ChoiceCount.count <= 6 ? 0 : ChoiceCount.count - 6,
 				});
 				const SliderNews = await News.findAll({
 					where: { SubPageSlider: true },
-					limit: 3, // Limit to the top 10 most visited posts
+					limit: 3,
 					offset: SliderCount.count - 3,
 				});
 				const SpecialNews = await News.findAll({
 					where: { SubPageSlider: true },
-					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15, // Limit to the top 10 most visited posts
+					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
 					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
 				});
-				const Result = await Promise.all(
-					SpecialNews.map(async (i) => {
-						const author = await i.getAuthor({ raw: true });
-						const subCategory = await i.getSubCategory({ raw: true });
-						return {
-							id: i.id,
-							News_Titre: i.News_Titre,
-							News_Title: i.News_Title,
-							News_Describe: i.News_Describe,
-							News_Content: i.News_Content,
-							News_Images: i.News_Images,
-							News_Status: i.News_Status,
-							Comment_Status: i.Comment_Status,
-							Author: author.Author_FirstName + " " + author.Author_LastName,
-							Category: i.Category,
-							SubCategory: subCategory?.SubCategory,
-							createdAt: i.createdAt,
-						};
-					})
-				);
 				res.status(200).json({
 					success: true,
-					body: { SpecialNews: Result, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
+					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
 				});
 			}
 		} catch (error) {
@@ -1386,7 +910,7 @@ export default class NewsControllers {
 	// COMMENT
 	static Comment = async (req, res) => {
 		const fa1 = "شما مدیر هستید .";
-		if (req.user.Role === "Lord" || req.user.Role === "OnAuthor") {
+		if (req.user.Role === "Lord" || req.user.Role === "Admin") {
 			res.status(403).json({
 				success: false,
 				message: fa1,
@@ -1478,7 +1002,8 @@ export default class NewsControllers {
 							Comment_Content: req.query.text,
 						});
 
-						const SendComments = await Comment.findAll({
+						const SendComments = await Comment.findOne({
+							where: { id: UpdComment.id },
 							include: [
 								{
 									model: User,
@@ -1496,9 +1021,9 @@ export default class NewsControllers {
 						res.status(200).json({
 							success: true,
 							body: {
-								Comments: SendComments,
+								Comment: SendComments,
 								UpdCommentId: UpdComment.id,
-								updatedAt: UpdComment.updatedAt,
+								Type: "Comment",
 							},
 							message: "نظر شما با موفقیت ویرایش شد.",
 						});
@@ -1524,28 +1049,20 @@ export default class NewsControllers {
 							Responses_Content: req.query.text,
 						});
 
-						const SendComments = await Comment.findAll({
-							where: { id: UpdResponse.commentId },
+						const SendResponse = await Responses.findOne({
+							where: { id: UpdResponse.id },
 							include: [
 								{
 									model: User,
-								},
-								{
-									model: Responses,
-									include: [
-										{
-											model: User,
-										},
-									],
 								},
 							],
 						});
 						res.status(200).json({
 							success: true,
 							body: {
-								Response: SendComments,
-								UpdCommentId: UpdResponse.id,
-								updatedAt: UpdResponse.updatedAt,
+								Response: SendResponse,
+								UpdResponseId: UpdResponse.id,
+								Type: "Response",
 							},
 							message: "نظر شما با موفقیت ویرایش شد.",
 						});
@@ -1580,7 +1097,9 @@ export default class NewsControllers {
 				if (Comments !== null) {
 					if (Comments.Role_Comment === req.user.Role && Comments.userId === req.user.id) {
 						await Comment.destroy({ where: { id: Comments.id }, force: true });
+						await Responses.destroy({ where: { commentId: Comments.id }, force: true });
 						const SendComments = await Comment.findAll({
+							where: { newsId: req.query.newsId },
 							include: [
 								{
 									model: User,
@@ -1599,8 +1118,7 @@ export default class NewsControllers {
 							success: true,
 							body: {
 								Comments: SendComments,
-								UpdCommentId: null,
-								updatedAt: null,
+								Type: "Comment",
 							},
 							message: "نظر شما با موفقیت حذف شد.",
 						});
@@ -1625,8 +1143,7 @@ export default class NewsControllers {
 							success: true,
 							body: {
 								Comments: SendComments,
-								UpdCommentId: null,
-								updatedAt: null,
+								Type: "Comment",
 							},
 							message: "نظر شما با موفقیت حذف شد.",
 						});
@@ -1649,18 +1166,12 @@ export default class NewsControllers {
 				if (GetResponse !== null) {
 					if (GetResponse.Role_Responses === req.user.Role && GetResponse.userId === req.user.id) {
 						await Responses.destroy({ where: { id: GetResponse.id }, force: true });
-						const SendComments = await Comment.findAll({
+
+						const SendComments = await Responses.findAll({
+							where: { commentId: req.query.commentId },
 							include: [
 								{
 									model: User,
-								},
-								{
-									model: Responses,
-									include: [
-										{
-											model: User,
-										},
-									],
 								},
 							],
 						});
@@ -1668,8 +1179,8 @@ export default class NewsControllers {
 							success: true,
 							body: {
 								Response: SendComments,
-								UpdCommentId: null,
-								updatedAt: null,
+								Type: "Response",
+								CommentId: Number(req.query.commentId),
 							},
 							message: "نظر شما با موفقیت حذف شد.",
 						});
@@ -1689,7 +1200,7 @@ export default class NewsControllers {
 		} else {
 			res.status(403).json({
 				success: false,
-				message: error.message,
+				message: "invaled server!",
 			});
 		}
 	};
@@ -1704,20 +1215,11 @@ export default class NewsControllers {
 						userId: req.user.id,
 						Role_Responses: req.user.Role,
 					});
-					const idNews = await Comment.findByPk(NewsResponse.commentId);
-					const Comments = await Comment.findAll({
-						where: { newsId: idNews.newsId },
+					const SelectdNews = await Responses.findAll({
+						where: { commentId: NewsResponse.commentId },
 						include: [
 							{
 								model: User,
-							},
-							{
-								model: Responses,
-								include: [
-									{
-										model: User,
-									},
-								],
 							},
 						],
 					});
@@ -1725,8 +1227,9 @@ export default class NewsControllers {
 					res.status(200).json({
 						success: true,
 						body: {
-							UpdateResponses: Comments,
+							UpdateResponses: SelectdNews,
 							currentResponses: NewsResponse.id,
+							CommentId: NewsResponse.commentId,
 						},
 					});
 				} else {
@@ -1752,29 +1255,20 @@ export default class NewsControllers {
 						userId: req.user.id,
 						Role_Responses: req.user.Role,
 					});
-					const idNews = await Comment.findByPk(NewsResToResponse.commentId);
-					const Comments = await Comment.findAll({
-						where: { newsId: idNews.newsId },
+					const SelectdNews = await Responses.findAll({
+						where: { commentId: NewsResToResponse.commentId },
 						include: [
 							{
 								model: User,
 							},
-							{
-								model: Responses,
-								include: [
-									{
-										model: User,
-									},
-								],
-							},
 						],
 					});
-
 					res.status(200).json({
 						success: true,
 						body: {
-							UpdateResToResponse: Comments,
+							UpdateResToResponse: SelectdNews,
 							currentResToResponse: NewsResToResponse.id,
+							CommentId: CommentId.commentId,
 						},
 					});
 				} else {
@@ -1797,7 +1291,7 @@ export default class NewsControllers {
 			const Comments = await Comment.findAndCountAll({
 				where: { Comment_Status: false },
 				include: [
-					{ model: User, attributes: ["id", "User_FirstName", "User_LastName", "User_Img"] },
+					{ model: User, attributes: ["id", "User_FirstName", "User_LastName", "Default_Image"] },
 					{ model: News, attributes: ["id", "News_Titre", "News_Title", "Category"] },
 				],
 			});

@@ -7,12 +7,8 @@ export const AxiosInstance = axios.create({
 AxiosInstance.interceptors.request.use(
 	(config) => {
 		const token = localStorage.getItem("user");
-		if (JSON.parse(token)?.Role === "OnUser" && JSON.parse(token)?.accessToken) {
-			config.headers["Authorization"] = `Bearer ${JSON.parse(token).accessToken}`; // Attach the JWT to the request
-		} else if (JSON.parse(token)?.Role === "OnAuthor" && JSON.parse(token)?.accessToken) {
-			config.headers["Authorization"] = `Bearer ${JSON.parse(token).accessToken}`; // Attach the JWT to the request
-		} else if (JSON.parse(token)?.Role === "Lord" && JSON.parse(token)?.accessToken) {
-			config.headers["Authorization"] = `Bearer ${JSON.parse(token).accessToken}`; // Attach the JWT to the request
+		if (JSON.parse(token)?.accessToken) {
+			config.headers["Authorization"] = `Bearer ${JSON.parse(token).accessToken}`;
 		}
 		return config;
 	},
@@ -28,20 +24,20 @@ AxiosInstance.interceptors.response.use(
 	},
 	async (error) => {
 		const originalRequest = error.config;
-
 		// Check if the error is due to an unauthorized request (401)
 		if (error.response && error.response.status === 401) {
 			const token = localStorage.getItem("user");
 			if (JSON.parse(token)?.refreshToken) {
+				console.log(JSON.parse(token).Info.Role);
 				try {
 					// Attempt to refresh the token
-					const response = await axios.post("http://localhost:5000/auth/refresh-token", {
-						refreshToken: JSON.parse(token)?.refreshToken,
-						Role: JSON.parse(token)?.Info.Role,
+					const response = await axios.post(`http://localhost:5000/auth/refresh-token?Role=${JSON.parse(token).Info.Role}`, {
+						refreshToken: JSON.parse(token).refreshToken,
 					});
+
 					localStorage.setItem("user", JSON.stringify(response.data?.body));
 					// Update the original request with the new token
-					originalRequest.headers["Authorization"] = `Bearer ${response.data?.body?.refreshToken}`;
+					originalRequest.headers["Authorization"] = `Bearer ${response.data?.body.refreshToken}`;
 
 					// Retry the original request
 					return axios(originalRequest);

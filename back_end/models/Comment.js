@@ -51,7 +51,7 @@ News.hasMany(Comment, {
 		unique: false,
 		allowNull: true,
 		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
+		onUpdate: "CASCADE",
 	},
 });
 Comment.hasMany(Like, {
@@ -59,7 +59,7 @@ Comment.hasMany(Like, {
 		unique: false,
 		allowNull: true,
 		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
+		onUpdate: "CASCADE",
 	},
 });
 Comment.hasMany(Responses, {
@@ -67,6 +67,6 @@ Comment.hasMany(Responses, {
 		unique: false,
 		allowNull: true,
 		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
+		onUpdate: "CASCADE",
 	},
 });

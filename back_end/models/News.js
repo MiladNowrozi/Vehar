@@ -1,6 +1,7 @@
 import { DataTypes } from "@sequelize/core";
 import db from "../db.js";
 import { SubCategory } from "./SubCategory.js";
+import { Activity } from "./Activity.js";
 
 export const News = db.define(
 	"News",
@@ -17,12 +18,12 @@ export const News = db.define(
 		News_Content: {
 			type: DataTypes.TEXT("long"),
 		},
-		News_Images: {
-			type: DataTypes.STRING(255),
-			allowNull: true,
-		},
 		Category: {
 			type: DataTypes.STRING(50),
+			allowNull: true,
+		},
+		Default_Image: {
+			type: DataTypes.STRING(255),
 			allowNull: true,
 		},
 		Comment_Status: {
@@ -89,10 +90,19 @@ export const News = db.define(
 	}
 );
 
+News.hasMany(Activity, {
+	foreignKey: {
+		unique: true,
+		allowNull: true,
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+	},
+});
+
 SubCategory.hasMany(News, {
 	foreignKey: {
 		unique: false,
 		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
+		onUpdate: "CASCADE",
 	},
 });

@@ -13,27 +13,29 @@ router.get("/search-user", NewsControllers.SearchUser);
 router.get("/get-all", NewsControllers.GetAllNews);
 router.put("/edit", AuthToken, NewsControllers.UpdNews);
 router.delete("/delete", AuthToken, NewsControllers.DeleNews);
-// Route to like a post
-router.post("/like", AuthToken, NewsControllers.NewsLike);
+// Route to like-news a post
+router.post("/like-news", AuthToken, NewsControllers.LikeNews);
+// Route to like-comment a post
+router.post("/like-comment", AuthToken, NewsControllers.LikeComment);
 // Route to get most visited posts
 router.get("/most-visited", NewsControllers.MostVisited);
 // SLIDER NEWS
 router.get("/sliders", NewsControllers.MainPagSliderAndChoice);
-// CREATE COMMENT
+// COMMENT
 router.get("/comment", AuthToken, NewsControllers.Comment);
-// CREATE COMMENT
+// EDIT COMMENT
 router.put("/comments-edit", AuthToken, NewsControllers.CommentsEdit);
-// CREATE COMMENT
+// DELETE COMMENT
 router.delete("/comments-delete", AuthToken, NewsControllers.CommentsDelete);
 // CREATE RESPONSES
 router.post("/responses", AuthToken, NewsControllers.Responses);
-// CHOSEN STATUS COMMENT
+// STATUS COMMENT
 router.get("/status-comment", AuthToken, NewsControllers.GetStatusComment);
-// CHOSEN STATUS COMMENT
+// VERIFY COMMENT
 router.post("/verification-comment", AuthToken, NewsControllers.VerificationComment);
-// CHOSEN CHOSEN
+// LAST NEWS
 router.get("/last-news", NewsControllers.LastNews);
-// CHOSEN CHOSEN
+// TICKER NEWS
 router.get("/news-tickers", NewsControllers.NewsTickers);
 // ROUTS SUBCATEGORY
 router.post("/create-subcategory", AuthToken, SubCategoryControllers.CreateSubCategory);

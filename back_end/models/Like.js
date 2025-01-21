@@ -25,6 +25,6 @@ News.hasMany(Like, {
 		unique: false,
 		allowNull: true,
 		onDelete: "SET NULL",
-		onUpdate: "SET NULL",
+		onUpdate: "CASCADE",
 	},
 });

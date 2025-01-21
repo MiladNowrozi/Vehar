@@ -10,6 +10,7 @@ import { DefaultAdmin } from "./components/admin/header/pages/defaultPage/Defaul
 import { EditProfile } from "./components/admin/header/pages/editProfile/EditProfile";
 import { ListAuthors } from "./components/admin/header/pages/listAuthors/ListAuthor";
 import { ListUsers } from "./components/admin/header/pages/listUsers/ListUsers";
+import HistoryLord from "./components/admin/header/pages/history/History.jsx";
 //
 import { NotFind } from "./components/admin/admins/page_403_err/NotFind";
 // fonts
@@ -26,7 +27,6 @@ import Archive from "./pages/Archive/Archive";
 import { Admin } from "./components/admin/admins/admin/Admin";
 // user
 import { User } from "./components/users/user/User";
-import { DefaultPage } from "./components/users/page/DefaultPage.jsx";
 import Profile from "./components/users/page/options/profile/Profile.jsx";
 import Likes from "./components/users/page/options/likes/Likes.jsx";
 import Comment from "./components/users/page/options/comments/Comment.jsx";
@@ -50,7 +50,7 @@ export const App = () => {
 				<Route path="/login-register" element={<LoginAndRegister />} />
 				<Route
 					path="/admin"
-					element={CurrentUser?.Info.Role === "Lord" || CurrentUser?.Info.Role === "OnAuthor" ? <Admin /> : <Navigate to="/login-register" />}
+					element={CurrentUser?.Info.Role === "Lord" || CurrentUser?.Info.Role === "Admin" ? <Admin /> : <Navigate to="/login-register" />}
 				>
 					<Route path="/admin" element={<DefaultAdmin />} />
 					<Route path="edit-profile" element={<EditProfile />} />
@@ -59,12 +59,12 @@ export const App = () => {
 					<Route path="list-lords" element={<ListAuthors />} />
 					<Route path="list-users" element={<ListUsers />} />
 					<Route path="list-email" element={<ListUsers />} />
+					<Route path="history" element={<HistoryLord />} />
 				</Route>
 
 				{/* user route */}
-				<Route path="/user" element={CurrentUser?.Info.Role === "OnUser" ? <User /> : <Navigate to="/login-register" />}>
-					<Route path="/user" element={<DefaultPage />} />
-					<Route path="profile" element={<Profile />} />
+				<Route path="/user" element={CurrentUser?.Info.Role === "User" ? <User /> : <Navigate to="/login-register" />}>
+					<Route index element={<Profile />} />
 					<Route path="likes" element={<Likes />} />
 					<Route path="history" element={<History />} />
 					<Route path="comment" element={<Comment />} />

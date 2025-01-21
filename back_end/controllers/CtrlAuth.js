@@ -3,47 +3,145 @@ import jwt from "jsonwebtoken";
 //
 import { EmailUser, User } from "../models/User.js";
 import { sendEmail } from "../utils/sendEmail.js";
-import { Token } from "../models/Token.js";
-import { Author, EmailAuthor } from "../models/Author.js";
-import { Lord } from "../models/Lord.js";
+import { Admin, EmailAdmin } from "../models/Admins.js";
 
 //
-export const RegisterToken = async (req, res) => {
+export const sendEmailVerify = async (req, res, next) => {
+	const accessToken = req.headers["authorization"]?.split(" ")[1];
+
+	if (req.query.status === "false") {
+		jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+			if (err) {
+				return res.status(401).json({
+					success: false,
+					message: "invalid server AuthToken",
+				});
+			}
+			if (req.query.email) {
+				if (user.Role === "Admin") {
+					try {
+						const ExistEmail = await EmailAdmin.findOne({ where: { EmailAdmin: req.query.email }, include: [{ model: Admin }] });
+						if (ExistEmail) {
+							const url = `http://localhost:5000/auth/verify-email?email=${ExistEmail.EmailAdmin}&status=true`;
+							await sendEmail(
+								ExistEmail.EmailAdmin,
+								"تایید ایمیل",
+								"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
+								`<a href=${url}>
+								<button>تایید ایمیل</button>
+							</a>
+							`
+							);
+							res.status(200).json({
+								success: true,
+								message: "ما یک پیامکی را برای ایمیل شما ارسال کردیم، لطفاً آن را تایید کنید .",
+							});
+						} else {
+							res.status(404).json({
+								success: false,
+								message: "not exist admin with this email !",
+							});
+						}
+					} catch (error) {
+						res.status(404).json({
+							success: false,
+							message: error,
+						});
+					}
+				} else {
+					try {
+						const ExistEmail = await EmailUser.findOne({ where: { EmailUser: req.query.email }, include: [{ model: User }] });
+						if (ExistEmail) {
+							const url = `http://localhost:5000/auth/verify-email?email=${ExistEmail.EmailUser}&status=true`;
+							await sendEmail(
+								ExistEmail.EmailUser,
+								"تایید ایمیل",
+								"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
+								`<a href=${url}>
+								<button>تایید ایمیل</button>
+							</a>
+							`
+							);
+							res.status(200).json({
+								success: true,
+								message: "ما یک پیامکی را برای ایمیل شما ارسال کردیم، لطفاً آن را تایید کنید .",
+							});
+						} else {
+							res.status(404).json({
+								success: false,
+								message: "not exist users with this email !",
+							});
+						}
+					} catch (error) {
+						res.status(404).json({
+							success: false,
+							message: error,
+						});
+					}
+				}
+			} else {
+				res.status(404).json({
+					success: false,
+					message: "pleas send a email!",
+				});
+			}
+		});
+	} else {
+		next();
+	}
+};
+
+export const VerifyEmail = async (req, res) => {
 	try {
-		if (req.query.Role === "User") {
-			const TokenExist = await Token.findOne({ where: { Token: req.query.verify_token } });
-			const HeckVerifyUser = await User.findByPk(req.query.Id);
-			if (TokenExist !== null && !HeckVerifyUser.Verify_Email) {
-				await Token.destroy({ where: { Token: req.query.verify_token }, force: true });
+		const ExistEmailUser = await EmailUser.findOne({ where: { EmailUser: req.query.email }, include: [{ model: User }] });
+		const ExistEmailAdmin = await EmailAdmin.findOne({ where: { EmailAdmin: req.query.email }, include: [{ model: Admin }] });
+		if (ExistEmailUser) {
+			if (!ExistEmail.user.Verify_Email) {
 				await User.update(
 					{ Verify_Email: true },
 					{
-						where: { id: HeckVerifyUser.id },
+						where: { id: ExistEmailUser.user.id },
 					}
 				);
-				res.send("ایمیل شما با موفقیت تایید شد، لطفاً به صفحه ورود مراجعه کنید!");
+				res.status(200).json({
+					success: true,
+					message: "ایمیل شما با موفقت تایید شد.",
+				});
 			} else {
-				res.send("لینک اعتبار سنجی ایمیل کاربر، نامعتبر است!");
+				res.status(401).json({
+					success: false,
+					message: "this is email is verify !",
+				});
 			}
-		}
-		if (req.query.Role === "Author") {
-			const TokenExist = await Token.findOne({ where: { Token: req.query.verify_token } });
-			const HeckVerifyAuthor = await Author.findByPk(req.query.Id);
-			if (TokenExist !== null && !HeckVerifyAuthor.Verify_Email) {
-				await Token.destroy({ where: { Token: req.query.verify_token }, force: true });
-				await Author.update(
+		} else if (ExistEmailAdmin) {
+			if (!ExistEmailAdmin.admin.Verify_Email) {
+				await Admin.update(
 					{ Verify_Email: true },
 					{
-						where: { id: HeckVerifyAuthor.id },
+						where: { id: ExistEmailAdmin.admin.id },
 					}
 				);
-				res.send("ایمیل شما با موفقیت تایید شد، لطفاً به صفحه ورود مراجعه کنید!");
+				res.status(200).json({
+					success: true,
+					message: "ایمیل شما با موفقت تایید شد.",
+				});
 			} else {
-				res.send("لینک اعتبار سنجی ایمیل نویسنده، نامعتبر است!");
+				res.status(401).json({
+					success: false,
+					message: "this is email is verify !",
+				});
 			}
+		} else {
+			res.status(404).json({
+				success: false,
+				message: "not exist users with this email !",
+			});
 		}
 	} catch (error) {
-		res.send("لینک نامعتبر است!");
+		res.status(401).json({
+			success: false,
+			message: error,
+		});
 	}
 };
 
@@ -80,48 +178,51 @@ export const PasswordForgot = async (req, res) => {
 
 export const AuthToken = async (req, res, next) => {
 	const accessToken = req.headers["authorization"]?.split(" ")[1];
-	if (!accessToken || accessToken === undefined) {
+
+	if (!accessToken) {
 		return res.sendStatus(401);
 	}
 	jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
 		if (err) {
+			console.log(user);
 			return res.status(401).json({
 				success: false,
 				message: "invalid server AuthToken",
 			});
 		}
+
 		req.user = user;
 		next();
 	});
 };
 
 export const RefreshToken = async (req, res) => {
-	const { refreshToken, Role } = req.body;
-	if (!refreshToken || refreshToken === undefined) {
+	const { refreshToken } = req.body;
+	if (!refreshToken) {
 		return res.sendStatus(401);
 	}
 	try {
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-			if (err || Role !== user.Role) {
+			if (err || req.query.Role !== user.Role) {
 				return res.status(401).json({
 					success: false,
 					message: "invalid server RefreshToken",
 				});
 			}
 
-			if (Role === "OnUser") {
+			if (req.query.Role === "User") {
 				const refreshToken = jwt.sign(
 					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
-						expiresIn: "1h",
+						expiresIn: "72h",
 					}
 				);
 				const accessToken = jwt.sign(
 					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
-						expiresIn: "5s",
+						expiresIn: "60s",
 					}
 				);
 				const UserInfo = await User.findByPk(user.id);
@@ -131,31 +232,31 @@ export const RefreshToken = async (req, res) => {
 						refreshToken: refreshToken,
 						accessToken: accessToken,
 						Info: {
-							Id: UserInfo.id,
-							Role: UserInfo.Role,
-							Img: UserInfo.User_Img,
-							FirstName: UserInfo.User_FirstName,
-							LastName: UserInfo.User_LastName,
+							Id: UserInfo?.id,
+							Role: UserInfo?.Role,
+							Img: UserInfo?.Default_Image,
+							FirstName: UserInfo?.User_FirstName,
+							LastName: UserInfo?.User_LastName,
 						},
 					},
 				});
 			}
-			if (Role === "OnAuthor") {
+			if (req.query.Role === "Admin") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Author_FirstName, LastName: user.Author_LastName, Author_UserName: user.Author_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Author_FirstName, LastName: user.Author_LastName, Author_UserName: user.Author_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "5s",
 					}
 				);
-				const AuthorInfo = await Author.findByPk(user.id);
+				const AuthorInfo = await Admin.findByPk(user.id);
 				res.status(200).json({
 					success: true,
 					body: {
@@ -164,28 +265,28 @@ export const RefreshToken = async (req, res) => {
 						Info: {
 							Role: AuthorInfo.Role,
 							Id: AuthorInfo.id,
-							FirstName: AuthorInfo.Author_FirstName,
-							LastName: AuthorInfo.Author_LastName,
+							FirstName: AuthorInfo.Admin_FirstName,
+							LastName: AuthorInfo.Admin_LastName,
 						},
 					},
 				});
 			}
-			if (Role === "Lord") {
+			if (req.query.Role === "Lord") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Lord_FirstName, LastName: user.Lord_LastName, Lord_UserName: user.Lord_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Lord_FirstName, LastName: user.Lord_LastName, Lord_UserName: user.Lord_UserName },
+					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "5s",
 					}
 				);
-				const LordInfo = await Lord.findByPk(user.id);
+				const LordInfo = await Admin.findByPk(user.id);
 				res.status(200).json({
 					success: true,
 					body: {
@@ -194,9 +295,9 @@ export const RefreshToken = async (req, res) => {
 						Info: {
 							Id: LordInfo.id,
 							Role: LordInfo.Role,
-							Img: LordInfo.Lord_Img,
-							FirstName: LordInfo.Lord_FirstName,
-							LastName: LordInfo.Lord_LastName,
+							Img: LordInfo.Admin_Img,
+							FirstName: LordInfo.Admin_FirstName,
+							LastName: LordInfo.Admin_LastName,
 						},
 					},
 				});
@@ -222,101 +323,49 @@ export const Register = async (req, res) => {
 		try {
 			const UserExist = await User.findOne({
 				where: { User_UserName: username_register },
+				include: [
+					{
+						model: EmailUser,
+						where: { EmailUser: email_register },
+					},
+				],
 			});
-			const getEmail = await EmailUser.findOne({ where: { EmailUser: email_register } });
-			const countRequestUser = await Token.findAll({ where: { Email: email_register } });
 
-			if (countRequestUser.length === 0) {
-				if (UserExist === null && getEmail === null) {
-					const CheckInLord = await Lord.findOne({ where: { Lord_UserName: username_register } });
-					const CheckInAuthor = await Author.findOne({ where: { Author_UserName: username_register } });
-					if (CheckInLord === null && CheckInAuthor === null) {
-						try {
-							const token = jwt.sign({ email: email_register }, "secret");
-							await Token.create({ Token: token, Email: email_register });
-							const ResetToken = await Token.findOne({ where: { Token: token } });
-							const salt = bcrypt.genSaltSync(10);
-							const HashPassword = bcrypt.hashSync(password_register, salt);
-
-							// Hash the password and create a user
-							const CreatedUser = await User.create({
-								User_FirstName: firstName_register,
-								User_LastName: lastName_register,
-								User_UserName: username_register,
-								User_Password: HashPassword,
-							});
-							await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
-							const url = `${process.env.BASE_URL}/auth/register/?verify_token=${token}&Id=${CreatedUser.id}&Role=User`;
-							await sendEmail(
-								email_register,
-								"تایید ایمیل",
-								"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
-								`<a href=${url}>
-									<button>تایید ایمیل</button>
-								</a>
-								`
-							);
-							setTimeout(async () => {
-								await Token.destroy({ where: { Token: ResetToken.Token } });
-							}, 1000 * 60 * 1);
-							res.status(200).json({
-								success: true,
-								message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
-							});
-						} catch (error) {
-							res.status(412).json({
-								success: false,
-								message: error.message,
-							});
-						}
-					} else {
-						res.status(403).json({
-							success: false,
-							message: "نام کاربری نامعتبر است!",
-						});
-					}
-				} else {
-					if (UserExist !== null && !UserExist.Verify_Email) {
-						const countRequestUser = await Token.findAll({ where: { Email: email_register } });
-						if (countRequestUser.length === 0) {
-							const token = jwt.sign({ email: email_register }, "secret");
-							await Token.create({ Token: token, Email: email_register });
-							const ResetToken = await Token.findOne({ where: { Token: token } });
-							const url = `${process.env.BASE_URL}/auth/register/?verify_token=${token}&Id=${UserExist.id}&Role=User`;
-
-							await sendEmail(
-								email_register,
-								"تایید ایمیل",
-								"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
-								`<a href=${url}>
-                  <button>تایید ایمیل</button>
-                 </a>
-                `
-							);
-							setTimeout(async () => {
-								await Token.destroy({ where: { Token: ResetToken.Token } });
-							}, 1000 * 60 * 1);
-							res.status(200).json({
-								success: true,
-								message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
-							});
-						} else {
-							res.status(412).json({
-								success: false,
-								message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
-							});
-						}
-					} else {
-						res.status(412).json({
-							success: false,
-							message: "شما قبلاً ثبت نام کرده اید،لطفاً به صفحه ورود مراجعه کنید!",
-						});
-					}
+			const CheckInAdmin = await Admin.findOne({
+				where: { Admin_UserName: username_register },
+				include: [
+					{
+						model: EmailAdmin,
+						where: { EmailAdmin: email_register },
+					},
+				],
+			});
+			if (!UserExist && !CheckInAdmin) {
+				try {
+					const salt = bcrypt.genSaltSync(10);
+					const HashPassword = bcrypt.hashSync(password_register, salt);
+					const CreatedUser = await User.create({
+						User_FirstName: firstName_register,
+						User_LastName: lastName_register,
+						User_UserName: username_register,
+						User_Password: HashPassword,
+						Default_Image: "http://localhost:5000/download/user?name=avatar-1577909_1920.png",
+					});
+					await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
+					res.status(200).json({
+						success: true,
+						message: "حساب شما با موفقیت ساخته شد، لطفاٌ به صفحه ورود مراجعه کنید .",
+					});
+				} catch (error) {
+					res.status(412).json({
+						success: false,
+						message: error.message,
+					});
 				}
 			} else {
-				res.status(412).json({
+				res.status(403).json({
 					success: false,
-					message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
+					message: "لطفاً از نام کاربری قوی تری استفاده کنید .",
 				});
 			}
 		} catch (error) {
@@ -341,108 +390,53 @@ export const Login = async (req, res) => {
 			const ExistUser = await User.findOne({
 				where: { User_UserName: username_login },
 			});
-			const ExistAuthor = await Author.findOne({
-				where: { Author_UserName: username_login },
-			});
-			const ExistLord = await Lord.findOne({
-				where: { Lord_UserName: username_login },
+			const ExistAdmin = await Admin.findOne({
+				where: { Admin_UserName: username_login },
 			});
 
 			// CHECK USER FULL INFO
-			if (ExistUser !== null && ExistUser.Role === "OnUser") {
+			if (ExistUser !== null && ExistUser.Role === "User") {
 				const GetUserByPk = await User.findByPk(ExistUser.id);
-				const CheckUserFullInfo = await User.findOne({
-					where: {
-						id: GetUserByPk.id,
-						User_UserName: username_login,
-					},
-				});
-				const isPasswordCurrent = bcrypt.compareSync(password_login, CheckUserFullInfo.User_Password);
+				const isPasswordCurrent = bcrypt.compareSync(password_login, GetUserByPk.User_Password);
 				if (isPasswordCurrent) {
-					if (!CheckUserFullInfo.Verify_Email) {
-						try {
-							const getUser = await User.findOne({
-								where: { User_UserName: CheckUserFullInfo.User_UserName },
-							});
-							const getEmail = await EmailUser.findOne({ where: { userId: getUser.id } });
-							const countRequestUser = await Token.findAll({ where: { Email: getEmail.email } });
-
-							if (countRequestUser.length === 0) {
-								const TokenEmail = jwt.sign({ email: getEmail.email }, "secret");
-								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${getUser.id}&Role=user`;
-								const ExistToken = await Token.create({
-									Token: TokenEmail,
-									Email: getEmail.email,
-								});
-								await sendEmail(
-									getEmail.email,
-									"تایید ایمیل",
-									"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
-									`<a href=${url}>
-			            <button>تایید ایمیل</button>
-			            </a>
-			            `
-								);
-								setTimeout(async () => {
-									await Token.destroy({ where: { Token: ExistToken.Token } });
-								}, 1000 * 60 * 5);
-								res.status(200).json({
-									success: false,
-									message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
-								});
-							} else {
-								res.status(404).json({
-									success: false,
-									message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
-								});
-							}
-						} catch (error) {
-							res.status(404).json({
-								success: false,
-								message: "عملیات بررسی صحت ایمیل شما ناموفق بود، لطفاً دوباره تلاش کنید!",
-							});
+					const refreshToken = jwt.sign(
+						{
+							id: ExistUser.id,
+							Role: ExistUser.Role,
+							UserName: ExistUser.User_UserName,
+						},
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "72h",
 						}
-					} else {
-						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
-						const refreshToken = jwt.sign(
-							{
-								id: ExistUser.id,
-								Role: ExistUser.Role,
-								UserName: ExistUser.User_UserName,
-							},
-							process.env.REFRESH_TOKEN_SECRET,
-							{
-								expiresIn: "1h",
-							}
-						);
-						const accessToken = jwt.sign(
-							{
-								id: ExistUser.id,
-								Role: ExistUser.Role,
-								UserName: ExistUser.User_UserName,
-							},
-							process.env.REFRESH_TOKEN_SECRET,
-							{
-								expiresIn: "5s",
-							}
-						);
-						// Store refresh token with expiration time
+					);
+					const accessToken = jwt.sign(
+						{
+							id: ExistUser.id,
+							Role: ExistUser.Role,
+							UserName: ExistUser.User_UserName,
+						},
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "60s",
+						}
+					);
+					// Store refresh token with expiration time
 
-						res.status(200).json({
-							body: {
-								accessToken: accessToken,
-								refreshToken: refreshToken,
-								Info: {
-									Id: ExistUser.id,
-									Role: ExistUser.Role,
-									Img: ExistUser.User_Img,
-									FirstName: ExistUser.User_FirstName,
-									LastName: ExistUser.User_LastName,
-								},
+					res.status(200).json({
+						body: {
+							accessToken: accessToken,
+							refreshToken: refreshToken,
+							Info: {
+								Id: ExistUser.id,
+								Role: ExistUser.Role,
+								Img: ExistUser.Default_Image,
+								FirstName: ExistUser.User_FirstName,
+								LastName: ExistUser.User_LastName,
 							},
-							success: true,
-						});
-					}
+						},
+						success: true,
+					});
 				} else {
 					res.status(404).json({
 						success: false,
@@ -451,91 +445,48 @@ export const Login = async (req, res) => {
 				}
 			}
 			// CHECK Author FULL INFO
-			else if (ExistAuthor !== null && ExistAuthor.Role === "OnAuthor") {
-				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistAuthor.Author_Password);
+			else if (ExistAdmin !== null && ExistAdmin.Role === "Admin") {
+				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistAdmin.Admin_Password);
+
 				if (isPasswordCurrent) {
-					if (!ExistAuthor.Verify_Email) {
-						try {
-							const getEmail = await EmailAuthor.findOne({ where: { authorId: ExistAuthor.id } });
-							const countRequestUser = await Token.findAll({ where: { Email: getEmail.EmailAuthor } });
-
-							if (countRequestUser.length === 0) {
-								const TokenEmail = jwt.sign({ email: getEmail.EmailAuthor }, "secret");
-								const url = `${process.env.BASE_URL}/auth/register/?verify_token=${TokenEmail}&Id=${ExistAuthor.id}&Role=Author`;
-								const ExistToken = await Token.create({
-									Token: TokenEmail,
-									Email: getEmail.EmailAuthor,
-								});
-								await sendEmail(
-									getEmail.EmailAuthor,
-									"تایید ایمیل",
-									"لطفا برای تایید ایمیل خود روی دکمه (تایید ایمیل) کلیک کنید",
-									`<a href=${url}>
-			            <button>تایید ایمیل</button>
-			            </a>
-			            `
-								);
-								setTimeout(async () => {
-									await Token.destroy({ where: { Token: ExistToken.Token } });
-								}, 1000 * 60 * 1);
-								res.status(200).json({
-									success: false,
-									message: "پیامکی جهت تایید ایمیل، به ایمیل شما ارسال شد(اعتبار پیامک 5 دقیقه) !",
-								});
-							} else {
-								res.status(404).json({
-									success: false,
-									message: "درخواست قبلی شما در حال بررسی است لطفاً صبور باشید!",
-								});
-							}
-						} catch (error) {
-							res.status(404).json({
-								success: false,
-								message: "عملیات بررسی صحت ایمیل شما ناموفق بود، لطفاً دوباره تلاش کنید!",
-							});
+					const refreshToken = jwt.sign(
+						{
+							id: ExistAdmin.id,
+							Role: ExistAdmin.Role,
+							UserName: ExistAdmin.Admin_UserName,
+						},
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "1h",
 						}
-					} else {
-						// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
-						const refreshToken = jwt.sign(
-							{
-								id: ExistAuthor.id,
-								Role: ExistAuthor.Role,
-								UserName: ExistAuthor.Author_UserName,
-							},
-							process.env.REFRESH_TOKEN_SECRET,
-							{
-								expiresIn: "1h",
-							}
-						);
-						const accessToken = jwt.sign(
-							{
-								id: ExistAuthor.id,
-								Role: ExistAuthor.Role,
+					);
+					const accessToken = jwt.sign(
+						{
+							id: ExistAdmin.id,
+							Role: ExistAdmin.Role,
+							UserName: ExistAdmin.Admin_UserName,
+						},
+						process.env.REFRESH_TOKEN_SECRET,
+						{
+							expiresIn: "5s",
+						}
+					);
+					// Store refresh token with expiration time
 
-								UserName: ExistAuthor.Author_UserName,
+					res.status(200).json({
+						body: {
+							accessToken: accessToken,
+							refreshToken: refreshToken,
+							Info: {
+								Id: ExistAdmin.id,
+								Role: ExistAdmin.Role,
+								Img: ExistAdmin.Default_Image,
+								FirstName: ExistAdmin.Admin_FirstName,
+								LastName: ExistAdmin.Admin_LastName,
 							},
-							process.env.REFRESH_TOKEN_SECRET,
-							{
-								expiresIn: "5m",
-							}
-						);
-						// Store refresh token with expiration time
-
-						res.status(200).json({
-							body: {
-								accessToken: accessToken,
-								refreshToken: refreshToken,
-								Info: {
-									Id: ExistAuthor.id,
-									Role: ExistAuthor.Role,
-									Img: ExistAuthor.Author_Img,
-									FirstName: ExistAuthor.Author_FirstName,
-									LastName: ExistAuthor.Author_LastName,
-								},
-							},
-							success: true,
-						});
-					}
+						},
+						success: true,
+					});
 				} else {
 					res.status(404).json({
 						success: false,
@@ -545,17 +496,17 @@ export const Login = async (req, res) => {
 			}
 
 			// CHECK Lord  FULL INFO
-			else if (ExistLord !== null && ExistAuthor.Role === "Lord") {
+			else if (ExistAdmin !== null && ExistAdmin.Role === "Lord") {
 				// Asynchronous run 👇
 				// const buf = randomBytes(256).toString("hex");
-				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistLord.Lord_Password);
+				const isPasswordCurrent = bcrypt.compareSync(password_login, ExistAdmin.Admin_Password);
 				if (isPasswordCurrent) {
 					// full time: Date.now() + 7 * 24 * 60 * 60 * 1000  // days
 					const refreshToken = jwt.sign(
 						{
-							id: ExistLord.id,
-							Role: ExistLord.Role,
-							UserName: ExistLord.Lord_UserName,
+							id: ExistAdmin.id,
+							Role: ExistAdmin.Role,
+							UserName: ExistAdmin.Admin_UserName,
 						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
@@ -564,13 +515,13 @@ export const Login = async (req, res) => {
 					);
 					const accessToken = jwt.sign(
 						{
-							id: ExistLord.id,
-							Role: ExistLord.Role,
-							UserName: ExistLord.Lord_UserName,
+							id: ExistAdmin.id,
+							Role: ExistAdmin.Role,
+							UserName: ExistAdmin.Admin_UserName,
 						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
-							expiresIn: "5m",
+							expiresIn: "5s",
 						}
 					);
 					// Store refresh token with expiration time
@@ -580,11 +531,11 @@ export const Login = async (req, res) => {
 							accessToken: accessToken,
 							refreshToken: refreshToken,
 							Info: {
-								Id: ExistLord.id,
-								Role: ExistLord.Role,
-								Img: ExistLord.Lord_Img,
-								FirstName: ExistLord.Lord_FirstName,
-								LastName: ExistLord.Lord_LastName,
+								Id: ExistAdmin.id,
+								Role: ExistAdmin.Role,
+								Img: ExistAdmin.Default_Image,
+								FirstName: ExistAdmin.Admin_FirstName,
+								LastName: ExistAdmin.Admin_LastName,
 							},
 						},
 					});

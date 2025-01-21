@@ -90,21 +90,20 @@ const Navbar = () => {
 		<div className="NavbarContainer">
 			<div className="formContent">
 				<div className="login-logout">
-					{CurrentUser?.Info.Role === "OnUser" ? (
+					{CurrentUser?.Info.Role === "User" ? (
 						<div className="logout-icon">
 							<i className="fas fa-user-check"></i>
 							<div className="content-logout">
-								<span className="img-user">
-									{CurrentUser.Info.Img === null ? (
-										<i className="fas fa-user-circle"></i>
-									) : (
-										<img className="img" src={CurrentUser.Info.Img} alt="img-user" />
-									)}
-								</span>
-								<span className="firstName-user">{CurrentUser.Info.FirstName + " " + CurrentUser.Info.LastName}</span>
-								<button type="button" onClick={logout} className="btn-logout">
+								<div className="content-info-user">
+									{CurrentUser.Info.Img === null ? <i className="fas fa-user-circle"></i> : <img src={CurrentUser.Info.Img} alt="img-user" />}
+									<span>سلام {CurrentUser.Info.FirstName} !</span>
+								</div>
+								<Link type="button" to={"/user"} className="Link-home">
+									<i className="fa fa-home"></i>صفحه من
+								</Link>
+								<Link type="button" onClick={logout} className="link-logout">
 									<i className="fa fa-sign-out"></i>خروج
-								</button>
+								</Link>
 							</div>
 						</div>
 					) : (
@@ -169,7 +168,7 @@ const Navbar = () => {
 											>
 												<div className="content-map-search">
 													<div className="text-title-and-titre">
-														<img src={e.News_Images} alt="img" />
+														<img src={e.Default_Image} alt="img" />
 														<div className="titre-news-search">
 															<p dangerouslySetInnerHTML={{ __html: e.News_Titre }}></p>
 														</div>

@@ -60,7 +60,7 @@ export const ListUsers = () => {
 		try {
 			await AxiosInstance({
 				method: "put",
-				url: `user/put${Cancel.target.id}`,
+				url: `user/dismissal?id=${Cancel.target.id}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -109,13 +109,17 @@ export const ListUsers = () => {
 								<tr className="map-user">
 									<td className="img-profile-user">
 										<img
-											src={e.User_Img ? e.User_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
+											src={
+												e.Default_Image
+													? e.Default_Image
+													: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"
+											}
 											alt="img-profile"
 										/>
 									</td>
 									<td className="td-info">{e.User_FirstName + " " + e.User_LastName}</td>
 									<td className="td-info">{e.emailUser}</td>
-									<td className={e.Role !== "OnUser" ? "red td-info" : "green td-info"}>{e.Role === "OnUser" ? "فعال" : "غیر فعال"}</td>
+									<td className={e.Role !== "User" ? "red td-info" : "green td-info"}>{e.Role === "User" ? "فعال" : "غیر فعال"}</td>
 									<td className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</td>
 									<td className="td-info">
 										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
@@ -128,7 +132,7 @@ export const ListUsers = () => {
 											حذف
 										</button>
 										<button id={e.id} onClick={handleCancelUser} className="cancel-user">
-											{e.Role === "OnUser" ? "غیر فعال" : "فعال"}
+											{e.Role === "User" ? "غیر فعال" : "فعال"}
 										</button>
 									</td>
 								</tr>
