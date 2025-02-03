@@ -1,0 +1,33 @@
+
+services:
+  backend:
+    image: node:18-alpine
+    command: npm start
+    working_dir: /app
+    volumes:
+      - ./back_end:/app
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: 927649
+      DB_NAME: vehar
+    restart: always
+
+  frontend:
+    image: node:18-alpine
+    container_name: frontend_app
+    working_dir: /app
+    command: /app/node_modules/.bin/react-scripts start
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
+    volumes:
+      - ./front_end:/app
+    depends_on:
+      - backend      
+    restart: always
+
+

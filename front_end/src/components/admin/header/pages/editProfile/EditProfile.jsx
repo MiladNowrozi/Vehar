@@ -19,7 +19,7 @@ export const EditProfile = () => {
 			<div className="admin-edit-page">
 				<div className="admin-image-profile-edit">
 					<img
-						src="http://localhost:5000/get-images?name=/2024/09/%DB%B2%DB%B0%DB%B2%DB%B4%DB%B0%DB%B9%DB%B1%DB%B4_%DB%B2%DB%B2%DB%B1%DB%B7%DB%B1%DB%B1-scaled.jpg"
+						src={`${process.env.REACT_APP_BASE_URL}/get-images?name=/2024/09/%DB%B2%DB%B0%DB%B2%DB%B4%DB%B0%DB%B9%DB%B1%DB%B4_%DB%B2%DB%B2%DB%B1%DB%B7%DB%B1%DB%B1-scaled.jpg`}
 						alt="admin"
 					/>
 					<form action="/">

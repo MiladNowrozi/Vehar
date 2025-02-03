@@ -464,7 +464,7 @@ export const CreateNews = () => {
 							toolbar: [
 								"ltr rtl preview undo redo blocks fontfamily fontsize bold italic underline strikethrough link image media table mergetags addcomment showcomments spellcheckdialog a11ycheck typography align lineheight checklist numlist bullist indent outdent emoticons charmap removeformat",
 							],
-							images_upload_url: "http://localhost:5000/news/create",
+							images_upload_url: process.env.REACT_APP_BASE_URL + "/news/create",
 							automatic_uploads: true,
 						}}
 					/>

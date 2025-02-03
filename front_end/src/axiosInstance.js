@@ -1,6 +1,6 @@
 import axios from "axios";
 export const AxiosInstance = axios.create({
-	baseURL: "http://localhost:5000", // Replace with your API base URL
+	baseURL: process.env.REACT_APP_BASE_URL, // Replace with your API base URL
 });
 
 // // Request interceptor to attach JWT to headers
@@ -31,7 +31,7 @@ AxiosInstance.interceptors.response.use(
 				console.log(JSON.parse(token).Info.Role);
 				try {
 					// Attempt to refresh the token
-					const response = await axios.post(`http://localhost:5000/auth/refresh-token?Role=${JSON.parse(token).Info.Role}`, {
+					const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/refresh-token?Role=${JSON.parse(token).Info.Role}`, {
 						refreshToken: JSON.parse(token).refreshToken,
 					});
 
