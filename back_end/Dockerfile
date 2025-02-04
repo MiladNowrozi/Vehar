@@ -6,13 +6,13 @@ WORKDIR /app
 
 
 COPY package*.json ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm npm install --verbose
 
 
 COPY . .
 
-
 EXPOSE 5000
 
+ENTRYPOINT [ "/app/entrypoint.sh" ]
 
 CMD ["node", "index.js"]
