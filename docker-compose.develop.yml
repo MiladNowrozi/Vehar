@@ -1,7 +1,7 @@
 
 services:
   mysql:
-    image: mysql:9.2
+    image: mysql:8.0.28
     environment:
       MYSQL_ROOT_PASSWORD: e96q3BHEv6HSqOXK7r8CnTTeMl0
     volumes:
@@ -21,7 +21,7 @@ services:
     build:
       context: ./front_end
       args:
-        REACT_APP_BASE_URL: http://localhost:5000
+        REACT_APP_BASE_URL: http://130.185.77.82:5000
     ports:
       - 127.0.0.1:3000:3000
     depends_on:
