@@ -1,0 +1,34 @@
+
+services:
+  mysql:
+    image: mysql:9.2
+    environment:
+      MYSQL_ROOT_PASSWORD: e96q3BHEv6HSqOXK7r8CnTTeMl0
+    volumes:
+      - mysql:/var/lib/mysql
+  backend:
+    build:
+      context: ./back_end
+    env_file:
+      - ./back.env
+    ports:
+      - 5000:5000
+    restart: always
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./front_end
+      args:
+        REACT_APP_BASE_URL: http://localhost:5000
+    ports:
+      - 127.0.0.1:3000:3000
+    depends_on:
+      - backend      
+    restart: always
+
+volumes:
+  mysql:
+
+
