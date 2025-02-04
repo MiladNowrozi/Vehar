@@ -22,6 +22,9 @@ app.use(cors({ origin: process.env.CORS_ORIGIN.split(","), credentials: true }))
 
 // res.status(200).json({ location: `http://localhost:5000/get-images?name=${req.file.filename}` });
 // middlewares
+app.get('/', (req, res) => {
+	res.send("this is a test api");
+})
 app.use("/auth", authRouter);
 app.use("/upload", AuthToken, uploadRouter);
 app.use("/download", downloadRouter);
