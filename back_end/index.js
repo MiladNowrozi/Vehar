@@ -14,7 +14,7 @@ import { AuthToken } from "./controllers/CtrlAuth.js";
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
-app.use(cors({ origin: process.env.CORS_ORIGIN.split(","), credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 //
 // const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 
@@ -22,9 +22,9 @@ app.use(cors({ origin: process.env.CORS_ORIGIN.split(","), credentials: true }))
 
 // res.status(200).json({ location: `http://localhost:5000/get-images?name=${req.file.filename}` });
 // middlewares
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
 	res.send("this is a test api");
-})
+});
 app.use("/auth", authRouter);
 app.use("/upload", AuthToken, uploadRouter);
 app.use("/download", downloadRouter);

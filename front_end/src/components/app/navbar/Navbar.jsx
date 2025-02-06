@@ -221,12 +221,14 @@ const Navbar = () => {
 						</div>
 					)}
 				</div>
-				<div className="SloganVehar">
-					<span style={{ color: "#fff" }}>سیاسی هستیم</span> جناحی نیستیم
-				</div>
 				<MenuHamburger />
 			</div>
-			{LiveDate()}
+			<div className="SloganVehar">
+				{LiveDate()}
+				<div className="Slogan">
+					<span style={{ color: "#fff" }}>سیاسی هستیم</span> جناحی نیستیم
+				</div>
+			</div>
 			<div className="NavbarMenuText defNavbarMenuText">
 				<div onClick={() => (window.location.href = "/")} className="Logo NavbarLogo defaultNavbarLogo">
 					<div className="DefaultLogoGreen animation-logo-green">

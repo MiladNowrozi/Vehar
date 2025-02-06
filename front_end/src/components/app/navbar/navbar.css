@@ -265,7 +265,6 @@
 		}
 	}
 	.full-time {
-		width: 15%;
 		font-size: 12px;
 		display: flex;
 		gap: 5px;
@@ -314,5 +313,46 @@
 		gap: 5px;
 		font-size: 12px;
 		color: yellow;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.NavbarContainer {
+		.NavbarLogo {
+			width: 50px;
+			height: 50px;
+			background-size: 60px;
+			right: 20px;
+			top: 12px;
+			.animation-logo-green {
+				top: 8px;
+				right: 5px;
+			}
+		}
+		.formContent {
+			width: 30%;
+			justify-content: unset;
+			gap: 65px;
+			.login-logout {
+				margin-left: 15px;
+			}
+		}
+		.full-time {
+			font-size: 10px;
+			font-weight: 400;
+		}
+		.NavbarMenuText {
+			display: flex;
+			justify-content: flex-end;
+			margin-right: unset;
+			.options-select {
+				display: none;
+			}
+		}
+		.SloganVehar {
+			align-items: flex-start;
+			flex-direction: column;
+			font-size: 10px;
+		}
 	}
 }

@@ -118,6 +118,11 @@
 			}
 		}
 	}
+
+	@media screen and (max-width: 480px) {
+		
+	}
+
 	.loading-data-6 {
 		width: 95%;
 		height: 200px;
@@ -388,6 +393,20 @@
 				}
 			}
 		}
+
+		/* writ media query for ContentSlider */
+		@media screen and (max-width: 480px) {
+			.ContentSlider {
+				width: 100%;
+				height: 500px;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				border-radius: 5px;
+				position: relative;
+			}
+		}
+
 		.loading-data-5 {
 			width: 100%;
 			display: flex;
