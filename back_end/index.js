@@ -14,7 +14,7 @@ import { AuthToken } from "./controllers/CtrlAuth.js";
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN.split(","), credentials: true }));
 //
 // const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 
