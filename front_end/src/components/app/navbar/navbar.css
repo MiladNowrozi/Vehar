@@ -318,6 +318,7 @@
 
 @media screen and (max-width: 480px) {
 	.NavbarContainer {
+		justify-content: unset;
 		.NavbarLogo {
 			width: 50px;
 			height: 50px;
@@ -331,7 +332,6 @@
 		}
 		.formContent {
 			width: 30%;
-			justify-content: unset;
 			gap: 65px;
 			.login-logout {
 				margin-left: 15px;
@@ -350,6 +350,7 @@
 			}
 		}
 		.SloganVehar {
+			width: 50%;
 			align-items: flex-start;
 			flex-direction: column;
 			font-size: 10px;
