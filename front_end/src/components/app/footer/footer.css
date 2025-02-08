@@ -3,13 +3,12 @@
 	height: 80px;
 	background-color: green;
 	display: flex;
-	flex-direction: row;
 	/* justify-content: center; */
 	align-items: center;
 	position: relative;
 
 	.Content-Right-Menu {
-		width: 20%;
+		width: unset;
 		height: 80px;
 		/* background-color: red; */
 		position: relative;
@@ -33,17 +32,15 @@
 	}
 
 	.Content-Center-Menu {
-		width: 60%;
+		width: unset;
 		height: 70px;
-		/* background-color: antiquewhite; */
 		display: flex;
 		flex-direction: column;
-		/* justify-content: center; */
 		align-items: center;
 		margin-top: 10px;
-
+		position: relative;
 		.Footer-Menu {
-			width: 50%;
+			width: unset;
 			height: 30px;
 			display: flex;
 			justify-content: center;
@@ -88,7 +85,7 @@
 	}
 
 	.Content-Left-Menu {
-		width: 20%;
+		width: unset;
 		height: 80px;
 		/* background-color: aqua; */
 		display: flex;
@@ -123,6 +120,70 @@
 				cursor: pointer;
 				font-size: 20px;
 				text-decoration: none;
+			}
+		}
+	}
+}
+
+/* write media query */
+
+@media screen and (max-width: 480px) {
+	.Container-footer {
+		justify-content: space-between;
+		margin-top: 12px;
+		.Content-Right-Menu {
+			width: 50px;
+			height: 50px;
+			border-radius: 100px;
+			right: 10px;
+			top: 0;
+			.Footer-Logo {
+				width: 50px;
+				height: 50px;
+				background-size: 57px;
+				right: 4px;
+				top: 2px;
+			}
+			.animation-logo-yellow-footer {
+				right: 20%;
+				top: 10px;
+			}
+		}
+
+		.Content-Center-Menu {
+			width: 75%;
+			font-size: 10px;
+			.copy-right {
+				width: 90%;
+				font-size: 10px;
+				text-align: center;
+			}
+			.Footer-Menu {
+				width: 100%;
+				.Link-footer-1,
+				.Link-footer-2,
+				.Link-footer-3,
+				.Link-footer-4,
+				.Link-footer-5 {
+					font-size: 12px;
+					font-weight: 400;
+				}
+			}
+			.copy-right {
+				direction: rtl;
+				width: 100%;
+			}
+		}
+		.Content-Left-Menu {
+			.networcs {
+				width: 100%;
+				height: 100vh;
+				flex-direction: column;
+				margin-left: 5px;
+				gap: 1px;
+				.eitaa-foter {
+					margin-right: 4px;
+				}
 			}
 		}
 	}
