@@ -86,7 +86,7 @@ export default class NewsControllers {
 				} catch (e) {
 					res.status(412).json({
 						success: false,
-						message: e.errors[0].message,
+						message: e.errors,
 					});
 				}
 			} else {
