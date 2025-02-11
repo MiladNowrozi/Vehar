@@ -94,7 +94,7 @@ export default class NewsControllers {
 					success: false,
 					message: "این خبر قبلاً منتشر شده است!",
 				});
-			}git remote set-url origin https://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@github.com/NorouziMilad/Vehar.git
+			}
 		} catch (error) {
 			// console.log(error);
 			res.status(404).json({
