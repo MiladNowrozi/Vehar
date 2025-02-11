@@ -50,7 +50,7 @@ import { Activity } from "../models/Activity.js";
 
 export default class NewsControllers {
 	static CreateNews = async (req, res) => {
-		console.log(req.user);
+		console.log(req.body);
 
 		try {
 			const NewsExist = await News.findOne({
@@ -86,7 +86,7 @@ export default class NewsControllers {
 				} catch (e) {
 					res.status(412).json({
 						success: false,
-						message: e,
+						message: e.errors[0].message,
 					});
 				}
 			} else {
