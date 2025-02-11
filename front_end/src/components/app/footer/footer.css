@@ -8,7 +8,7 @@
 	position: relative;
 
 	.Content-Right-Menu {
-		width: unset;
+		width: 20%;
 		height: 80px;
 		/* background-color: red; */
 		position: relative;
@@ -32,7 +32,7 @@
 	}
 
 	.Content-Center-Menu {
-		width: unset;
+		width: 60%;
 		height: 70px;
 		display: flex;
 		flex-direction: column;
@@ -40,7 +40,7 @@
 		margin-top: 10px;
 		position: relative;
 		.Footer-Menu {
-			width: unset;
+			width: 50%;
 			height: 30px;
 			display: flex;
 			justify-content: center;
@@ -80,12 +80,13 @@
 			bottom: 5px;
 			font-family: Vazirmatn;
 			font-size: 12px;
+			direction: rtl;
 			color: rgb(238, 255, 0);
 		}
 	}
 
 	.Content-Left-Menu {
-		width: unset;
+		width: 20%;
 		height: 80px;
 		/* background-color: aqua; */
 		display: flex;
@@ -93,7 +94,6 @@
 		justify-content: center;
 		/* align-items: center; */
 		position: relative;
-
 		.networcs {
 			width: 50%;
 			height: 30px;
@@ -175,11 +175,15 @@
 			}
 		}
 		.Content-Left-Menu {
+			width: unset;
+			margin-left: 0px;
+			background-color: red;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			.networcs {
-				width: 100%;
 				height: 100vh;
 				flex-direction: column;
-				margin-left: 5px;
 				gap: 1px;
 				.eitaa-foter {
 					margin-right: 4px;
