@@ -26,4 +26,4 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
       - name: Deploy to VPS
         run: |
-          ssh ubuntu@130.185.77.82 'bash -s' < ./deploy.sh
+          ssh milad@130.185.77.82 'bash -s' < ./deploy.sh
