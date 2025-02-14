@@ -3,7 +3,7 @@ services:
   mysql:
     image: mysql:8.0.28
     environment:
-      MYSQL_ROOT_PASSWORD: e96q3BHEv6HSqOXK7r8CnTTeMl0
+      MYSQL_ROOT_PASSWORD: 927649
     volumes:
       - mysql:/var/lib/mysql
   backend:
