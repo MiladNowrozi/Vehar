@@ -14,17 +14,13 @@ import { AuthToken } from "./controllers/CtrlAuth.js";
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
-app.use(cors({ origin: process.env.CORS_ORIGIN.split(","), credentials: true }));
-//
+app.use(cors({ origin: ["http://localhost:3000", "http://locklhost:5000", "http://130.185.77.82"], credentials: true }));
 // const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 
 // await db.sync({ alter: true });
 
 // res.status(200).json({ location: `http://localhost:5000/get-images?name=${req.file.filename}` });
 // middlewares
-app.get("/", (req, res) => {
-	res.send("this is a test api");
-});
 app.use("/auth", authRouter);
 app.use("/upload", AuthToken, uploadRouter);
 app.use("/download", downloadRouter);
@@ -36,5 +32,5 @@ app.use("*", (req, res) => {
 });
 
 app.listen(5000, () => {
-	console.log("connected to backend!!!!!");
+	console.log("connected to backend !");
 });
