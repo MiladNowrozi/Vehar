@@ -50,8 +50,6 @@ import { Activity } from "../models/Activity.js";
 
 export default class NewsControllers {
 	static CreateNews = async (req, res) => {
-		console.log(req.body);
-
 		try {
 			const NewsExist = await News.findOne({
 				where: {
@@ -474,6 +472,8 @@ export default class NewsControllers {
 	};
 	// UPDATE ONE NEWS
 	static UpdNews = async (req, res) => {
+		console.log(req.body);
+
 		try {
 			const GetOneNewsForUpd = await News.findByPk(req.body.id);
 			if (GetOneNewsForUpd) {
@@ -490,6 +490,8 @@ export default class NewsControllers {
 					SubPageColumn: req.body.SubPageColumn,
 					MainNote: req.body.MainNote,
 					SubNote: req.body.SubNote,
+					MainTicker: req.body.MainTicker,
+					SubTicker: req.body.SubTicker,
 					Category: req.body.Category,
 					subCategoryId: req.body.subCategoryId,
 					authorId: req.body.AuthorId,
