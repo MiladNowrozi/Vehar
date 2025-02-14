@@ -176,11 +176,10 @@
 		}
 		.Content-Left-Menu {
 			width: unset;
-			margin-left: 0px;
+			margin-left: 4px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background-color: fuchsia;
 			.networcs {
 				height: 100vh;
 				flex-direction: column;
