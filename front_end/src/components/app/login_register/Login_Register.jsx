@@ -301,7 +301,7 @@ export const LoginAndRegister = () => {
 	return (
 		<div className="container-auth">
 			{/* start login part */}
-			<div id="login-content" style={{ right: "35%" }} className="login-content">
+			<div id="login-content" style={{ right: window.innerWidth > 480 ? "35%" : "10%" }} className="login-content">
 				<p className="title-login">وارد شوید!</p>
 				<form className="login-form" id="login-form" action="">
 					<div className="login-input">
@@ -325,7 +325,7 @@ export const LoginAndRegister = () => {
 							<button
 								onClick={() => {
 									document.getElementById("login-content").style.right = "100%";
-									document.getElementById("forgot-password").style.right = "35%";
+									document.getElementById("forgot-password").style.right = window.innerWidth > 480 ? "35%" : "10%";
 								}}
 								type="button"
 							>
@@ -333,8 +333,8 @@ export const LoginAndRegister = () => {
 							</button>
 							<button
 								onClick={() => {
-									document.getElementById("login-content").style.right = "100%";
-									document.getElementById("register-content").style.right = "35%";
+									document.getElementById("login-content").style.right = window.innerWidth > 480 ? "100%" : "-80%";
+									document.getElementById("register-content").style.right = window.innerWidth > 480 ? "35%" : "10%";
 								}}
 								type="button"
 							>
@@ -345,7 +345,7 @@ export const LoginAndRegister = () => {
 				</form>
 			</div>
 			{/* start forgot password */}
-			<div id="forgot-password" style={{ right: "-30%" }} className="forgot-password">
+			<div id="forgot-password" style={{ right: window.innerWidth > 480 ? "-35%" : "-80%" }} className="forgot-password">
 				<p className="title-forgot">فراموشی رمز عبور</p>
 				<form className="forgot-form" id="forgot-form" action="">
 					<div className="forgot-input">
@@ -386,7 +386,7 @@ export const LoginAndRegister = () => {
 							<button
 								onClick={() => {
 									document.getElementById("forgot-password").style.right = "100%";
-									document.getElementById("register-content").style.right = "35%";
+									document.getElementById("register-content").style.right = window.innerWidth > 480 ? "35%" : "10%";
 								}}
 								type="button"
 							>
@@ -394,8 +394,8 @@ export const LoginAndRegister = () => {
 							</button>
 							<button
 								onClick={() => {
-									document.getElementById("forgot-password").style.right = "-35%";
-									document.getElementById("login-content").style.right = "35%";
+									document.getElementById("forgot-password").style.right = window.innerWidth > 480 ? "-35%" : "100%";
+									document.getElementById("login-content").style.right = window.innerWidth > 480 ? "35%" : "10%";
 								}}
 								type="button"
 							>
@@ -407,7 +407,7 @@ export const LoginAndRegister = () => {
 			</div>
 			{/* start register part */}
 
-			<div id="register-content" style={{ right: "-35%" }} className="register-content">
+			<div id="register-content" style={{ right: window.innerWidth > 480 ? "-35%" : "-80%" }} className="register-content">
 				<p className="title-register">ثبت نام کنید!</p>
 				<form className="register-form" id="register-form" action="">
 					<div className="register-input">
@@ -461,8 +461,8 @@ export const LoginAndRegister = () => {
 						</button>
 						<button
 							onClick={() => {
-								document.getElementById("login-content").style.right = "35%";
-								document.getElementById("register-content").style.right = "-30%";
+								document.getElementById("login-content").style.right = window.innerWidth > 480 ? "35%" : "10%";
+								document.getElementById("register-content").style.right = window.innerWidth > 480 ? "-35%" : "-80%";
 							}}
 							type="button"
 						>
