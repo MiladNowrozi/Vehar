@@ -29,7 +29,6 @@
 	scrollbar-width: thin;
 	scrollbar-color: rgb(199, 10, 3) rgba(179, 0, 0, 0);
 	transition: all 0.1s;
-	border-radius: 5px;
 
 	.ContentMenu {
 		width: 100%;
@@ -190,6 +189,9 @@
 				}
 				.SocialNetworks {
 				}
+			}
+			.NavMenu {
+				border-top-right-radius: 0px;
 			}
 		}
 	}
