@@ -186,8 +186,10 @@
 				}
 				.ListMenuSite {
 					height: unset;
+					padding-bottom: 15px;
 				}
 				.SocialNetworks {
+					border-radius: 0 0 0 20px;
 				}
 			}
 			.NavMenu {
