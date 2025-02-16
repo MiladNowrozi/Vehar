@@ -57,7 +57,6 @@ export const PageMenu = () => {
 								</li>
 							</ul>
 						</div>
-						<div className="ColumnCenterMenu"></div>
 						<div className="ListMenuSite">
 							<ul>
 								<li>

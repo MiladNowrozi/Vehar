@@ -30,7 +30,6 @@
 	scrollbar-color: rgb(199, 10, 3) rgba(179, 0, 0, 0);
 	transition: all 0.1s;
 	border-radius: 5px;
-	background-color: rgba(35, 170, 1, 0.836);
 
 	.ContentMenu {
 		width: 100%;
@@ -45,7 +44,8 @@
 		.NavMenu {
 			width: 100%;
 			height: 50px;
-			background-color: #cc3838b9;
+			background-color: rgb(99, 0, 0);
+			color: #fff;
 			border-radius: 20px 20px 0px 0px;
 			font-family: Vazirmatn;
 			font-size: 8px;
@@ -54,7 +54,6 @@
 			flex-direction: row;
 			justify-content: space-around;
 			align-items: center;
-
 			.fa-times {
 				font-size: 15px;
 				cursor: pointer;
@@ -73,7 +72,6 @@
 				height: 280px;
 				background-color: rgb(181, 184, 1);
 				font-size: 13px;
-				margin-bottom: 5px;
 				transition: all 0.1s;
 
 				&.ListMenuNews li {
@@ -84,7 +82,7 @@
 					flex-direction: column;
 				}
 
-				&.ListMenuNews::before {
+				/* &.ListMenuNews::before {
 					content: "";
 					width: 22%;
 					height: 16px;
@@ -108,7 +106,7 @@
 					border-radius: 0px 0px 20px 0px;
 					transition: all 1s;
 					z-index: 1;
-				}
+				} */
 
 				&.ListMenuNews a:hover {
 					color: red;
@@ -120,18 +118,6 @@
 					font-family: Vazirmatn;
 				}
 			}
-			.ColumnCenterMenu {
-				width: 95%;
-				height: 32px;
-				background-color: #020202;
-				position: absolute;
-				bottom: 258px;
-				background-size: 50px;
-				background-image: url(../../navbar/logo/VeharYellow.svg);
-				background-repeat: no-repeat;
-				background-position: center;
-			}
-
 			.ListMenuSite {
 				width: 100%;
 				height: 233px;
@@ -145,30 +131,6 @@
 					margin-top: 25px;
 					display: flex;
 					flex-direction: column;
-				}
-
-				&.ListMenuSite::before {
-					content: "";
-					width: 22%;
-					height: 16px;
-					background-color: rgb(231, 230, 233);
-					border-radius: 0px 20px 0px 0px;
-					position: absolute;
-					left: 0%;
-					bottom: 258px;
-					transition: all 1s;
-				}
-
-				&.ListMenuSite::after {
-					content: "";
-					width: 22%;
-					height: 16px;
-					background-color: rgb(231, 230, 233);
-					border-radius: 20px 0px 0px 0px;
-					position: absolute;
-					right: 0%;
-					bottom: 258px;
-					transition: all 1s;
 				}
 
 				&.ListMenuSite a:hover {
@@ -217,5 +179,18 @@
 @media screen and (max-width: 480px) {
 	.ContentPageMenu {
 		width: 45%;
+		height: unset;
+		.ContentMenu {
+			height: unset;
+			.ListMenuCenter {
+				.ListMenuNews {
+				}
+				.ListMenuSite {
+					height: unset;
+				}
+				.SocialNetworks {
+				}
+			}
+		}
 	}
 }
