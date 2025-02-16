@@ -359,6 +359,11 @@
 			.recommend-container {
 				.content-recommend {
 					width: 100%;
+					.inputs {
+						input {
+							width: 60%;
+						}
+					}
 				}
 			}
 		}
