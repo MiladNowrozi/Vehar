@@ -70,6 +70,7 @@ function Header() {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [TickerNews, setTickerNews] = useState([]);
 	const Timer = 10000;
+
 	useEffect(() => {
 		const SendData = async () => {
 			await AxiosInstance({
