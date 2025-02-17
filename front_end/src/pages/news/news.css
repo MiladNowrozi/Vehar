@@ -1543,6 +1543,11 @@
 				:nth-child(2) {
 					order: -1;
 				}
+				.loading-data-2 {
+					width: 95%;
+					height: 250px;
+					margin-top: 15px;
+				}
 				.Result_News_Container_Center {
 					width: 96%;
 					margin-top: 15px;
@@ -1613,6 +1618,7 @@
 					.ContainerLeft {
 						.ContainerHeaderLeft {
 							padding: unset;
+							background-image: unset;
 							.NewsContainer-left {
 								.NewsContent-left {
 									.NewsItems-left {
@@ -1643,6 +1649,7 @@
 					& .ContainerRight {
 						& .ContainerHeaderRight {
 							padding: unset;
+							background-image: unset;
 							.NewsContainer-Right {
 								.NewsContent-Right {
 									.NewsItems-Right {
