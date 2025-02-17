@@ -1060,6 +1060,7 @@
 						.link-slider-img,
 						img {
 							position: unset;
+							height: 280px;
 						}
 					}
 					.TextImgCenter {
