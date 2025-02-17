@@ -1575,14 +1575,23 @@
 							.Section_News_Result {
 								.News_Result {
 									padding: 5px;
+									.content-center-current-news {
+										img {
+											height: 250px;
+											margin-bottom: unset;
+											margin-top: unset;
+										}
+									}
 								}
 							}
 						}
 					}
 					.content-info-news {
 						padding: 10px;
+						direction: unset;
 						.date-eye-section {
 							gap: 5px;
+							direction: rtl;
 							.date-news {
 								display: flex;
 								gap: 5px;
