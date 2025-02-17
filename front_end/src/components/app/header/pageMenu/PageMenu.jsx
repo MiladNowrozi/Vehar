@@ -2,7 +2,7 @@ import "./pagemenu.css";
 export const MenuHamburger = () => {
 	function handleHamburger() {
 		const changeStyleMenu = document.querySelector("#ContentPageMenu");
-		if (window.innerWidth < 480) {
+		if (window.innerWidth < 500) {
 			changeStyleMenu.style.right === "-45%" ? (changeStyleMenu.style.right = "0%") : (changeStyleMenu.style.right = "-45%");
 		} else {
 			changeStyleMenu.style.right === "-18%" ? (changeStyleMenu.style.right = "0%") : (changeStyleMenu.style.right = "-18%");
@@ -24,11 +24,11 @@ export const MenuHamburger = () => {
 
 export const PageMenu = () => {
 	function offMenu() {
-		document.querySelector("#ContentPageMenu").style.right = window.innerWidth < 480 ? "-45%" : "-18%";
+		document.querySelector("#ContentPageMenu").style.right = window.innerWidth < 500 ? "-45%" : "-18%";
 	}
 	return (
 		<div>
-			<div id="ContentPageMenu" className="ContentPageMenu DefaultCPM" style={{ right: window.innerWidth < 480 ? "-45%" : "-18%" }}>
+			<div id="ContentPageMenu" className="ContentPageMenu DefaultCPM" style={{ right: window.innerWidth < 500 ? "-45%" : "-18%" }}>
 				<div className="ContentMenu">
 					<div className="NavMenu">
 						<i onClick={offMenu} className="fas fa-times"></i>

@@ -17,7 +17,7 @@ function Header() {
 		SubNoteNews: [],
 	});
 	function oofMenuPage() {
-		document.querySelector("#ContentPageMenu").style.right = window.innerWidth < 480 ? "-45%" : "-18%";
+		document.querySelector("#ContentPageMenu").style.right = window.innerWidth < 500 ? "-45%" : "-18%";
 	}
 	const Urls = useLocation().search;
 	useEffect(() => {
