@@ -65,20 +65,22 @@ export const News = () => {
 		};
 		FetchData();
 	}, [NewsId]);
-	const [DateC, TimeC] = [
-		{
-			DateCreate: new Date(news.GetSelectedNews.createdAt)
-				.toLocaleDateString("fa-IR", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-				})
-				.split("T")[0],
-		},
-		{
-			TimeCreate: new Date(news.GetSelectedNews.createdAt).toTimeString().split(" ")[0],
-		},
-	];
+
+	// const [DateC, TimeC] = [
+	// 	{
+	// 		DateCreate: new Date(news.GetSelectedNews.createdAt)
+	// 			.toLocaleDateString("fa-IR", {
+	// 				year: "numeric",
+	// 				month: "long",
+	// 				day: "numeric",
+	// 			})
+	// 			.split("T")[0],
+	// 	},
+	// 	{
+	// 		TimeCreate: new Date(news.GetSelectedNews.createdAt).toTimeString().split(" ")[0],
+	// 	},
+	// ];
+
 	const [CommentsValue, setCommentsValue] = useState("");
 	const [newResponse, setNewResponse] = useState("");
 	const [newResToRes, setNewResToRes] = useState("");
@@ -460,8 +462,10 @@ export const News = () => {
 												<p className="fa fa-eye"></p>
 											</div>
 											<div className="date-news">
-												<span>{DateC.DateCreate}</span>
-												<span>{TimeC.TimeCreate}</span>
+												{/* <span>{DateC.DateCreate}</span>
+												<span>{TimeC.TimeCreate}</span> */}
+												<i className="fas fa-calendar-alt"></i>
+												<span>{moment(news.GetSelectedNews.createdAt).fromNow()}</span>
 											</div>
 										</section>
 									</div>
@@ -497,10 +501,6 @@ export const News = () => {
 													<p>{news.GetSelectedNews.admin.Admin_FirstName + " " + news.GetSelectedNews.admin.Admin_LastName}</p>
 												</section>
 											</div>
-											<span>
-												<i className="fas fa-calendar-alt"></i>
-												<span>{moment(news.GetSelectedNews.createdAt).fromNow()}</span>
-											</span>
 										</div>
 										<div className="left-info">
 											<div className="code-news">
