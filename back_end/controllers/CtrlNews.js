@@ -463,6 +463,8 @@ export default class NewsControllers {
 				});
 			}
 		} catch (e) {
+			console.log(e);
+
 			res.status(500).json({
 				success: false,
 				body: null,
@@ -472,8 +474,6 @@ export default class NewsControllers {
 	};
 	// UPDATE ONE NEWS
 	static UpdNews = async (req, res) => {
-		console.log(req.body);
-
 		try {
 			const GetOneNewsForUpd = await News.findByPk(req.body.id);
 			if (GetOneNewsForUpd) {

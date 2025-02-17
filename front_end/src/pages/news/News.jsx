@@ -42,15 +42,13 @@ export const News = () => {
 		GetSelectedNews: [],
 		GetSelectedChosen: [],
 	});
-	console.log(news);
-
 	const NewsId = useLocation().pathname.split("/")[2];
 	useEffect(() => {
 		const FetchData = async () => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get?id=${NewsId}&userId=${CurrentUser && CurrentUser.Info.Id}&role=${CurrentUser && CurrentUser.Info.Role}`,
+					url: `/news/get?id=${NewsId}&userId=${CurrentUser ? CurrentUser.Info.Id : 0}&role=${CurrentUser ? CurrentUser.Info.Role : ""}`,
 				})
 					.then((success) => {
 						const { GetSelectedSpecial, GetSelectedNews, GetSelectedChosen } = success.data.body;
