@@ -951,7 +951,7 @@
 	}
 }
 /* wite media query */
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
 	.bodyHederHome {
 		.Gallery-Row-Slider,
 		.Gallery-reading-content {
