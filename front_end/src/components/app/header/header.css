@@ -1044,6 +1044,7 @@
 				.ItemsSlider {
 					grid-template-columns: auto auto;
 					gap: 8px 8px;
+					display: none;
 					.imgCenter0 {
 						grid-column: 1 / 3;
 					}
