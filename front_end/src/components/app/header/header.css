@@ -1164,6 +1164,11 @@
 				gap: 10px;
 				background-color: #f3fcef;
 				border-radius: 20px;
+				.content-title-note {
+					.span-title-note {
+						width: 35%;
+					}
+				}
 			}
 		}
 		.content-title-chosen {
