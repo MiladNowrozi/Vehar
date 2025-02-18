@@ -17,7 +17,22 @@ function Header() {
 		SubNoteNews: [],
 	});
 	function oofMenuPage() {
-		document.querySelector("#ContentPageMenu").style.right = window.innerWidth < 500 ? "-45%" : "-18%";
+		const GetIdOverFlow = document.querySelector("#ContentPageMenu");
+		if (window.innerWidth < 500) {
+			if (GetIdOverFlow.style.right === "-45%") {
+				GetIdOverFlow.style.right = "0%";
+				document.getElementById("home").style.overflow = "hidden";
+			} else {
+				GetIdOverFlow.style.right = "-45%";
+				document.getElementById("home").style.overflow = "auto";
+			}
+		} else {
+			if (GetIdOverFlow.style.right === "-18%") {
+				GetIdOverFlow.style.right = "0%";
+			} else {
+				GetIdOverFlow.style.right = "-18%";
+			}
+		}
 	}
 	const Urls = useLocation().search;
 	useEffect(() => {
