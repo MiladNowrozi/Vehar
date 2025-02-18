@@ -18,5 +18,7 @@ docker compose -f docker-compose.develop.yml down
 docker images -q | grep -v $(docker images -q f2ad9f23df82) | xargs -r docker rmi
 
 docker compose -f docker-compose.develop.yml build backend
+docker compose -f docker-compose.develop.yml build frontend
 
 docker compose -f docker-compose.develop.yml up -d backend
+docker compose -f docker-compose.develop.yml up -d frontend
