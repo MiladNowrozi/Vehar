@@ -37,19 +37,11 @@ export const PageMenu = () => {
 	function offMenu() {
 		const GetIdOverFlow = document.querySelector("#ContentPageMenu");
 		if (window.innerWidth < 500) {
-			if (GetIdOverFlow.style.right === "-45%") {
-				GetIdOverFlow.style.right = "0%";
-				document.getElementById("home").style.overflow = "hidden";
-			} else {
-				GetIdOverFlow.style.right = "-45%";
-				document.getElementById("home").style.overflow = "auto";
-			}
+			GetIdOverFlow.style.right = "-45%";
+			document.getElementById("home").style.overflow = "auto";
 		} else {
-			if (GetIdOverFlow.style.right === "-18%") {
-				GetIdOverFlow.style.right = "0%";
-			} else {
-				GetIdOverFlow.style.right = "-18%";
-			}
+			GetIdOverFlow.style.right = "-18%";
+			document.getElementById("home").style.overflow = "auto";
 		}
 	}
 	return (

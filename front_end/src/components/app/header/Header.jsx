@@ -16,24 +16,6 @@ function Header() {
 		SpecialNews: [],
 		SubNoteNews: [],
 	});
-	function oofMenuPage() {
-		const GetIdOverFlow = document.querySelector("#ContentPageMenu");
-		if (window.innerWidth < 500) {
-			if (GetIdOverFlow.style.right === "-45%") {
-				GetIdOverFlow.style.right = "0%";
-				document.getElementById("home").style.overflow = "hidden";
-			} else {
-				GetIdOverFlow.style.right = "-45%";
-				document.getElementById("home").style.overflow = "auto";
-			}
-		} else {
-			if (GetIdOverFlow.style.right === "-18%") {
-				GetIdOverFlow.style.right = "0%";
-			} else {
-				GetIdOverFlow.style.right = "-18%";
-			}
-		}
-	}
 	const Urls = useLocation().search;
 	useEffect(() => {
 		const NewsHeader = async () => {
@@ -110,7 +92,7 @@ function Header() {
 	return (
 		<Fragment>
 			<PageMenu />
-			<div onClick={oofMenuPage} className="bodyHederHome">
+			<div className="bodyHederHome">
 				<div className="Container-Slider">
 					<div className="container-ticker">
 						{TickerNews.length > 0 && (
