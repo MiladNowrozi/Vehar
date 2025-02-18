@@ -3,11 +3,22 @@ export const MenuHamburger = () => {
 	function handleHamburger() {
 		const changeStyleMenu = document.querySelector("#ContentPageMenu");
 		if (window.innerWidth < 500) {
-			changeStyleMenu.style.right === "-45%" ? (changeStyleMenu.style.right = "0%") : (changeStyleMenu.style.right = "-45%");
+			if (changeStyleMenu.style.right === "-45%") {
+				changeStyleMenu.style.right = "0%";
+				document.getElementById("home").style.overflow = "hidden";
+			} else {
+				changeStyleMenu.style.right = "-45%";
+				document.getElementById("home").style.overflow = "auto";
+			}
 		} else {
-			changeStyleMenu.style.right === "-18%" ? (changeStyleMenu.style.right = "0%") : (changeStyleMenu.style.right = "-18%");
+			if (changeStyleMenu.style.right === "-18%") {
+				changeStyleMenu.style.right = "0%";
+			} else {
+				changeStyleMenu.style.right = "-18%";
+			}
 		}
 	}
+
 	return (
 		<div>
 			<div className="NavbarMenuHamburger">
