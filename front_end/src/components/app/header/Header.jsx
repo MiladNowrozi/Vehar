@@ -66,7 +66,7 @@ function Header() {
 	// Ticker news api
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [TickerNews, setTickerNews] = useState([]);
-	const Timer = 10000;
+	const Timer = 5000;
 
 	useEffect(() => {
 		const SendData = async () => {
