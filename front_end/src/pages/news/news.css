@@ -1534,7 +1534,7 @@
 	height: 200px;
 }
 
-@media only screen and (min-width: 300px) and (max-width: 500px) {
+@media screen and (max-width: 500px) {
 	.ResultNewsHeader {
 		.ResultNewsContainer {
 			.ResultNewsContent {
