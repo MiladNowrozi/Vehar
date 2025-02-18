@@ -316,7 +316,7 @@
 	}
 }
 
-@media only screen and (min-width: 300px) and (max-width: 480px) {
+@media only screen and (min-width: 300px) and (max-width: 500px) {
 	.NavbarContainer {
 		justify-content: unset;
 		.NavbarLogo {
