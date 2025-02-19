@@ -1623,6 +1623,9 @@
 					.Content-anim-chosen {
 						justify-content: flex-start;
 						direction: rtl;
+						.Animation-Circle {
+							z-index: 1;
+						}
 					}
 					.ContainerLeft {
 						.ContainerHeaderLeft {
