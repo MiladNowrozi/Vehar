@@ -45,7 +45,7 @@
 			height: 50px;
 			background-color: rgb(99, 0, 0);
 			color: #fff;
-			border-radius: 20px 20px 0px 0px;
+			border-top-left-radius: 20px;
 			font-family: Vazirmatn;
 			font-size: 8px;
 			direction: ltr;

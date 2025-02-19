@@ -44,8 +44,9 @@
 			&.test::before {
 				content: "";
 				width: 35px;
-				height: 25px;
+				height: 27px;
 				left: -10px;
+				bottom: -1px;
 				background-color: white;
 				position: absolute;
 				aspect-ratio: 1;
@@ -240,7 +241,7 @@
 								width: 30px;
 								height: 25px;
 								left: -12px;
-								bottom: 0px;
+								bottom: -1px;
 								transform: skew(-35deg);
 								background-color: white;
 								position: absolute;
@@ -457,9 +458,9 @@
 				&.span-title-political-and-social::before {
 					content: "";
 					width: 30px;
-					height: 25px;
+					height: 27px;
 					left: -12px;
-					bottom: 0px;
+					bottom: -1px;
 					transform: skew(-35deg);
 					background-color: #f3fcef;
 					position: absolute;
@@ -505,9 +506,9 @@
 					&.span-title-special-news::before {
 						content: "";
 						width: 30px;
-						height: 25px;
+						height: 27px;
 						left: -12px;
-						bottom: 0px;
+						bottom: -1px;
 						transform: skew(-35deg);
 						background-color: white;
 						position: absolute;
@@ -658,9 +659,9 @@
 					&.span-title-note::before {
 						content: "";
 						width: 30px;
-						height: 25px;
+						height: 27px;
 						left: -12px;
-						bottom: 0px;
+						bottom: -1px;
 						transform: skew(-35deg);
 						background-color: #f3fcef;
 						position: absolute;
@@ -1203,8 +1204,9 @@
 				&.test::before {
 					content: "";
 					width: 35px;
-					height: 25px;
+					height: 27px;
 					left: -10px;
+					bottom: -1px;
 					background-color: white;
 					position: absolute;
 					aspect-ratio: 1;
