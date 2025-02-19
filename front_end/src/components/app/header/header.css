@@ -239,9 +239,9 @@
 							&.span-title-full-viewers::before {
 								content: "";
 								width: 30px;
-								height: 25px;
+								height: 28px;
 								left: -12px;
-								bottom: -1px;
+								bottom: -2px;
 								transform: skew(-35deg);
 								background-color: white;
 								position: absolute;
@@ -458,9 +458,9 @@
 				&.span-title-political-and-social::before {
 					content: "";
 					width: 30px;
-					height: 27px;
+					height: 28px;
 					left: -12px;
-					bottom: -1px;
+					bottom: -2px;
 					transform: skew(-35deg);
 					background-color: #f3fcef;
 					position: absolute;
@@ -506,9 +506,9 @@
 					&.span-title-special-news::before {
 						content: "";
 						width: 30px;
-						height: 27px;
+						height: 28px;
 						left: -12px;
-						bottom: -1px;
+						bottom: -2px;
 						transform: skew(-35deg);
 						background-color: white;
 						position: absolute;
@@ -659,9 +659,9 @@
 					&.span-title-note::before {
 						content: "";
 						width: 30px;
-						height: 27px;
+						height: 28px;
 						left: -12px;
-						bottom: -1px;
+						bottom: -2px;
 						transform: skew(-35deg);
 						background-color: #f3fcef;
 						position: absolute;

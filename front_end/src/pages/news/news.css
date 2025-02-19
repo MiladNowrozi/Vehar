@@ -46,9 +46,9 @@
 						&.span-anim-chosen::before {
 							content: "";
 							width: 30px;
-							height: 25px;
+							height: 28px;
 							left: -12px;
-							bottom: 0px;
+							bottom: -2px;
 							transform: skew(-35deg);
 							background-color: white;
 							position: absolute;
@@ -489,9 +489,9 @@
 						&.span-anim-Special::before {
 							content: "";
 							width: 30px;
-							height: 25px;
+							height: 28px;
 							left: -12px;
-							bottom: 0px;
+							bottom: -2px;
 							transform: skew(-35deg);
 							background-color: white;
 							position: absolute;
