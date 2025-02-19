@@ -23,7 +23,7 @@
 	width: 15%;
 	height: 600px;
 	position: fixed;
-	z-index: 1;
+	z-index: 2;
 	direction: rtl;
 	overflow-y: scroll;
 	scrollbar-width: thin;

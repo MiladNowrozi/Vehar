@@ -304,9 +304,10 @@
 	}
 
 	.SloganVehar {
+		width: 27%;
 		height: 30px;
 		display: flex;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		direction: rtl;
 		font-weight: 600;
