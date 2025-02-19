@@ -1542,7 +1542,6 @@
 				align-items: center;
 				:nth-child(2) {
 					order: -1;
-					z-index: 1;
 				}
 				.loading-data-2 {
 					width: 95%;
@@ -1685,6 +1684,9 @@
 					.Content-anim-Special {
 						direction: rtl;
 						justify-content: flex-start;
+						.Animation-Circle {
+							z-index: 1;
+						}
 					}
 				}
 			}
