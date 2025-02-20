@@ -20,58 +20,73 @@
 	}
 }
 .ContentPageMenu {
-	width: 15%;
-	height: 600px;
+	height: 100vh;
 	position: fixed;
 	z-index: 2;
 	direction: rtl;
-	overflow-y: scroll;
-	scrollbar-width: thin;
 	scrollbar-color: rgb(199, 10, 3) rgba(179, 0, 0, 0);
-	transition: all 0.1s;
-
+	background-color: rgba(0, 0, 0, 0.274);
 	.ContentMenu {
-		width: 100%;
-		height: 597px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: center;
-		border-radius: 20px;
-		transition: all 0.1s;
-
 		.NavMenu {
 			width: 100%;
-			height: 50px;
-			background-color: rgb(99, 0, 0);
-			color: #fff;
-			border-top-left-radius: 20px;
+			border-left: 40px solid transparent;
+			border-bottom: 40px solid #fff;
+			color: #000;
 			font-family: Vazirmatn;
-			font-size: 8px;
-			direction: ltr;
-			display: flex;
-			flex-direction: row;
-			justify-content: space-around;
-			align-items: center;
-			.fa-times {
-				font-size: 15px;
-				cursor: pointer;
-				color: #31e603;
+			height: 30px;
+			.neon-container {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				span:nth-child(1) {
+					width: 30%;
+					height: 30px;
+					font-size: 16px;
+					font-weight: 800;
+					display: flex;
+					align-items: center;
+					margin-top: 5px;
+				}
+				span:nth-child(2) {
+					width: 100%;
+					height: 30px;
+					font-size: 15px;
+					font-weight: 500;
+					display: flex;
+					align-items: center;
+					margin-top: 5px;
+				}
+				.neon-text {
+					width: 100%;
+					color: green;
+					margin-right: 20px;
+					animation: glow 1.5s infinite alternate;
+				}
 			}
 		}
 
 		.ListMenuCenter {
 			width: 100%;
+			height: calc(100vh - 100px);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-
+			overflow-y: auto;
+			scrollbar-width: thin;
 			.ListMenuNews {
 				width: 100%;
-				height: 280px;
-				background-color: rgb(181, 184, 1);
+				background-color: #eee;
 				font-size: 13px;
 				transition: all 0.1s;
+				ul li:last-child {
+					a {
+						border-bottom: unset;
+					}
+				}
 
 				&.ListMenuNews li {
 					list-style-type: none;
@@ -108,28 +123,37 @@
 				} */
 
 				&.ListMenuNews a:hover {
-					color: red;
+					color: #000;
 					transition: all 0.2s;
 				}
 
 				&.ListMenuNews a {
 					text-decoration: none;
 					font-family: Vazirmatn;
+					border-bottom: 1px solid rgba(0, 128, 0, 0.281);
+					padding-bottom: 10px;
+					color: #000;
 				}
 			}
 			.ListMenuSite {
 				width: 100%;
-				height: 233px;
-				background-color: rgb(231, 230, 233);
+				height: 100vh;
+				background-color: #eee;
 				font-size: 13px;
 				text-align: center;
 				transition: all 0.1s;
-
+				padding: 10px;
+				ul li a:last-child {
+					border-bottom: none;
+				}
 				&.ListMenuSite li {
 					list-style-type: none;
 					margin-top: 25px;
 					display: flex;
 					flex-direction: column;
+					background-color: rgba(0, 194, 0, 0.253);
+					padding: 15px;
+					border-radius: 10px;
 				}
 
 				&.ListMenuSite a:hover {
@@ -140,7 +164,10 @@
 				&.ListMenuSite a {
 					text-decoration: none;
 					font-family: Vazirmatn;
-					margin-top: 25px;
+					margin-top: 10px;
+					color: #000;
+					border-bottom: 1px solid rgba(21, 126, 0, 0.226);
+					padding-bottom: 10px;
 				}
 			}
 		}
@@ -149,12 +176,10 @@
 			width: 100%;
 			height: 40px;
 			background-color: rgb(0, 0, 0);
-			border-radius: 0px 0px 20px 20px;
 			display: flex;
 			justify-content: space-evenly;
 			align-items: center;
 			transition: all 0.1s;
-
 			.fab {
 				font-size: 20px;
 				cursor: pointer;
@@ -175,6 +200,15 @@
 	}
 }
 
+@keyframes glow {
+	0% {
+		text-shadow: 0 0 5px #ff1e00, 0 0 10px #ff1e00, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+	}
+	100% {
+		text-shadow: 0 0 10px #00ff15, 0 0 20px #ffee00, 0 0 40px #00d4ff, 0 0 80px #fbff00, 0 0 160px #00d4ff;
+	}
+}
+
 @media screen and (max-width: 500px) {
 	.ContentPageMenu {
 		width: 45%;
@@ -182,14 +216,8 @@
 		.ContentMenu {
 			height: unset;
 			.ListMenuCenter {
-				.ListMenuNews {
-				}
 				.ListMenuSite {
-					height: unset;
 					padding-bottom: 15px;
-				}
-				.SocialNetworks {
-					border-radius: 0 0 0 20px;
 				}
 			}
 			.NavMenu {

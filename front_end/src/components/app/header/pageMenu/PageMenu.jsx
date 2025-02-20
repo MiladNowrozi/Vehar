@@ -2,19 +2,30 @@ import "./pagemenu.css";
 export const MenuHamburger = () => {
 	function handleHamburger() {
 		const changeStyleMenu = document.querySelector("#ContentPageMenu");
+		const Locked = document.getElementById("ContentMenu");
 		if (window.innerWidth < 500) {
 			if (changeStyleMenu.style.right === "-45%") {
 				changeStyleMenu.style.right = "0%";
+				changeStyleMenu.style.width = "100%";
+				Locked.style.width = "45%";
 				document.getElementById("home").style.overflow = "hidden";
 			} else {
 				changeStyleMenu.style.right = "-45%";
+				changeStyleMenu.style.width = "45%";
+				Locked.style.width = "100%";
 				document.getElementById("home").style.overflow = "auto";
 			}
 		} else {
 			if (changeStyleMenu.style.right === "-18%") {
 				changeStyleMenu.style.right = "0%";
+				changeStyleMenu.style.width = "100%";
+				Locked.style.width = "15%";
+				document.getElementById("home").style.overflow = "hidden";
 			} else {
 				changeStyleMenu.style.right = "-18%";
+				changeStyleMenu.style.width = "15%";
+				Locked.style.width = "100%";
+				document.getElementById("home").style.overflow = "auto";
 			}
 		}
 	}
@@ -34,23 +45,34 @@ export const MenuHamburger = () => {
 };
 
 export const PageMenu = () => {
-	function offMenu() {
-		const GetIdOverFlow = document.querySelector("#ContentPageMenu");
-		if (window.innerWidth < 500) {
-			GetIdOverFlow.style.right = "-45%";
-			document.getElementById("home").style.overflow = "auto";
-		} else {
-			GetIdOverFlow.style.right = "-18%";
-			document.getElementById("home").style.overflow = "auto";
-		}
-	}
+	// function offMenu() {
+	// 	const GetIdOverFlow = document.querySelector("#ContentPageMenu");
+	// 	const Locked = document.getElementById("ContentMenu");
+	// 	if (window.innerWidth < 500) {
+	// 		GetIdOverFlow.style.right = "-45%";
+	// 		document.getElementById("home").style.overflow = "auto";
+	// 		GetIdOverFlow.style.width = "15%";
+	// 		Locked.style.width = "100%";
+	// 	} else {
+	// 		GetIdOverFlow.style.right = "-18%";
+	// 		document.getElementById("home").style.overflow = "auto";
+	// 		GetIdOverFlow.style.width = "15%";
+	// 		Locked.style.width = "100%";
+	// 	}
+	// }
+	// <i onClick={offMenu} className="fas fa-times"></i>
+	// <h1>پایگاه خبری وهار</h1>
 	return (
-		<div>
+		<div id="LockAccess">
 			<div id="ContentPageMenu" className="ContentPageMenu DefaultCPM" style={{ right: window.innerWidth < 500 ? "-45%" : "-18%" }}>
-				<div className="ContentMenu">
+				<div id="ContentMenu" className="ContentMenu">
 					<div className="NavMenu">
-						<i onClick={offMenu} className="fas fa-times"></i>
-						<h1>منو دستیار</h1>
+						{/*  */}
+						<div class="neon-container">
+							<span class="neon-text">وهار</span>
+							<span>پایگاه خبری</span>
+						</div>
+						{/*  */}
 					</div>
 					<div className="ListMenuCenter">
 						<div className="ListMenuNews">
