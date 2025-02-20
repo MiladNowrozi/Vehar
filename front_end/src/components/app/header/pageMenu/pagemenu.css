@@ -41,9 +41,9 @@
 			.neon-container {
 				display: flex;
 				align-items: center;
-				gap: 10px;
-				span:nth-child(1) {
-					width: 30%;
+				justify-content: space-evenly;
+				span:nth-child(2) {
+					width: 20%;
 					height: 30px;
 					font-size: 16px;
 					font-weight: 800;
@@ -51,8 +51,8 @@
 					align-items: center;
 					margin-top: 5px;
 				}
-				span:nth-child(2) {
-					width: 100%;
+				span:nth-child(1) {
+					width: 42%;
 					height: 30px;
 					font-size: 15px;
 					font-weight: 500;
@@ -63,7 +63,6 @@
 				.neon-text {
 					width: 100%;
 					color: green;
-					margin-right: 20px;
 					animation: glow 1.5s infinite alternate;
 				}
 			}
@@ -71,12 +70,13 @@
 
 		.ListMenuCenter {
 			width: 100%;
-			height: calc(100vh - 100px);
+			/* height: calc(100vh - 100px); */
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			overflow-y: auto;
 			scrollbar-width: thin;
+			scrollbar-color: auto;
 			.ListMenuNews {
 				width: 100%;
 				background-color: #eee;
@@ -202,10 +202,10 @@
 
 @keyframes glow {
 	0% {
-		text-shadow: 0 0 5px #ff1e00, 0 0 10px #ff1e00, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+		text-shadow: 0 0 5px #fbff00;
 	}
 	100% {
-		text-shadow: 0 0 10px #00ff15, 0 0 20px #ffee00, 0 0 40px #00d4ff, 0 0 80px #fbff00, 0 0 160px #00d4ff;
+		text-shadow: 0 0 10px green;
 	}
 }
 

@@ -69,12 +69,12 @@ export const PageMenu = () => {
 					<div className="NavMenu">
 						{/*  */}
 						<div class="neon-container">
-							<span class="neon-text">وهار</span>
 							<span>پایگاه خبری</span>
+							<span class="neon-text">وهار</span>
 						</div>
 						{/*  */}
 					</div>
-					<div className="ListMenuCenter">
+					<div className="ListMenuCenter" style={{ height: window.innerHeight - 105 }}>
 						<div className="ListMenuNews">
 							<ul>
 								<li>
