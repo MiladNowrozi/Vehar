@@ -34,7 +34,7 @@
 		.NavMenu {
 			width: 100%;
 			border-left: 40px solid transparent;
-			border-bottom: 40px solid #fff;
+			border-bottom: 40px solid #eee;
 			color: #000;
 			font-family: Vazirmatn;
 			height: 30px;
@@ -52,7 +52,6 @@
 					margin-top: 5px;
 				}
 				span:nth-child(1) {
-					width: 42%;
 					height: 30px;
 					font-size: 15px;
 					font-weight: 500;
@@ -70,7 +69,6 @@
 
 		.ListMenuCenter {
 			width: 100%;
-			/* height: calc(100vh - 100px); */
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -82,57 +80,30 @@
 				background-color: #eee;
 				font-size: 13px;
 				transition: all 0.1s;
-				ul li:last-child {
-					a {
+				border-top: 1px solid rgba(60, 255, 0, 0.308);
+				ul .Link-menu {
+					text-decoration: none;
+					list-style-type: none;
+					margin-top: 10px;
+					display: flex;
+					flex-direction: column;
+					border-bottom: 1px solid rgba(0, 128, 0, 0.281);
+					padding-bottom: 10px;
+					&:last-child {
 						border-bottom: unset;
 					}
 				}
 
-				&.ListMenuNews li {
-					list-style-type: none;
-					margin-right: 10px;
-					margin-top: 10px;
-					display: flex;
-					flex-direction: column;
-				}
-
-				/* &.ListMenuNews::before {
-					content: "";
-					width: 22%;
-					height: 16px;
-					right: 0%;
-					bottom: 274px;
-					position: absolute;
-					background-color: rgb(181, 184, 1);
-					border-radius: 0px 0px 0px 20px;
-					transition: all 1s;
-					z-index: 1;
-				}
-
-				&.ListMenuNews::after {
-					content: "";
-					width: 22%;
-					height: 16px;
-					left: 0%;
-					bottom: 274px;
-					position: absolute;
-					background-color: rgb(181, 184, 1);
-					border-radius: 0px 0px 20px 0px;
-					transition: all 1s;
-					z-index: 1;
-				} */
-
-				&.ListMenuNews a:hover {
-					color: #000;
+				ul .Link-menu h1:hover {
+					color: darkred;
 					transition: all 0.2s;
 				}
 
-				&.ListMenuNews a {
-					text-decoration: none;
+				ul .Link-menu h1 {
 					font-family: Vazirmatn;
-					border-bottom: 1px solid rgba(0, 128, 0, 0.281);
-					padding-bottom: 10px;
+					margin-right: 10px;
 					color: #000;
+					font-size: 13px;
 				}
 			}
 			.ListMenuSite {
@@ -143,10 +114,10 @@
 				text-align: center;
 				transition: all 0.1s;
 				padding: 10px;
-				ul li a:last-child {
+				ul .Link-menu:last-child {
 					border-bottom: none;
 				}
-				&.ListMenuSite li {
+				&.ListMenuSite ul {
 					list-style-type: none;
 					margin-top: 25px;
 					display: flex;
@@ -156,18 +127,21 @@
 					border-radius: 10px;
 				}
 
-				&.ListMenuSite a:hover {
+				ul .Link-menu h1:hover {
 					color: red;
 					transition: all 0.2s;
 				}
-
-				&.ListMenuSite a {
+				ul .Link-menu {
 					text-decoration: none;
+					border-bottom: 1px solid rgba(21, 126, 0, 0.226);
+					padding-bottom: 10px;
+				}
+
+				ul .Link-menu h1 {
 					font-family: Vazirmatn;
 					margin-top: 10px;
 					color: #000;
-					border-bottom: 1px solid rgba(21, 126, 0, 0.226);
-					padding-bottom: 10px;
+					font-size: 13px;
 				}
 			}
 		}

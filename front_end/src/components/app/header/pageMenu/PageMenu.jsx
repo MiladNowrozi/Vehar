@@ -1,35 +1,36 @@
+import { Link } from "react-router-dom";
 import "./pagemenu.css";
-export const MenuHamburger = () => {
-	function handleHamburger() {
-		const changeStyleMenu = document.querySelector("#ContentPageMenu");
-		const Locked = document.getElementById("ContentMenu");
-		if (window.innerWidth < 500) {
-			if (changeStyleMenu.style.right === "-45%") {
-				changeStyleMenu.style.right = "0%";
-				changeStyleMenu.style.width = "100%";
-				Locked.style.width = "45%";
-				document.getElementById("home").style.overflow = "hidden";
-			} else {
-				changeStyleMenu.style.right = "-45%";
-				changeStyleMenu.style.width = "45%";
-				Locked.style.width = "100%";
-				document.getElementById("home").style.overflow = "auto";
-			}
+const handleHamburger = () => {
+	const changeStyleMenu = document.getElementById("ContentPageMenu");
+	const Locked = document.getElementById("ContentMenu");
+	if (window.innerWidth < 500) {
+		if (changeStyleMenu.style.right === "-50%") {
+			changeStyleMenu.style.right = "0%";
+			changeStyleMenu.style.width = "100%";
+			Locked.style.width = "50%";
+			document.getElementById("home").style.overflow = "hidden";
 		} else {
-			if (changeStyleMenu.style.right === "-18%") {
-				changeStyleMenu.style.right = "0%";
-				changeStyleMenu.style.width = "100%";
-				Locked.style.width = "15%";
-				document.getElementById("home").style.overflow = "hidden";
-			} else {
-				changeStyleMenu.style.right = "-18%";
-				changeStyleMenu.style.width = "15%";
-				Locked.style.width = "100%";
-				document.getElementById("home").style.overflow = "auto";
-			}
+			changeStyleMenu.style.right = "-50%";
+			changeStyleMenu.style.width = "50%";
+			Locked.style.width = "100%";
+			document.getElementById("home").style.overflow = "auto";
+		}
+	} else {
+		if (changeStyleMenu.style.right === "-18%") {
+			changeStyleMenu.style.right = "0%";
+			changeStyleMenu.style.width = "100%";
+			Locked.style.width = "15%";
+			document.getElementById("home").style.overflow = "hidden";
+		} else {
+			changeStyleMenu.style.right = "-18%";
+			changeStyleMenu.style.width = "15%";
+			Locked.style.width = "100%";
+			document.getElementById("home").style.overflow = "auto";
 		}
 	}
+};
 
+export const MenuHamburger = () => {
 	return (
 		<div>
 			<div className="NavbarMenuHamburger">
@@ -77,34 +78,40 @@ export const PageMenu = () => {
 					<div className="ListMenuCenter" style={{ height: window.innerHeight - 105 }}>
 						<div className="ListMenuNews">
 							<ul>
-								<li>
-									<a href="/">صفحه اصلی</a>
-								</li>
-								<li>
-									<a href="/">اخبار بومی</a>
-								</li>
-								<li>
-									<a href="/">اخبار جدید</a>
-								</li>
-								<li>
-									<a href="/">سیاسی</a>
-								</li>
-								<li>
-									<a href="/">اجتماعی</a>
-								</li>
-								<li>
-									<a href="/">ورزشی</a>
-								</li>
+								<Link className="Link-menu" onClick={handleHamburger} to={"/"}>
+									<h1>صفحه اصلی</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to="/?catpolitic">
+									<h1>سیاست</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=social">
+									<h1>جامعه</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=local">
+									<h1>بومی</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=economy">
+									<h1>اقتصاد</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=sport">
+									<h1>ورزش</h1>
+								</Link>
 							</ul>
 						</div>
 						<div className="ListMenuSite">
 							<ul>
-								<li>
-									<a href="#">درباره ما</a>
-									<a href="#">تماس با ما</a>
-									<a href="#">مشارکت در خبرنگاری</a>
-									<a href="#">آرشیو</a>
-								</li>
+								<Link className="Link-menu" onClick={handleHamburger} to={"/about"}>
+									<h1>درباره ما</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to={"/contact-us"}>
+									<h1>تماس با ما</h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to={"/participation"}>
+									<h1>مشارکت </h1>
+								</Link>
+								<Link className="Link-menu" onClick={handleHamburger} to={"/archive"}>
+									<h1>آرشیو</h1>
+								</Link>
 							</ul>
 						</div>
 						<div className="SocialNetworks">

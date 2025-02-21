@@ -5,6 +5,7 @@ import Footer from "../../components/app/footer/Footer";
 import Navbar from "../../components/app/navbar/Navbar";
 import "../../fonts/fontAwesome/css/all.css";
 import "./home.css";
+import { PageMenu } from "../../components/app/header/pageMenu/PageMenu";
 
 // fs: stands for function scroll
 // base pages in home page
@@ -16,6 +17,7 @@ const Home = () => {
 				<Navbar />
 			</div>
 			<div className="HeaderHome">
+				<PageMenu />
 				<Outlet />
 			</div>
 			<div className="FooterHome">

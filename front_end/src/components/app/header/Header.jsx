@@ -1,6 +1,5 @@
 import "./header.css";
 //
-import { PageMenu } from "./pageMenu/PageMenu.jsx";
 import { AnimationLoading, AnimationRed } from "../../../animations/Animation.jsx";
 import { Fragment, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -37,7 +36,6 @@ function Header() {
 			})
 				.then((success) => {
 					console.log(success.data.body);
-
 					SetSliderNews((prev) => ({
 						...prev,
 						SpecialNews: success.data.body.SpecialNews,
@@ -91,7 +89,6 @@ function Header() {
 
 	return (
 		<Fragment>
-			<PageMenu />
 			<div className="bodyHederHome">
 				<div className="Container-Slider">
 					<div className="container-ticker">

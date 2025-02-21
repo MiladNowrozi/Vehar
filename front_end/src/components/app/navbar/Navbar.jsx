@@ -90,7 +90,7 @@ const Navbar = () => {
 		<div className="NavbarContainer">
 			<div className="formContent">
 				<div className="login-logout">
-					{CurrentUser?.Info.Role === "User" ? (
+					{CurrentUser ? (
 						<div className="logout-icon">
 							<i className="fas fa-user-check"></i>
 							<div className="content-logout">
@@ -236,10 +236,10 @@ const Navbar = () => {
 					</div>
 				</div>
 				<div className="options-select">
-					<Link className="options-navbar" to="/?cat=contact-us">
+					<Link className="options-navbar" to="/contact-us">
 						<h6>ارتباط با ما</h6>
 					</Link>
-					<Link className="options-navbar" to="/?cat=about">
+					<Link className="options-navbar" to="/about">
 						<h6>درباره ما</h6>
 					</Link>
 					<Link className="options-navbar" to="/?cat=sport">

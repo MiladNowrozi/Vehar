@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./comment.css";
 import { AxiosInstance } from "../../../../../axiosInstance";
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Comment() {
 	const navigate = useNavigate();

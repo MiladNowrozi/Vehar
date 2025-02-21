@@ -1,5 +1,5 @@
 import "./archive.css";
-
+import "../../components/app/header/pageMenu/PageMenu";
 const Archive = () => {
 	return (
 		<div className="container-archive">
