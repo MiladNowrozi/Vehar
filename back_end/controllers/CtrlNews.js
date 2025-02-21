@@ -398,6 +398,7 @@ export default class NewsControllers {
 					offset: CountChosen.count <= 5 ? 0 : CountChosen.count - 5,
 				});
 				//
+				console.log(SelectedChosen);
 
 				const SelectNews = await News.findOne({
 					where: { id: SelectedNews.id },

@@ -46,26 +46,9 @@ export const MenuHamburger = () => {
 };
 
 export const PageMenu = () => {
-	// function offMenu() {
-	// 	const GetIdOverFlow = document.querySelector("#ContentPageMenu");
-	// 	const Locked = document.getElementById("ContentMenu");
-	// 	if (window.innerWidth < 500) {
-	// 		GetIdOverFlow.style.right = "-45%";
-	// 		document.getElementById("home").style.overflow = "auto";
-	// 		GetIdOverFlow.style.width = "15%";
-	// 		Locked.style.width = "100%";
-	// 	} else {
-	// 		GetIdOverFlow.style.right = "-18%";
-	// 		document.getElementById("home").style.overflow = "auto";
-	// 		GetIdOverFlow.style.width = "15%";
-	// 		Locked.style.width = "100%";
-	// 	}
-	// }
-	// <i onClick={offMenu} className="fas fa-times"></i>
-	// <h1>پایگاه خبری وهار</h1>
 	return (
 		<div id="LockAccess">
-			<div id="ContentPageMenu" className="ContentPageMenu DefaultCPM" style={{ right: window.innerWidth < 500 ? "-45%" : "-18%" }}>
+			<div id="ContentPageMenu" className="ContentPageMenu DefaultCPM" style={{ right: window.innerWidth < 500 ? "-50%" : "-18%" }}>
 				<div id="ContentMenu" className="ContentMenu">
 					<div className="NavMenu">
 						{/*  */}
@@ -115,9 +98,13 @@ export const PageMenu = () => {
 							</ul>
 						</div>
 						<div className="SocialNetworks">
-							<i className="fab fa-telegram"></i>
-							<i className="fab fa-instagram" style={{ fontSize: "22px" }}></i>
-							<a href="#">
+							<a href="https://telegram.me/vehar">
+								<i className="fab fa-telegram"></i>
+							</a>
+							<a href="http://instagram.com/vehar.ir">
+								<i className="fab fa-instagram" style={{ fontSize: "22px" }}></i>
+							</a>
+							<a href="https://eitaa.com/vehar_ir">
 								<button href="#" className="eitaa"></button>
 							</a>
 						</div>

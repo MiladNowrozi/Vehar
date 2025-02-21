@@ -28,7 +28,6 @@ AxiosInstance.interceptors.response.use(
 		if (error.response && error.response.status === 401) {
 			const token = localStorage.getItem("user");
 			if (JSON.parse(token)?.refreshToken) {
-				console.log(JSON.parse(token).Info.Role);
 				try {
 					// Attempt to refresh the token
 					const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/refresh-token?Role=${JSON.parse(token).Info.Role}`, {
@@ -49,7 +48,6 @@ AxiosInstance.interceptors.response.use(
 				}
 			} else {
 				localStorage.setItem("user", null);
-				window.location.href = "/login-register";
 			}
 		}
 		// Handle other errors
