@@ -7,7 +7,7 @@ import { AuthContext } from "../../../context/authContext";
 export const MenuLord = () => {
 	const { CurrentUser } = useContext(AuthContext);
 	return (
-		<section className="menu-lord">
+		<section id="menu-lord" className="menu-lord" style={{ right: "0%" }}>
 			<Link to={"/"}>
 				<div className="navbar-menu-lord">
 					<section className="animation">

@@ -62,6 +62,7 @@ export const News = () => {
 			}
 		};
 		FetchData();
+		window.scrollTo(0, 0);
 	}, [NewsId]);
 
 	const [DateC, TimeC] = [

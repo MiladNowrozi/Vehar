@@ -258,6 +258,7 @@
 							cursor: pointer;
 							transition: all 0.3s;
 							color: green;
+							background-color: #fff;
 						}
 						.fa-edit:hover {
 							color: darkred;

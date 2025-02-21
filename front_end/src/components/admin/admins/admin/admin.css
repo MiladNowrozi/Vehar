@@ -1,16 +1,27 @@
 * {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 .container-admin {
-  width: 100%;
-  height: 100vh;
-  .hed-main-admin {
-    width: 90%;
-    height: 80vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    margin-top: 5px;
-  }
+	width: 100%;
+	height: 100vh;
+	.hed-main-admin {
+		width: 90%;
+		height: 80vh;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		margin-top: 5px;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.container-admin {
+		.hed-main-admin {
+			width: 100%;
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
+	}
 }

@@ -79,3 +79,48 @@
 		}
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.admin-navbar-page {
+		.messages-admin {
+			/* width: 100%; */
+			display: flex;
+			align-items: centers;
+			justify-content: space-between;
+			gap: 15px;
+			.open-menu-admin {
+				width: 30px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				gap: 7px;
+				div {
+					width: 100%;
+					height: 1px;
+					background-color: #fff;
+					transition: all 0.5s;
+				}
+				&.milad {
+					div {
+						transition: all 0.5s;
+						width: 100%;
+						height: 1px;
+						background-color: #fff;
+						&:nth-child(1) {
+							transform: rotate(45deg);
+						}
+						&:nth-child(2) {
+							display: none;
+						}
+						&:nth-child(3) {
+							transform: rotate(-45deg);
+							margin-top: -8px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
