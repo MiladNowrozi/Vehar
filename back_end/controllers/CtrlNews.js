@@ -852,7 +852,7 @@ export default class NewsControllers {
 
 				const SubNoteNews = await News.findAll({
 					where: { Category: req.query.cat, SubNote: true },
-					limit: 1,
+					limit: SubNoteCount.count <= 1 ? SubNoteCount.count : 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
 				});
 				const ChoiceNews = await News.findAll({
@@ -862,13 +862,13 @@ export default class NewsControllers {
 				});
 				const SliderNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
-					limit: 3,
-					offset: SliderCount.count - 3,
+					limit: SliderCount.count <= 3 ? SliderCount.count : 3,
+					offset: SliderCount.count <= 3 ? 0 : SliderCount.count - 3,
 				});
 				const SpecialNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
-					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
-					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
+					limit: SliderCount.count <= 15 ? SliderCount.count : 15,
+					offset: SliderCount.count <= 15 ? 0 : SliderCount.count - 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -880,7 +880,7 @@ export default class NewsControllers {
 				const SubNoteCount = await News.findAndCountAll({ where: { SubNote: true } });
 				const SubNoteNews = await News.findAll({
 					where: { SubNote: true },
-					limit: 1,
+					limit: SubNoteCount.count <= 1 ? SubNoteCount.count : 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
 				});
 				const ChoiceNews = await News.findAll({
@@ -890,13 +890,13 @@ export default class NewsControllers {
 				});
 				const SliderNews = await News.findAll({
 					where: { SubPageSlider: true },
-					limit: 3,
-					offset: SliderCount.count - 3,
+					limit: SliderCount.count <= 3 ? SliderCount.count : 3,
+					offset: SliderCount.count <= 3 ? 0 : SliderCount.count - 3,
 				});
 				const SpecialNews = await News.findAll({
 					where: { SubPageSlider: true },
-					limit: SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
-					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
+					limit: SliderCount.count <= 15 ? SliderCount.count : 15,
+					offset: SliderCount.count <= 15 ? 0 : SliderCount.count - 15,
 				});
 				res.status(200).json({
 					success: true,
@@ -908,6 +908,7 @@ export default class NewsControllers {
 				success: false,
 				message: error.message,
 			});
+			console.log(error);
 		}
 	};
 	// COMMENT
@@ -1342,7 +1343,7 @@ export default class NewsControllers {
 	//LAST NEWS
 	static LastNews = async (req, res) => {
 		try {
-			if (req.query.cat === "politic") {
+			if (req.query.cat) {
 				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat } });
 				const countPolitic = await News.findAndCountAll({
 					where: { Category: req.query.cat },
@@ -1352,50 +1353,6 @@ export default class NewsControllers {
 				res.status(200).json({
 					success: true,
 					body: countPolitic.rows,
-				});
-			} else if (req.query.cat === "economy") {
-				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat } });
-				const countEconomy = await News.findAndCountAll({
-					where: { Category: req.query.cat },
-					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
-					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-				});
-				res.status(200).json({
-					success: true,
-					body: countEconomy.rows,
-				});
-			} else if (req.query.cat === "social") {
-				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat } });
-				const countSocial = await News.findAndCountAll({
-					where: { Category: req.query.cat },
-					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
-					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-				});
-				res.status(200).json({
-					success: true,
-					body: countSocial.rows,
-				});
-			} else if (req.query.cat === "sport") {
-				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat } });
-				const countSport = await News.findAndCountAll({
-					where: { Category: req.query.cat },
-					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
-					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-				});
-				res.status(200).json({
-					success: true,
-					body: countSport.rows,
-				});
-			} else if (req.query.cat === "local") {
-				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat } });
-				const countLocal = await News.findAndCountAll({
-					where: { Category: req.query.cat },
-					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
-					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-				});
-				res.status(200).json({
-					success: true,
-					body: countLocal.rows,
 				});
 			} else {
 				const CountAllpolitic = await News.findAll({ where: { Category: "politic" } });
