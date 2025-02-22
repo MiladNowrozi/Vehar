@@ -64,7 +64,7 @@ export const PageMenu = () => {
 								<Link className="Link-menu" onClick={handleHamburger} to={"/"}>
 									<h1>صفحه اصلی</h1>
 								</Link>
-								<Link className="Link-menu" onClick={handleHamburger} to="/?catpolitic">
+								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=politic">
 									<h1>سیاست</h1>
 								</Link>
 								<Link className="Link-menu" onClick={handleHamburger} to="/?cat=social">
