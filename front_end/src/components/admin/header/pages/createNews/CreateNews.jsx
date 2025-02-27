@@ -432,6 +432,7 @@ export const CreateNews = () => {
 							language_url: "/tinymce/fa.js",
 							language: "fa",
 							image_advtab: true,
+							toolbar_mode: "wrap",
 							plugins: [
 								"autosave", // it required for 'restoredraft plugin'
 								"anchor",
@@ -464,6 +465,9 @@ export const CreateNews = () => {
 							toolbar: [
 								"ltr rtl preview undo redo blocks fontfamily fontsize bold italic underline strikethrough link image media table mergetags addcomment showcomments spellcheckdialog a11ycheck typography align lineheight checklist numlist bullist indent outdent emoticons charmap removeformat",
 							],
+							mobile: {
+								menubar: true, // فعال کردن منوی موبایل
+							},
 							images_upload_url: process.env.REACT_APP_BASE_URL + "/news/create",
 							automatic_uploads: true,
 						}}

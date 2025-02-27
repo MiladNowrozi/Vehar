@@ -184,7 +184,6 @@ export const AuthToken = async (req, res, next) => {
 	}
 	jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
 		if (err) {
-			console.log(user);
 			return res.status(401).json({
 				success: false,
 				message: "invalid server AuthToken",

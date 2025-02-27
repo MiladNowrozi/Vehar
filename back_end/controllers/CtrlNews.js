@@ -140,6 +140,7 @@ export default class NewsControllers {
 					include: [
 						{
 							model: SubCategory,
+							required: false,
 						},
 						{
 							model: Admin,
@@ -398,7 +399,6 @@ export default class NewsControllers {
 					offset: CountChosen.count <= 5 ? 0 : CountChosen.count - 5,
 				});
 				//
-				console.log(SelectedChosen);
 
 				const SelectNews = await News.findOne({
 					where: { id: SelectedNews.id },
@@ -421,6 +421,7 @@ export default class NewsControllers {
 						{
 							model: Comment,
 							required: false,
+							where: { Comment_Status: true },
 							include: [
 								{
 									model: Like,
@@ -946,6 +947,7 @@ export default class NewsControllers {
 											model: User,
 										},
 									],
+									required: false,
 								},
 							],
 						});

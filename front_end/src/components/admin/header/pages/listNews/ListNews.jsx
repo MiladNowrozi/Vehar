@@ -197,19 +197,21 @@ export const ListNews = () => {
 					</div>
 				</div>
 				<table id="table-comment" className="content-table-comment">
-					<thead>
-						<tr className="titles-table-comment">
-							<th>تعداد</th>
-							<th>پروفایل</th>
-							<th>نام</th>
-							<th>نظر</th>
-							<th>دسته</th>
-							<th>تیتر خبر</th>
-							<th>عنوان خبر</th>
-							<th>تاریخ</th>
-							<th>کد خبر</th>
-						</tr>
-					</thead>
+					{window.innerWidth > 500 && (
+						<thead>
+							<tr className="titles-table-comment">
+								<th>تعداد</th>
+								<th>پروفایل</th>
+								<th>نام</th>
+								<th>نظر</th>
+								<th>دسته</th>
+								<th>تیتر خبر</th>
+								<th>عنوان خبر</th>
+								<th>تاریخ</th>
+								<th>کد خبر</th>
+							</tr>
+						</thead>
+					)}
 					{(NewsStatus.Comments.length > 0 &&
 						NewsStatus.Comments.map((e, i) => {
 							const [DateC, TimeC] = [
@@ -220,6 +222,21 @@ export const ListNews = () => {
 							];
 							return (
 								<tbody key={i} className="content-map-comment">
+									{window.innerWidth < 500 && (
+										<thead>
+											<tr className="titles-table-comment">
+												<th>تعداد</th>
+												<th>پروفایل</th>
+												<th>نام</th>
+												<th>نظر</th>
+												<th>دسته</th>
+												<th>تیتر خبر</th>
+												<th>عنوان خبر</th>
+												<th>تاریخ</th>
+												<th>کد خبر</th>
+											</tr>
+										</thead>
+									)}
 									<tr>
 										<td>
 											<hr style={{ border: "none", height: "1px" }} />
@@ -326,7 +343,7 @@ export const ListNews = () => {
 								</tbody>
 							);
 						})) ||
-						"لیست خبر های منتشر نشده خالی است ."}
+						"لیست نظر های منتشر نشده خالی است ."}
 				</table>
 			</div>
 			<div id="content-add-news" className="content-add-news">
@@ -368,17 +385,19 @@ export const ListNews = () => {
 					</button>
 				</div>
 				<table className="content-table-news">
-					<thead>
-						<tr className="titles-table-news">
-							<th>تیتر</th>
-							<th>عنوان</th>
-							<th>نویسنده</th>
-							<th>دسته ها</th>
-							<th>نظرات</th>
-							<th>تاریخ انتشار</th>
-							<th>کد خبر</th>
-						</tr>
-					</thead>
+					{window.innerWidth > 500 && (
+						<thead>
+							<tr className="titles-table-news">
+								<th>تیتر</th>
+								<th>عنوان</th>
+								<th>نویسنده</th>
+								<th>دسته ها</th>
+								<th>نظرات</th>
+								<th>تاریخ انتشار</th>
+								<th>کد خبر</th>
+							</tr>
+						</thead>
+					)}
 					{ReceiveAllNews.News.map((e) => {
 						const [DateC, TimeC] = [
 							{
@@ -388,6 +407,19 @@ export const ListNews = () => {
 						];
 						return (
 							<tbody key={e.id} className="content-map-news">
+								{window.innerWidth < 500 && (
+									<thead>
+										<tr className="titles-table-news">
+											<th>تیتر</th>
+											<th>عنوان</th>
+											<th>نویسنده</th>
+											<th>دسته ها</th>
+											<th>نظرات</th>
+											<th>تاریخ انتشار</th>
+											<th>کد خبر</th>
+										</tr>
+									</thead>
+								)}
 								<tr>
 									<td>
 										<hr style={{ border: "none", height: "1px" }} />
@@ -400,7 +432,7 @@ export const ListNews = () => {
 									<td className="title-news">
 										<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
 									</td>
-									<td className="td-info">{e.Author}</td>
+									<td className="td-info">{e.admin.Admin_FirstName + " " + e.admin.Admin_LastName}</td>
 									<td className="td-info">
 										{(e.Category === "politic" && "سیاست") ||
 											(e.Category === "economy" && "اقتصاد") ||
@@ -408,7 +440,7 @@ export const ListNews = () => {
 											(e.Category === "sport" && "ورزش") ||
 											(e.Category === "local" && "بومی")}
 									</td>
-									<td className="green td-info">{e.Comment_Status === false ? 0 : "تنظیم"}</td>
+									<td className="green td-info">{e.Comment_Status === false ? "فعال" : "غیر فعال"}</td>
 									<td className="td-info">
 										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
 									</td>
@@ -423,7 +455,7 @@ export const ListNews = () => {
 													Titre: e.News_Titre,
 													Title: e.News_Title,
 													Category: e.Category,
-													Author: e.Author,
+													Author: e.admin.Admin_FirstName + " " + e.admin.Admin_LastName,
 												})
 											}
 											className="delete-news"

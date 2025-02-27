@@ -223,8 +223,6 @@ export const ListAuthors = () => {
 		document.getElementById("warning-delete-author").style.display = "none";
 	};
 
-	console.log(IdDeletedAuthor);
-
 	const handleDeleteAuthor = async () => {
 		try {
 			await AxiosInstance({
@@ -269,80 +267,80 @@ export const ListAuthors = () => {
 		<div className="container-add-author">
 			<div id="content-add-author" className="content-add-author">
 				<h2>نویسنده ها</h2>
-				<table className="content-table-author">
-					<thead>
-						<tr className="titles-table-author">
-							<th>پروفایل</th>
-							<th>نام نویسنده</th>
-							<th>ایمیل</th>
-							<th>وضعیت سمت</th>
-							<th>وضعیت ایمیل</th>
-							<th>تاریخ ایجاد</th>
-							<th>آخرین بروزرسانی</th>
-						</tr>
-					</thead>
-					{ReceiveAllAuthor.map((e) => {
-						const [DateC, TimeC] = [
-							{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
-							{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
-						];
-						const [DateU, TimeU] = [
-							{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
-							{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
-						];
-						return (
-							<tbody key={e.id} className="content-map-author">
-								<tr>
-									<td>
-										<hr style={{ border: "none", height: "1px" }} />
-									</td>
-								</tr>
-								<tr className="map-author">
-									<td className="img-profile-author">
+				{ReceiveAllAuthor.map((e) => {
+					const [DateC, TimeC] = [
+						{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+						{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
+					];
+					const [DateU, TimeU] = [
+						{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+						{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
+					];
+					return (
+						<div key={e.id} className="content-map-author">
+							<div className="map-author">
+								<div className="content-options">
+									<div className="img-profile-author style-display">
+										<span>پروفایل</span>
 										<img
 											src={e.Admin_Img ? e.Admin_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
 											alt="img-profile"
 										/>
-									</td>
-									<td className="td-info">{e.Admin_FirstName + " " + e.Admin_LastName}</td>
-									{console.log(e)}
-									<td className="td-info">{e.emailAdmin.EmailAdmin}</td>
-									<td className={e.Role !== "Admin" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
-										{e.Role === "Admin" && "نصب"}
-										{e.Role === "!Admin" && "عزل"}
-										{e.Role === "Lord" && "مالک"}
-									</td>
-									<td className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</td>
-									<td className="td-info">
-										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
-									</td>
-									<td className="td-info">
-										<span className="Date">{DateU.DateUpdate}</span> <span className="Time">{TimeU.TimeUpdate}</span>
-									</td>
-									<td className="ffff">
-										{e.Role !== "Lord" && (
+									</div>
+									<div className="name-author style-display">
+										<span>نام نویسنده</span>
+										<p className="td-info">{e.Admin_FirstName + " " + e.Admin_LastName}</p>
+									</div>
+									<div className="email-author-1 style-display">
+										<span>ایمیل</span>
+										<div className="td-info">{e.emailAdmin.EmailAdmin}</div>
+									</div>
+									<div className="role-author style-display">
+										<span>وضعیت سمت</span>
+										<div className={e.Role !== "Admin" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
+											{e.Role === "Admin" && "نصب"}
+											{e.Role === "!Admin" && "عزل"}
+											{e.Role === "Lord" && "مالک"}
+										</div>
+									</div>
+									<div className="status-email-author style-display">
+										<span>وضعیت ایمیل</span>
+										<div className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</div>
+									</div>
+									<div className="td-info style-display">
+										<span>تاریخ ایجاد</span>
+										<div>
+											<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
+										</div>
+									</div>
+									<div className="td-info style-display">
+										<span>آخرین بروزرسانی</span>
+										<div>
+											<span className="Date">{DateU.DateUpdate}</span> <span className="Time">{TimeU.TimeUpdate}</span>
+										</div>
+									</div>
+									{e.Role !== "Lord" && (
+										<div className="ffff style-display">
 											<button id={e.id} name={e.Admin_FirstName + " " + e.Admin_LastName} onClick={handleDeletedAuthor} className="delete-author">
 												حذف
 											</button>
-										)}
-										{e.Role !== "Lord" && (
-											<button id={e.id} onClick={handleCancelAuthor} className="cancel-author">
-												{e.Role === "OnAuthor" ? "عزل" : "منصوب"}
-											</button>
-										)}
-									</td>
-								</tr>
-							</tbody>
-						);
-					})}
-					<thead>
-						<tr>
-							<td>
-								<span style={{ color: "white" }} id="empty-author"></span>
-							</td>
-						</tr>
-					</thead>
-				</table>
+											{e.Role !== "Lord" && (
+												<button id={e.id} onClick={handleCancelAuthor} className="cancel-author">
+													{e.Role === "Admin" ? "عزل" : "منصوب"}
+												</button>
+											)}
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+					);
+				})}
+				<div>
+					<div>
+						<span style={{ color: "white" }} id="empty-author"></span>
+					</div>
+				</div>
 				<div>
 					<div id="author-content" className="author-content">
 						<p className="title-author">اضافه کردن یک نویسنده</p>
@@ -358,7 +356,7 @@ export const ListAuthors = () => {
 								</div>
 								<div className="username-author">
 									<label htmlFor="Admin_UserName">نام کاربری :</label>
-									<i className="fas fa-user"></i>
+									<i className="fas fa-author"></i>
 									<input
 										type="username"
 										name="Admin_UserName"
@@ -380,7 +378,7 @@ export const ListAuthors = () => {
 							</div>
 							<div className="other-info-author">
 								<button type="submit" onClick={handelSubmitAuthor}>
-									ارسال درخواست
+									ایجاد حساب نویسنده
 								</button>
 							</div>
 						</form>

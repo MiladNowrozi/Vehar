@@ -140,23 +140,9 @@ export default class UserControllers {
 						},
 					],
 				});
-				const AllUser = ShowAllUser.map((e) => {
-					return {
-						id: e.id,
-						User_FirstName: e.User_FirstName,
-						User_LastName: e.User_LastName,
-						emailUser: e.emailUser?.EmailUser,
-						Role: e.Role,
-						Verify_Email: e.Verify_Email,
-						createdAt: e.createdAt,
-						updatedAt: e.updatedAt,
-						Default_Image: e.Default_Image,
-					};
-				});
 				res.status(200).json({
 					success: true,
-					body: AllUser,
-					message: `مدیریت ${GetUser.User_FirstName + " " + GetUser.User_LastName} با موفقیت لغو شد!`,
+					body: ShowAllUser,
 				});
 			} else {
 				await User.update(
@@ -175,23 +161,9 @@ export default class UserControllers {
 						},
 					],
 				});
-				const AllUser = ShowAllUser.map((e) => {
-					return {
-						id: e.id,
-						User_FirstName: e.User_FirstName,
-						User_LastName: e.User_LastName,
-						emailUser: e.emailUser?.EmailUser,
-						Role: e.Role,
-						Verify_Email: e.Verify_Email,
-						createdAt: e.createdAt,
-						updatedAt: e.updatedAt,
-						Default_Image: e.Default_Image,
-					};
-				});
 				res.status(200).json({
 					success: true,
-					body: AllUser,
-					message: `مدیریت ${GetUser.User_FirstName + " " + GetUser.User_LastName} با موفقیت فعال شد!`,
+					body: ShowAllUser,
 				});
 			}
 		} else {
@@ -258,23 +230,10 @@ export default class UserControllers {
 				},
 			],
 		});
-		const AllUser = ShowAllUser.map((e) => {
-			return {
-				id: e.id,
-				User_FirstName: e.User_FirstName,
-				User_LastName: e.User_LastName,
-				emailUser: e.emailUser?.EmailUser,
-				Role: e.Role,
-				Verify_Email: e.Verify_Email,
-				createdAt: e.createdAt,
-				updatedAt: e.updatedAt,
-				Default_Image: e.Default_Image,
-			};
-		});
 		res.status(200).json({
 			success: true,
-			body: AllUser.length !== 0 ? AllUser : AllUser,
-			message: `${AllUser.length === 0 ? "شما هیچ نویسنده ای ندارید !" : ""}`,
+			body: ShowAllUser,
+			message: `${ShowAllUser.length === 0 ? "شما هیچ نویسنده ای ندارید !" : ""}`,
 		});
 	};
 	// HISTORY
@@ -303,9 +262,9 @@ export default class UserControllers {
 	};
 	// DELETE
 	static DeleteUser = async (req, res) => {
-		if (req.params.id) {
+		if (req.query.id) {
 			try {
-				await User.destroy({ where: { id: req.params.id } });
+				await User.destroy({ where: { id: req.query.id } });
 				const ShowAllUser = await User.findAll({
 					include: [
 						{

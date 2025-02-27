@@ -239,6 +239,7 @@
 
 @media screen and (max-width: 500px) {
 	.admin-container {
+		width: 100%;
 		.admin-content-container {
 			width: 100%;
 			padding: unset;
@@ -251,6 +252,17 @@
 				}
 				.admin-other-profile {
 					width: 100%;
+				}
+			}
+		}
+		.admin-edit-content-container {
+			height: 100vh;
+			.admin-edit-profile-content {
+				.admin-edit-inputs-profile {
+					width: 90%;
+				}
+				.admin-edit-other-profile {
+					width: 90%;
 				}
 			}
 		}

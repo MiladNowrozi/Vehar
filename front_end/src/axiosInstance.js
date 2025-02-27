@@ -48,6 +48,7 @@ AxiosInstance.interceptors.response.use(
 				}
 			} else {
 				localStorage.setItem("user", null);
+				window.location.href = "/login-register";
 			}
 		}
 		// Handle other errors

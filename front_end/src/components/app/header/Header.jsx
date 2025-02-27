@@ -15,6 +15,8 @@ function Header() {
 		SpecialNews: [],
 		SubNoteNews: [],
 	});
+	console.log(LastNews);
+
 	const Urls = useLocation().search;
 	useEffect(() => {
 		const NewsHeader = async () => {

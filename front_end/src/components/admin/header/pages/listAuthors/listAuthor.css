@@ -4,6 +4,7 @@
 	flex-direction: column;
 	align-items: center;
 	.content-add-author {
+		width: 100%;
 		padding: 15px;
 		direction: rtl;
 		background-color: green;
@@ -11,44 +12,40 @@
 		flex-direction: column;
 		border-radius: 5px;
 		gap: 15px;
-		.content-table-author {
-			width: 100%;
-			border-collapse: collapse;
-			.titles-table-author {
-				th {
-					border-right: 1px solid #acaf003b;
-					border-left: 1px solid #acaf003b;
-					border-top: 1px solid #acaf003b;
-					padding: 5px;
-					text-align: start;
-					font-size: 14px;
-					color: white;
-				}
-			}
-			.content-map-author {
-				.map-author {
-					background-color: white;
-					margin-top: 10px;
 
-					&.map-author:hover {
-						background-color: #d1d1d1;
-						transition: all 0.3s;
+		.content-map-author {
+			.map-author {
+				display: flex;
+				.content-options {
+					width: 30%;
+					padding: 5px;
+					display: flex;
+					flex-direction: column;
+					gap: 5px;
+					background-color: white;
+					border-radius: 5px;
+					margin-top: 10px;
+					.style-display {
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						align-items: center;
+						padding: 5px;
+						font-size: 12px;
+						border-radius: 5px;
+						background-color: #eee;
 					}
 					.ffff {
 						background-color: green;
 					}
 					.img-profile-author {
-						display: flex;
-						justify-content: center;
 						img {
 							width: 40px;
 							border-radius: 50%;
 						}
 					}
 					.td-info {
-						border-right: 1px solid #acaf003b;
 						text-align: center;
-						font-size: 13px;
 						padding: 5px;
 						.Date {
 							color: rgb(173, 0, 150);
@@ -65,29 +62,30 @@
 					}
 				}
 			}
-			.delete-author,
-			.cancel-author {
-				padding: 5px;
-				cursor: pointer;
-				border: none;
-				margin-right: 5px;
-				border-radius: 5px;
-				padding: 5px 10px 5px 10px;
-			}
-			.cancel-author:hover {
-				background-color: black;
-				color: white;
-				transition: all 0.5s;
-			}
-			.delete-author:hover {
-				background-color: red;
-				color: white;
-				transition: all 0.5s;
-			}
+		}
+		.delete-author,
+		.cancel-author {
+			width: 50%;
+			padding: 5px;
+			cursor: pointer;
+			border: none;
+			margin-right: 5px;
+			border-radius: 5px;
+			padding: 5px 10px 5px 10px;
+		}
+		.cancel-author:hover {
+			background-color: black;
+			color: white;
+			transition: all 0.5s;
+		}
+		.delete-author:hover {
+			background-color: red;
+			color: white;
+			transition: all 0.5s;
 		}
 
 		.author-content {
-			width: 100%;
+			width: 30%;
 			padding: 10px;
 			background-color: rgb(1, 11, 153);
 			display: flex;
@@ -107,16 +105,19 @@
 				font-size: 14px;
 				font-weight: 200;
 				display: flex;
-				align-items: flex-end;
+				align-items: center;
 				color: white;
+				flex-direction: column;
+				gap: 25px;
 				.author-input {
 					/* width: 100%; */
 					display: flex;
 					position: relative;
+					flex-direction: column;
 					gap: 5px;
 					.username-author {
 						position: relative;
-						.fa-user {
+						.fa-author {
 							color: green;
 							font-size: 15px;
 							padding: 5px;
@@ -178,7 +179,7 @@
 				}
 
 				button[type="submit"] {
-					width: 100px;
+					width: 100%;
 					padding: 5px;
 					font-family: vazirmatn;
 					cursor: pointer;
@@ -241,6 +242,69 @@
 			background-color: green;
 			color: white;
 			transition: all 0.3s;
+		}
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.container-add-author {
+		width: 100%;
+		.warning-delete-author {
+			width: 80%;
+			left: 10%;
+			right: 10%;
+			font-size: 14px;
+			justify-content: space-evenly;
+			gap: unset;
+		}
+		.content-add-author {
+			width: 100%;
+			border-radius: unset;
+			h2 {
+				text-align: center;
+				color: #fff;
+			}
+			.content-title {
+				width: 30%;
+			}
+			.content-map-author {
+				width: 100%;
+				.map-author {
+					display: flex;
+					flex-direction: column;
+					margin-top: unset;
+					.content-options {
+						width: 100%;
+					}
+					.td-info {
+						font-size: 14px;
+					}
+				}
+			}
+
+			.author-content {
+				.author-form {
+					height: 55vh;
+					flex-direction: column;
+					align-items: unset;
+					justify-content: space-between;
+					.author-input {
+						flex-direction: column;
+					}
+					.other-info-author {
+						width: 100%;
+						display: flex;
+						justify-content: center;
+						button {
+							width: 70%;
+							padding: 10px;
+							font-size: 14px;
+							font-weight: 500;
+							color: #000;
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -12,47 +12,40 @@
 		flex-direction: column;
 		border-radius: 5px;
 		gap: 15px;
-		.content-table-user {
-			width: 100%;
-			border-collapse: collapse;
-			.titles-table-user {
-				th {
-					border-right: 1px solid #acaf003b;
-					border-left: 1px solid #acaf003b;
-					border-top: 1px solid #acaf003b;
-					padding: 5px;
-					text-align: start;
-					font-size: 14px;
-					color: white;
-				}
-			}
-			.content-map-user {
-				.map-user {
-					background-color: white;
-					margin-top: 10px;
 
-					&.map-user:hover {
-						background-color: #d1d1d1;
-						transition: all 0.3s;
+		.content-map-user {
+			.map-user {
+				display: flex;
+				.content-options {
+					width: 30%;
+					padding: 5px;
+					display: flex;
+					flex-direction: column;
+					gap: 5px;
+					background-color: white;
+					border-radius: 5px;
+					margin-top: 10px;
+					.style-display {
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						align-items: center;
+						padding: 5px;
+						font-size: 12px;
+						border-radius: 5px;
+						background-color: #eee;
 					}
 					.ffff {
 						background-color: green;
 					}
 					.img-profile-user {
-						display: flex;
-						justify-content: center;
-						padding-top: 2px;
-						padding-bottom: 2px;
 						img {
 							width: 40px;
-							height: 40px;
 							border-radius: 50%;
 						}
 					}
 					.td-info {
-						border-right: 1px solid #acaf003b;
 						text-align: center;
-						font-size: 13px;
 						padding: 5px;
 						.Date {
 							color: rgb(173, 0, 150);
@@ -69,146 +62,26 @@
 					}
 				}
 			}
-			.delete-user,
-			.cancel-user {
-				padding: 5px;
-				cursor: pointer;
-				border: none;
-				margin-right: 5px;
-				border-radius: 5px;
-				padding: 5px 10px 5px 10px;
-			}
-			.cancel-user:hover {
-				background-color: black;
-				color: white;
-				transition: all 0.5s;
-			}
-			.delete-user:hover {
-				background-color: red;
-				color: white;
-				transition: all 0.5s;
-			}
 		}
-
-		.user-content {
-			width: 100%;
-			padding: 10px;
-			background-color: rgb(1, 11, 153);
-			display: flex;
-			flex-direction: column;
-			align-items: center;
+		.delete-user,
+		.cancel-user {
+			width: 50%;
+			padding: 5px;
+			cursor: pointer;
+			border: none;
+			margin-right: 5px;
 			border-radius: 5px;
-			direction: rtl;
-			gap: 20px;
-			.title-user {
-				font-size: 20px;
-				font-weight: 200;
-				margin-top: 5px;
-				color: white;
-			}
-			.user-form {
-				width: 100%;
-				font-size: 14px;
-				font-weight: 200;
-				display: flex;
-				align-items: flex-end;
-				color: white;
-				.user-input {
-					/* width: 100%; */
-					display: flex;
-					position: relative;
-					gap: 5px;
-					.username-user {
-						position: relative;
-						.fa-user {
-							color: green;
-							font-size: 15px;
-							padding: 5px;
-							position: absolute;
-							left: 10px;
-							bottom: 2px;
-							background-color: white;
-						}
-					}
-					.password-user {
-						position: relative;
-						.fa-lock {
-							color: green;
-							font-size: 15px;
-							padding: 5px;
-							position: absolute;
-							left: 10px;
-							bottom: 2px;
-							background-color: white;
-						}
-					}
-					.email-user {
-						.fa-envelope {
-							color: green;
-							font-size: 15px;
-							padding: 5px;
-							position: absolute;
-							left: 10px;
-							bottom: 1px;
-							background-color: white;
-						}
-					}
-
-					input[type="text"],
-					input[type="username"],
-					input[type="password"],
-					input[type="email"] {
-						width: 100%;
-						height: 30px;
-						margin-top: 5px;
-						outline: none;
-						border: none;
-						font-size: 13px;
-						font-weight: 400;
-						border-radius: 5px;
-						font-family: vazirmatn;
-						-webkit-box-shadow: 0 0 0 30px white inset !important;
-					}
-					input[type="username"],
-					input[type="text"]:valid {
-						padding: 15px 15px 12px 15px;
-					}
-					input[type="password"]:valid {
-						padding: 15px 15px 10px 15px;
-					}
-					input[type="email"]:valid {
-						padding: 15px 15px 10px 15px;
-					}
-				}
-
-				button[type="submit"] {
-					width: 100px;
-					padding: 5px;
-					font-family: vazirmatn;
-					cursor: pointer;
-					border: none;
-					border-radius: 5px;
-					margin-right: 5px;
-				}
-				button[type="submit"]:hover {
-					transition: all 0.5s;
-					background-color: green;
-					color: white;
-				}
-				#submit-warning-user {
-					background-color: white;
-					font-family: Vazirmatn;
-					font-size: 12px;
-					font-weight: 300;
-					display: none;
-					justify-content: center;
-					align-items: center;
-					direction: rtl;
-					padding: 2px 5px 2px 5px;
-					border-radius: 5px;
-					color: red;
-				}
-			}
+			padding: 5px 10px 5px 10px;
+		}
+		.cancel-user:hover {
+			background-color: black;
+			color: white;
+			transition: all 0.5s;
+		}
+		.delete-user:hover {
+			background-color: red;
+			color: white;
+			transition: all 0.5s;
 		}
 	}
 	.warning-delete-user {
@@ -245,6 +118,45 @@
 			background-color: green;
 			color: white;
 			transition: all 0.3s;
+		}
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.container-add-user {
+		width: 100%;
+		.warning-delete-user {
+			width: 80%;
+			left: 10%;
+			right: 10%;
+			font-size: 14px;
+			justify-content: space-evenly;
+			gap: unset;
+		}
+		.content-add-user {
+			width: 100%;
+			border-radius: unset;
+			h2 {
+				text-align: center;
+				color: #fff;
+			}
+			.content-title {
+				width: 30%;
+			}
+			.content-map-user {
+				width: 100%;
+				.map-user {
+					display: flex;
+					flex-direction: column;
+					margin-top: unset;
+					.content-options {
+						width: 100%;
+					}
+					.td-info {
+						font-size: 14px;
+					}
+				}
+			}
 		}
 	}
 }

@@ -24,7 +24,6 @@ export const ListUsers = () => {
 	}, []);
 
 	const [IdDeletedUser, setIdDeletedUser] = useState(null);
-
 	const handleDeletedUser = async (Deleted) => {
 		setIdDeletedUser(Deleted.target.id);
 		document.getElementById("warning-delete-user").style.display = "flex";
@@ -39,7 +38,7 @@ export const ListUsers = () => {
 		try {
 			await AxiosInstance({
 				method: "delete",
-				url: `user/delete${IdDeletedUser}`,
+				url: `user/delete/?id=${IdDeletedUser}`,
 				withCredentials: true,
 			})
 				.then((success) => {
@@ -78,75 +77,79 @@ export const ListUsers = () => {
 		<div className="container-add-user">
 			<div id="content-add-user" className="content-add-user">
 				<h2>کاربران</h2>
-				<table className="content-table-user">
-					<thead>
-						<tr className="titles-table-user">
-							<th>پروفایل</th>
-							<th>نام کاربر</th>
-							<th>ایمیل</th>
-							<th>وضعیت</th>
-							<th>وضعیت ایمیل</th>
-							<th>تاریخ عضویت</th>
-							<th>آخرین بروزرسانی</th>
-						</tr>
-					</thead>
-					{ReceiveAllUser.map((e) => {
-						const [DateC, TimeC] = [
-							{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
-							{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
-						];
-						const [DateU, TimeU] = [
-							{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
-							{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
-						];
-						return (
-							<tbody key={e.id} className="content-map-user">
-								<tr>
-									<td>
-										<hr style={{ border: "none", height: "1px" }} />
-									</td>
-								</tr>
-								<tr className="map-user">
-									<td className="img-profile-user">
+				{ReceiveAllUser.map((e) => {
+					const [DateC, TimeC] = [
+						{ DateCreate: new Date(e.createdAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+						{ TimeCreate: new Date(e.createdAt).toTimeString().split(" ")[0] },
+					];
+					const [DateU, TimeU] = [
+						{ DateUpdate: new Date(e.updatedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" }).split("T")[0] },
+						{ TimeUpdate: new Date(e.updatedAt).toTimeString().split(" ")[0] },
+					];
+					return (
+						<div key={e.id} className="content-map-user">
+							<div className="map-user">
+								<div className="content-options">
+									<div className="img-profile-user style-display">
+										<span>پروفایل</span>
 										<img
-											src={
-												e.Default_Image
-													? e.Default_Image
-													: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"
-											}
+											src={e.User_Img ? e.User_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
 											alt="img-profile"
 										/>
-									</td>
-									<td className="td-info">{e.User_FirstName + " " + e.User_LastName}</td>
-									<td className="td-info">{e.emailUser}</td>
-									<td className={e.Role !== "User" ? "red td-info" : "green td-info"}>{e.Role === "User" ? "فعال" : "غیر فعال"}</td>
-									<td className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</td>
-									<td className="td-info">
-										<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
-									</td>
-									<td className="td-info">
-										<span className="Date">{DateU.DateUpdate}</span> <span className="Time">{TimeU.TimeUpdate}</span>
-									</td>
-									<td className="ffff">
-										<button id={e.id} name={e.User_FirstName + " " + e.User_LastName} onClick={handleDeletedUser} className="delete-user">
-											حذف
-										</button>
-										<button id={e.id} onClick={handleCancelUser} className="cancel-user">
-											{e.Role === "User" ? "غیر فعال" : "فعال"}
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						);
-					})}
-					<thead>
-						<tr>
-							<td>
-								<span style={{ color: "white" }} id="empty-user"></span>
-							</td>
-						</tr>
-					</thead>
-				</table>
+									</div>
+									<div className="name-user style-display">
+										<span>نام</span>
+										<p className="td-info">{e.User_FirstName + " " + e.User_LastName}</p>
+									</div>
+									<div className="email-user-1 style-display">
+										<span>ایمیل</span>
+										<div className="td-info">{e.emailUser.EmailUser}</div>
+									</div>
+									<div className="role-user style-display">
+										<span>وضعیت</span>
+										<div className={e.Role !== "User" && e.Role !== "Lord" ? "red td-info" : "green td-info"}>
+											{e.Role === "User" && "فعال"}
+											{e.Role === "!User" && " غیر فعال"}
+										</div>
+									</div>
+									<div className="status-email-user style-display">
+										<span>وضعیت ایمیل</span>
+										<div className={e.Verify_Email ? "green td-info" : "red td-info"}>{e.Verify_Email === true ? "تایید" : "تایید نشده"}</div>
+									</div>
+									<div className="td-info style-display">
+										<span>تاریخ ایجاد</span>
+										<div>
+											<span className="Date">{DateC.DateCreate}</span> <span className="Time">{TimeC.TimeCreate}</span>
+										</div>
+									</div>
+									<div className="td-info style-display">
+										<span>آخرین بروزرسانی</span>
+										<div>
+											<span className="Date">{DateU.DateUpdate}</span> <span className="Time">{TimeU.TimeUpdate}</span>
+										</div>
+									</div>
+									{e.Role !== "Lord" && (
+										<div className="ffff style-display">
+											<button id={e.id} name={e.User_FirstName + " " + e.User_LastName} onClick={handleDeletedUser} className="delete-user">
+												حذف
+											</button>
+											{e.Role !== "Lord" && (
+												<button id={e.id} onClick={handleCancelUser} className="cancel-user">
+													{e.Role === "User" ? "غیر فعال" : "فعال"}
+												</button>
+											)}
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+					);
+				})}
+				<div>
+					<div>
+						<span style={{ color: "white" }} id="empty-user"></span>
+					</div>
+				</div>
 			</div>
 			<div id="warning-delete-user" className="warning-delete-user">
 				<div id="deleted-user"></div>
