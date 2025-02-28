@@ -44,6 +44,9 @@ const Navbar = () => {
 	const { CurrentUser, logout } = useContext(AuthContext);
 	const [OpenProfileUser, setOpenProfileUser] = useState(false);
 
+	const ToggleProfileUser = () => {
+		OpenProfileUser === false ? setOpenProfileUser(true) : setOpenProfileUser(false);
+	};
 	//
 	const [ReceiveAllNews, setReceiveAllNews] = useState({
 		News: [],
@@ -91,7 +94,12 @@ const Navbar = () => {
 	return (
 		<div className="NavbarContainer">
 			<div className="formContent">
-				<div className="login-logout" onMouseOver={() => setOpenProfileUser(true)} onMouseOut={() => setOpenProfileUser(false)}>
+				<div
+					className="login-logout"
+					onClick={ToggleProfileUser}
+					onMouseOver={() => setOpenProfileUser(true)}
+					onMouseOut={() => setOpenProfileUser(false)}
+				>
 					{CurrentUser ? (
 						<div className="logout-icon">
 							<i className="fas fa-user-check"></i>

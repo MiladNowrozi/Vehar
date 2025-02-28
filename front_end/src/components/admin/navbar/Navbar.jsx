@@ -23,8 +23,10 @@ export const Toggle = () => {
 
 export const NavbarAdmin = () => {
 	const { CurrentUser, logout } = useContext(AuthContext);
-	const [OpenProfile, setOpenProfile] = useState(false);
-
+	const [OpenProfileAdmin, setOpenProfileAdmin] = useState(false);
+	const ToggleProfileAdmin = () => {
+		OpenProfileAdmin === false ? setOpenProfileAdmin(true) : setOpenProfileAdmin(false);
+	};
 	return (
 		<div className="admin-navbar-page">
 			<div className="messages-admin">
@@ -38,9 +40,15 @@ export const NavbarAdmin = () => {
 			<div className="welcome-navbar-admin">
 				<h1>{fa1}</h1>
 			</div>
-			<div id="login-admin" onMouseOver={() => setOpenProfile(true)} onMouseOut={() => setOpenProfile(false)} className="login-admin">
+			<div
+				id="login-admin"
+				onClick={ToggleProfileAdmin}
+				onMouseOver={() => setOpenProfileAdmin(true)}
+				onMouseOut={() => setOpenProfileAdmin(false)}
+				className="login-admin"
+			>
 				<i className="fa fa-user-circle" aria-hidden="true"></i>
-				{OpenProfile === true && (
+				{OpenProfileAdmin === true && (
 					<div className="Show-LoginProfile-Lord">
 						<h3>{CurrentUser && fa2 + CurrentUser.Info.FirstName + " !"}</h3>
 						<Link to={"/"}>
