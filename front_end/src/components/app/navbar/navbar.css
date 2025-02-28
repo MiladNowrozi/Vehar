@@ -333,6 +333,8 @@
 			.login-logout {
 				margin-left: 15px;
 				.logout-icon {
+					margin-left: unset;
+					margin-bottom: 2px;
 					.content-logout {
 						width: 35%;
 					}

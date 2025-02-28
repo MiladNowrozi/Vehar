@@ -1707,8 +1707,23 @@
 	.container-comments {
 		.content-comments {
 			width: 95%;
+			gap: unset;
+			padding: unset;
+			.question {
+				.container-reply {
+					width: 100%;
+					.reply-match-id-comment {
+						width: 100%;
+					}
+				}
+			}
 			.item-comment {
-				& .btn-reply-and-likes {
+				.btn-reply-and-likes {
+					.div-fa-comment {
+						font-size: 12px;
+						align-items: center;
+						padding: 5px;
+					}
 					button[type="button"] {
 						width: max-content;
 						height: max-content;
@@ -1745,6 +1760,25 @@
 					height: max-content;
 					font-size: 10px;
 					padding: 5px;
+				}
+			}
+		}
+	}
+	.container-responses {
+		width: 95%;
+		.content-response {
+			.item-map-responses-main {
+				.reply-to-response {
+					font-size: 10px;
+					button.send-btn-response {
+						font-size: 10px;
+						width: max-content;
+					}
+					.edit-btn-time-response {
+						button {
+							font-size: 10px;
+						}
+					}
 				}
 			}
 		}

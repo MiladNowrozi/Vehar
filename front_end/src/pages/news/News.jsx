@@ -649,7 +649,7 @@ export const News = () => {
 										</button>
 										{comment.responses.length > 0 && (
 											<div className="div-fa-comment">
-												<span>{comment.responses.length}</span>
+												<span>{comment.responses.length > 9 ? "+9" : comment.responses.length}</span>
 												<span
 													onClick={() => {
 														if (document.getElementById(comment.id + "container-responses").style.display !== "none") {
