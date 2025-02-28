@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import "./menu.css";
 import { AnimationYellow } from "../../../animations/Animation";
 import { AuthContext } from "../../../context/authContext";
-
+import { Toggle } from "../navbar/Navbar";
 export const MenuLord = () => {
 	const { CurrentUser } = useContext(AuthContext);
 	return (
 		<section id="menu-lord" className="menu-lord" style={{ right: window.innerWidth < 500 ? "-50%" : "0%" }}>
-			<Link to={"/"}>
+			<Link onClick={Toggle} to={"/"}>
 				<div className="navbar-menu-lord">
 					<section className="animation">
 						<span className="logo-site"></span>
@@ -20,37 +20,37 @@ export const MenuLord = () => {
 				</div>
 			</Link>
 			<div className="header-menu-lord">
-				<Link to={"/admin"}>
+				<Link onClick={Toggle} to={"/admin"}>
 					<button>
 						<i className="fas fa-user"></i>پروفایل شخصی
 					</button>
 				</Link>
 				{CurrentUser.Info.Role === "Lord" && (
-					<Link to={"list-lords"}>
+					<Link onClick={Toggle} to={"list-lords"}>
 						<button>
 							<i className="fas fa-user-friends"></i>نویسندگان
 						</button>
 					</Link>
 				)}
 				{CurrentUser.Info.Role === "Lord" && (
-					<Link to={"list-users"}>
+					<Link onClick={Toggle} to={"list-users"}>
 						<button>
 							<i className="fas fa-users"></i>کاربران
 						</button>
 					</Link>
 				)}
-				<Link to={"create-news"}>
+				<Link onClick={Toggle} to={"create-news"}>
 					<button>
 						<i className="fas fa-newspaper"></i>ایجاد خبر
 					</button>
 				</Link>
-				<Link to={"news"}>
+				<Link onClick={Toggle} to={"news"}>
 					<button>
 						<i className="fas fa-newspaper"></i>اخبار
 					</button>
 				</Link>
 				{CurrentUser.Info.Role === "Lord" && (
-					<Link to={"history"}>
+					<Link onClick={Toggle} to={"history"}>
 						<button>
 							<i className="fas fa-history"></i>خبر های اخیر
 						</button>

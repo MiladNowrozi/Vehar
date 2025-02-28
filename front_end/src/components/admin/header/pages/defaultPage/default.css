@@ -254,15 +254,33 @@
 					width: 100%;
 				}
 			}
+			.btn-going-to-edit-user {
+				width: 90%;
+				font-size: 1rem;
+			}
 		}
 		.admin-edit-content-container {
 			height: 100vh;
+			border-radius: unset;
 			.admin-edit-profile-content {
+				gap: unset;
+				.admin-edit-image-profile{
+					margin-bottom: 10px;
+				}
 				.admin-edit-inputs-profile {
 					width: 90%;
+					border-radius: unset;
+				}
+				.btn-action-edit {
+					width: 100%;
+					position: unset;
+					button {
+						font-size: 1rem;
+					}
 				}
 				.admin-edit-other-profile {
 					width: 90%;
+					border-radius: unset;
 				}
 			}
 		}

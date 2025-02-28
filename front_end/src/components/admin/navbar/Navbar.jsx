@@ -9,24 +9,25 @@ const fa2 = "سلام ";
 const fa3 = "امنیت ";
 const fa4 = "خروج ";
 //
+
+export const Toggle = () => {
+	const add = document.getElementById("milad");
+	const OpenMenu = document.getElementById("menu-lord");
+	add.classList.toggle("milad");
+	if (OpenMenu.style.right === "-50%") {
+		OpenMenu.style.right = "0%";
+	} else {
+		OpenMenu.style.right = "-50%";
+	}
+};
+
 export const NavbarAdmin = () => {
 	const { CurrentUser, logout } = useContext(AuthContext);
-	const milad = () => {
-		const add = document.getElementById("milad");
-		const OpenMenu = document.getElementById("menu-lord");
-		add.classList.toggle("milad");
-		if (OpenMenu.style.right === "-50%") {
-			OpenMenu.style.right = "0%";
-		} else {
-			OpenMenu.style.right = "-50%";
-		}
-	};
-
 	return (
 		<div className="admin-navbar-page">
 			<div className="messages-admin">
 				<i className="fas fa-comment-alt" aria-hidden="true"></i>
-				<div id="milad" onClick={milad} className="open-menu-admin">
+				<div id="milad" onClick={Toggle} className="open-menu-admin">
 					<div></div>
 					<div></div>
 					<div></div>

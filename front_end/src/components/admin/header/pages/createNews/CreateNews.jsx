@@ -974,7 +974,7 @@ export const CreateNews = () => {
 						</div>
 					</div>
 					<div className="buttons-create-news">
-						<Link to={"/lord"}>انصراف</Link>
+						<Link to={"/admin"}>انصراف</Link>
 						<div id="submit-warning"></div>
 						<button id="release" onClick={editNews.id ? handleSubmitEdit : handleSubmit} type="button">
 							{editNews.id ? "ویرایش" : "انتشار"}
