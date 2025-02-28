@@ -68,7 +68,6 @@ export const DefaultAdmin = () => {
 	const i5 = "نام کاربری باید حداقل شامل یک عدد باشد!";
 	const i6 = "نام کاربری باید حداقل شامل یکی از نمادهای @#$%& باشد!";
 
-	console.log(DataAdmin);
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		if (selectedImage) {

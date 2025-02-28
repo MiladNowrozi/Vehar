@@ -42,6 +42,8 @@ const Navbar = () => {
 	const navigate = useNavigate();
 	const [SearchNav, setSearchNav] = useState(false);
 	const { CurrentUser, logout } = useContext(AuthContext);
+	const [OpenProfileUser, setOpenProfileUser] = useState(false);
+
 	//
 	const [ReceiveAllNews, setReceiveAllNews] = useState({
 		News: [],
@@ -89,22 +91,24 @@ const Navbar = () => {
 	return (
 		<div className="NavbarContainer">
 			<div className="formContent">
-				<div className="login-logout">
+				<div className="login-logout" onMouseOver={() => setOpenProfileUser(true)} onMouseOut={() => setOpenProfileUser(false)}>
 					{CurrentUser ? (
 						<div className="logout-icon">
 							<i className="fas fa-user-check"></i>
-							<div className="content-logout">
-								<div className="content-info-user">
-									{CurrentUser.Info.Img === null ? <i className="fas fa-user-circle"></i> : <img src={CurrentUser.Info.Img} alt="img-user" />}
-									<span>سلام {CurrentUser.Info.FirstName} !</span>
+							{OpenProfileUser === true && (
+								<div className="content-logout">
+									<div className="content-info-user">
+										{CurrentUser.Info.Img === null ? <i className="fas fa-user-circle"></i> : <img src={CurrentUser.Info.Img} alt="img-user" />}
+										<span>سلام {CurrentUser.Info.FirstName} !</span>
+									</div>
+									<Link type="button" to={"/user"} className="Link-home">
+										<i className="fa fa-home"></i>صفحه من
+									</Link>
+									<Link type="button" onClick={logout} className="link-logout">
+										<i className="fa fa-sign-out"></i>خروج
+									</Link>
 								</div>
-								<Link type="button" to={"/user"} className="Link-home">
-									<i className="fa fa-home"></i>صفحه من
-								</Link>
-								<Link type="button" onClick={logout} className="link-logout">
-									<i className="fa fa-sign-out"></i>خروج
-								</Link>
-							</div>
+							)}
 						</div>
 					) : (
 						<div className="login-icon">

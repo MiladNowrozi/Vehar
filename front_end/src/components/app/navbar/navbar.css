@@ -189,9 +189,6 @@
 					cursor: pointer;
 					color: yellow;
 				}
-				.fa-user-check:hover ~ .content-logout {
-					visibility: visible;
-				}
 				.content-logout {
 					width: 10%;
 					background-color: rgb(172, 146, 1);
@@ -204,7 +201,6 @@
 					z-index: 1;
 					gap: 5px;
 					font-weight: 300;
-					visibility: hidden;
 					transition: all 1s;
 					.content-info-user {
 						width: 100px;
@@ -336,6 +332,11 @@
 			gap: 65px;
 			.login-logout {
 				margin-left: 15px;
+				.logout-icon {
+					.content-logout {
+						width: 35%;
+					}
+				}
 			}
 		}
 		.full-time {

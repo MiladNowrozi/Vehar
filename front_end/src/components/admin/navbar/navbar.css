@@ -33,7 +33,7 @@
 			position: fixed;
 			right: 5px;
 			gap: 5px;
-			display: none;
+			display: flex;
 			flex-direction: column;
 			align-items: end;
 			justify-content: center;
@@ -54,11 +54,6 @@
 			}
 			h3 {
 				direction: rtl;
-			}
-		}
-		&.login-admin:hover {
-			& .Show-LoginProfile-Lord {
-				display: flex;
 			}
 		}
 	}
@@ -119,6 +114,14 @@
 							margin-top: -8px;
 						}
 					}
+				}
+			}
+		}
+		.login-admin {
+			.Show-LoginProfile-Lord {
+				width: 30%;
+				&.Show-LoginProfile-Lord a {
+					width: 100%;
 				}
 			}
 		}
