@@ -1704,4 +1704,49 @@
 			width: 95%;
 		}
 	}
+	.container-comments {
+		.content-comments {
+			width: 95%;
+			.item-comment {
+				& .btn-reply-and-likes {
+					button[type="button"] {
+						width: max-content;
+						height: max-content;
+						font-size: 10px;
+					}
+				}
+			}
+			.container-info-comment {
+				.warning-delete-comment {
+					width: max-content;
+					padding: 10px;
+					left: 16%;
+					.btn-delete-comment {
+						button {
+							width: 35%;
+						}
+					}
+				}
+				.like-item-container {
+					width: max-content;
+					align-items: baseline;
+					gap: 5px;
+					.date-comment-content {
+						font-size: 10px;
+					}
+					.like-comment-content {
+						font-size: 10px;
+						gap: 5px;
+					}
+				}
+				.but-delete-comment,
+				.but-edit-comment {
+					width: max-content;
+					height: max-content;
+					font-size: 10px;
+					padding: 5px;
+				}
+			}
+		}
+	}
 }
