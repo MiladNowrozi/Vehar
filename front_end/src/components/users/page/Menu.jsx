@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 //
 import { AnimationYellow } from "../../../animations/Animation";
 import { AuthContext } from "../../../context/authContext";
+import { ToggleProfileUser } from "./Navbar";
 //
 import "../user/user.css";
 
 export const MenuUser = () => {
 	const { CurrentUser } = useContext(AuthContext);
+
 	return (
-		<section className="menu-user">
-			<Link to={"/"}>
+		<div id="menu-user-id" className="menu-user" style={{ right: "-50%", height: window.innerHeight - 123 }}>
+			<Link onClick={ToggleProfileUser} to={"/"}>
 				<div className="navbar-menu-user">
 					<section className="animation">
 						<span className="logo-site"></span>
@@ -22,27 +24,27 @@ export const MenuUser = () => {
 				</div>
 			</Link>
 			<div className="header-menu-user">
-				<Link to={"/user"}>
+				<Link onClick={ToggleProfileUser} to={"/user"}>
 					<button>
 						<i className="fas fa-user"></i>پروفایل
 					</button>
 				</Link>
-				<Link to={"comment"}>
+				<Link onClick={ToggleProfileUser} to={"comment"}>
 					<button>
 						<i className="fas fa-comments"></i>نظرات من
 					</button>
 				</Link>
-				<Link to={"likes"}>
+				<Link onClick={ToggleProfileUser} to={"likes"}>
 					<button>
 						<i className="fas fa-thumbs-up"></i>خبر های پسندیده
 					</button>
 				</Link>
-				<Link to={"history"}>
+				<Link onClick={ToggleProfileUser} to={"history"}>
 					<button>
 						<i className="fas fa-history"></i>سابقه فعالیت
 					</button>
 				</Link>
 			</div>
-		</section>
+		</div>
 	);
 };

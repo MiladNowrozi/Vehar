@@ -33,9 +33,7 @@
 							.fa-user-check {
 								cursor: pointer;
 								color: yellow;
-							}
-							.fa-user-check:hover ~ .content-logout {
-								visibility: visible;
+								font-size: 18px;
 							}
 							.content-logout {
 								width: 10%;
@@ -49,7 +47,6 @@
 								z-index: 1;
 								gap: 5px;
 								font-weight: 300;
-								visibility: hidden;
 								transition: all 1s;
 								.content-info-user {
 									width: 100px;
@@ -91,9 +88,6 @@
 									background-color: yellow;
 								}
 							}
-							.content-logout:hover {
-								visibility: visible;
-							}
 							.content-logout:after {
 								content: "";
 								width: 10px;
@@ -125,7 +119,6 @@
 				/* Menu style */
 				.menu-user {
 					width: 15%;
-					height: 100%;
 					background-color: green;
 					display: flex;
 					transition: all 0.5s;
@@ -227,6 +220,103 @@
 		/* Footer style */
 		.include-footer {
 			width: 100%;
+		}
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.container-user-panel {
+		& .content-user-panel {
+			& .include-navbar {
+				& .container-nav {
+					& .content-nav {
+						display: flex;
+						align-items: center;
+						gap: 10px;
+						.open-menu-user {
+							width: 30px;
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							align-items: center;
+							cursor: pointer;
+							gap: 7px;
+							div {
+								width: 100%;
+								height: 1px;
+								background-color: #fff;
+								transition: all 0.5s;
+							}
+							&.milad {
+								div {
+									transition: all 0.5s;
+									width: 100%;
+									height: 1px;
+									background-color: #fff;
+									&:nth-child(1) {
+										transform: rotate(45deg);
+									}
+									&:nth-child(2) {
+										display: none;
+									}
+									&:nth-child(3) {
+										transform: rotate(-45deg);
+										margin-top: -8px;
+									}
+								}
+							}
+						}
+						& .login-logout {
+							& .logout-icon {
+								.content-logout {
+									width: 35%;
+								}
+							}
+						}
+					}
+				}
+			}
+			.include-header {
+				width: 100%;
+				.header {
+					.menu-user {
+						width: max-content;
+						position: fixed;
+						z-index: 1;
+						padding: unset;
+						padding-top: 15px;
+						padding-left: 15px;
+						background-color: rgb(3, 72, 112);
+						transition: all 0.5s;
+						.header-menu-user {
+							&.header-menu-user a > button {
+								padding-left: 15px;
+							}
+						}
+					}
+					.content-header {
+						width: 100%;
+						.user-container {
+							width: 100%;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							.user-content-container {
+								width: 98%;
+								.user-profile-content {
+									.user-other-profile {
+										width: 90%;
+									}
+								}
+								.btn-going-to-edit-user {
+									width: 25%;
+									font-size: 15px;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

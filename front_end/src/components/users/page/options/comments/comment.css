@@ -142,3 +142,24 @@
 		}
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.container-comment-panel-user {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.content-comment-panel-user {
+			width: 98%;
+			height: 100%;
+			.items-comment-panel-user {
+				.abut-news-user-comment {
+					.side-right-about {
+						.author-news-user {
+							flex-direction: column;
+						}
+					}
+				}
+			}
+		}
+	}
+}

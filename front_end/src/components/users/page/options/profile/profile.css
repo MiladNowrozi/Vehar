@@ -235,3 +235,22 @@
 		}
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.user-container {
+		.user-edit-content-container {
+			width: 98%;
+			.user-edit-profile-content {
+				.user-edit-inputs-profile {
+					width: 100%;
+				}
+				.user-edit-other-profile {
+					width: 100%;
+				}
+				.btn-action-edit {
+					width: 35%;
+				}
+			}
+		}
+	}
+}

@@ -150,3 +150,34 @@
 		}
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.container-likes-news {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.likes-content-news {
+			width: 98%;
+			height: 100%;
+			.likes-items-news {
+				.news-about {
+					.side-right-likes {
+						.author-news-likes {
+							flex-direction: column;
+							font-size: 10px;
+						}
+						.createdAt-news-likes {
+							font-size: 10px;
+						}
+					}
+					.count-visit-likes {
+						font-size: 10px;
+					}
+					.code-likes-likes {
+						font-size: 10px;
+					}
+				}
+			}
+		}
+	}
+}

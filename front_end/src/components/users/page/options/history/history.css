@@ -154,3 +154,41 @@
 		}
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.container-history-news {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.history-content-news {
+			width: 98%;
+			.history-items-news {
+				.news-about {
+					.side-right-history {
+						.author-news-history {
+							flex-direction: column;
+							font-size: 10px;
+						}
+						.createdAt-news-history {
+							font-size: 10px;
+							h5 {
+								font-size: 10px;
+							}
+						}
+					}
+					.side-lift-history {
+						.history-user {
+							font-size: 10px;
+						}
+						.code-history-history {
+							font-size: 10px;
+						}
+						.count-visit-history {
+							font-size: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
