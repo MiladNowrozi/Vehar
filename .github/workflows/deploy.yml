@@ -21,9 +21,9 @@ jobs:
       - name: Add VPS to known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 130.185.77.82 >> ~/.ssh/known_hosts  # Replace with your VPS IP
+          ssh-keyscan -H 87.107.105.135 >> ~/.ssh/known_hosts  # Replace with your VPS IP
           chmod 700 ~/.ssh
           chmod 644 ~/.ssh/known_hosts
       - name: Deploy to VPS
         run: |
-          ssh milad@130.185.77.82 'bash -s' < ./deploy.sh
+          ssh -p 9011 root@87.107.105.139 'bash -s' < ./deploy.sh

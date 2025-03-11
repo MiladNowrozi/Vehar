@@ -21,7 +21,7 @@ services:
     build:
       context: ./front_end
       args:
-        REACT_APP_BASE_URL: http://130.185.77.82:5000
+        REACT_APP_BASE_URL: http://87.107.105.139:5000
     ports:
       - 127.0.0.1:3000:3000
     depends_on:

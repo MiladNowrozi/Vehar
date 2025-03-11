@@ -25,6 +25,7 @@ import ContactUs from "./pages/ContactUs/ContactUs";
 import Participation from "./pages/Participation/Participation";
 import Archive from "./pages/Archive/Archive";
 import { Admin } from "./components/admin/admins/admin/Admin";
+import Upload from "./components/admin/header/pages/createNews/upload/Upload.jsx";
 // user
 import { User } from "./components/users/user/User";
 import Profile from "./components/users/page/options/profile/Profile.jsx";
@@ -58,7 +59,7 @@ export const App = () => {
 					<Route path="news" element={<ListNews />} />
 					<Route path="list-lords" element={<ListAuthors />} />
 					<Route path="list-users" element={<ListUsers />} />
-					<Route path="list-email" element={<ListUsers />} />
+					<Route path="upload-files" element={<Upload />} />
 					<Route path="history" element={<HistoryLord />} />
 				</Route>
 

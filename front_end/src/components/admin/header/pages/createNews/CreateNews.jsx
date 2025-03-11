@@ -466,10 +466,20 @@ export const CreateNews = () => {
 								"ltr rtl preview undo redo blocks fontfamily fontsize bold italic underline strikethrough link image media table mergetags addcomment showcomments spellcheckdialog a11ycheck typography align lineheight checklist numlist bullist indent outdent emoticons charmap removeformat",
 							],
 							mobile: {
-								menubar: true, // فعال کردن منوی موبایل
+								menubar: true,
 							},
-							images_upload_url: process.env.REACT_APP_BASE_URL + "/news/create",
 							automatic_uploads: true,
+							// file_picker_callback: function (callback, value, meta) {
+							// 	window.open("http://localhost:3000/admin/upload-files", "File Manager", "width=800,height=600");
+							// 	window.addEventListener(
+							// 		"message",
+							// 		function (event) {
+							// 			if (event.origin !== window.location.origin) return;
+							// 			callback(event.data.url);
+							// 		},
+							// 		false
+							// 	);
+							// },
 						}}
 					/>
 					<div className="Category">

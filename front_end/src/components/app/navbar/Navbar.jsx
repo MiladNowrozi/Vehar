@@ -109,7 +109,7 @@ const Navbar = () => {
 										{CurrentUser.Info.Img === null ? <i className="fas fa-user-circle"></i> : <img src={CurrentUser.Info.Img} alt="img-user" />}
 										<span>سلام {CurrentUser.Info.FirstName} !</span>
 									</div>
-									<Link type="button" to={"/user"} className="Link-home">
+									<Link type="button" to={CurrentUser.Info.Role === "User" ? "/user" : "/admin"} className="Link-home">
 										<i className="fa fa-home"></i>صفحه من
 									</Link>
 									<Link type="button" onClick={logout} className="link-logout">

@@ -21,15 +21,15 @@ import { Activity } from "../models/Activity.js";
 
 // 	http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
 // 	// Access the data
-// 	users.slice(80, 100).forEach(async (user) => {
-// 		const imgRegex = /http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹][^x<>]+.jpg/gi;
+// 	users.slice(0, 100).forEach(async (user) => {
+// 		const imgRegex = /http:[\/]{2,2}87.107.105.139:5000[\/A-z-?=0-9۰-۹][^x<>]+.jpg/gi;
 // 		const imageUrls = [];
 // 		let match;
 // 		while ((match = imgRegex.exec(user.content.rendered)) !== null) {
 // 			imageUrls.push(match[0]);
 // 		}
 // 		try {
-// 			const k = await News.create({
+// 			await News.create({
 // 				News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
 // 				News_Title: user.title.rendered,
 // 				News_Describe: user.excerpt.rendered,
@@ -37,7 +37,7 @@ import { Activity } from "../models/Activity.js";
 // 				Default_Image: imageUrls[0].toString(),
 // 				createdAt: new Date(user.date),
 // 				Category: "local",
-// 				subCategoryId: 5,
+// 				// subCategoryId: 5,
 // 				authorId: 1,
 // 			});
 

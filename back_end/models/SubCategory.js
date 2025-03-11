@@ -4,7 +4,6 @@ import db from "../db.js";
 export const SubCategory = db.define("SubCategory", {
 	SubCategory: {
 		type: DataTypes.STRING(50),
-		allowNull: false,
 	},
 	Category: {
 		type: DataTypes.STRING(50),

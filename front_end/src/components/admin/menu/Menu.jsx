@@ -49,6 +49,11 @@ export const MenuLord = () => {
 						<i className="fas fa-newspaper"></i>اخبار
 					</button>
 				</Link>
+				<Link onClick={window.innerWidth < 500 && Toggle} to={"upload-files"}>
+					<button>
+						<i className="fas fa-upload"></i>آپلود فایل
+					</button>
+				</Link>
 				{CurrentUser.Info.Role === "Lord" && (
 					<Link onClick={window.innerWidth < 500 && Toggle} to={"history"}>
 						<button>
