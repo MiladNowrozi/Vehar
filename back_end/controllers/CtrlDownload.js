@@ -11,11 +11,11 @@ export default class DownloadControllers {
 	//  ######## NEWS
 	static FilesNews = async (req, res) => {
 		const checkFile = req.query.name.split(".")[1];
-		
+
 		if (checkFile === "png" || checkFile === "jpeg" || checkFile === "gif" || checkFile === "jpg") {
 			const imagePath = __dirname + "/uploads/news" + req.query.name;
 			if (!fs.existsSync(imagePath)) {
-				return res.status(404).json({ error: "File not found" });
+				return res.status(404).json({ error: "Image not found" });
 			}
 			const contentType = imagePath.endsWith(".png")
 				? "image/png"
@@ -31,7 +31,7 @@ export default class DownloadControllers {
 		} else if (checkFile === "mp4") {
 			const VideoPath = __dirname + "/uploads/news" + req.query.name;
 			if (!fs.existsSync(VideoPath)) {
-				return res.status(404).json({ error: "File not found" });
+				return res.status(404).json({ error: "Video not found" });
 			}
 
 			const stat = fs.statSync(VideoPath);
@@ -170,15 +170,15 @@ export default class DownloadControllers {
 				limit: parseInt(req.query.limit),
 				offset: 0,
 			});
-		
-				res.status(200).json({
-					success: true,
-					body: {
-						total: video.count,
-						video: video.rows,
-					},
-					message: "all images were receive successfully!",
-				});
+
+			res.status(200).json({
+				success: true,
+				body: {
+					total: video.count,
+					video: video.rows,
+				},
+				message: "all images were receive successfully!",
+			});
 		} catch (error) {
 			console.error("Error reading files:", error);
 			res.status(500).json({ error: "Failed to read files" });
