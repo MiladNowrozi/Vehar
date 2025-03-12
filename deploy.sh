@@ -6,7 +6,6 @@
 
 # docker compose -f docker-compose.develop.yml up -d backend
 # docker compose -f docker-compose.develop.yml up -d frontend
-
 # ___________________________________________________________
 
 cd /root/home/Vehar
