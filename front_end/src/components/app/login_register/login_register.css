@@ -426,7 +426,6 @@ m {
 	.container-auth {
 		.login-content {
 			width: 80%;
-			/* position: unset; */
 		}
 		.register-content {
 			width: 80%;
