@@ -9,7 +9,7 @@
 
 # ___________________________________________________________
 
-cd /root/home/Vehar
+cd Vehar
 
 git pull origin master
 
