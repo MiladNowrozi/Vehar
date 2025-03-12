@@ -16,6 +16,8 @@ services:
     restart: always
     depends_on:
       - mysql
+    volumes:
+      - /root/home/uploads:/app/uploads
 
   frontend:
     build:
