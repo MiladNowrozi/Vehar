@@ -15,7 +15,7 @@ git pull origin master
 
 docker compose -f docker-compose.develop.yml down
 
-docker images --format "{{.Repository}}" | grep -v mysql:8.0.28 | xargs -r docker rmi -f
+docker rmi -f $(docker images -q)
 
 docker compose -f docker-compose.develop.yml build backend
 docker compose -f docker-compose.develop.yml build frontend
