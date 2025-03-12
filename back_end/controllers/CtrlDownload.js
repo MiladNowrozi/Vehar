@@ -15,7 +15,7 @@ export default class DownloadControllers {
 		if (checkFile === "png" || checkFile === "jpeg" || checkFile === "gif" || checkFile === "jpg") {
 			const imagePath = __dirname + "/uploads/news" + req.query.name;
 			if (!fs.existsSync(imagePath)) {
-				return res.status(404).json({ error: "Image not found 5555" });
+				return res.status(404).json({ error: "Image not found 1122" });
 			}
 			const contentType = imagePath.endsWith(".png")
 				? "image/png"
