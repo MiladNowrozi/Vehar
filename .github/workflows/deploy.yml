@@ -26,4 +26,4 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
       - name: Deploy to VPS
         run: |
-          ssh -p 9011 root@87.107.105.139 'bash -s' < ~/home/Vehar/deploy.sh
+          ssh -p 9011 root@87.107.105.139 'bash -s' < ./deploy.sh
