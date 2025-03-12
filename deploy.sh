@@ -11,6 +11,7 @@
 
 cd /root/home/Vehar
 
+git reset --hard origin/master
 git pull origin master
 
 docker compose -f docker-compose.develop.yml down
