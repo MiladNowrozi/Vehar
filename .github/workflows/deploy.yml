@@ -26,8 +26,4 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
       - name: Deploy to VPS
         run: |
-          ssh -p 9011 root@87.107.105.139 << 'EOF'
-            cd /root/home/Vehar || exit 1
-            git pull origin master
-            bash deploy.sh
-          EOF
+          ssh -p 9011 root@87.107.105.139 'bash -s' < ./deploy.sh
