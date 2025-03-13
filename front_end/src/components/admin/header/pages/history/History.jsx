@@ -113,7 +113,7 @@ export default function HistoryLord() {
 										<p>{e.id}</p>
 									</div>
 									<div className="count-visit-history-lord">
-										<i class="fa fa-eye" aria-hidden="true"></i>
+										<i className="fa fa-eye" aria-hidden="true"></i>
 										<p>{e.Visit_Count}</p>
 									</div>
 								</div>

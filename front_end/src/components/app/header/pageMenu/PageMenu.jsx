@@ -52,9 +52,9 @@ export const PageMenu = () => {
 				<div id="ContentMenu" className="ContentMenu">
 					<div className="NavMenu">
 						{/*  */}
-						<div class="neon-container">
+						<div className="neon-container">
 							<span>پایگاه خبری</span>
-							<span class="neon-text">وهار</span>
+							<span className="neon-text">وهار</span>
 						</div>
 						{/*  */}
 					</div>

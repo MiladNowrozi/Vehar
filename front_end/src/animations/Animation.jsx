@@ -32,11 +32,11 @@ export const AnimationRed = () => {
 };
 export const AnimationLoading = () => {
 	return (
-		<div class="container-loading">
-			<div class="item"></div>
-			<div class="item"></div>
-			<div class="item"></div>
-			<div class="item"></div>
+		<div className="container-loading">
+			<div className="item"></div>
+			<div className="item"></div>
+			<div className="item"></div>
+			<div className="item"></div>
 		</div>
 	);
 };

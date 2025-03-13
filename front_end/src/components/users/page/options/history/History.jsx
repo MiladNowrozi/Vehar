@@ -71,7 +71,7 @@ export default function History() {
 											<p>{e.news.id}</p>
 										</div>
 										<div className="count-visit-history">
-											<i class="fa fa-eye" aria-hidden="true"></i>
+											<i className="fa fa-eye" aria-hidden="true"></i>
 											<p>{e.news.Visit_Count}</p>
 										</div>
 									</div>

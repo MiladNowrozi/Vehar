@@ -25,7 +25,7 @@ export default function Likes() {
 		};
 		FetchData();
 	}, []);
-	
+
 	const fa1 = "تیتر خبر : ";
 	const fa2 = "نویسنده : ";
 	const fa3 = "عنوان خبر : ";
@@ -69,7 +69,7 @@ export default function Likes() {
 											<p>{e.news.id}</p>
 										</div>
 										<div className="count-visit-likes">
-											<i class="fa fa-eye" aria-hidden="true"></i>
+											<i className="fa fa-eye" aria-hidden="true"></i>
 											<p>{e.news.Visit_Count}</p>
 										</div>
 									</div>
