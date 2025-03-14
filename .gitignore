@@ -2,7 +2,6 @@ back_end/node_modules
 back_end/News.json
 back_end/uploads
 back_end/.env
-# back_end/index.js
 #
 front_end/node_modules
 front_end/build
