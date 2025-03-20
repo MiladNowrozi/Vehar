@@ -1,9 +1,9 @@
 cd /root/home/Vehar
 git pull origin master
-npm --prefix ./back_end/ i
 pm2 delete 0
+rm -rf ./back_end/node_modules
+npm --prefix ./back_end/ i
 pm2 start ./back_end/index.js
-# rm -rf ./back_end/node_modules
 
 npm --prefix ./front_end i
 npm --prefix ./front_end run build
