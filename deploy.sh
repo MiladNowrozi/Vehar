@@ -7,6 +7,7 @@ rm -rf ./back_end/node_modules
 
 npm --prefix ./front_end i
 npm --prefix ./front_end run build
+rm -rf /usr/share/nginx/html/*
 mv ./build/* /usr/share/nginx/html/
 rm -rf ./front_end/node_modules
 rm -rf ./build
