@@ -1,25 +1,12 @@
-#!/bin/bash
-# cd Vehar
-# git pull origin master
-# docker compose -f docker-compose.develop.yml build backend
-# docker compose -f docker-compose.develop.yml build frontend
-
-# docker compose -f docker-compose.develop.yml up -d backend
-# docker compose -f docker-compose.develop.yml up -d frontend
-
-# ___________________________________________________________
-
 cd /root/home/Vehar
-
 git pull origin master
+npm --prefix ./back_end/ i
+pm2 delete 0
+pm2 start ./back_end/index.js
+rm -rf ./back_end/node_modules
 
-docker compose -f docker-compose.develop.yml down
-
-# docker rmi -f $(docker images -q)
-docker images --format "{{.Repository}}:{{.Tag}}" | grep -v "mysql:8.0.28" | xargs -r docker rmi -f
-
-docker compose -f docker-compose.develop.yml build backend
-docker compose -f docker-compose.develop.yml build frontend
-
-docker compose -f docker-compose.develop.yml up --build -d
-# docker compose -f docker-compose.develop.yml up -d frontend
+npm --prefix ./front_end i
+npm --prefix ./front_end run build
+mv ./build/* /usr/share/nginx/html/
+rm -rf ./front_end/node_modules
+rm -rf ./build

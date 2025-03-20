@@ -21,12 +21,12 @@ app.use(cors({ origin: ["http://localhost:3000", "http://locklhost:5000", "http:
 
 // res.status(200).json({ location: `http://localhost:5000/get-images?name=${req.file.filename}` });
 // middlewares
-app.use("/auth", authRouter);
-app.use("/upload", AuthToken, uploadRouter);
-app.use("/download", downloadRouter);
-app.use("/admin", AuthToken, adminRouter);
-app.use("/user", AuthToken, usersRouter);
-app.use("/news", newsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/upload", AuthToken, uploadRouter);
+app.use("/api/download", downloadRouter);
+app.use("/api/admin", AuthToken, adminRouter);
+app.use("/api/user", AuthToken, usersRouter);
+app.use("/api/news", newsRouter);
 app.use("*", (req, res) => {
 	res.status(404).send("چنین مسیری یافت نشد!");
 });

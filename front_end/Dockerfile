@@ -1,21 +1,22 @@
-# Frontend Dockerfile
-FROM node:18-alpine AS builder
+FROM node:18 AS build
+
+WORKDIR /app
 
 ARG REACT_APP_BASE_URL
 ENV REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
-WORKDIR /app
 
 COPY package*.json ./
-RUN --mount=type=cache,target=/root/.npm npm install
 
+RUN npm install
 
 COPY . .
-CMD ["/app/node_modules/.bin/react-scripts", "start"]
 
+RUN npm run build
 
-# FROM nginx:alpine
-# COPY --from=builder /app/build /usr/share/nginx/html
+FROM nginx:latest
 
+COPY --from=build /app/build /usr/share/nginx/html
 
+EXPOSE 80
 
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

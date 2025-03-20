@@ -8,7 +8,6 @@ front_end/build
 #
 .vscode
 .env
-develop.env
 production.env
 back.env
-front.env
+nginx.conf
