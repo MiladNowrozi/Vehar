@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { Files } from "../models/Files.js";
 import { Op } from "@sequelize/core";
 
-const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../");
 
 export default class DownloadControllers {
 	//  ######## NEWS
