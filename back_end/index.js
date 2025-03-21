@@ -16,7 +16,6 @@ app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors({ origin: process.env.URLS.split(","), credentials: true }));
 // const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
-console.log(process.env.URLS.split(","));
 
 // await db.sync({ alter: true });
 

@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 //
 import multer from "multer";
-const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../");
 
 //  ################ NEWS
 
