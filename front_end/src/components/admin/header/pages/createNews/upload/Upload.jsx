@@ -14,6 +14,35 @@ const Upload = () => {
 	const [openVideo, setOpenVideo] = useState(false);
 	const [openSound, setOpenSound] = useState(false);
 
+	const [files, setFiles] = useState([]);
+
+	const handleFileChange = (event) => {
+		setFiles(event.target.files);
+	};
+
+	const handleUpload = async () => {
+		const formData = new FormData();
+		for (let i = 0; i < files.length; i++) {
+			formData.append("files", files[i]);
+		}
+
+		try {
+			await AxiosInstance({
+				method: "get",
+				url: "/api/upload",
+				withCredentials: true,
+			})
+				.then((success) => {
+					alert("آپلود شما با موفقیت انجام شد .");
+				})
+				.catch((e) => {
+					console.log(e);
+				});
+		} catch (error) {
+			console.error("Error uploading files:", error);
+		}
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoadingImages(true);
@@ -114,6 +143,8 @@ const Upload = () => {
 				>
 					تصاویر
 				</button>
+				<input type="file" multiple onChange={handleFileChange} />
+				<button onClick={handleUpload}>Upload</button>
 			</div>
 			<div className="content-gallery-files">
 				{openImages && (
