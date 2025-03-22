@@ -57,13 +57,20 @@ export default class NewsControllers {
 				},
 			});
 			if (NewsExist === null) {
+				const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
+				const imageUrls = [];
+				let match;
+				while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
+					imageUrls.push(match[1]);
+				}
+
 				try {
 					await News.create({
 						News_Titre: req.body.News_Titre,
 						News_Title: req.body.News_Title,
 						News_Describe: req.body.News_Describe,
 						News_Content: req.body.News_Content,
-						Default_Image: req.body.Default_Image,
+						Default_Image: imageUrls[0].toString(),
 						Comment_Status: req.body.Comment_Status,
 						MainPageColumn: req.body.MainPageColumn,
 						MainPageSlider: req.body.MainPageSlider,
@@ -476,6 +483,12 @@ export default class NewsControllers {
 	};
 	// UPDATE ONE NEWS
 	static UpdNews = async (req, res) => {
+		const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
+		const imageUrls = [];
+		let match;
+		while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
+			imageUrls.push(match[1]);
+		}
 		try {
 			const GetOneNewsForUpd = await News.findByPk(req.body.id);
 			if (GetOneNewsForUpd) {
@@ -484,7 +497,7 @@ export default class NewsControllers {
 					News_Title: req.body.News_Title,
 					News_Describe: req.body.News_Describe,
 					News_Content: req.body.News_Content,
-					Default_Image: req.body.Default_Image,
+					Default_Image: imageUrls[0].toString(),
 					Comment_Status: req.body.Comment_Status,
 					MainPageSlider: req.body.MainPageSlider,
 					MainPageColumn: req.body.MainPageColumn,

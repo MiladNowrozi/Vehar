@@ -18,7 +18,6 @@ export const CreateNews = () => {
 		News_Title: "",
 		News_Describe: "",
 		News_Content: "",
-		Default_Image: null,
 		Comment_Status: false,
 		MainPageSlider: false,
 		MainPageColumn: false,
@@ -54,76 +53,6 @@ export const CreateNews = () => {
 		};
 		FetchData();
 	}, [NewsId]);
-
-	// const handelChange = (e) => {
-	// 	setInput((prev) => ({
-	// 		...prev,
-	// 		[e.target.name]: e.target.value,
-	// 		AuthorId: CurrentUser && CurrentUser.Info.Role === "Lord" ? CurrentUser.Info.id : navigate("/login-register"),
-	// 	}));
-	// };
-
-	// const handelEditorChange = (e) => {
-	// 	const imgRegex = /<img\s+[^>]*src="([^"]*)"/gi;
-	// 	const imageUrls = [];
-	// 	let match;
-	// 	while ((match = imgRegex.exec(e)) !== null) {
-	// 		imageUrls.push(match[1]);
-	// 	}
-
-	// 	setInput((prev) => ({
-	// 		...prev,
-	// 		Editor: e,
-	// 		Images: imageUrls.toString(),
-	// 	}));
-	// };
-
-	// const handleChangeCategory = (e) => {
-	// 	const ele = document.getElementsByName("HandleCheckboxCategory");
-	// 	const eleSubCategory = document.getElementsByName("HandleCheckboxSubCategory");
-	// 	const showCreateSubCategory = document.getElementById("subcategory-content");
-	// 	if (document.getElementById(e.target.id).checked) {
-	// 		setInput((prev) => ({
-	// 			...prev,
-	// 			Category: e.target.id,
-	// 		}));
-	// 		const a = document.getElementsByClassName("Create-SubCategory");
-	// 		for (let i = 0; i < a.length; i++) {
-	// 			a[i].style.display = "none";
-	// 			showCreateSubCategory.style.display = "block";
-	// 		}
-	// 		for (let i = 0; i < ele.length; i++) {
-	// 			ele[i].checked = false;
-	// 			document.getElementById(e.target.id).checked = true;
-	// 			for (let i = 0; i < eleSubCategory.length; i++) {
-	// 				eleSubCategory[i].checked = false;
-	// 			}
-	// 		}
-	// 	} else {
-	// 		setInput((prev) => ({
-	// 			...prev,
-	// 			Category: "",
-	// 		}));
-	// 	}
-	// };
-	// const handleChangeSubCategory = (e) => {
-	// 	const ele = document.getElementsByName("HandleCheckboxSubCategory");
-	// 	if (document.getElementById(e.target.id).checked) {
-	// 		setInput((prev) => ({
-	// 			...prev,
-	// 			SubCategoryId: e.target.id.match(/(\d+)/)[0],
-	// 		}));
-	// 		for (let i = 0; i < ele.length; i++) {
-	// 			ele[i].checked = false;
-	// 			document.getElementById(e.target.id).checked = true;
-	// 		}
-	// 	} else {
-	// 		setInput((prev) => ({
-	// 			...prev,
-	// 			SubCategoryId: "",
-	// 		}));
-	// 	}
-	// };
 
 	const handleSubmit = async () => {
 		if (input.News_Title === "" && input.News_Describe === "" && input.News_Content === "" && input.Category === "") {
