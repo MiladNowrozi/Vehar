@@ -1,4 +1,3 @@
-/** @format */
 import React, { useContext, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Link, useLocation } from "react-router-dom";
@@ -10,7 +9,6 @@ import { AxiosInstance } from "../../../../../axiosInstance.js";
 export const CreateNews = () => {
 	const NewsId = useLocation().search;
 	const [editNews, setEditNews] = useState([]);
-	console.log(editNews);
 
 	const { CurrentUser } = useContext(AuthContext);
 
