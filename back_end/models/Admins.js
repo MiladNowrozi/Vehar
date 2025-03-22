@@ -24,7 +24,7 @@ export const Admin = db.define("Admin", {
 	Default_Image: {
 		type: DataTypes.STRING(255),
 		allowNull: true,
-		defaultValue: "http://localhost:5000/download/user?name=avatar-1577909_1920.png",
+		defaultValue: "http://87.107.105.139/api/download/user?name=avatar-1577909_1920.png",
 	},
 	Role: {
 		type: DataTypes.STRING(100),
@@ -82,7 +82,7 @@ db.queryInterface.tableExists("Admins").then(async (e) => {
 				Role: "Lord",
 				Admin_remember: false,
 				Verify_Email: true,
-				Default_Image: "http://localhost:5000/download/user?name=avatar-1577909_1920.png",
+				Default_Image: "http://87.107.105.139/api/download/user?name=avatar-1577909_1920.png",
 			});
 			db.queryInterface.tableExists("EmailAdmins").then(async (e) => {
 				if (!e) {
