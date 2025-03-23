@@ -264,6 +264,7 @@ export const RefreshToken = async (req, res) => {
 						Info: {
 							Role: AuthorInfo.Role,
 							Id: AuthorInfo.id,
+							Img: AuthorInfo.Default_Image,
 							FirstName: AuthorInfo.Admin_FirstName,
 							LastName: AuthorInfo.Admin_LastName,
 						},
@@ -286,6 +287,8 @@ export const RefreshToken = async (req, res) => {
 					}
 				);
 				const LordInfo = await Admin.findByPk(user.id);
+				console.log(LordInfo.Admin_Img);
+
 				res.status(200).json({
 					success: true,
 					body: {
@@ -294,7 +297,7 @@ export const RefreshToken = async (req, res) => {
 						Info: {
 							Id: LordInfo.id,
 							Role: LordInfo.Role,
-							Img: LordInfo.Admin_Img,
+							Img: LordInfo.Default_Image,
 							FirstName: LordInfo.Admin_FirstName,
 							LastName: LordInfo.Admin_LastName,
 						},

@@ -511,7 +511,7 @@ export const News = () => {
 												<i
 													className="fa fa-heart"
 													onClick={async () => {
-														if (CurrentUser) {
+														if (CurrentUser.Info) {
 															await AxiosInstance({
 																method: "post",
 																url: `/news/like-news?id=${news.GetSelectedNews.id}`,
