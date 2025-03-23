@@ -17,7 +17,7 @@ router.post("/news", uploadFiles, (req, res) => {
 	if (req.file) {
 		res.status(200).json({
 			success: true,
-			message: "File uploaded successfully!",
+			message: "File uploaded successfully !",
 			file: {
 				AbsolutePath: req.file.originalname,
 				path: req.file.path,
