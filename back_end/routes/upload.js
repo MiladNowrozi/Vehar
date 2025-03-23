@@ -70,9 +70,12 @@ const deleteOldImageUser = async (req, res, next) => {
 router.post("/user", deleteOldImageUser, uploadFileUser, async (req, res) => {
 	const FilePath = process.env.BASE_URL + "/download/user?name=" + req.file.path.split("/")[5];
 	try {
-		const SaveFilePath = await User.update({
-			Default_Image: FilePath,
-		});
+		const SaveFilePath = await User.update(
+			{
+				Default_Image: FilePath,
+			},
+			{ where: { id: req.user.id } }
+		);
 		res.status(200).json({
 			success: true,
 			message: "File uploaded successfully!",
