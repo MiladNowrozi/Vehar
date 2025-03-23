@@ -21,6 +21,7 @@ export const User = db.define("User", {
 	Default_Image: {
 		type: DataTypes.STRING(255),
 		allowNull: true,
+		defaultValue: "http://87.107.105.139/api/download/user?name=default-profile.jpg",
 	},
 	User_Remember: {
 		type: DataTypes.BOOLEAN,

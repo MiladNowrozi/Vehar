@@ -29,10 +29,13 @@ router.post("/news", uploadFiles, (req, res) => {
 });
 
 // ################# USER
+
+const Default_Image_User = "http://87.107.105.139/api/download/user?name=default-profile.jpg";
+
 const deleteOldImageUser = async (req, res, next) => {
 	const ChangeImg = await User.findByPk(req.user.id);
 
-	if (ChangeImg) {
+	if (ChangeImg && ChangeImg.Default_Image !== Default_Image_User) {
 		const SplitNameFromUrl = ChangeImg.Default_Image.split("=")[1];
 		const oldImage = path.join(__dirname, "/uploads/user/", SplitNameFromUrl);
 		if (fs.existsSync(oldImage)) {
@@ -84,10 +87,12 @@ router.post("/user", deleteOldImageUser, uploadFileUser, async (req, res) => {
 });
 
 // ################# ADMIN
+const Default_Image_Admin = "http://87.107.105.139/api/download/admin?name=default-profile.jpg";
+
 const deleteOldImageAdmin = async (req, res, next) => {
 	const ChangeImg = await Admin.findByPk(req.user.id);
 
-	if (ChangeImg) {
+	if (ChangeImg && ChangeImg.Default_Image !== Default_Image_Admin) {
 		const SplitNameFromUrl = ChangeImg.Default_Image.split("=")[1];
 		const oldImage = path.join(__dirname, "/uploads/admin/", SplitNameFromUrl);
 		if (fs.existsSync(oldImage)) {

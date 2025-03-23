@@ -348,7 +348,7 @@ export const Register = async (req, res) => {
 						User_LastName: lastName_register,
 						User_UserName: username_register,
 						User_Password: HashPassword,
-						Default_Image: "http://87.107.105.139/api/download/user?name=avatar-1577909_1920.png",
+						Default_Image: "http://87.107.105.139/api/download/user?name=default-profile.jpg",
 					});
 					await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
 					res.status(200).json({
