@@ -65,7 +65,7 @@ const deleteOldImageUser = async (req, res, next) => {
 };
 
 router.post("/user", deleteOldImageUser, uploadFileUser, async (req, res) => {
-	const FilePath = process.env.BASE_URL + "/download/user?name=" + req.file.path.split("\\")[3];
+	const FilePath = process.env.BASE_URL + "/download/user?name=" + req.file.path.split("/")[5];
 	try {
 		const SaveFilePath = await User.update({
 			Default_Image: FilePath,
@@ -117,7 +117,7 @@ const deleteOldImageAdmin = async (req, res, next) => {
 };
 
 router.post("/admin", deleteOldImageAdmin, uploadFileAdmin, async (req, res) => {
-	const FilePath = process.env.BASE_URL + "/download/admin?name=" + req.file.path.split("\\")[3];
+	const FilePath = process.env.BASE_URL + "/download/admin?name=" + req.file.path.split("/")[5];
 	try {
 		const SaveFilePath = await Admin.update(
 			{
