@@ -9,7 +9,7 @@ import { uploadFiles, uploadFileUser, uploadFileAdmin } from "../controllers/Ctr
 import { User } from "../models/User.js";
 import { Admin } from "../models/Admins.js";
 
-const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../");
 
 // ################# NEWS
 
@@ -17,7 +17,7 @@ router.post("/news", uploadFiles, (req, res) => {
 	if (req.file) {
 		res.status(200).json({
 			success: true,
-			message: "File uploaded successfully !",
+			message: "File uploaded successfully!",
 			file: {
 				AbsolutePath: req.file.originalname,
 				path: req.file.path,
