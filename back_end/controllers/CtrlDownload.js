@@ -119,7 +119,7 @@ export default class DownloadControllers {
 		try {
 			const images = await Files.findAndCountAll({
 				where: {
-					FilePath: {
+					FileName: {
 						[Op.or]: [{ [Op.like]: "%.jpg" }],
 					},
 				},
@@ -162,7 +162,7 @@ export default class DownloadControllers {
 		try {
 			const video = await Files.findAndCountAll({
 				where: {
-					FilePath: {
+					FileName: {
 						[Op.or]: [{ [Op.like]: "%.mp4" }],
 					},
 				},
@@ -189,7 +189,7 @@ export default class DownloadControllers {
 	// 	try {
 	// 		const images = await Files.findAndCountAll({
 	// 			where: {
-	// 				FilePath: {
+	// 				FileName: {
 	// 					[Op.or]: [{ [Op.like]: "%.mp4" }],
 	// 				},
 	// 			},

@@ -12,8 +12,8 @@ const StorageNews = multer.diskStorage({
 		const now = new Date();
 		const year = now.getFullYear();
 		const month = String(now.getMonth() + 1).padStart(2, "0");
-		const day = String(now.getDate()).padStart(2, "0");
-		const dir = path.join(__dirname, "/uploads/news/", year.toString(), month, day);
+
+		const dir = path.join(__dirname, "/uploads/news/", year.toString(), month);
 
 		fs.mkdirSync(dir, { recursive: true });
 		cb(null, dir);
@@ -26,7 +26,7 @@ const StorageNews = multer.diskStorage({
 });
 
 const UploadFile = multer({ storage: StorageNews });
-export const uploadFiles = UploadFile.single("file");
+export const uploadFiles = UploadFile.array("files", 100);
 
 //  ################ USER
 

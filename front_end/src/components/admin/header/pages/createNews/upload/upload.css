@@ -13,6 +13,21 @@
 		gap: 5px;
 		background-color: aqua;
 		padding: 10px;
+		.option-upload {
+			display: flex;
+			width: 12%;
+			gap: 5px;
+			button,
+			label {
+				width: 100%;
+			}
+			button {
+				background-color: saddlebrown;
+			}
+			label {
+				background-color: saddlebrown;
+			}
+		}
 		button {
 			width: 10%;
 			border: none;
@@ -26,6 +41,17 @@
 		button:hover {
 			background-color: green;
 			color: yellow;
+		}
+		label {
+			width: 70px;
+			height: 30px;
+			background-color: darkred;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			border-radius: 5px;
+			cursor: pointer;
 		}
 	}
 	.content-gallery-files {
@@ -80,5 +106,18 @@
 		}
 	}
 	.content-sound {
+	}
+}
+@media screen and (max-width: 500px) {
+	.container-gallery-files {
+		width: 100%;
+		.content-option-button {
+			button {
+				width: 65px;
+			}
+			.option-upload {
+				width: 35%;
+			}
+		}
 	}
 }

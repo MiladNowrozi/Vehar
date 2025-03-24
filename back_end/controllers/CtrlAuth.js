@@ -221,7 +221,7 @@ export const RefreshToken = async (req, res) => {
 					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
-						expiresIn: "60s",
+						expiresIn: "500s",
 					}
 				);
 				const UserInfo = await User.findByPk(user.id);
@@ -252,7 +252,7 @@ export const RefreshToken = async (req, res) => {
 					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
-						expiresIn: "5s",
+						expiresIn: "120s",
 					}
 				);
 				const AuthorInfo = await Admin.findByPk(user.id);
@@ -283,7 +283,7 @@ export const RefreshToken = async (req, res) => {
 					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
 					process.env.REFRESH_TOKEN_SECRET,
 					{
-						expiresIn: "5s",
+						expiresIn: "120s",
 					}
 				);
 				const LordInfo = await Admin.findByPk(user.id);
@@ -470,7 +470,7 @@ export const Login = async (req, res) => {
 						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
-							expiresIn: "5s",
+							expiresIn: "120s",
 						}
 					);
 					// Store refresh token with expiration time
@@ -523,7 +523,7 @@ export const Login = async (req, res) => {
 						},
 						process.env.REFRESH_TOKEN_SECRET,
 						{
-							expiresIn: "5s",
+							expiresIn: "120s",
 						}
 					);
 					// Store refresh token with expiration time

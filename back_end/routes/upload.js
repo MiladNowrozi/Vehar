@@ -8,23 +8,29 @@ import { uploadFiles, uploadFileUser, uploadFileAdmin } from "../controllers/Ctr
 
 import { User } from "../models/User.js";
 import { Admin } from "../models/Admins.js";
+import { Files } from "../models/Files.js";
 
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../");
 
 // ################# NEWS
 
 router.post("/news", uploadFiles, (req, res) => {
-	if (req.file) {
+	if (req.files) {
+		req.files.map(async (DataFile) => {
+			await Files.create({
+				OriginalName: DataFile.originalname,
+				FileName: DataFile.filename,
+				FilePath: DataFile.path.split("/").slice(3).join("/"),
+				MimeType: DataFile.mimetype,
+				adminId: req.user.id,
+			});
+		});
 		res.status(200).json({
 			success: true,
-			message: "File uploaded successfully!",
-			file: {
-				AbsolutePath: req.file.originalname,
-				path: req.file.path,
-			},
+			message: "Files uploaded successfully ✔",
 		});
 	} else {
-		res.status(400).json({ message: "File upload failed." });
+		res.status(400).json({ message: "File upload failed !" });
 	}
 });
 
@@ -79,7 +85,7 @@ router.post("/user", deleteOldImageUser, uploadFileUser, async (req, res) => {
 		res.status(200).json({
 			success: true,
 			message: "File uploaded successfully!",
-			FilePath: SaveFilePath.FilePath,
+			FilePath: SaveFilePath.FileName,
 		});
 	} catch (error) {
 		res.status(403).json({

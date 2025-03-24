@@ -5,8 +5,14 @@ export const Files = db.define("Files", {
 	OriginalName: {
 		type: DataTypes.STRING(255),
 	},
+	FileName: {
+		type: DataTypes.STRING(255),
+	},
 	FilePath: {
 		type: DataTypes.STRING(255),
+	},
+	MimeType: {
+		type: DataTypes.STRING(15),
 	},
 });
 

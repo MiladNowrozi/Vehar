@@ -21,25 +21,25 @@ const Upload = () => {
 	};
 
 	const handleUpload = async () => {
-		const formData = new FormData();
-		for (let i = 0; i < files.length; i++) {
-			formData.append("files", files[i]);
-		}
+		if (files.length > 0) {
+			const formData = new FormData();
+			for (let i = 0; i < files.length; i++) {
+				formData.append("files", files[i]);
+			}
 
-		try {
-			await AxiosInstance({
-				method: "get",
-				url: "/api/upload",
-				withCredentials: true,
-			})
-				.then((success) => {
-					alert("آپلود شما با موفقیت انجام شد .");
-				})
-				.catch((e) => {
-					console.log(e);
-				});
-		} catch (error) {
-			console.error("Error uploading files:", error);
+			try {
+				await AxiosInstance.post("/upload/news", formData)
+					.then((success) => {
+						alert("آپلود شما با موفقیت انجام شد .");
+					})
+					.catch((e) => {
+						console.log(e);
+					});
+			} catch (error) {
+				console.error("Error uploading files:", error);
+			}
+		} else {
+			alert("لطفاً فایل های خود را انتخاب کنید !");
 		}
 	};
 
@@ -143,8 +143,11 @@ const Upload = () => {
 				>
 					تصاویر
 				</button>
-				<input type="file" multiple onChange={handleFileChange} />
-				<button onClick={handleUpload}>Upload</button>
+				<input id="upload_files_id" style={{ display: "none" }} type="file" multiple onChange={handleFileChange} />
+				<div className="option-upload">
+					<label htmlFor="upload_files_id" className="fa fa-upload"></label>
+					<button onClick={handleUpload}>ارسال</button>
+				</div>
 			</div>
 			<div className="content-gallery-files">
 				{openImages && (
@@ -152,7 +155,7 @@ const Upload = () => {
 						<div id="items-images-scroll-id" className="items-images">
 							{Images.images?.map((Image, index) => (
 								<div key={index} className="list-item">
-									<img src={Image.FilePath} alt="images" />
+									<img src={process.env.REACT_APP_SET_URLS + Image.FilePath} alt="images" />
 								</div>
 							))}
 							{loadingImages && <p className="loadingImages">Loading...</p>}
