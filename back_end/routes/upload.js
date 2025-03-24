@@ -20,7 +20,7 @@ router.post("/news", uploadFiles, (req, res) => {
 			await Files.create({
 				OriginalName: DataFile.originalname,
 				FileName: DataFile.filename,
-				FilePath: DataFile.path.split("/").slice(3).join("/"),
+				FilePath: DataFile.path.match(/\d{4}\/\d{2}\/.*$/)[0],
 				MimeType: DataFile.mimetype,
 				adminId: req.user.id,
 			});
