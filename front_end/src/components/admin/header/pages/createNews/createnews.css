@@ -35,6 +35,26 @@
 			font-family: Vazirmatn;
 			user-select: none;
 		}
+		.editor-select-images {
+			width: 100%;
+			height: 100vh;
+			position: fixed;
+			z-index: 3;
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			background-color: darkgoldenrod;
+			left: 0;
+			right: 0;
+			top: 0;
+			.section-files {
+				width: 100%;
+				height: 100vh;
+				display: flex;
+				margin-top: 40px;
+				justify-content: center;
+			}
+		}
 
 		.Category {
 			width: 80%;

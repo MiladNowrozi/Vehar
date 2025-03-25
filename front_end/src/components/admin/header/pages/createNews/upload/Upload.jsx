@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./upload.css"; // Import the CSS file
 import { AxiosInstance } from "../../../../../../axiosInstance";
+import { CreateNews } from "../CreateNews";
 
-const Upload = () => {
+const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
 	const [Videos, setVideos] = useState([]);
 	const [LimitImages, setLimitImages] = useState(50);
@@ -111,10 +112,34 @@ const Upload = () => {
 		VideoScroll && VideoScroll.addEventListener("scroll", handleScroll);
 	}, [loadingVideo, LimitVideo]);
 
+	const [selectedImage, setSelectedImage] = useState([]);
+	// const handleSelectImage = (imageUrl) => {
+	// 	setSelectedImage(imageUrl);
+	// };
+	const toggleImageSelection = (image) => {
+		setSelectedImage((prev) => {
+			if (prev.includes(image)) {
+				return prev.filter((img) => img !== image);
+			} else {
+				return [...prev, image];
+			}
+		});
+	};
+
+	const insertImagesToEditor = () => {
+		setFilePickerOpen(false);
+		if (editorRef.current) {
+			const imageTags = selectedImage.map((img) => `<img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" />`).join("");
+			editorRef.current.insertContent(imageTags);
+			setSelectedImage([]); // Clear selection after inserting
+			document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
+		}
+	};
 	return (
 		<div className="container-gallery-files">
 			<div className="content-option-button">
 				<button
+					type="button"
 					onClick={() => {
 						setOpenSound(true);
 						setOpenVideo(false);
@@ -124,6 +149,7 @@ const Upload = () => {
 					صوتی
 				</button>
 				<button
+					type="button"
 					onClick={() => {
 						setOpenVideo(true);
 						setOpenImages(false);
@@ -134,6 +160,7 @@ const Upload = () => {
 					ویدئو ها
 				</button>
 				<button
+					type="button"
 					onClick={() => {
 						setOpenImages(true);
 						setOpenVideo(false);
@@ -146,7 +173,9 @@ const Upload = () => {
 				<input id="upload_files_id" style={{ display: "none" }} type="file" multiple onChange={handleFileChange} />
 				<div className="option-upload">
 					<label htmlFor="upload_files_id" className="fa fa-upload"></label>
-					<button onClick={handleUpload}>ارسال</button>
+					<button type="button" onClick={handleUpload}>
+						ارسال
+					</button>
 				</div>
 			</div>
 			<div className="content-gallery-files">
@@ -155,10 +184,33 @@ const Upload = () => {
 						<div id="items-images-scroll-id" className="items-images">
 							{Images.images?.map((Image, index) => (
 								<div key={index} className="list-item">
-									<img src={process.env.REACT_APP_SET_URLS + Image.FilePath} alt="images" />
+									<label htmlFor={"match-index" + index}>
+										<input
+											type="checkbox"
+											checked={selectedImage.includes(process.env.REACT_APP_SET_URLS + Image.FilePath)}
+											onChange={() => toggleImageSelection(process.env.REACT_APP_SET_URLS + Image.FilePath)}
+										/>
+										<img
+											id={"match-index" + index}
+											onClick={() => toggleImageSelection(process.env.REACT_APP_SET_URLS + Image.FilePath)}
+											src={process.env.REACT_APP_SET_URLS + Image.FilePath}
+											alt="images"
+										/>
+									</label>
 								</div>
 							))}
 							{loadingImages && <p className="loadingImages">Loading...</p>}
+						</div>
+						<div className="options-control-images-selected">
+							<button type="button" onClick={insertImagesToEditor} disabled={!selectedImage}>
+								درج تصویر در ادیتور
+							</button>
+							<div>
+								<p>انخاب شده: {selectedImage.length}</p>
+							</div>
+							<div>
+								<p> تعداد کل: {Images.images.length}</p>
+							</div>
 						</div>
 					</div>
 				)}

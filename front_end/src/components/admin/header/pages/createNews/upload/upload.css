@@ -81,6 +81,13 @@
 					}
 				}
 			}
+			.options-control-images-selected {
+				display: flex;
+				gap: 10px;
+				justify-content: center;
+				background-color: aqua;
+				padding: 10px;
+			}
 		}
 		.content-video {
 			width: 100%;
@@ -117,6 +124,17 @@
 			}
 			.option-upload {
 				width: 35%;
+			}
+		}
+		.content-gallery-files {
+			.content-images {
+				.items-images {
+					.list-item {
+						img {
+							height: 250px;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -1,12 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Link, useLocation } from "react-router-dom";
 
 import "./createnews.css";
 import { AuthContext } from "../../../../../context/authContext";
 import { AxiosInstance } from "../../../../../axiosInstance.js";
+import Upload from "./upload/Upload.jsx";
 
-export const CreateNews = () => {
+export const CreateNews = ({ selectedImages }) => {
+	console.log(selectedImages);
+
 	const NewsId = useLocation().search;
 	const [editNews, setEditNews] = useState([]);
 
@@ -282,6 +285,13 @@ export const CreateNews = () => {
 	const fa2 = "حداکثر عنوان مجاز، 100 کاراکتر";
 	const fa3 = "حداکثر توضیح کوتاه مجاز، 100 کاراکتر";
 	const fa4 = "فقط مالک می تواند دسته اضافه کند .";
+
+	const [isFilePickerOpen, setFilePickerOpen] = useState(false);
+	// const [callbackFunc, setCallbackFunc] = useState(null);
+
+	const [selectedImage, setSelectedImage] = useState(null);
+	const editorRef = useRef(null);
+
 	return (
 		<>
 			<div className="news-create-admin">
@@ -343,11 +353,13 @@ export const CreateNews = () => {
 								: setInput({ ...input, News_Describe: e.target.value.length <= 350 ? e.target.value : input.News_Describe })
 						}
 					/>
+
 					{/*for more abut editor please see https://www.tiny.cloud/docs/tinymce/latest/ */}
 
 					<label htmlFor="TextEditor">متن خبر :</label>
 					<Editor
 						tinymceScriptSrc="/tinymce/tinymce.min.js"
+						onInit={(evt, editor) => (editorRef.current = editor)}
 						value={editNews.id ? editNews.News_Content : input.News_Content}
 						onEditorChange={(e) => (editNews.id ? setEditNews({ ...editNews, News_Content: e }) : setInput({ ...input, News_Content: e }))}
 						init={{
@@ -396,19 +408,17 @@ export const CreateNews = () => {
 								menubar: true,
 							},
 							automatic_uploads: true,
-							// file_picker_callback: function (callback, value, meta) {
-							// 	window.open("http://localhost:3000/admin/upload-files", "File Manager", "width=800,height=600");
-							// 	window.addEventListener(
-							// 		"message",
-							// 		function (event) {
-							// 			if (event.origin !== window.location.origin) return;
-							// 			callback(event.data.url);
-							// 		},
-							// 		false
-							// 	);
-							// },
+							file_picker_callback: function (callback) {
+								setFilePickerOpen(true);
+								document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "none";
+							},
 						}}
 					/>
+					{isFilePickerOpen && (
+						<div className="editor-select-images">
+							<div className="section-files">{<Upload editorRef={editorRef} setFilePickerOpen={setFilePickerOpen} />}</div>
+						</div>
+					)}
 					<div className="Category">
 						<div className="title-category">
 							<h2>مربوط به دسته</h2>
