@@ -113,9 +113,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	}, [loadingVideo, LimitVideo]);
 
 	const [selectedImage, setSelectedImage] = useState([]);
-	// const handleSelectImage = (imageUrl) => {
-	// 	setSelectedImage(imageUrl);
-	// };
 	const toggleImageSelection = (image) => {
 		setSelectedImage((prev) => {
 			if (prev.includes(image)) {
@@ -181,7 +178,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			<div className="content-gallery-files">
 				{openImages && (
 					<div className="content-images">
-						<div id="items-images-scroll-id" className="items-images">
+						<div id="items-images-scroll-id" style={{ height: window.innerHeight - 145 }} className="items-images">
 							{Images.images?.map((Image, index) => (
 								<div key={index} className="list-item">
 									<label htmlFor={"match-index" + index}>

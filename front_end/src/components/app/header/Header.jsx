@@ -209,7 +209,7 @@ function Header() {
 									<img src={e.Default_Image} alt="img" />
 								</Link>
 								<div className="Content-Texts-Dallery">
-									<p className="RoutingNewsHeader-Gallery"> به این جمع بپیوندید!</p>
+									<p className="RoutingNewsHeader-Gallery">{e.News_Titre}</p>
 									<Link className="HeadlineNewsHeader-Gallery" to={`/news/${e.id}`}>
 										<p dangerouslySetInnerHTML={{ __html: e.News_Title }}></p>
 									</Link>
@@ -371,7 +371,7 @@ function Header() {
 												</div>
 												<div className="RoutingNews">
 													<div>
-														<h1 className="RoutingNewsHeader">یادم نرود که بتنظیمانم</h1>
+														<h1 className="RoutingNewsHeader">{News.News_Titre}</h1>
 														<Link className="HeadlineNewsHeader" to={`/news/${News.id}`}>
 															<h1 dangerouslySetInnerHTML={{ __html: News.News_Title }}></h1>
 														</Link>
