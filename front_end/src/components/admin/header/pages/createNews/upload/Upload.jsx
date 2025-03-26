@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./upload.css"; // Import the CSS file
 import { AxiosInstance } from "../../../../../../axiosInstance";
-import { CreateNews } from "../CreateNews";
+import { useLocation } from "react-router-dom";
 
 const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
@@ -14,6 +14,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [openImages, setOpenImages] = useState(false);
 	const [openVideo, setOpenVideo] = useState(false);
 	const [openSound, setOpenSound] = useState(false);
+	const NewsId = useLocation().pathname.split("/")[2];
 
 	const [files, setFiles] = useState([]);
 
@@ -168,12 +169,14 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					تصاویر
 				</button>
 				<input id="upload_files_id" style={{ display: "none" }} type="file" multiple onChange={handleFileChange} />
-				<div className="option-upload">
-					<label htmlFor="upload_files_id" className="fa fa-upload"></label>
-					<button type="button" onClick={handleUpload}>
-						ارسال
-					</button>
-				</div>
+				{NewsId !== "create-news" && (
+					<div className="option-upload">
+						<label htmlFor="upload_files_id" className="fa fa-upload"></label>
+						<button type="button" onClick={handleUpload}>
+							ارسال
+						</button>
+					</div>
+				)}
 			</div>
 			<div className="content-gallery-files">
 				{openImages && (
@@ -198,17 +201,19 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 							))}
 							{loadingImages && <p className="loadingImages">Loading...</p>}
 						</div>
-						<div className="options-control-images-selected">
-							<button type="button" onClick={insertImagesToEditor} disabled={!selectedImage}>
-								درج تصویر در ادیتور
-							</button>
-							<div>
-								<p>انخاب شده: {selectedImage.length}</p>
+						{NewsId !== "upload-files" && (
+							<div className="options-control-images-selected">
+								<button type="button" onClick={insertImagesToEditor} disabled={!selectedImage}>
+									درج تصویر در ادیتور
+								</button>
+								<div>
+									<p>انخاب شده: {selectedImage.length}</p>
+								</div>
+								<div>
+									<p> تعداد کل: {Images.images.length}</p>
+								</div>
 							</div>
-							<div>
-								<p> تعداد کل: {Images.images.length}</p>
-							</div>
-						</div>
+						)}
 					</div>
 				)}
 				{openVideo && (

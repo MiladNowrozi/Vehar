@@ -70,7 +70,7 @@ export default class NewsControllers {
 						News_Title: req.body.News_Title,
 						News_Describe: req.body.News_Describe,
 						News_Content: req.body.News_Content,
-						Default_Image: imageUrls[0].toString(),
+						Default_Image: imageUrls[0]?.toString(),
 						Comment_Status: req.body.Comment_Status,
 						MainPageColumn: req.body.MainPageColumn,
 						MainPageSlider: req.body.MainPageSlider,
