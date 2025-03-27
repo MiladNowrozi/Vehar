@@ -1,16 +1,13 @@
-import fs, { createReadStream } from "fs";
+import fs from "fs";
 import path from "path";
-import { glob } from "glob";
 import { fileURLToPath } from "url";
 import { Files } from "../models/Files.js";
-import { Op } from "@sequelize/core";
 
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../");
 
-export default class DownloadControllers {
-	//  ######## NEWS
-	static FilesNews = async (req, res) => {
-		const checkFile = req.query.name.split(".")[1];
+export default class DeleteControllers {
+	//  ######## Image
+	static Image = async (req, res) => {
 
 		if (checkFile === "png" || checkFile === "jpeg" || checkFile === "gif" || checkFile === "jpg") {
 			const imagePath = __dirname + "/uploads/news" + req.query.name;
@@ -70,8 +67,8 @@ export default class DownloadControllers {
 		}
 	};
 
-	//  ######## USER
-	static FilesUser = async (req, res) => {
+	//  ######## Video
+	static Video = async (req, res) => {
 		const imagePath = __dirname + "/uploads/user/" + req.query.name;
 
 		fs.readFile(imagePath, (err, data) => {
@@ -85,8 +82,8 @@ export default class DownloadControllers {
 		});
 	};
 
-	//  ######## ADMIN
-	static FilesAdmin = async (req, res) => {
+	//  ######## Other
+	static Other = async (req, res) => {
 		const imagePath = __dirname + "/uploads/admin/" + req.query.name;
 
 		fs.readFile(imagePath, (err, data) => {
@@ -99,87 +96,4 @@ export default class DownloadControllers {
 			res.end(data);
 		});
 	};
-
-	// RECEIVE URL IMAGES
-	static AllImagesUrl = async (req, res) => {
-		try {
-			const images = await Files.findAndCountAll({
-				where: {
-					FileName: {
-						[Op.or]: [{ [Op.like]: "%.jpg" }],
-					},
-				},
-				order: [["id", "ASC"]],
-				limit: parseInt(req.query.limit),
-				offset: 0,
-			});
-
-			res.status(200).json({
-				success: true,
-				body: {
-					total: images.count,
-					images: images.rows,
-				},
-				message: "all images were receive successfully!",
-			});
-		} catch (error) {
-			console.error("Error reading files:", error);
-			res.status(500).json({ error: "Failed to read files" });
-		}
-	};
-
-	// RECEIVE URL VIDEO
-	static AllVideoUrl = async (req, res) => {
-		try {
-			const video = await Files.findAndCountAll({
-				where: {
-					FileName: {
-						[Op.or]: [{ [Op.like]: "%.mp4" }],
-					},
-				},
-				order: [["id", "ASC"]],
-				limit: parseInt(req.query.limit),
-				offset: 0,
-			});
-
-			res.status(200).json({
-				success: true,
-				body: {
-					total: video.count,
-					video: video.rows,
-				},
-				message: "all images were receive successfully!",
-			});
-		} catch (error) {
-			console.error("Error reading files:", error);
-			res.status(500).json({ error: "Failed to read files" });
-		}
-	};
-
-	// static AllSound = async (req, res) => {
-	// 	try {
-	// 		const images = await Files.findAndCountAll({
-	// 			where: {
-	// 				FileName: {
-	// 					[Op.or]: [{ [Op.like]: "%.mp4" }],
-	// 				},
-	// 			},
-	// 			order: [["id", "ASC"]],
-	// 			limit: parseInt(req.query.limit),
-	// 			offset: 0,
-	// 		});
-
-	// 		res.status(200).json({
-	// 			success: true,
-	// 			body: {
-	// 				total: images.count,
-	// 				images: images.rows,
-	// 			},
-	// 			message: "all images were receive successfully!",
-	// 		});
-	// 	} catch (error) {
-	// 		console.error("Error reading files:", error);
-	// 		res.status(500).json({ error: "Failed to read files" });
-	// 	}
-	// };
 }

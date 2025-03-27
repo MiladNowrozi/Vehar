@@ -19,27 +19,32 @@ import { Activity } from "../models/Activity.js";
 // 	}
 // 	const users = JSON.parse(data);
 
-// 	http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
+// 	// http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
 // 	// Access the data
-// 	users.slice(0, 100).forEach(async (user) => {
-// 		const imgRegex = /http:[\/]{2,2}87.107.105.139:5000[\/A-z-?=0-9۰-۹][^x<>]+.jpg/gi;
+// 	users.slice(16, 17).forEach(async (user) => {
+// 		const imgRegex = /https?:\/\/\d+\.\d+\.\d+\.\d+\/api\/download\/news\?name=[^"]+/gi;
 // 		const imageUrls = [];
 // 		let match;
-// 		while ((match = imgRegex.exec(user.content.rendered)) !== null) {
+// 		while ((match = imgRegex.exec(user.News_Content)) !== null) {
 // 			imageUrls.push(match[0]);
 // 		}
+// 		console.log(imageUrls[0]?.toString());
+// /
 // 		try {
-// 			await News.create({
-// 				News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
-// 				News_Title: user.title.rendered,
-// 				News_Describe: user.excerpt.rendered,
-// 				News_Content: user.content.rendered,
-// 				Default_Image: imageUrls[0]?.toString(),
-// 				createdAt: new Date(user.date),
-// 				Category: "local",
-// 				// subCategoryId: 5,
-// 				authorId: 1,
-// 			});
+// 			await News.update(
+// 				{
+// 					// News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
+// 					News_Title: user.News_Title,
+// 					News_Describe: user.News_Describe,
+// 					News_Content: user.News_Content,
+// 					Default_Image: imageUrls[0]?.toString(),
+// 					createdAt: new Date(user.createdAt),
+// 					// Category: "local",
+// 					// subCategoryId: 5,
+// 					authorId: 1,
+// 				},
+// 				{ where: { id: 17 } }
+// 			);
 
 // 			console.log("yes");
 // 		} catch (error) {

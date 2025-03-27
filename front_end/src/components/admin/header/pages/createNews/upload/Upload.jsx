@@ -127,7 +127,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const insertImagesToEditor = () => {
 		setFilePickerOpen(false);
 		if (editorRef.current) {
-			const imageTags = selectedImage.map((img) => `<img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" />`).join("");
+			const imageTags = selectedImage.map((img) => `<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`).join("");
 			editorRef.current.insertContent(imageTags);
 			setSelectedImage([]); // Clear selection after inserting
 			document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";

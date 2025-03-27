@@ -4,7 +4,8 @@ import cookieParser from "cookie-parser";
 //
 import authRouter from "./routes/auth.js";
 import uploadRouter from "./routes/upload.js";
-import downloadRouter from "./routes/download.js";
+import DownloadRouter from "./routes/download.js";
+import DeleteRouter from "./routes/delete.js";
 import adminRouter from "./routes/Admins.js";
 import usersRouter from "./routes/users.js";
 import newsRouter from "./routes/news.js";
@@ -23,7 +24,8 @@ app.use(cors({ origin: process.env.URLS.split(","), credentials: true }));
 // middlewares
 app.use("/api/auth", authRouter);
 app.use("/api/upload", AuthToken, uploadRouter);
-app.use("/api/download", downloadRouter);
+app.use("/api/download", DownloadRouter);
+app.use("/api/delete", AuthToken, DeleteRouter);
 app.use("/api/admin", AuthToken, adminRouter);
 app.use("/api/user", AuthToken, usersRouter);
 app.use("/api/news", newsRouter);

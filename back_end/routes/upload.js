@@ -15,12 +15,15 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..
 // ################# NEWS
 
 router.post("/news", uploadFiles, (req, res) => {
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
 	if (req.files) {
 		req.files.map(async (DataFile) => {
 			await Files.create({
 				OriginalName: DataFile.originalname,
 				FileName: DataFile.filename,
-				FilePath: DataFile.path.match(/\d{4}\/\d{2}\/.*$/)[0],
+				FilePath: year + "/" + month + "/" + DataFile.filename,
 				MimeType: DataFile.mimetype,
 				adminId: req.user.id,
 			});

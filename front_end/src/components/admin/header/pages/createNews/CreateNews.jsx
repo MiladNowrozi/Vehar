@@ -407,10 +407,13 @@ export const CreateNews = ({ selectedImages }) => {
 							mobile: {
 								menubar: true,
 							},
+							relative_urls: false,
+							remove_script_host: false,
+							convert_urls: false,
 							automatic_uploads: true,
 							file_picker_callback: function (callback) {
 								setFilePickerOpen(true);
-								document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "none";
+								document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "none"; // this is a class of Editor TinyMce for closes upload image window after clicking
 							},
 						}}
 					/>

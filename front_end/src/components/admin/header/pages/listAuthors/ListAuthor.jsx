@@ -282,10 +282,7 @@ export const ListAuthors = () => {
 								<div className="content-options">
 									<div className="img-profile-author style-display">
 										<span>پروفایل</span>
-										<img
-											src={e.Admin_Img ? e.Admin_Img : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRybsd7cw9VxpeBObuBE90Al3a1OB0kgPhyHg&s"}
-											alt="img-profile"
-										/>
+										<img src={e.Default_Image} alt="img-profile" />
 									</div>
 									<div className="name-author style-display">
 										<span>نام نویسنده</span>
