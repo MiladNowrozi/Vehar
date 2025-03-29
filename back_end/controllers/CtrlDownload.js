@@ -109,7 +109,7 @@ export default class DownloadControllers {
 						[Op.or]: [{ [Op.like]: "%.jpg" }],
 					},
 				},
-				order: [["id", "ASC"]],
+				order: [["createdAt", "DESC"]],
 				limit: parseInt(req.query.limit),
 				offset: 0,
 			});

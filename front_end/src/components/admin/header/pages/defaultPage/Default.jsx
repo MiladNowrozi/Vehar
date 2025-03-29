@@ -38,7 +38,7 @@ export const DefaultAdmin = () => {
 				});
 		};
 		FetchData();
-	}, []);
+	}, [CurrentUser]);
 
 	const handleFileChange = async (event) => {
 		const file = event.target?.files[0];
@@ -129,7 +129,7 @@ export const DefaultAdmin = () => {
 								{fa2}
 								{success ? <p>{success}</p> : DataAdmin.emailAdmin?.EmailAdmin}
 								{!success && (
-									<button	
+									<button
 										disabled={DataAdmin.Verify_Email}
 										onClick={async () =>
 											await AxiosInstance.get(`auth/verify-email?email=${DataAdmin.emailAdmin?.EmailAdmin}&status=false`)

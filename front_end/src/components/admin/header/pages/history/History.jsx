@@ -62,7 +62,7 @@ export default function HistoryLord() {
 				{History.length > 0 && <p className="p-info-lord">{fa7}</p>}
 				{(History.length > 0 &&
 					History.map((e, i) => (
-						<div className="history-items-news-lord">
+						<div key={i} className="history-items-news-lord">
 							<div className="main-info-history">
 								<img src={e.Default_Image} alt="img" />
 								<div className="main-info">

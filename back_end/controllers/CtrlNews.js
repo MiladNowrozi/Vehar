@@ -106,7 +106,7 @@ export default class NewsControllers {
 				});
 			}
 		} catch (error) {
-			// console.log(error);
+			console.log(error);
 			res.status(404).json({
 				success: false,
 				message: error.message,
@@ -477,8 +477,6 @@ export default class NewsControllers {
 				});
 			}
 		} catch (e) {
-			console.log(e);
-
 			res.status(500).json({
 				success: false,
 				body: null,
@@ -494,6 +492,12 @@ export default class NewsControllers {
 		while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
 			imageUrls.push(match[1]);
 		}
+		// console.log(req.body.id);
+
+		if (!req.body.id) {
+			return res.sendStatus(401);
+		}
+
 		try {
 			const GetOneNewsForUpd = await News.findByPk(req.body.id);
 			if (GetOneNewsForUpd) {
@@ -873,27 +877,32 @@ export default class NewsControllers {
 					where: { Category: req.query.cat, SubNote: true },
 					limit: SubNoteCount.count <= 1 ? SubNoteCount.count : 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
+					order: [["createdAt", "ASC"]],
 				});
 				const ChoiceNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageColumn: true },
 					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6,
 					offset: ChoiceCount.count <= 6 ? 0 : ChoiceCount.count - 6,
+					order: [["createdAt", "ASC"]],
 				});
 				const SliderNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
 					limit: SliderCount.count <= 3 ? SliderCount.count : 3,
 					offset: SliderCount.count <= 3 ? 0 : SliderCount.count - 3,
+					order: [["createdAt", "ASC"]],
 				});
 				const SpecialNews = await News.findAll({
 					where: { Category: req.query.cat, SubPageSlider: true },
-					limit: SliderCount.count <= 15 ? SliderCount.count : 15,
-					offset: SliderCount.count <= 15 ? 0 : SliderCount.count - 15,
+					limit: SliderCount.count <= 3 ? 0 : SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
+					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
+					order: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,
 					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
 				});
 			} else {
+				// for first pages (main)
 				const SliderCount = await News.findAndCountAll({ where: { SubPageSlider: true } });
 				const ChoiceCount = await News.findAndCountAll({ where: { SubPageColumn: true } });
 				const SubNoteCount = await News.findAndCountAll({ where: { SubNote: true } });
@@ -901,22 +910,28 @@ export default class NewsControllers {
 					where: { SubNote: true },
 					limit: SubNoteCount.count <= 1 ? SubNoteCount.count : 1,
 					offset: SubNoteCount.count <= 1 ? 0 : SubNoteCount.count - 1,
+					order: [["createdAt", "ASC"]],
 				});
 				const ChoiceNews = await News.findAll({
 					where: { SubPageColumn: true },
 					limit: ChoiceCount.count <= 6 ? ChoiceCount.count : 6,
 					offset: ChoiceCount.count <= 6 ? 0 : ChoiceCount.count - 6,
+					order: [["createdAt", "ASC"]],
 				});
 				const SliderNews = await News.findAll({
 					where: { SubPageSlider: true },
 					limit: SliderCount.count <= 3 ? SliderCount.count : 3,
 					offset: SliderCount.count <= 3 ? 0 : SliderCount.count - 3,
+					order: [["createdAt", "ASC"]],
 				});
+
 				const SpecialNews = await News.findAll({
 					where: { SubPageSlider: true },
-					limit: SliderCount.count <= 15 ? SliderCount.count : 15,
-					offset: SliderCount.count <= 15 ? 0 : SliderCount.count - 15,
+					limit: SliderCount.count <= 3 ? 0 : SliderCount.count <= 18 ? SliderCount.count - 3 : 15,
+					offset: SliderCount.count <= 18 ? 0 : SliderCount.count - 18,
+					order: [["createdAt", "ASC"]],
 				});
+
 				res.status(200).json({
 					success: true,
 					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
@@ -927,7 +942,7 @@ export default class NewsControllers {
 				success: false,
 				message: error.message,
 			});
-			console.log(error);
+			// console.log(error);
 		}
 	};
 	// COMMENT
@@ -1369,6 +1384,7 @@ export default class NewsControllers {
 					where: { Category: req.query.cat },
 					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
 					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
+					rder: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,
@@ -1380,6 +1396,7 @@ export default class NewsControllers {
 					where: { Category: "politic" },
 					limit: CountAllpolitic.length <= 10 ? CountAllpolitic.length : 10,
 					offset: CountAllpolitic.length <= 10 ? 0 : CountAllpolitic.length - 10,
+					rder: [["createdAt", "ASC"]],
 				});
 				//
 				const CountAlleconomy = await News.findAll({ where: { Category: "economy" } });
@@ -1387,6 +1404,7 @@ export default class NewsControllers {
 					where: { Category: "economy" },
 					limit: CountAlleconomy.length <= 10 ? CountAlleconomy.length : 10,
 					offset: CountAlleconomy.length <= 10 ? 0 : CountAlleconomy.length - 10,
+					rder: [["createdAt", "ASC"]],
 				});
 				//
 				const CountAllsocial = await News.findAll({ where: { Category: "social" } });
@@ -1394,6 +1412,7 @@ export default class NewsControllers {
 					where: { Category: "social" },
 					limit: CountAllsocial.length <= 10 ? CountAllsocial.length : 10,
 					offset: CountAllsocial.length <= 10 ? 0 : CountAllsocial.length - 10,
+					rder: [["createdAt", "ASC"]],
 				});
 				//
 				const CountAllsport = await News.findAll({ where: { Category: "sport" } });
@@ -1401,6 +1420,7 @@ export default class NewsControllers {
 					where: { Category: "sport" },
 					limit: CountAllsport.length <= 10 ? CountAllsport.length : 10,
 					offset: CountAllsport.length <= 10 ? 0 : CountAllsport.length - 10,
+					rder: [["createdAt", "ASC"]],
 				});
 				//
 				const CountAlllocal = await News.findAll({ where: { Category: "local" } });
@@ -1408,6 +1428,7 @@ export default class NewsControllers {
 					where: { Category: "local" },
 					limit: CountAlllocal.length <= 10 ? CountAlllocal.length : 10,
 					offset: CountAlllocal.length <= 10 ? 0 : CountAlllocal.length - 10,
+					rder: [["createdAt", "ASC"]],
 				});
 				//
 				const Result = [...countPolitic.rows, ...countEconomy.rows, ...countSocial.rows, ...countSport.rows, ...countLocal.rows];
@@ -1432,6 +1453,7 @@ export default class NewsControllers {
 					where: { Category: req.query.cat, MainTicker: true },
 					limit: CountAllpolitic.length <= 5 ? CountAllpolitic.length : 5,
 					offset: CountAllpolitic.length <= 5 ? 0 : CountAllpolitic.length - 5,
+					rder: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,
@@ -1443,6 +1465,7 @@ export default class NewsControllers {
 					where: { SubTicker: true },
 					limit: CountAllpolitic.length <= 5 ? CountAllpolitic.length : 5,
 					offset: CountAllpolitic.length <= 5 ? 0 : CountAllpolitic.length - 5,
+					rder: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,

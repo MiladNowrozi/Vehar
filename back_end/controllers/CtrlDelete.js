@@ -8,61 +8,44 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..
 export default class DeleteControllers {
 	//  ######## Image
 	static Image = async (req, res) => {
+		if (!req.user) {
+			return res.sendStatus(401);
+		}
 
-		if (checkFile === "png" || checkFile === "jpeg" || checkFile === "gif" || checkFile === "jpg") {
-			const imagePath = __dirname + "/uploads/news" + req.query.name;
-			if (!fs.existsSync(imagePath)) {
-				return res.status(404).json({ error: "Image not found" });
-			}
-			const contentType = imagePath.endsWith(".png")
-				? "image/png"
-				: imagePath.endsWith(".jpg") || imagePath.endsWith(".jpeg")
-				? "image/jpeg"
-				: imagePath.endsWith(".gif")
-				? "image/gif"
-				: "application/octet-stream";
-
-			res.setHeader("Content-Type", contentType);
-			const readStream = fs.createReadStream(imagePath);
-			readStream.pipe(res);
-		} else if (checkFile === "mp4") {
-			const VideoPath = __dirname + "/uploads/news" + req.query.name;
-			if (!fs.existsSync(VideoPath)) {
-				return res.status(404).json({ error: "Video not found" });
-			}
-
-			const stat = fs.statSync(VideoPath);
-			const fileSize = stat.size;
-			const range = req.headers.range;
-
-			if (!range) {
-				res.writeHead(200, {
-					"Content-Length": fileSize,
-					"Content-Type": "video/mp4",
+		if (req.body.length > 0) {
+			try {
+				const FindImages = await Files.findAll({ where: { id: req.body } });
+				for (const FilesImage of FindImages) {
+					const ImagesForDelete = path.join(__dirname, "/uploads/news/", FilesImage.FilePath);
+					if (fs.existsSync(ImagesForDelete)) {
+						fs.unlinkSync(ImagesForDelete);
+						await Files.destroy({ where: { id: FilesImage.id } });
+					} else {
+						res.status(403).json({
+							success: false,
+							message: `not finding some of images:${ImagesForDelete} for deleting !`,
+						});
+					}
+				}
+				const ResultDeleting = await Files.findAndCountAll();
+				res.status(200).json({
+					success: true,
+					body: {
+						total: ResultDeleting.count,
+						images: ResultDeleting.rows,
+					},
+					message: "all images were receive successfully!",
 				});
-
-				fs.createReadStream(VideoPath).pipe(res);
-			} else {
-				const parts = range.replace(/bytes=/, "").split("-");
-				const start = parseInt(parts[0], 10);
-				const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-				const chunkSize = end - start + 1;
-
-				const videoStream = fs.createReadStream(VideoPath, { start, end });
-
-				res.writeHead(206, {
-					"Content-Range": `bytes ${start}-${end}/${fileSize}`,
-					"Accept-Ranges": "bytes",
-					"Content-Length": chunkSize,
-					"Content-Type": "video/mp4",
+			} catch (error) {
+				res.status(500).json({
+					message: error.message,
+					success: false,
 				});
-
-				videoStream.pipe(res);
 			}
 		} else {
 			res.status(403).json({
+				message: "not images sending !",
 				success: false,
-				message: "The file extension is unknown .",
 			});
 		}
 	};

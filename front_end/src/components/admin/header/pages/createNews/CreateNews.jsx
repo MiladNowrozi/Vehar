@@ -7,9 +7,7 @@ import { AuthContext } from "../../../../../context/authContext";
 import { AxiosInstance } from "../../../../../axiosInstance.js";
 import Upload from "./upload/Upload.jsx";
 
-export const CreateNews = ({ selectedImages }) => {
-	console.log(selectedImages);
-
+export const CreateNews = () => {
 	const NewsId = useLocation().search;
 	const [editNews, setEditNews] = useState([]);
 
@@ -42,7 +40,7 @@ export const CreateNews = ({ selectedImages }) => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get${NewsId}&userId=${CurrentUser ? CurrentUser.Info.Id : 0}`,
+					url: `/news/get${NewsId ? NewsId : "?id="}&userId=${CurrentUser.Info ? CurrentUser.Info.Id : 0}`,
 				})
 					.then((success) => {
 						setEditNews(success.data.body.GetSelectedNews);
@@ -55,7 +53,7 @@ export const CreateNews = ({ selectedImages }) => {
 			}
 		};
 		FetchData();
-	}, [NewsId]);
+	}, [NewsId, CurrentUser]);
 
 	const handleSubmit = async () => {
 		if (input.News_Title === "" && input.News_Describe === "" && input.News_Content === "" && input.Category === "") {
@@ -567,7 +565,7 @@ export const CreateNews = ({ selectedImages }) => {
 							<div className="container-columns">
 								<div className="disable-comment">
 									<input
-										onClick={(e) => {
+										onChange={(e) => {
 											editNews.id
 												? setEditNews({ ...editNews, Comment_Status: e.target.checked })
 												: setInput({
@@ -670,7 +668,7 @@ export const CreateNews = ({ selectedImages }) => {
 								<hr style={{ width: "100%", backgroundColor: "red" }} />
 								<div className="add-to-chosen-main-page">
 									<input
-										onClick={(e) => {
+										onChange={(e) => {
 											editNews.id
 												? setEditNews({
 														...editNews,

@@ -3,10 +3,10 @@ import DeleteControllers from "../controllers/CtrlDelete.js";
 
 const router = express.Router();
 
-router.get("/images", DeleteControllers.Image);
+router.post("/images", DeleteControllers.Image);
 
-router.get("/video", DeleteControllers.Video);
+router.post("/video", DeleteControllers.Video);
 
-router.get("/other", DeleteControllers.Other);
+router.post("/other", DeleteControllers.Other);
 
 export default router;

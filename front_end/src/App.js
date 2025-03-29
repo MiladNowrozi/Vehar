@@ -22,7 +22,6 @@ import { CreateNews } from "./components/admin/header/pages/createNews/CreateNew
 import { AuthContext } from "./context/authContext";
 import { useContext } from "react";
 import ContactUs from "./pages/ContactUs/ContactUs";
-import Participation from "./pages/Participation/Participation";
 import Archive from "./pages/Archive/Archive";
 import { Admin } from "./components/admin/admins/admin/Admin";
 import Upload from "./components/admin/header/pages/createNews/upload/Upload.jsx";
@@ -44,7 +43,6 @@ export const App = () => {
 					<Route path="/news/:id" element={<News />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/contact-us" element={<ContactUs />} />
-					<Route path="/participation" element={<Participation />} />
 					<Route path="/archive" element={<Archive />} />
 				</Route>
 				{/* lord route */}
@@ -70,7 +68,7 @@ export const App = () => {
 					<Route path="history" element={<History />} />
 					<Route path="comment" element={<Comment />} />
 				</Route>
-				<Route path="*" element={<NotFind />} />
+				{/* <Route path="*" element={<NotFind />} /> */}
 			</Routes>
 		</div>
 	);

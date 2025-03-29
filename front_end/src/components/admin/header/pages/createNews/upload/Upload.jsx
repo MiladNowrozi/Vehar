@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
 	const [Videos, setVideos] = useState([]);
-	const [LimitImages, setLimitImages] = useState(50);
+	const [LimitImages, setLimitImages] = useState(10);
 	const [LimitVideo, setLimitVideo] = useState(10);
 	const [loadingImages, setLoadingImages] = useState(false);
 	const [loadingVideo, setLoadingVideo] = useState(false);
@@ -55,7 +55,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					withCredentials: true,
 				})
 					.then((success) => {
-						console.log(success);
 						setImages(success.data.body);
 					})
 					.catch((e) => {
@@ -79,7 +78,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					withCredentials: true,
 				})
 					.then((success) => {
-						console.log(success);
 						setVideos(success.data.body);
 					})
 					.catch((e) => {
@@ -95,13 +93,13 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 
 	useEffect(() => {
 		const ImagesScroll = document.getElementById("items-images-scroll-id");
-		const handleScroll = () => {
-			if (ImagesScroll && ImagesScroll.scrollTop + ImagesScroll.clientHeight >= ImagesScroll.scrollHeight) {
-				setLimitImages(LimitImages + 50);
-			}
-		};
-		ImagesScroll && ImagesScroll.addEventListener("scroll", handleScroll);
-	}, [loadingImages, LimitImages]);
+		ImagesScroll &&
+			ImagesScroll.addEventListener("scroll", () => {
+				if (ImagesScroll.scrollTop + ImagesScroll.clientHeight >= ImagesScroll.scrollHeight && Images.total > LimitImages) {
+					setLimitImages(LimitImages + 10);
+				}
+			});
+	}, [loadingImages, LimitImages, Images]);
 
 	useEffect(() => {
 		const VideoScroll = document.getElementById("items-video-scroll-id");
@@ -124,13 +122,33 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		});
 	};
 
-	const insertImagesToEditor = () => {
-		setFilePickerOpen(false);
-		if (editorRef.current) {
-			const imageTags = selectedImage.map((img) => `<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`).join("");
-			editorRef.current.insertContent(imageTags);
-			setSelectedImage([]); // Clear selection after inserting
-			document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
+	const insertImagesToEditor = async () => {
+		if (NewsId === "upload-files") {
+			try {
+				await AxiosInstance.post("/delete/images", selectedImage)
+					.then((success) => {
+						alert("تصاویر با موفقیت حذف شدند .");
+						// setImages(success.data.body);
+						console.log(success.data);
+
+						setSelectedImage([]);
+					})
+					.catch((e) => {
+						console.log(e);
+					});
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		} else {
+			setFilePickerOpen(false);
+			if (editorRef.current) {
+				const imageTags = selectedImage
+					.map((img) => `<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`)
+					.join("");
+				editorRef.current.insertContent(imageTags);
+				setSelectedImage([]); // Clear selection after inserting
+				document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
+			}
 		}
 	};
 	return (
@@ -182,38 +200,44 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				{openImages && (
 					<div className="content-images">
 						<div id="items-images-scroll-id" style={{ height: window.innerHeight - 145 }} className="items-images">
-							{Images.images?.map((Image, index) => (
-								<div key={index} className="list-item">
-									<label htmlFor={"match-index" + index}>
-										<input
-											type="checkbox"
-											checked={selectedImage.includes(process.env.REACT_APP_SET_URLS + Image.FilePath)}
-											onChange={() => toggleImageSelection(process.env.REACT_APP_SET_URLS + Image.FilePath)}
-										/>
-										<img
-											id={"match-index" + index}
-											onClick={() => toggleImageSelection(process.env.REACT_APP_SET_URLS + Image.FilePath)}
-											src={process.env.REACT_APP_SET_URLS + Image.FilePath}
-											alt="images"
-										/>
-									</label>
-								</div>
-							))}
+							{Images.images?.length > 0 &&
+								Images.images.map(
+									(Image, index) =>
+										(
+											<div key={index} className="list-item">
+												<label htmlFor={"match-index" + index}>
+													<input
+														type="checkbox"
+														checked={selectedImage.includes(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)}
+														onChange={() =>
+															toggleImageSelection(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)
+														}
+													/>
+													<img
+														id={"match-index" + index}
+														onClick={() =>
+															toggleImageSelection(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)
+														}
+														src={process.env.REACT_APP_SET_URLS + Image.FilePath}
+														alt="images"
+													/>
+												</label>
+											</div>
+										) || "not find"
+								)}
 							{loadingImages && <p className="loadingImages">Loading...</p>}
 						</div>
-						{NewsId !== "upload-files" && (
-							<div className="options-control-images-selected">
-								<button type="button" onClick={insertImagesToEditor} disabled={!selectedImage}>
-									درج تصویر در ادیتور
-								</button>
-								<div>
-									<p>انخاب شده: {selectedImage.length}</p>
-								</div>
-								<div>
-									<p> تعداد کل: {Images.images.length}</p>
-								</div>
+						<div className="options-control-images-selected">
+							<button type="button" onClick={insertImagesToEditor} disabled={!selectedImage}>
+								{NewsId === "upload-files" ? "حذف" : "درج در ادیتور"}
+							</button>
+							<div>
+								<p>انخاب شده: {selectedImage.length}</p>
 							</div>
-						)}
+							<div>
+								<p> تعداد کل: {Images.total}</p>
+							</div>
+						</div>
 					</div>
 				)}
 				{openVideo && (

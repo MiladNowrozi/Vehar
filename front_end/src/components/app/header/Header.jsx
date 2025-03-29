@@ -15,7 +15,6 @@ function Header() {
 		SpecialNews: [],
 		SubNoteNews: [],
 	});
-	console.log(LastNews);
 
 	const Urls = useLocation().search;
 	useEffect(() => {
@@ -37,7 +36,6 @@ function Header() {
 				withCredentials: true,
 			})
 				.then((success) => {
-					console.log(success.data.body);
 					SetSliderNews((prev) => ({
 						...prev,
 						SpecialNews: success.data.body.SpecialNews,
@@ -251,7 +249,7 @@ function Header() {
 							<div className="container-note">
 								{SliderNews.SubNoteNews.map((e, i) => (
 									<div key={i} className="content-note">
-										<div key={i} className="content-writer">
+										<div className="content-writer">
 											<img src={e.Default_Image} alt="img" />
 										</div>
 										<div className="content-write">
@@ -358,7 +356,7 @@ function Header() {
 						</div>
 						{(SliderNews.SpecialNews.length > 0 && (
 							<div className="containerHeaderRight">
-								{SliderNews.SpecialNews.sort((a, b) => b.id - a.id).map((News, i) => (
+								{SliderNews.SpecialNews.map((News, i) => (
 									<div key={i} className="NewsContainer">
 										<div className="NewsContent" style={{ borderBottom: i === SliderNews.SpecialNews.length - 1 ? 0 : "" }}>
 											<div className="NewsItems">
