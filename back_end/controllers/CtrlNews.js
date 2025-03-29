@@ -1384,57 +1384,23 @@ export default class NewsControllers {
 					where: { Category: req.query.cat },
 					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
 					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-					rder: [["createdAt", "ASC"]],
+					order: [["createdAt", "DESC"]],
 				});
 				res.status(200).json({
 					success: true,
 					body: countPolitic.rows,
 				});
 			} else {
-				const CountAllpolitic = await News.findAll({ where: { Category: "politic" } });
-				const countPolitic = await News.findAndCountAll({
-					where: { Category: "politic" },
-					limit: CountAllpolitic.length <= 10 ? CountAllpolitic.length : 10,
-					offset: CountAllpolitic.length <= 10 ? 0 : CountAllpolitic.length - 10,
-					rder: [["createdAt", "ASC"]],
-				});
-				//
-				const CountAlleconomy = await News.findAll({ where: { Category: "economy" } });
-				const countEconomy = await News.findAndCountAll({
-					where: { Category: "economy" },
-					limit: CountAlleconomy.length <= 10 ? CountAlleconomy.length : 10,
-					offset: CountAlleconomy.length <= 10 ? 0 : CountAlleconomy.length - 10,
-					rder: [["createdAt", "ASC"]],
-				});
-				//
-				const CountAllsocial = await News.findAll({ where: { Category: "social" } });
-				const countSocial = await News.findAndCountAll({
-					where: { Category: "social" },
-					limit: CountAllsocial.length <= 10 ? CountAllsocial.length : 10,
-					offset: CountAllsocial.length <= 10 ? 0 : CountAllsocial.length - 10,
-					rder: [["createdAt", "ASC"]],
-				});
-				//
-				const CountAllsport = await News.findAll({ where: { Category: "sport" } });
-				const countSport = await News.findAndCountAll({
-					where: { Category: "sport" },
-					limit: CountAllsport.length <= 10 ? CountAllsport.length : 10,
-					offset: CountAllsport.length <= 10 ? 0 : CountAllsport.length - 10,
-					rder: [["createdAt", "ASC"]],
-				});
-				//
-				const CountAlllocal = await News.findAll({ where: { Category: "local" } });
+				const CountAlllocal = await News.findAll();
 				const countLocal = await News.findAndCountAll({
-					where: { Category: "local" },
-					limit: CountAlllocal.length <= 10 ? CountAlllocal.length : 10,
-					offset: CountAlllocal.length <= 10 ? 0 : CountAlllocal.length - 10,
-					rder: [["createdAt", "ASC"]],
+					limit: CountAlllocal.length <= 20 ? CountAlllocal.length : 20,
+					offset: CountAlllocal.length <= 20 ? 0 : CountAlllocal.length - 20,
+					order: [["createdAt", "DESC"]],
 				});
 				//
-				const Result = [...countPolitic.rows, ...countEconomy.rows, ...countSocial.rows, ...countSport.rows, ...countLocal.rows];
 				res.status(200).json({
 					success: true,
-					body: Result,
+					body: countLocal.rows,
 				});
 			}
 		} catch (error) {
@@ -1453,7 +1419,7 @@ export default class NewsControllers {
 					where: { Category: req.query.cat, MainTicker: true },
 					limit: CountAllpolitic.length <= 5 ? CountAllpolitic.length : 5,
 					offset: CountAllpolitic.length <= 5 ? 0 : CountAllpolitic.length - 5,
-					rder: [["createdAt", "ASC"]],
+					order: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,
@@ -1465,7 +1431,7 @@ export default class NewsControllers {
 					where: { SubTicker: true },
 					limit: CountAllpolitic.length <= 5 ? CountAllpolitic.length : 5,
 					offset: CountAllpolitic.length <= 5 ? 0 : CountAllpolitic.length - 5,
-					rder: [["createdAt", "ASC"]],
+					order: [["createdAt", "ASC"]],
 				});
 				res.status(200).json({
 					success: true,
