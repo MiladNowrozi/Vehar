@@ -8,43 +8,32 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..
 export default class DeleteControllers {
 	//  ######## Image
 	static Image = async (req, res) => {
-		if (!req.user) {
-			return res.sendStatus(401);
-		}
-
-		if (req.body.length > 0) {
-			try {
-				const FindImages = await Files.findAll({ where: { id: req.body } });
-				for (const FilesImage of FindImages) {
-					const ImagesForDelete = path.join(__dirname, "/uploads/news/", FilesImage.FilePath);
-					if (fs.existsSync(ImagesForDelete)) {
-						fs.unlinkSync(ImagesForDelete);
-						await Files.destroy({ where: { id: FilesImage.id } });
-					} else {
-						res.status(403).json({
-							success: false,
-							message: `not finding some of images:${ImagesForDelete} for deleting !`,
-						});
+		try {
+			const FindImages = await Files.findAll({ where: { id: req.body } });
+			await Promise.all(
+				FindImages.map(async (image) => {
+					const filePath = path.join(__dirname, "/uploads/news/", image.FilePath);
+					try {
+						await fs.promises.unlink(filePath);
+						await Files.destroy({ where: { id: image.id } });
+					} catch (error) {
+						console.error(`Error deleting ${filePath}: ${error.message}`);
+						throw new Error(`Failed to delete ${image.FilePath}`);
 					}
-				}
-				const ResultDeleting = await Files.findAndCountAll();
-				res.status(200).json({
-					success: true,
-					body: {
-						total: ResultDeleting.count,
-						images: ResultDeleting.rows,
-					},
-					message: "all images were receive successfully!",
-				});
-			} catch (error) {
-				res.status(500).json({
-					message: error.message,
-					success: false,
-				});
-			}
-		} else {
-			res.status(403).json({
-				message: "not images sending !",
+				})
+			);
+			const ResultDeleting = await Files.findAndCountAll();
+			res.status(200).json({
+				success: true,
+				body: {
+					total: ResultDeleting.count,
+					ResultDeleting: req.body,
+				},
+				message: "all images were receive successfully!",
+			});
+		} catch (error) {
+			res.status(500).json({
+				message: error.message,
 				success: false,
 			});
 		}

@@ -352,7 +352,11 @@
 
 					background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 50%);
 					&.TextImgCenter:hover {
-						background: linear-gradient(to bottom, rgba(10, 130, 0, 0) 0%, rgba(57, 85, 35, 0.4) 50%);
+						background: linear-gradient(
+							to bottom,
+							rgba(10, 130, 0, 0) 0%,
+							rgba(57, 85, 35, 0.4) 50%
+						);
 					}
 					.TextImg-1 {
 						text-align: start;
@@ -766,7 +770,7 @@
 				.Container-Header-Left {
 					direction: rtl;
 					display: flex;
-					flex-direction: column;
+					flex-direction: column-reverse;
 					gap: 10px;
 					border-radius: 5px;
 					margin-top: 10px;

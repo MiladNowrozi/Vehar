@@ -95,7 +95,10 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		const ImagesScroll = document.getElementById("items-images-scroll-id");
 		ImagesScroll &&
 			ImagesScroll.addEventListener("scroll", () => {
-				if (ImagesScroll.scrollTop + ImagesScroll.clientHeight >= ImagesScroll.scrollHeight && Images.total > LimitImages) {
+				if (
+					ImagesScroll.scrollTop + ImagesScroll.clientHeight >= ImagesScroll.scrollHeight &&
+					Images.total > LimitImages
+				) {
 					setLimitImages(LimitImages + 10);
 				}
 			});
@@ -104,7 +107,10 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	useEffect(() => {
 		const VideoScroll = document.getElementById("items-video-scroll-id");
 		const handleScroll = () => {
-			if (VideoScroll && VideoScroll.scrollTop + VideoScroll.clientHeight >= VideoScroll.scrollHeight) {
+			if (
+				VideoScroll &&
+				VideoScroll.scrollTop + VideoScroll.clientHeight >= VideoScroll.scrollHeight
+			) {
 				setLimitVideo(LimitVideo + 10);
 			}
 		};
@@ -129,11 +135,12 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					.then((success) => {
 						alert("تصاویر با موفقیت حذف شدند .");
 						// setImages(success.data.body);
-						console.log(success.data);
+						console.log(success.data.body);
 
 						setSelectedImage([]);
 					})
 					.catch((e) => {
+						alert("پوزش! ما نتونستیم فرایند حذف را انجام دهیم .");
 						console.log(e);
 					});
 			} catch (error) {
@@ -143,7 +150,10 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			setFilePickerOpen(false);
 			if (editorRef.current) {
 				const imageTags = selectedImage
-					.map((img) => `<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`)
+					.map(
+						(img) =>
+							`<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`
+					)
 					.join("");
 				editorRef.current.insertContent(imageTags);
 				setSelectedImage([]); // Clear selection after inserting
@@ -186,7 +196,13 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				>
 					تصاویر
 				</button>
-				<input id="upload_files_id" style={{ display: "none" }} type="file" multiple onChange={handleFileChange} />
+				<input
+					id="upload_files_id"
+					style={{ display: "none" }}
+					type="file"
+					multiple
+					onChange={handleFileChange}
+				/>
 				{NewsId !== "create-news" && (
 					<div className="option-upload">
 						<label htmlFor="upload_files_id" className="fa fa-upload"></label>
@@ -199,7 +215,11 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			<div className="content-gallery-files">
 				{openImages && (
 					<div className="content-images">
-						<div id="items-images-scroll-id" style={{ height: window.innerHeight - 145 }} className="items-images">
+						<div
+							id="items-images-scroll-id"
+							style={{ height: window.innerHeight - 145 }}
+							className="items-images"
+						>
 							{Images.images?.length > 0 &&
 								Images.images.map(
 									(Image, index) =>
@@ -208,15 +228,27 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 												<label htmlFor={"match-index" + index}>
 													<input
 														type="checkbox"
-														checked={selectedImage.includes(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)}
+														checked={selectedImage.includes(
+															NewsId === "upload-files"
+																? Image.id
+																: process.env.REACT_APP_SET_URLS + Image.FilePath
+														)}
 														onChange={() =>
-															toggleImageSelection(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)
+															toggleImageSelection(
+																NewsId === "upload-files"
+																	? Image.id
+																	: process.env.REACT_APP_SET_URLS + Image.FilePath
+															)
 														}
 													/>
 													<img
 														id={"match-index" + index}
 														onClick={() =>
-															toggleImageSelection(NewsId === "upload-files" ? Image.id : process.env.REACT_APP_SET_URLS + Image.FilePath)
+															toggleImageSelection(
+																NewsId === "upload-files"
+																	? Image.id
+																	: process.env.REACT_APP_SET_URLS + Image.FilePath
+															)
 														}
 														src={process.env.REACT_APP_SET_URLS + Image.FilePath}
 														alt="images"

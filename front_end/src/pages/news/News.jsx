@@ -42,17 +42,25 @@ export const News = () => {
 		GetSelectedNews: [],
 		GetSelectedChosen: [],
 	});
+
 	const NewsId = useLocation().pathname.split("/")[2];
 	useEffect(() => {
 		const FetchData = async () => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get?id=${NewsId}&userId=${CurrentUser ? CurrentUser.Info.Id : 0}&role=${CurrentUser ? CurrentUser.Info.Role : ""}`,
+					url: `/news/get?id=${NewsId}&userId=${CurrentUser ? CurrentUser.Info.Id : 0}&role=${
+						CurrentUser ? CurrentUser.Info.Role : ""
+					}`,
 				})
 					.then((success) => {
 						const { GetSelectedSpecial, GetSelectedNews, GetSelectedChosen } = success.data.body;
-						setNews({ ...news, GetSelectedSpecial: GetSelectedSpecial, GetSelectedNews: GetSelectedNews, GetSelectedChosen: GetSelectedChosen });
+						setNews({
+							...news,
+							GetSelectedSpecial: GetSelectedSpecial,
+							GetSelectedNews: GetSelectedNews,
+							GetSelectedChosen: GetSelectedChosen,
+						});
 					})
 					.catch((err) => {
 						console.log(err);
@@ -109,7 +117,9 @@ export const News = () => {
 					setActiveResponseId(null);
 
 					setTimeout(() => {
-						const GoToResponse = document.getElementById(success.data.body.newCommentId + "comment");
+						const GoToResponse = document.getElementById(
+							success.data.body.newCommentId + "comment"
+						);
 						if (GoToResponse) {
 							GoToResponse.scrollIntoView({
 								behavior: "smooth",
@@ -117,7 +127,9 @@ export const News = () => {
 						}
 					}, 1000);
 					setTimeout(() => {
-						const GoToResponse = document.getElementById(success.data.body.newCommentId + "comment");
+						const GoToResponse = document.getElementById(
+							success.data.body.newCommentId + "comment"
+						);
 						if (GoToResponse) {
 							document.querySelector(".result-send-comment").innerHTML = "";
 						} else {
@@ -149,14 +161,20 @@ export const News = () => {
 						...news,
 						GetSelectedNews: {
 							...news.GetSelectedNews,
-							comments: news.GetSelectedNews.comments.map((e) => (e.id === success.data.body.UpdCommentId ? (e = success.data.body.Comment) : e)),
+							comments: news.GetSelectedNews.comments.map((e) =>
+								e.id === success.data.body.UpdCommentId ? (e = success.data.body.Comment) : e
+							),
 						},
 					});
-					document.querySelector(".result-send-comment").innerHTML = success.data.body.Comment ? success.data.message : "";
+					document.querySelector(".result-send-comment").innerHTML = success.data.body.Comment
+						? success.data.message
+						: "";
 					setEditComment({ ...editComment, id: null, type: "", content: "" });
 					success.data.body.Comments &&
 						setTimeout(() => {
-							const GoToResponse = document.getElementById(success.data.body.UpdCommentId + "comment");
+							const GoToResponse = document.getElementById(
+								success.data.body.UpdCommentId + "comment"
+							);
 							if (GoToResponse) {
 								GoToResponse.scrollIntoView({
 									behavior: "smooth",
@@ -170,14 +188,18 @@ export const News = () => {
 							...news.GetSelectedNews,
 							comments: news.GetSelectedNews.comments.map((e) => ({
 								...e,
-								responses: e.responses.map((e) => (e.id === success.data.body.UpdResponseId ? (e = success.data.body.Response) : e)),
+								responses: e.responses.map((e) =>
+									e.id === success.data.body.UpdResponseId ? (e = success.data.body.Response) : e
+								),
 							})),
 						},
 					});
 					setEditComment({ ...editComment, id: null, type: "", content: "" });
 					success.data.body.Response &&
 						setTimeout(() => {
-							const GoToResponse = document.getElementById(success.data.body.UpdResponseId + "response");
+							const GoToResponse = document.getElementById(
+								success.data.body.UpdResponseId + "response"
+							);
 							if (GoToResponse) {
 								GoToResponse.scrollIntoView({
 									behavior: "smooth",
@@ -212,7 +234,9 @@ export const News = () => {
 						GetSelectedNews: {
 							...news.GetSelectedNews,
 							comments: news.GetSelectedNews.comments.map((e) =>
-								e.id === success.data.body.CommentId ? { ...e, responses: success.data.body.Response } : e
+								e.id === success.data.body.CommentId
+									? { ...e, responses: success.data.body.Response }
+									: e
 							),
 						},
 					});
@@ -236,7 +260,9 @@ export const News = () => {
 					GetSelectedNews: {
 						...news.GetSelectedNews,
 						comments: news.GetSelectedNews.comments.map((e) =>
-							e.id === response.data.body.CommentId ? { ...e, responses: response.data.body.UpdateResponses } : e
+							e.id === response.data.body.CommentId
+								? { ...e, responses: response.data.body.UpdateResponses }
+								: e
 						),
 					},
 				});
@@ -248,7 +274,9 @@ export const News = () => {
 				setActiveResponseId(null);
 
 				setTimeout(() => {
-					const GoToResponse = document.getElementById(response.data.body.currentResponses + "response");
+					const GoToResponse = document.getElementById(
+						response.data.body.currentResponses + "response"
+					);
 					if (GoToResponse) {
 						GoToResponse.scrollIntoView({
 							behavior: "instant",
@@ -272,7 +300,9 @@ export const News = () => {
 					GetSelectedNews: {
 						...news.GetSelectedNews,
 						comments: news.GetSelectedNews.comments.map((e) =>
-							e.id === response.data.body.CommentId ? { ...e, responses: response.data.body.UpdateResToResponse } : e
+							e.id === response.data.body.CommentId
+								? { ...e, responses: response.data.body.UpdateResToResponse }
+								: e
 						),
 					},
 				});
@@ -284,7 +314,9 @@ export const News = () => {
 				setActiveResponseId(null);
 
 				setTimeout(() => {
-					const GoToResponse = document.getElementById(response.data.body.currentResToResponse + "response");
+					const GoToResponse = document.getElementById(
+						response.data.body.currentResToResponse + "response"
+					);
 					if (GoToResponse) {
 						GoToResponse.scrollIntoView({
 							behavior: "instant",
@@ -333,15 +365,19 @@ export const News = () => {
 									<AnimationRed />
 								</div>
 								<div className="ContainerLeft">
-									{(news.GetSelectedSpecial.length > 0 &&
-										news.GetSelectedSpecial.map((e, i) => (
+									{(news.GetSelectedChosen.length > 0 &&
+										news.GetSelectedChosen.map((e, i) => (
 											<div key={i} className="ContainerHeaderLeft">
 												<div className="NewsContainer-left">
 													<div className="NewsContent-left">
 														<div className="NewsItems-left">
 															<div className="img-content-left">
 																<Link to={`/news/${e.id}`} className="ImgNews-left">
-																	<img className="imgStyleHeader-left" src={e.Default_Image} alt="imgs" />
+																	<img
+																		className="imgStyleHeader-left"
+																		src={e.Default_Image}
+																		alt="imgs"
+																	/>
 																</Link>
 															</div>
 															<div className="RoutingNews-left">
@@ -399,7 +435,10 @@ export const News = () => {
 												</Link>
 											</div>
 											<div className="news-path-category">
-												<Link to={`/?cat=${news.GetSelectedNews.Category}`} className="Link-news-path-category">
+												<Link
+													to={`/?cat=${news.GetSelectedNews.Category}`}
+													className="Link-news-path-category"
+												>
 													{(news.GetSelectedNews.Category === "politic" && "سیاست") ||
 														(news.GetSelectedNews.Category === "economy" && "اقتصاد") ||
 														(news.GetSelectedNews.Category === "social" && "جامعه") ||
@@ -409,46 +448,62 @@ export const News = () => {
 											</div>
 											{news.GetSelectedNews.subCategoryName && (
 												<div className="news-path-sub-category">
-													<Link className="Link-news-path-sub-category">{news.GetSelectedNews.SubCategoryName}</Link>
+													<Link className="Link-news-path-sub-category">
+														{news.GetSelectedNews.SubCategoryName}
+													</Link>
 												</div>
 											)}
 										</div>
-										{(CurrentUser?.Info.Role === news.GetSelectedNews.admin.Role && CurrentUser?.Info.Id === news.GetSelectedNews.admin.id && (
-											<section className="delete-edit-news">
-												<Link className="Link-delete-news" to={`/admin/create-news?id=${news.GetSelectedNews.id}`}>
-													<button className="fa fa-edit"></button>
-												</Link>
-												<button onClick={() => setDeleteNews(news.GetSelectedNews.id)} className="fa fa-trash"></button>
-												{DeleteNews && (
-													<div className="warning-dele-news">
-														<p>{fa10}</p>
-														<span>
-															<p>{fa7}</p>
-															<p>{news.GetSelectedNews.id}</p>
-														</span>
-														<span>
-															<p>{fa5}</p>
-															<p>{news.GetSelectedNews.admin.Admin_FirstName + " " + news.GetSelectedNews.admin.Admin_LastName}</p>
-														</span>
-														<span>
-															<p>{fa8}</p>
-															<p>{news.GetSelectedNews.News_Titre}</p>
-														</span>
-														<span>
-															<p>{fa9}</p>
-															<p>{news.GetSelectedNews.News_Title}</p>
-														</span>
-														<span className="btn-dele-cancel">
-															<button onClick={() => setDeleteNews(null)}>{fa3}</button>
-															<button onClick={handleDeleteNews}>{fa2}</button>
-														</span>
-													</div>
-												)}
-											</section>
-										)) ||
+										{(CurrentUser?.Info.Role === news.GetSelectedNews.admin.Role &&
+											CurrentUser?.Info.Id === news.GetSelectedNews.admin.id && (
+												<section className="delete-edit-news">
+													<Link
+														className="Link-delete-news"
+														to={`/admin/create-news?id=${news.GetSelectedNews.id}`}
+													>
+														<button className="fa fa-edit"></button>
+													</Link>
+													<button
+														onClick={() => setDeleteNews(news.GetSelectedNews.id)}
+														className="fa fa-trash"
+													></button>
+													{DeleteNews && (
+														<div className="warning-dele-news">
+															<p>{fa10}</p>
+															<span>
+																<p>{fa7}</p>
+																<p>{news.GetSelectedNews.id}</p>
+															</span>
+															<span>
+																<p>{fa5}</p>
+																<p>
+																	{news.GetSelectedNews.admin.Admin_FirstName +
+																		" " +
+																		news.GetSelectedNews.admin.Admin_LastName}
+																</p>
+															</span>
+															<span>
+																<p>{fa8}</p>
+																<p>{news.GetSelectedNews.News_Titre}</p>
+															</span>
+															<span>
+																<p>{fa9}</p>
+																<p>{news.GetSelectedNews.News_Title}</p>
+															</span>
+															<span className="btn-dele-cancel">
+																<button onClick={() => setDeleteNews(null)}>{fa3}</button>
+																<button onClick={handleDeleteNews}>{fa2}</button>
+															</span>
+														</div>
+													)}
+												</section>
+											)) ||
 											(CurrentUser?.Info.Role === "Lord" && (
 												<section className="delete-edit-news">
-													<Link className="Link-delete-news" to={`/admin/create-news?id=${news.GetSelectedNews.id}`}>
+													<Link
+														className="Link-delete-news"
+														to={`/admin/create-news?id=${news.GetSelectedNews.id}`}
+													>
 														<button className="fa fa-edit"></button>
 													</Link>
 													<button className="fa fa-trash"></button>
@@ -496,7 +551,11 @@ export const News = () => {
 												<img src={news.GetSelectedNews.admin.Default_Image} alt="img" />
 												<section>
 													<p>{news.GetSelectedNews.admin.Role === "Lord" ? fa6 : fa5}</p>
-													<p>{news.GetSelectedNews.admin.Admin_FirstName + " " + news.GetSelectedNews.admin.Admin_LastName}</p>
+													<p>
+														{news.GetSelectedNews.admin.Admin_FirstName +
+															" " +
+															news.GetSelectedNews.admin.Admin_LastName}
+													</p>
 												</section>
 											</div>
 										</div>
@@ -505,7 +564,11 @@ export const News = () => {
 												{fa7}
 												<p>{+" " + news.GetSelectedNews.id}</p>
 											</div>
-											<div className={news.GetSelectedNews.likes[0]?.Like_News ? "is-liked" : "like-news-user"}>
+											<div
+												className={
+													news.GetSelectedNews.likes[0]?.Like_News ? "is-liked" : "like-news-user"
+												}
+											>
 												<span>{news.GetSelectedNews.Like_Count}</span>
 												<i
 													className="fa fa-heart"
@@ -531,7 +594,8 @@ export const News = () => {
 																.catch((err) => {
 																	console.log(err);
 																	document.getElementById("need-to-login").style.display = "block";
-																	document.getElementById("need-to-login").innerHTML = err.response.data.message;
+																	document.getElementById("need-to-login").innerHTML =
+																		err.response.data.message;
 																	setTimeout(() => {
 																		document.getElementById("need-to-login").style.display = "none";
 																	}, 5000);
@@ -544,7 +608,11 @@ export const News = () => {
 														}
 													}}
 												></i>
-												<span style={{ display: "none" }} id="need-to-login" className="need-to-login">
+												<span
+													style={{ display: "none" }}
+													id="need-to-login"
+													className="need-to-login"
+												>
 													{fa12}
 												</span>
 											</div>
@@ -564,15 +632,19 @@ export const News = () => {
 									<AnimationRed />
 								</div>
 								<div className="ContainerRight">
-									{news.GetSelectedChosen.length > 0 ? (
-										news.GetSelectedChosen.sort((a, b) => a.id - b.id).map((News, i) => (
+									{news.GetSelectedSpecial.length > 0 ? (
+										news.GetSelectedSpecial.sort((a, b) => a.id - b.id).map((News, i) => (
 											<div key={i} className="ContainerHeaderRight">
 												<div className="NewsContainer-Right">
 													<div className="NewsContent-Right">
 														<div className="NewsItems-Right">
 															<div className="img-content-Right">
 																<Link to={`/news/${News.id}`} className="ImgNews-Right">
-																	<img className="imgStyleHeader-Right" src={News.Default_Image} alt="imgs" />
+																	<img
+																		className="imgStyleHeader-Right"
+																		src={News.Default_Image}
+																		alt="imgs"
+																	/>
 																</Link>
 															</div>
 															<div className="RoutingNews-Right">
@@ -636,7 +708,9 @@ export const News = () => {
 										<button
 											type="button"
 											onClick={() => {
-												activeCommentId === comment.id ? setActiveCommentId(null) : setActiveCommentId(comment.id);
+												activeCommentId === comment.id
+													? setActiveCommentId(null)
+													: setActiveCommentId(comment.id);
 												setCommentsValue("");
 												setNewResponse("");
 												setNewResToRes("");
@@ -648,13 +722,22 @@ export const News = () => {
 										</button>
 										{comment.responses.length > 0 && (
 											<div className="div-fa-comment">
-												<span>{comment.responses.length > 9 ? "+9" : comment.responses.length}</span>
+												<span>
+													{comment.responses.length > 9 ? "+9" : comment.responses.length}
+												</span>
 												<span
 													onClick={() => {
-														if (document.getElementById(comment.id + "container-responses").style.display !== "none") {
-															document.getElementById(comment.id + "container-responses").style.display = "none";
+														if (
+															document.getElementById(comment.id + "container-responses").style
+																.display !== "none"
+														) {
+															document.getElementById(
+																comment.id + "container-responses"
+															).style.display = "none";
 														} else {
-															document.getElementById(comment.id + "container-responses").style.display = "block";
+															document.getElementById(
+																comment.id + "container-responses"
+															).style.display = "block";
 														}
 													}}
 													className="fa fa-comments"
@@ -665,7 +748,13 @@ export const News = () => {
 											<button
 												className="but-delete-comment"
 												onClick={() => {
-													setDeleteComment({ ...DeleteComment, id: comment.id, type: "Comment", commentId: null, newsId: news.GetSelectedNews.id });
+													setDeleteComment({
+														...DeleteComment,
+														id: comment.id,
+														type: "Comment",
+														commentId: null,
+														newsId: news.GetSelectedNews.id,
+													});
 												}}
 											>
 												{fa2}
@@ -676,7 +765,13 @@ export const News = () => {
 													<div className="btn-delete-comment">
 														<button
 															onClick={() => {
-																setDeleteComment({ ...DeleteComment, id: null, type: "", commentId: null, newsId: null });
+																setDeleteComment({
+																	...DeleteComment,
+																	id: null,
+																	type: "",
+																	commentId: null,
+																	newsId: null,
+																});
 															}}
 														>
 															{fa3}
@@ -688,7 +783,12 @@ export const News = () => {
 											<button
 												className="but-edit-comment"
 												onClick={() => {
-													setEditComment({ ...editComment, type: "Comment", id: comment.id, content: comment.Comment_Content });
+													setEditComment({
+														...editComment,
+														type: "Comment",
+														id: comment.id,
+														content: comment.Comment_Content,
+													});
 													document.getElementById("usr-form").scrollIntoView({
 														behavior: "smooth",
 													});
@@ -722,8 +822,10 @@ export const News = () => {
 																					e.id === success.data.CommentId
 																						? {
 																								...e,
-																								Like_Comment: success.data.body.comment.Like_Comment,
-																								UnLike_Comment: success.data.body.comment.UnLike_Comment,
+																								Like_Comment:
+																									success.data.body.comment.Like_Comment,
+																								UnLike_Comment:
+																									success.data.body.comment.UnLike_Comment,
 																								likes: e.likes.map((e) => ({
 																									...e,
 																									Like_Comment: success.data.body.Like_Comment,
@@ -739,7 +841,11 @@ export const News = () => {
 																		console.log(err);
 																	});
 															}}
-															className={comment.likes?.[0]?.Like_Comment ? "color-like fa fa-thumbs-up" : "fa fa-thumbs-up"}
+															className={
+																comment.likes?.[0]?.Like_Comment
+																	? "color-like fa fa-thumbs-up"
+																	: "fa fa-thumbs-up"
+															}
 														></div>
 														<p id={"like-up" + comment.id} className="like-up">
 															{comment.Like_Comment}
@@ -747,7 +853,11 @@ export const News = () => {
 													</section>
 													<section className="like-down">
 														<div
-															className={comment.likes?.[0]?.UnLike_Comment ? "color-unlike fa fa-thumbs-down" : "fa fa-thumbs-down"}
+															className={
+																comment.likes?.[0]?.UnLike_Comment
+																	? "color-unlike fa fa-thumbs-down"
+																	: "fa fa-thumbs-down"
+															}
 															onClick={async () => {
 																await AxiosInstance({
 																	method: "post",
@@ -762,8 +872,10 @@ export const News = () => {
 																					e.id === success.data.CommentId
 																						? {
 																								...e,
-																								Like_Comment: success.data.body.comment.Like_Comment,
-																								UnLike_Comment: success.data.body.comment.UnLike_Comment,
+																								Like_Comment:
+																									success.data.body.comment.Like_Comment,
+																								UnLike_Comment:
+																									success.data.body.comment.UnLike_Comment,
 																								likes: e.likes.map((e) => ({
 																									...e,
 																									Like_Comment: success.data.body.Like_Comment,
@@ -798,7 +910,9 @@ export const News = () => {
 													onChange={(e) => {
 														setNewResponse(e.target.value);
 													}}
-													placeholder={`پاسخ به ${comment.user.User_FirstName + " " + comment.user.User_LastName}`}
+													placeholder={`پاسخ به ${
+														comment.user.User_FirstName + " " + comment.user.User_LastName
+													}`}
 												></textarea>
 												<button
 													type="button"
@@ -811,7 +925,11 @@ export const News = () => {
 											</div>
 										)}
 									</div>
-									<div style={{ display: "none" }} id={comment.id + "container-responses"} className="container-responses">
+									<div
+										style={{ display: "none" }}
+										id={comment.id + "container-responses"}
+										className="container-responses"
+									>
 										{comment.responses.length > 0 && (
 											<div className="content-response">
 												{comment.responses.map(
@@ -823,7 +941,8 @@ export const News = () => {
 																className={
 																	Response.Role_Responses === "Lord"
 																		? "item-map-responses-Lord"
-																		: Response.Role_Responses === "Author" && Response.userId === news.GetSelectedNews.AuthorId
+																		: Response.Role_Responses === "Author" &&
+																		  Response.userId === news.GetSelectedNews.AuthorId
 																		? "item-map-responses-OnAuthor"
 																		: Response.Role_Responses === comment.Role_Comment
 																		? "item-map-responses-main"
@@ -833,32 +952,52 @@ export const News = () => {
 																<div id="info-user-response" className="info-user-response">
 																	<img src={Response.user.Default_Image} alt="img" />
 																	<div>
-																		<p>{Response.user.User_FirstName + " " + Response.user.User_LastName}</p>
+																		<p>
+																			{Response.user.User_FirstName +
+																				" " +
+																				Response.user.User_LastName}
+																		</p>
 																		در پاسخ به
 																		<p
 																			onClick={() => {
-																				const id = comment.responses.find((e) => Response.ResponsesToRes === e.id)?.id;
-																				const section = document.getElementById(id ? id + "response" : comment.id + "comment");
+																				const id = comment.responses.find(
+																					(e) => Response.ResponsesToRes === e.id
+																				)?.id;
+																				const section = document.getElementById(
+																					id ? id + "response" : comment.id + "comment"
+																				);
 																				if (section) {
 																					section.scrollIntoView({
 																						behavior: "instant",
 																					});
 																					section.id === id + "response"
-																						? (section.children[0].style.backgroundColor = "#0000009c")
-																						: (section.children[0].children[0].style.backgroundColor = "#0000009c");
+																						? (section.children[0].style.backgroundColor =
+																								"#0000009c")
+																						: (section.children[0].children[0].style.backgroundColor =
+																								"#0000009c");
 																				}
 																				setTimeout(() => {
 																					section.id === id + "response"
-																						? (section.children[0].style.backgroundColor = "rgb(0, 87, 75)")
-																						: (section.children[0].children[0].style.backgroundColor = "#09008659");
+																						? (section.children[0].style.backgroundColor =
+																								"rgb(0, 87, 75)")
+																						: (section.children[0].children[0].style.backgroundColor =
+																								"#09008659");
 																				}, 1000);
 																			}}
 																		>
-																			{comment.responses.find((e) => Response.ResponsesToRes === e.id)
-																				? comment.responses.find((e) => Response.ResponsesToRes === e.id).user.User_FirstName +
+																			{comment.responses.find(
+																				(e) => Response.ResponsesToRes === e.id
+																			)
+																				? comment.responses.find(
+																						(e) => Response.ResponsesToRes === e.id
+																				  ).user.User_FirstName +
 																				  " " +
-																				  comment.responses.find((e) => Response.ResponsesToRes === e.id).user.User_LastName
-																				: comment.user.User_FirstName + " " + comment.user.User_LastName}
+																				  comment.responses.find(
+																						(e) => Response.ResponsesToRes === e.id
+																				  ).user.User_LastName
+																				: comment.user.User_FirstName +
+																				  " " +
+																				  comment.user.User_LastName}
 																		</p>
 																	</div>
 																</div>
@@ -870,7 +1009,9 @@ export const News = () => {
 																		className="send-btn-response"
 																		type="button"
 																		onClick={() => {
-																			activeResponseId === Response.id ? setActiveResponseId(null) : setActiveResponseId(Response.id);
+																			activeResponseId === Response.id
+																				? setActiveResponseId(null)
+																				: setActiveResponseId(Response.id);
 																			setCommentsValue("");
 																			setNewResponse("");
 																			setNewResToRes("");
@@ -905,7 +1046,9 @@ export const News = () => {
 																		<button
 																			className="but-edit-response"
 																			onClick={() => {
-																				activeResponseId === Response.id ? setActiveResponseId(null) : setActiveResponseId(Response.id);
+																				activeResponseId === Response.id
+																					? setActiveResponseId(null)
+																					: setActiveResponseId(Response.id);
 																				setCommentsValue("");
 																				setNewResponse("");
 																				setNewResToRes("");
@@ -926,7 +1069,13 @@ export const News = () => {
 																				<div className="btn-delete-response">
 																					<button
 																						onClick={() => {
-																							setDeleteComment({ ...DeleteComment, id: null, type: "", commentId: null, newsId: null });
+																							setDeleteComment({
+																								...DeleteComment,
+																								id: null,
+																								type: "",
+																								commentId: null,
+																								newsId: null,
+																							});
 																						}}
 																					>
 																						{fa3}
@@ -949,11 +1098,20 @@ export const News = () => {
 																				value={editComment.id ? editComment.content : newResToRes}
 																				onChange={(e) => {
 																					editComment.id
-																						? setEditComment({ ...editComment, content: e.target.value })
+																						? setEditComment({
+																								...editComment,
+																								content: e.target.value,
+																						  })
 																						: setNewResToRes(e.target.value);
 																				}}
 																				placeholder={
-																					!editComment.id ? `پاسخ به ${Response.user.User_FirstName + " " + Response.user.User_LastName}` : ""
+																					!editComment.id
+																						? `پاسخ به ${
+																								Response.user.User_FirstName +
+																								" " +
+																								Response.user.User_LastName
+																						  }`
+																						: ""
 																				}
 																			></textarea>
 																			<button
@@ -964,7 +1122,11 @@ export const News = () => {
 																						: () =>
 																								SubmitResponseToRes(
 																									Response.id,
-																									comment.responses.find((e) => Response.ResponsesToRes === e.id)?.id ? "response" : "comment"
+																									comment.responses.find(
+																										(e) => Response.ResponsesToRes === e.id
+																									)?.id
+																										? "response"
+																										: "comment"
 																								)
 																				}
 																			>
@@ -1003,12 +1165,18 @@ export const News = () => {
 											id="textarea-comment"
 											value={editComment.id ? editComment.content : CommentsValue}
 											onChange={(e) => {
-												editComment.id ? setEditComment({ ...editComment, content: e.target.value }) : setCommentsValue(e.target.value);
+												editComment.id
+													? setEditComment({ ...editComment, content: e.target.value })
+													: setCommentsValue(e.target.value);
 											}}
 											form="usr-form"
 											placeholder="عکس العمل شما نسبت به این خبر چیه ؟"
 										></textarea>
-										<input type="button" onClick={editComment.id ? CommentEdit : SubmitComment} value={editComment.id ? "ویرایش" : "ارسال نظر"} />
+										<input
+											type="button"
+											onClick={editComment.id ? CommentEdit : SubmitComment}
+											value={editComment.id ? "ویرایش" : "ارسال نظر"}
+										/>
 									</form>
 								</div>
 							</div>

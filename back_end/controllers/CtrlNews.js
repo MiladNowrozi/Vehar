@@ -58,7 +58,11 @@ export default class NewsControllers {
 		try {
 			const NewsExist = await News.findOne({
 				where: {
-					[Op.or]: [{ News_Titre: req.body.News_Titre }, { News_Title: req.body.News_Title }, { News_Describe: req.body.News_Describe }],
+					[Op.or]: [
+						{ News_Titre: req.body.News_Titre },
+						{ News_Title: req.body.News_Title },
+						{ News_Describe: req.body.News_Describe },
+					],
 				},
 			});
 			if (NewsExist === null) {
@@ -85,7 +89,7 @@ export default class NewsControllers {
 						SubNote: req.body.SubNote,
 						MainTicker: req.body.MainTicker,
 						SubTicker: req.body.SubTicker,
-						Category: req.body.CategoryId,
+						Category: req.body.Category,
 						subCategoryId: req.body.SubCategoryId,
 						authorId: req.body.AuthorId,
 					});
@@ -188,7 +192,10 @@ export default class NewsControllers {
 						TotalPages: Math.ceil(GetAllResult.count / parseInt(req.query.limit)),
 						TotalNews: GetAllResult.count,
 					},
-					message: req.query.searchbyid === "null" ? "هیچ خبری موجود نیست" : `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
+					message:
+						req.query.searchbyid === "null"
+							? "هیچ خبری موجود نیست"
+							: `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
 				});
 			} catch (e) {
 				res.status(500).json({
@@ -232,7 +239,10 @@ export default class NewsControllers {
 					TotalPages: Math.ceil(SearchInNewsByTitle.count / parseInt(req.query.limit)),
 					TotalNews: SearchInNewsByTitle.count,
 				},
-				message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
+				message:
+					req.query.search === "null"
+						? "هیچ خبری موجود نیست"
+						: `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
 			});
 		} else {
 			try {
@@ -261,7 +271,10 @@ export default class NewsControllers {
 						TotalPages: Math.ceil(findAndCountAll.count / parseInt(req.query.limit)),
 						TotalNews: findAndCountAll.count,
 					},
-					message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
+					message:
+						req.query.search === "null"
+							? "هیچ خبری موجود نیست"
+							: `خبری با عنوان (${req.query.search}) وجود ندارد !`,
 				});
 			} catch (e) {
 				res.status(500).json({
@@ -310,7 +323,10 @@ export default class NewsControllers {
 						TotalPages: Math.ceil(GetAllResult.count / parseInt(req.query.limit)),
 						TotalNews: GetAllResult.count,
 					},
-					message: req.query.searchbyid === "null" ? "هیچ خبری موجود نیست" : `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
+					message:
+						req.query.searchbyid === "null"
+							? "هیچ خبری موجود نیست"
+							: `خبری با کد (${req.query.searchbyid}) وجود ندارد!`,
 				});
 			} catch (e) {
 				res.status(500).json({
@@ -367,7 +383,10 @@ export default class NewsControllers {
 					TotalPages: Math.ceil(SearchInNewsByTitle.count / parseInt(req.query.limit)),
 					TotalNews: SearchInNewsByTitle.count,
 				},
-				message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
+				message:
+					req.query.search === "null"
+						? "هیچ خبری موجود نیست"
+						: `خبری با تیتر/عنوان (${req.query.search}) وجود ندارد !`,
 			});
 		} else {
 			res.status(200).json({
@@ -378,7 +397,10 @@ export default class NewsControllers {
 					TotalPages: 0,
 					TotalNews: 0,
 				},
-				message: req.query.search === "null" ? "هیچ خبری موجود نیست" : `خبری با عنوان (${req.query.search}) وجود ندارد !`,
+				message:
+					req.query.search === "null"
+						? "هیچ خبری موجود نیست"
+						: `خبری با عنوان (${req.query.search}) وجود ندارد !`,
 			});
 		}
 	};
@@ -390,15 +412,21 @@ export default class NewsControllers {
 				await SelectedNews.update({ Visit_Count: (SelectedNews.Visit_Count += 1) });
 
 				if (req.query.userId && req.query.role === "User") {
-					const CheckHistory = await Activity.findOne({ where: { newsId: req.query.id, userId: req.query.userId } });
+					const CheckHistory = await Activity.findOne({
+						where: { newsId: req.query.id, userId: req.query.userId },
+					});
 					if (!CheckHistory) {
 						await Activity.create({ newsId: req.query.id, userId: req.query.userId });
 					}
 				}
 
 				//
-				const CountSpecial = await News.findAndCountAll({ where: { Category: SelectedNews.Category, MainPageSlider: true } });
-				const CountChosen = await News.findAndCountAll({ where: { Category: SelectedNews.Category, MainPageColumn: true } });
+				const CountSpecial = await News.findAndCountAll({
+					where: { Category: SelectedNews.Category, MainPageSlider: true },
+				});
+				const CountChosen = await News.findAndCountAll({
+					where: { Category: SelectedNews.Category, MainPageColumn: true },
+				});
 
 				const SelectedSpecial = await News.findAll({
 					where: { Category: SelectedNews.Category, SubPageSlider: true },
@@ -406,7 +434,7 @@ export default class NewsControllers {
 					offset: CountSpecial.count <= 5 ? 0 : CountSpecial.count - 5,
 				});
 				const SelectedChosen = await News.findAll({
-					where: { Category: SelectedNews.Category, SubPageSlider: true },
+					where: { Category: SelectedNews.Category, MainPageColumn: true },
 					limit: CountChosen.count <= 5 ? CountChosen.count : 5,
 					offset: CountChosen.count <= 5 ? 0 : CountChosen.count - 5,
 				});
@@ -577,7 +605,9 @@ export default class NewsControllers {
 			try {
 				const GetOneNews = await News.findByPk(req.query.id);
 				if (GetOneNews) {
-					const LikeCachk = await Like.findOne({ where: { newsId: GetOneNews.id, userId: req.user.id } });
+					const LikeCachk = await Like.findOne({
+						where: { newsId: GetOneNews.id, userId: req.user.id },
+					});
 					if (LikeCachk) {
 						if (LikeCachk.Like_News) {
 							await LikeCachk.update({ Like_News: false });
@@ -641,17 +671,26 @@ export default class NewsControllers {
 				const GetOneComment = await Comment.findByPk(req.query.id);
 				if (GetOneComment) {
 					if (req.query.status === "like") {
-						const LikeCachk = await Like.findOne({ where: { userId: req.user.id, commentId: GetOneComment.id } });
+						const LikeCachk = await Like.findOne({
+							where: { userId: req.user.id, commentId: GetOneComment.id },
+						});
 						if (LikeCachk) {
 							if (LikeCachk.Like_Comment) {
 								if (LikeCachk.UnLike_Comment) {
 									await LikeCachk.update({ UnLike_Comment: false });
-									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									await GetOneComment.update({
+										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
+									});
 									const ResultLike = await Like.findOne({
 										where: { commentId: GetOneComment.id, userId: req.user.id },
 										attributes: ["UnLike_Comment", "Like_Comment"],
 										include: [
-											{ model: Comment, required: false, include: [{ Like, required: false }], attributes: ["UnLike_Comment", "Like_Comment"] },
+											{
+												model: Comment,
+												required: false,
+												include: [{ Like, required: false }],
+												attributes: ["UnLike_Comment", "Like_Comment"],
+											},
 										],
 									});
 									res.status(200).json({
@@ -674,7 +713,9 @@ export default class NewsControllers {
 							} else {
 								if (LikeCachk.UnLike_Comment) {
 									await LikeCachk.update({ UnLike_Comment: false });
-									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									await GetOneComment.update({
+										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
+									});
 									const ResultLike = await Like.findOne({
 										where: { commentId: GetOneComment.id, userId: req.user.id },
 										attributes: ["UnLike_Comment", "Like_Comment"],
@@ -699,7 +740,11 @@ export default class NewsControllers {
 								}
 							}
 						} else {
-							await Like.create({ Like_Comment: true, userId: req.user.id, commentId: GetOneComment.id });
+							await Like.create({
+								Like_Comment: true,
+								userId: req.user.id,
+								commentId: GetOneComment.id,
+							});
 							await GetOneComment.update({ Like_Comment: (GetOneComment.Like_Comment += 1) });
 							const ResultLike = await Like.findOne({
 								where: { commentId: GetOneComment.id, userId: req.user.id },
@@ -712,7 +757,9 @@ export default class NewsControllers {
 							});
 						}
 					} else if (req.query.status === "unlike") {
-						const LikeCachk = await Like.findOne({ where: { userId: req.user.id, commentId: GetOneComment.id } });
+						const LikeCachk = await Like.findOne({
+							where: { userId: req.user.id, commentId: GetOneComment.id },
+						});
 						if (LikeCachk) {
 							if (LikeCachk.UnLike_Comment) {
 								if (LikeCachk.Like_Comment) {
@@ -729,7 +776,9 @@ export default class NewsControllers {
 									});
 								} else {
 									await LikeCachk.update({ UnLike_Comment: false });
-									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment -= 1) });
+									await GetOneComment.update({
+										UnLike_Comment: (GetOneComment.UnLike_Comment -= 1),
+									});
 									const ResultLike = await Like.findOne({
 										where: { commentId: GetOneComment.id, userId: req.user.id },
 										attributes: ["UnLike_Comment", "Like_Comment"],
@@ -755,7 +804,9 @@ export default class NewsControllers {
 									});
 								} else {
 									await LikeCachk.update({ UnLike_Comment: true });
-									await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
+									await GetOneComment.update({
+										UnLike_Comment: (GetOneComment.UnLike_Comment += 1),
+									});
 									const ResultLike = await Like.findOne({
 										where: { commentId: GetOneComment.id, userId: req.user.id },
 										attributes: ["UnLike_Comment", "Like_Comment"],
@@ -768,7 +819,11 @@ export default class NewsControllers {
 								}
 							}
 						} else {
-							await Like.create({ UnLike_Comment: true, userId: req.user.id, commentId: GetOneComment.id });
+							await Like.create({
+								UnLike_Comment: true,
+								userId: req.user.id,
+								commentId: GetOneComment.id,
+							});
 							await GetOneComment.update({ UnLike_Comment: (GetOneComment.UnLike_Comment += 1) });
 							const ResultLike = await Like.findOne({
 								where: { commentId: GetOneComment.id, userId: req.user.id },
@@ -869,9 +924,21 @@ export default class NewsControllers {
 	static MainPagSliderAndChoice = async (req, res) => {
 		try {
 			if (req.query.cat) {
-				const SliderCount = await News.findAndCountAll({ where: { Category: req.query.cat, SubPageSlider: true } });
-				const ChoiceCount = await News.findAndCountAll({ where: { Category: req.query.cat, SubPageColumn: true } });
-				const SubNoteCount = await News.findAndCountAll({ where: { Category: req.query.cat, SubNote: true } });
+				const SliderCount = await News.findAndCountAll({
+					where: { Category: req.query.cat, SubPageSlider: true },
+				});
+				const ChoiceCount = await News.findAndCountAll({
+					where: { Category: req.query.cat, SubPageColumn: true },
+				});
+				console.log(
+					ChoiceCount.rows.map((e) => {
+						e.id;
+					})
+				);
+
+				const SubNoteCount = await News.findAndCountAll({
+					where: { Category: req.query.cat, SubNote: true },
+				});
 
 				const SubNoteNews = await News.findAll({
 					where: { Category: req.query.cat, SubNote: true },
@@ -899,7 +966,12 @@ export default class NewsControllers {
 				});
 				res.status(200).json({
 					success: true,
-					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
+					body: {
+						SpecialNews: SpecialNews,
+						SliderNews: SliderNews,
+						ChoiceNews: ChoiceNews,
+						SubNoteNews: SubNoteNews,
+					},
 				});
 			} else {
 				// for first pages (main)
@@ -934,7 +1006,12 @@ export default class NewsControllers {
 
 				res.status(200).json({
 					success: true,
-					body: { SpecialNews: SpecialNews, SliderNews: SliderNews, ChoiceNews: ChoiceNews, SubNoteNews: SubNoteNews },
+					body: {
+						SpecialNews: SpecialNews,
+						SliderNews: SliderNews,
+						ChoiceNews: ChoiceNews,
+						SubNoteNews: SubNoteNews,
+					},
 				});
 			}
 		} catch (error) {
@@ -1384,7 +1461,7 @@ export default class NewsControllers {
 					where: { Category: req.query.cat },
 					limit: CountAllpolitic.length <= 20 ? CountAllpolitic.length : 20,
 					offset: CountAllpolitic.length <= 20 ? 0 : CountAllpolitic.length - 20,
-					order: [["createdAt", "DESC"]],
+					order: [["createdAt", "DESC"]], // this is need to cheacking later
 				});
 				res.status(200).json({
 					success: true,
@@ -1395,7 +1472,7 @@ export default class NewsControllers {
 				const countLocal = await News.findAndCountAll({
 					limit: CountAlllocal.length <= 20 ? CountAlllocal.length : 20,
 					offset: CountAlllocal.length <= 20 ? 0 : CountAlllocal.length - 20,
-					order: [["createdAt", "DESC"]],
+					order: [["createdAt", "ASC"]],
 				});
 				//
 				res.status(200).json({
@@ -1414,7 +1491,9 @@ export default class NewsControllers {
 	static NewsTickers = async (req, res) => {
 		try {
 			if (req.query.cat) {
-				const CountAllpolitic = await News.findAll({ where: { Category: req.query.cat, MainTicker: true } });
+				const CountAllpolitic = await News.findAll({
+					where: { Category: req.query.cat, MainTicker: true },
+				});
 				const countPolitic = await News.findAndCountAll({
 					where: { Category: req.query.cat, MainTicker: true },
 					limit: CountAllpolitic.length <= 5 ? CountAllpolitic.length : 5,

@@ -9,7 +9,6 @@ import Upload from "./upload/Upload.jsx";
 
 export const CreateNews = () => {
 	const NewsId = useLocation().search;
-	const [editNews, setEditNews] = useState([]);
 
 	const { CurrentUser } = useContext(AuthContext);
 
@@ -40,10 +39,11 @@ export const CreateNews = () => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `/news/get${NewsId ? NewsId : "?id="}&userId=${CurrentUser.Info ? CurrentUser.Info.Id : 0}`,
+					url: `/news/get${NewsId}&userId=${CurrentUser.Info ? CurrentUser.Info.Id : 0}`,
 				})
 					.then((success) => {
-						setEditNews(success.data.body.GetSelectedNews);
+						// setEditNews(success.data.body.GetSelectedNews);
+						setInput(success.data.body.GetSelectedNews);
 					})
 					.catch((err) => {
 						console.log(err);
@@ -54,29 +54,42 @@ export const CreateNews = () => {
 		};
 		FetchData();
 	}, [NewsId, CurrentUser]);
+	console.log(input);
 
 	const handleSubmit = async () => {
-		if (input.News_Title === "" && input.News_Describe === "" && input.News_Content === "" && input.Category === "") {
+		if (
+			input.News_Title === "" &&
+			input.News_Describe === "" &&
+			input.News_Content === "" &&
+			input.Category === ""
+		) {
 			const showWarning = document.getElementById("submit-warning");
 			showWarning.style.display = "flex";
 			showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
 			setTimeout(() => {
 				showWarning.style.display = "none";
 			}, 5000);
-		} else if (input.News_Title === "" || input.News_Describe === "" || input.News_Content === "" || input.Category === "") {
+		} else if (
+			input.News_Title === "" ||
+			input.News_Describe === "" ||
+			input.News_Content === "" ||
+			input.Category === ""
+		) {
 			const showWarning = document.getElementById("submit-warning");
 			showWarning.style.display = "flex";
-			showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${input.News_Title === "" ? "عنوان خبر، " : ""}${
-				input.News_Describe === "" ? "توضیح کوتاه، " : ""
-			}${input.News_Content === "" ? "متن خبر، " : ""}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
+			showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${
+				input.News_Title === "" ? "عنوان خبر، " : ""
+			}${input.News_Describe === "" ? "توضیح کوتاه، " : ""}${
+				input.News_Content === "" ? "متن خبر، " : ""
+			}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
 			setTimeout(() => {
 				showWarning.style.display = "none";
 			}, 5000);
 		} else {
 			try {
 				await AxiosInstance({
-					method: "post",
-					url: "news/create",
+					method: NewsId ? "put" : "post",
+					url: NewsId ? "news/edit" : "news/create",
 					data: input,
 					withCredentials: true,
 				})
@@ -93,7 +106,9 @@ export const CreateNews = () => {
 						const showWarning = document.getElementById("submit-warning");
 						showWarning.style.display = "flex";
 						showWarning.innerHTML = `<p style="color: red;">${
-							err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
+							err.response.data.message === undefined
+								? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+								: err.response.data.message
 						}</p>`;
 						setTimeout(() => {
 							showWarning.style.display = "none";
@@ -109,60 +124,74 @@ export const CreateNews = () => {
 			}
 		}
 	};
-	const handleSubmitEdit = async () => {
-		if (editNews.News_Titre === "" && editNews.News_Describe === "" && editNews.News_Content === "" && editNews.Category === "") {
-			const showWarning = document.getElementById("submit-warning");
-			showWarning.style.display = "flex";
-			showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
-			setTimeout(() => {
-				showWarning.style.display = "none";
-			}, 5000);
-		} else if (editNews.News_Title === "" || editNews.News_Describe === "" || editNews.News_Content === "" || editNews.Category === "") {
-			const showWarning = document.getElementById("submit-warning");
-			showWarning.style.display = "flex";
-			showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${input.News_Title === "" ? "عنوان خبر، " : ""}${
-				input.News_Describe === "" ? "توضیح کوتاه، " : ""
-			}${input.News_Content === "" ? "متن خبر، " : ""}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
-			setTimeout(() => {
-				showWarning.style.display = "none";
-			}, 5000);
-		} else {
-			try {
-				await AxiosInstance({
-					method: "put",
-					url: "news/edit",
-					data: editNews,
-					withCredentials: true,
-				})
-					.then((success) => {
-						const showWarning = document.getElementById("submit-warning");
-						showWarning.style.display = "flex";
-						showWarning.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
-						setTimeout(() => {
-							showWarning.style.display = "none";
-						}, 5000);
-					})
-					.catch((err) => {
-						console.log(err.response.data);
-						const showWarning = document.getElementById("submit-warning");
-						showWarning.style.display = "flex";
-						showWarning.innerHTML = `<p style="color: red;">${
-							err.response.data.message === undefined ? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}` : err.response.data.message
-						}</p>`;
-						setTimeout(() => {
-							showWarning.style.display = "none";
-						}, 5000);
-					});
-			} catch (error) {
-				const showWarning = document.getElementById("submit-warning");
-				showWarning.style.display = "flex";
-				showWarning.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
-				setTimeout(() => {
-					showWarning.style.display = "none";
-				}, 5000);
-			}
-		}
-	};
+	// const handleSubmitEdit = async () => {
+	// 	if (
+	// 		editNews.News_Titre === "" &&
+	// 		editNews.News_Describe === "" &&
+	// 		editNews.News_Content === "" &&
+	// 		editNews.Category === ""
+	// 	) {
+	// 		const showWarning = document.getElementById("submit-warning");
+	// 		showWarning.style.display = "flex";
+	// 		showWarning.innerHTML = `<p style="color: red;">لطفاً فیلد ها را پر کنید!</p>`;
+	// 		setTimeout(() => {
+	// 			showWarning.style.display = "none";
+	// 		}, 5000);
+	// 	} else if (
+	// 		editNews.News_Title === "" ||
+	// 		editNews.News_Describe === "" ||
+	// 		editNews.News_Content === "" ||
+	// 		editNews.Category === ""
+	// 	) {
+	// 		const showWarning = document.getElementById("submit-warning");
+	// 		showWarning.style.display = "flex";
+	// 		showWarning.innerHTML = `لطفاً فیلد،&nbsp;<p style="color: red;">${
+	// 			input.News_Title === "" ? "عنوان خبر، " : ""
+	// 		}${input.News_Describe === "" ? "توضیح کوتاه، " : ""}${
+	// 			input.News_Content === "" ? "متن خبر، " : ""
+	// 		}${input.Category === "" ? "دسته مربوطه، " : ""}</p> را هم پر کنید!`;
+	// 		setTimeout(() => {
+	// 			showWarning.style.display = "none";
+	// 		}, 5000);
+	// 	} else {
+	// 		try {
+	// 			await AxiosInstance({
+	// 				method: "put",
+	// 				url: "news/edit",
+	// 				data: editNews,
+	// 				withCredentials: true,
+	// 			})
+	// 				.then((success) => {
+	// 					const showWarning = document.getElementById("submit-warning");
+	// 					showWarning.style.display = "flex";
+	// 					showWarning.innerHTML = `<p style="color: green;">${success.data.message}</p>`;
+	// 					setTimeout(() => {
+	// 						showWarning.style.display = "none";
+	// 					}, 5000);
+	// 				})
+	// 				.catch((err) => {
+	// 					console.log(err.response.data);
+	// 					const showWarning = document.getElementById("submit-warning");
+	// 					showWarning.style.display = "flex";
+	// 					showWarning.innerHTML = `<p style="color: red;">${
+	// 						err.response.data.message === undefined
+	// 							? `ارسال درخواست ناموفق!<br/> علت خطا: ${err.message}`
+	// 							: err.response.data.message
+	// 					}</p>`;
+	// 					setTimeout(() => {
+	// 						showWarning.style.display = "none";
+	// 					}, 5000);
+	// 				});
+	// 		} catch (error) {
+	// 			const showWarning = document.getElementById("submit-warning");
+	// 			showWarning.style.display = "flex";
+	// 			showWarning.innerHTML = `<p style="color: red;">${`ارسال درخواست ناموفق!<br/> علت خطا: ${error.message}`}</p>`;
+	// 			setTimeout(() => {
+	// 				showWarning.style.display = "none";
+	// 			}, 5000);
+	// 		}
+	// 	}
+	// };
 
 	const [Categories, setCategories] = useState({
 		GetCategories: [
@@ -285,9 +314,7 @@ export const CreateNews = () => {
 	const fa4 = "فقط مالک می تواند دسته اضافه کند .";
 
 	const [isFilePickerOpen, setFilePickerOpen] = useState(false);
-	// const [callbackFunc, setCallbackFunc] = useState(null);
 
-	const [selectedImage, setSelectedImage] = useState(null);
 	const editorRef = useRef(null);
 
 	return (
@@ -296,59 +323,56 @@ export const CreateNews = () => {
 				<form id="loginForm" className="input-news-admin">
 					<label htmlFor="Titer">
 						تیتر خبر :
-						{editNews.id
-							? editNews.News_Titre.length >= 50 && <span className="limit-characters">{fa1}</span>
-							: input.News_Titre.length >= 50 && <span className="limit-characters">{fa1}</span>}
+						{input.News_Titre.length >= 50 && <span className="limit-characters">{fa1}</span>}
 					</label>
 					<input
 						type="text"
 						id="Titer"
 						name="Titer"
-						value={editNews.id ? editNews.News_Titre : input.News_Titre}
+						value={input.News_Titre}
 						autoComplete="off"
 						placeholder="مسئول اداره امور خبرنگاران ؛"
 						onChange={(e) =>
-							editNews.id
-								? setEditNews({ ...editNews, News_Titre: e.target.value.length <= 50 ? e.target.value : editNews.News_Titre })
-								: setInput({ ...input, News_Titre: e.target.value.length <= 50 ? e.target.value : input.News_Titre })
+							setInput({
+								...input,
+								News_Titre: e.target.value.length <= 50 ? e.target.value : input.News_Titre,
+							})
 						}
 					/>
 					<label htmlFor="Title">
 						عنوان خبر :
-						{editNews.id
-							? editNews.News_Title.length >= 100 && <span className="limit-characters">{fa2}</span>
-							: input.News_Title.length >= 100 && <span className="limit-characters">{fa2}</span>}
+						{input.News_Title.length >= 100 && <span className="limit-characters">{fa2}</span>}
 					</label>
 					<input
 						type="text"
 						id="Title"
 						name="Title"
-						value={editNews.id ? editNews.News_Title : input.News_Title}
+						value={input.News_Title}
 						autoComplete="off"
 						placeholder="جهان بینی خبرنگاران، در حوزه رسانه ها مسئله ای بسیار مهم است ..."
 						onChange={(e) =>
-							editNews.id
-								? setEditNews({ ...editNews, News_Title: e.target.value.length <= 100 ? e.target.value : editNews.News_Title })
-								: setInput({ ...input, News_Title: e.target.value.length <= 100 ? e.target.value : input.News_Title })
+							setInput({
+								...input,
+								News_Title: e.target.value.length <= 100 ? e.target.value : input.News_Title,
+							})
 						}
 					/>
 					<label htmlFor="Description">
 						توضیح کوتاه :
-						{editNews.id
-							? editNews.News_Describe.length >= 350 && <span className="limit-characters">{fa3}</span>
-							: input.News_Describe.length >= 350 && <span className="limit-characters">{fa3}</span>}
+						{input.News_Describe.length >= 350 && <span className="limit-characters">{fa3}</span>}
 					</label>
 					<input
 						type="text"
 						id="Description"
 						name="Description"
-						value={editNews.id ? editNews.News_Describe : input.News_Describe}
+						value={input.News_Describe}
 						autoComplete="off"
 						placeholder="مسئول محترم اداره امور خبرنگاران گفت؛ خبرنگار باید به دید جهانی، وقایع را نگاه کند ..."
 						onChange={(e) =>
-							editNews.id
-								? setEditNews({ ...editNews, News_Describe: e.target.value.length <= 350 ? e.target.value : editNews.News_Describe })
-								: setInput({ ...input, News_Describe: e.target.value.length <= 350 ? e.target.value : input.News_Describe })
+							setInput({
+								...input,
+								News_Describe: e.target.value.length <= 350 ? e.target.value : input.News_Describe,
+							})
 						}
 					/>
 
@@ -358,8 +382,8 @@ export const CreateNews = () => {
 					<Editor
 						tinymceScriptSrc="/tinymce/tinymce.min.js"
 						onInit={(evt, editor) => (editorRef.current = editor)}
-						value={editNews.id ? editNews.News_Content : input.News_Content}
-						onEditorChange={(e) => (editNews.id ? setEditNews({ ...editNews, News_Content: e }) : setInput({ ...input, News_Content: e }))}
+						value={input.News_Content}
+						onEditorChange={(e) => setInput({ ...input, News_Content: e })}
 						init={{
 							width: "80%",
 							height: "100vh",
@@ -411,13 +435,16 @@ export const CreateNews = () => {
 							automatic_uploads: true,
 							file_picker_callback: function (callback) {
 								setFilePickerOpen(true);
-								document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "none"; // this is a class of Editor TinyMce for closes upload image window after clicking
+								document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display =
+									"none"; // this is a class of Editor TinyMce for closes upload image window after clicking
 							},
 						}}
 					/>
 					{isFilePickerOpen && (
 						<div className="editor-select-images">
-							<div className="section-files">{<Upload editorRef={editorRef} setFilePickerOpen={setFilePickerOpen} />}</div>
+							<div className="section-files">
+								{<Upload editorRef={editorRef} setFilePickerOpen={setFilePickerOpen} />}
+							</div>
 						</div>
 					)}
 					<div className="Category">
@@ -435,14 +462,15 @@ export const CreateNews = () => {
 													<input
 														name="HandleCheckboxCategory"
 														onChange={(e) =>
-															editNews.id
-																? setEditNews({ ...editNews, Category: e.target.checked === true && Category.id })
-																: setInput({ ...input, Category: e.target.checked === true && Category.id })
+															setInput({
+																...input,
+																Category: e.target.checked === true && Category.id,
+															})
 														}
 														type="radio"
 														id={Category.id}
 														className="button-category"
-														checked={editNews.id ? editNews.Category === Category.id : input.Category === Category.id}
+														checked={input.Category === Category.id}
 													/>
 													{Category.name}
 												</label>
@@ -452,93 +480,61 @@ export const CreateNews = () => {
 								</div>
 								<div id="subcategory-content" className="Create-SubCategory">
 									<h3>
-										{!editNews.id
-											? Categories.GetSubCategories.Count?.[input.Category] === undefined
-												? "لطفاٌ یک دسته را انتخاب کنید ."
-												: ` افزودن دسته جدید برای ${
-														(input.Category === "politic" && "سیاست") ||
-														(input.Category === "economy" && "اقتصاد") ||
-														(input.Category === "social" && "جامعه") ||
-														(input.Category === "sport" && "ورزش") ||
-														(input.Category === "local" && "بومی")
-												  }`
+										{Categories.GetSubCategories.Count?.[input.Category] === undefined
+											? "لطفاٌ یک دسته را انتخاب کنید ."
 											: ` افزودن دسته جدید برای ${
-													(editNews.Category === "politic" && "سیاست") ||
-													(editNews.Category === "economy" && "اقتصاد") ||
-													(editNews.Category === "social" && "جامعه") ||
-													(editNews.Category === "sport" && "ورزش") ||
-													(editNews.Category === "local" && "بومی")
+													(input.Category === "politic" && "سیاست") ||
+													(input.Category === "economy" && "اقتصاد") ||
+													(input.Category === "social" && "جامعه") ||
+													(input.Category === "sport" && "ورزش") ||
+													(input.Category === "local" && "بومی")
 											  }`}
 									</h3>
 									<div className="ddd">
 										{Categories.GetSubCategories.ShowAllSubCategory?.map((SubCategory, i) => {
-											return editNews.id
-												? SubCategory.Category === editNews.Category && (
-														<div key={i} className="btn-checkbox-subC">
-															<label htmlFor={SubCategory.id + "SubCategory"} className="content-checkbox">
-																<input
-																	checked={editNews.id ? editNews.subCategoryId === SubCategory.id : input.SubCategoryId === SubCategory.id}
-																	onChange={(e) =>
-																		editNews.id
-																			? setEditNews({
-																					...editNews,
-																					subCategoryId: e.target.checked && SubCategory.id,
-																			  })
-																			: setInput({ ...input, SubCategoryId: e.target.checked && SubCategory.id })
-																	}
-																	type="radio"
-																	id={SubCategory.id + "SubCategory"}
-																	className="button-category"
-																/>
-																{SubCategory.SubCategory}
-															</label>
-															<button
-																name={SubCategory.SubCategory}
-																id={SubCategory.id}
-																onClick={handleDeleteSubCategory}
-																type="button"
-																className="fa fa-trash"
-															></button>
-														</div>
-												  )
-												: SubCategory.Category === input.Category && (
-														<div key={i} className="btn-checkbox-subC">
-															<label htmlFor={SubCategory.id + "SubCategory"} className="content-checkbox">
-																<input
-																	name="HandleCheckboxSubCategory"
-																	checked={input.SubCategoryId === SubCategory.id ? true : false}
-																	onChange={(e) =>
-																		setInput({
-																			...input,
-																			SubCategoryId: e.target.checked ? SubCategory.id : false,
-																		})
-																	}
-																	type="radio"
-																	id={SubCategory.id + "SubCategory"}
-																	className="button-category"
-																/>
-																{SubCategory.SubCategory}
-															</label>
-															<button
-																name={SubCategory.SubCategory}
-																id={SubCategory.id}
-																onClick={handleDeleteSubCategory}
-																type="button"
-																className="fa fa-trash"
-															></button>
-														</div>
-												  );
+											return (
+												SubCategory.Category === input.Category && (
+													<div key={i} className="btn-checkbox-subC">
+														<label
+															htmlFor={SubCategory.id + "SubCategory"}
+															className="content-checkbox"
+														>
+															<input
+																name="HandleCheckboxSubCategory"
+																checked={input.SubCategoryId === SubCategory.id ? true : false}
+																onChange={(e) =>
+																	setInput({
+																		...input,
+																		SubCategoryId: e.target.checked ? SubCategory.id : false,
+																	})
+																}
+																type="radio"
+																id={SubCategory.id + "SubCategory"}
+																className="button-category"
+															/>
+															{SubCategory.SubCategory}
+														</label>
+														<button
+															name={SubCategory.SubCategory}
+															id={SubCategory.id}
+															onClick={handleDeleteSubCategory}
+															type="button"
+															className="fa fa-trash"
+														></button>
+													</div>
+												)
+											);
 										})}
 									</div>
 									<div className="branch-Create-content">
 										<span
-											id={editNews.id ? editNews.Category + "test1" : input.Category + "test1"}
-											name={editNews.id ? editNews.Category + "ShowWarningSubCategory" : input.Category + "ShowWarningSubCategory"}
+											id={input.Category + "test1"}
+											name={input.Category + "ShowWarningSubCategory"}
 											className="ShowWarningSubCategory"
 										></span>
 										<div className="btn-create-sub-category">
 											<input
-												id={editNews.id ? editNews.Category : input.Category}
+												id={input.Category}
 												onChange={(e) =>
 													setValueSubCategory((prev) => ({
 														...prev,
@@ -550,12 +546,16 @@ export const CreateNews = () => {
 												type="input"
 											/>
 											<input
-												id={editNews.id ? editNews.Category + "test" : input.Category + "test"}
+												id={input.Category + "test"}
 												onClick={submitSubCategoryName}
 												type="button"
 												value={"+"}
 											/>
-											<span style={{ display: "none" }} id="warning-add-subCategory" className="warning-add-subCategory">
+											<span
+												style={{ display: "none" }}
+												id="warning-add-subCategory"
+												className="warning-add-subCategory"
+											>
 												{fa4}
 											</span>
 										</div>
@@ -566,15 +566,13 @@ export const CreateNews = () => {
 								<div className="disable-comment">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({ ...editNews, Comment_Status: e.target.checked })
-												: setInput({
-														...input,
-														Comment_Status: e.target.checked,
-												  });
+											setInput({
+												...input,
+												Comment_Status: e.target.checked,
+											});
 										}}
 										type="checkbox"
-										checked={editNews.Comment_Status ? editNews.Comment_Status : input.Comment_Status}
+										checked={input.Comment_Status}
 										id="disable-comment"
 									/>
 									<label htmlFor="disable-comment">بستن اظهار نظر</label>
@@ -585,31 +583,19 @@ export const CreateNews = () => {
 										type="checkbox"
 										id="add-to-slider-main-page"
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: true,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: e.target.checked,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: true,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: e.target.checked,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: true,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: e.target.checked,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
-										checked={editNews.SubPageSlider ? editNews.SubPageSlider : input.SubPageSlider}
+										checked={input.SubPageSlider}
 									/>
 									<label htmlFor="add-to-slider-main-page">اسلایدر صفحه اصلی</label>
 									<br />
@@ -617,83 +603,50 @@ export const CreateNews = () => {
 								<div className="add-to-slider-self-news">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: e.target.checked,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: e.target.checked,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: e.target.checked,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
 										type="checkbox"
 										id="add-to-slider-self-news"
-										checked={editNews.MainPageSlider ? editNews.MainPageSlider : input.MainPageSlider}
+										checked={input.MainPageSlider}
 									/>
 									<label htmlFor="add-to-slider-self-news">
-										{!editNews.id
-											? `اسلایدر صفحه ${
-													(input.Category === "politic" && "سیاست") ||
-													(input.Category === "economy" && "اقتصاد") ||
-													(input.Category === "social" && "جامعه") ||
-													(input.Category === "sport" && "ورزش") ||
-													(input.Category === "local" && "بومی") ||
-													"..."
-											  } `
-											: `اسلایدر صفحه ${
-													(editNews.Category === "politic" && "سیاست") ||
-													(editNews.Category === "economy" && "اقتصاد") ||
-													(editNews.Category === "social" && "جامعه") ||
-													(editNews.Category === "sport" && "ورزش") ||
-													(editNews.Category === "local" && "بومی") ||
-													"..."
-											  } `}
+										{`اسلایدر صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
 									</label>
 								</div>
 								<hr style={{ width: "100%", backgroundColor: "red" }} />
 								<div className="add-to-chosen-main-page">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: true,
-														SubPageColumn: e.target.checked,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: true,
-														SubPageColumn: e.target.checked,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: true,
+												SubPageColumn: e.target.checked,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
-										checked={editNews.SubPageColumn ? editNews.SubPageColumn : input.SubPageColumn}
+										checked={input.SubPageColumn}
 										type="checkbox"
 										id="add-to-chosen-main-page"
 									/>
@@ -702,220 +655,135 @@ export const CreateNews = () => {
 								<div className="add-to-chosen-self-news">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: e.target.checked,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: e.target.checked,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: e.target.checked,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
 										type="checkbox"
-										checked={editNews.MainPageColumn ? editNews.MainPageColumn : input.MainPageColumn}
+										checked={input.MainPageColumn}
 										id="add-to-chosen-self-news"
 									/>
 									<label htmlFor="add-to-chosen-self-news">
-										{!editNews.id
-											? `منتخب صفحه ${
-													(input.Category === "politic" && "سیاست") ||
-													(input.Category === "economy" && "اقتصاد") ||
-													(input.Category === "social" && "جامعه") ||
-													(input.Category === "sport" && "ورزش") ||
-													(input.Category === "local" && "بومی") ||
-													"..."
-											  } `
-											: `منتخب صفحه ${
-													(editNews.Category === "politic" && "سیاست") ||
-													(editNews.Category === "economy" && "اقتصاد") ||
-													(editNews.Category === "social" && "جامعه") ||
-													(editNews.Category === "sport" && "ورزش") ||
-													(editNews.Category === "local" && "بومی") ||
-													"..."
-											  } `}
+										{`منتخب صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
 									</label>
 								</div>
 								<hr style={{ width: "100%", backgroundColor: "red" }} />
 								<div className="add-to-main-page-note">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: e.target.checked,
-														MainTicker: false,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: e.target.checked,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: e.target.checked,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
 										type="checkbox"
 										id="add-to-main-page-note"
-										checked={editNews.SubNote ? editNews.SubNote : input.SubNote}
+										checked={input.SubNote}
 									/>
 									<label htmlFor="add-to-main-page-note">یادداشت در صفحه اصلی</label>
 								</div>
 								<div className="add-to-self-page-note">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: e.target.checked,
-														SubNote: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: e.target.checked,
-														SubNote: false,
-														MainTicker: false,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: e.target.checked,
+												SubNote: false,
+												MainTicker: false,
+												SubTicker: false,
+											});
 										}}
 										type="checkbox"
 										id="add-to-self-page-note"
-										checked={editNews.MainNote ? editNews.MainNote : input.MainNote}
+										checked={input.MainNote}
 									/>
 									<label htmlFor="add-to-self-page-note">
-										{!editNews.id
-											? `یادداشت در صفحه ${
-													(input.Category === "politic" && "سیاست") ||
-													(input.Category === "economy" && "اقتصاد") ||
-													(input.Category === "social" && "جامعه") ||
-													(input.Category === "sport" && "ورزش") ||
-													(input.Category === "local" && "بومی") ||
-													"..."
-											  } `
-											: `یادداشت در صفحه ${
-													(editNews.Category === "politic" && "سیاست") ||
-													(editNews.Category === "economy" && "اقتصاد") ||
-													(editNews.Category === "social" && "جامعه") ||
-													(editNews.Category === "sport" && "ورزش") ||
-													(editNews.Category === "local" && "بومی") ||
-													"..."
-											  } `}
+										{`یادداشت در صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
 									</label>
 								</div>
 								<hr style={{ width: "100%", backgroundColor: "red" }} />
 								<div className="add-main-ticker-news">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: true,
-														SubTicker: e.target.checked,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: true,
-														SubTicker: e.target.checked,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: true,
+												SubTicker: e.target.checked,
+											});
 										}}
 										type="checkbox"
 										id="add-main-ticker-news"
-										checked={editNews.SubTicker ? editNews.SubTicker : input.SubTicker}
+										checked={input.SubTicker}
 									/>
 									<label htmlFor="add-main-ticker-news">تیکر صفحه اصلی</label>
 								</div>
 								<div className="add-sub-ticker-news">
 									<input
 										onChange={(e) => {
-											editNews.id
-												? setEditNews({
-														...editNews,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: e.target.checked,
-														SubTicker: false,
-												  })
-												: setInput({
-														...input,
-														MainPageSlider: false,
-														MainPageColumn: false,
-														SubPageColumn: false,
-														SubPageSlider: false,
-														MainNote: false,
-														SubNote: false,
-														MainTicker: e.target.checked,
-														SubTicker: false,
-												  });
+											setInput({
+												...input,
+												MainPageSlider: false,
+												MainPageColumn: false,
+												SubPageColumn: false,
+												SubPageSlider: false,
+												MainNote: false,
+												SubNote: false,
+												MainTicker: e.target.checked,
+												SubTicker: false,
+											});
 										}}
 										type="checkbox"
 										id="add-sub-ticker-news"
-										checked={editNews.MainTicker ? editNews.MainTicker : input.MainTicker}
+										checked={input.MainTicker}
 									/>
 									<label htmlFor="add-sub-ticker-news">
-										{!editNews.id
-											? `تیکر صفحه ${
-													(input.Category === "politic" && "سیاست") ||
-													(input.Category === "economy" && "اقتصاد") ||
-													(input.Category === "social" && "جامعه") ||
-													(input.Category === "sport" && "ورزش") ||
-													(input.Category === "local" && "بومی") ||
-													"..."
-											  } `
-											: `تیکر صفحه ${
-													(editNews.Category === "politic" && "سیاست") ||
-													(editNews.Category === "economy" && "اقتصاد") ||
-													(editNews.Category === "social" && "جامعه") ||
-													(editNews.Category === "sport" && "ورزش") ||
-													(editNews.Category === "local" && "بومی") ||
-													"..."
-											  } `}
+										{`تیکر صفحه ${
+											(input.Category === "politic" && "سیاست") ||
+											(input.Category === "economy" && "اقتصاد") ||
+											(input.Category === "social" && "جامعه") ||
+											(input.Category === "sport" && "ورزش") ||
+											(input.Category === "local" && "بومی") ||
+											"..."
+										} `}
 									</label>
 								</div>
 							</div>
@@ -924,8 +792,8 @@ export const CreateNews = () => {
 					<div className="buttons-create-news">
 						<Link to={"/admin"}>انصراف</Link>
 						<div id="submit-warning"></div>
-						<button id="release" onClick={editNews.id ? handleSubmitEdit : handleSubmit} type="button">
-							{editNews.id ? "ویرایش" : "انتشار"}
+						<button id="release" onClick={handleSubmit} type="button">
+							{NewsId ? "ویرایش" : "انتشار"}
 						</button>
 					</div>
 				</form>
@@ -934,13 +802,20 @@ export const CreateNews = () => {
 			<div id="warning-delete-SubCategory" className="warning-delete">
 				<div id="deleted-SubCategory"></div>
 				<div>
-					<button type="button" id={GetCategoriesId.SetGetSubCategoryId} onClick={handleDeletedSubCategory} className="btn-deleted-SubCategory">
+					<button
+						type="button"
+						id={GetCategoriesId.SetGetSubCategoryId}
+						onClick={handleDeletedSubCategory}
+						className="btn-deleted-SubCategory"
+					>
 						حذف
 					</button>
 					<button
 						type="button"
 						className="btn-cancel-SubCategory"
-						onClick={() => (document.getElementById("warning-delete-SubCategory").style.display = "none")}
+						onClick={() =>
+							(document.getElementById("warning-delete-SubCategory").style.display = "none")
+						}
 					>
 						لغو
 					</button>
