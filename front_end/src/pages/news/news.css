@@ -508,6 +508,8 @@
 				.ContainerRight {
 					width: 100%;
 					padding: 5px;
+					display: flex;
+					flex-direction: column-reverse;
 					.ContainerHeaderRight {
 						width: 100%;
 						background-image: linear-gradient(rgba(22, 168, 3, 0), rgba(229, 245, 8, 0.288));

@@ -72,7 +72,10 @@ export default class NewsControllers {
 				while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
 					imageUrls.push(match[1]);
 				}
-
+				if (imageUrls[0].length > 255) {
+					console.log("max length URL of 'Default_Image' most be 255" + `: ${imageUrls[0]}`);
+					return res.sendStatus(401);
+				}
 				try {
 					await News.create({
 						News_Titre: req.body.News_Titre,
@@ -163,27 +166,6 @@ export default class NewsControllers {
 						},
 					],
 				});
-
-				// const ResultSearchId = await Promise.all(
-				// 	GetAllResult.rows.map(async (i) => {
-				// 		const author = await i.getAdmin({ raw: true });
-				// 		const subCategory = await i.getSubCategory({ raw: true });
-				// 		return {
-				// 			id: i.id,
-				// 			News_Titre: i.News_Titre,
-				// 			News_Title: i.News_Title,
-				// 			News_Describe: i.News_Describe,
-				// 			News_Content: i.News_Content,
-				// 			Default_Image: i.Default_Image,
-				// 			News_Status: i.News_Status,
-				// 			Comment_Status: i.Comment_Status,
-				// 			Author: author.Admin_FirstName + " " + author.Admin_LastName,
-				// 			Category: i.Category,
-				// 			SubCategory: subCategory?.SubCategory,
-				// 			createdAt: i.createdAt,
-				// 		};
-				// 	})
-				// );
 				res.status(200).json({
 					success: true,
 					body: {
@@ -256,11 +238,13 @@ export default class NewsControllers {
 						},
 						{
 							model: SubCategory,
+							required: false,
 						},
 					],
 
 					limit: parseInt(req.query.limit),
 					offset: (parseInt(req.query.currentpage) - 1) * parseInt(req.query.limit),
+					order: [["createdAt", "DESC"]],
 				});
 
 				res.status(200).json({
@@ -427,16 +411,29 @@ export default class NewsControllers {
 				const CountChosen = await News.findAndCountAll({
 					where: { Category: SelectedNews.Category, MainPageColumn: true },
 				});
-
 				const SelectedSpecial = await News.findAll({
-					where: { Category: SelectedNews.Category, SubPageSlider: true },
-					limit: CountSpecial.count <= 5 ? CountSpecial.count : 5,
-					offset: CountSpecial.count <= 5 ? 0 : CountSpecial.count - 5,
+					where: {
+						Category: SelectedNews.Category,
+						SubPageSlider: true,
+						id: {
+							[Op.ne]: req.query.id, // Exclude the current news by ID
+						},
+					},
+					limit: CountSpecial.count <= 7 ? CountSpecial.count : 7,
+					offset: CountSpecial.count <= 7 ? 0 : CountSpecial.count - 7,
+					order: [["createdAt", "ASC"]],
 				});
 				const SelectedChosen = await News.findAll({
-					where: { Category: SelectedNews.Category, MainPageColumn: true },
+					where: {
+						Category: SelectedNews.Category,
+						MainPageColumn: true,
+						id: {
+							[Op.ne]: req.query.id, // Exclude the current news by ID
+						},
+					},
 					limit: CountChosen.count <= 5 ? CountChosen.count : 5,
 					offset: CountChosen.count <= 5 ? 0 : CountChosen.count - 5,
+					order: [["createdAt", "ASC"]],
 				});
 				//
 
@@ -520,9 +517,9 @@ export default class NewsControllers {
 		while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
 			imageUrls.push(match[1]);
 		}
-		// console.log(req.body.id);
 
-		if (!req.body.id) {
+		if (imageUrls[0].length > 255) {
+			console.log("max length URL of 'Default_Image' most be 255" + `: ${imageUrls[0]}`);
 			return res.sendStatus(401);
 		}
 
@@ -564,7 +561,7 @@ export default class NewsControllers {
 			res.status(404).json({
 				success: false,
 				body: null,
-				message: "invalid server when updata news!",
+				message: error.message,
 			});
 		}
 	};

@@ -633,7 +633,7 @@ export const News = () => {
 								</div>
 								<div className="ContainerRight">
 									{news.GetSelectedSpecial.length > 0 ? (
-										news.GetSelectedSpecial.sort((a, b) => a.id - b.id).map((News, i) => (
+										news.GetSelectedSpecial.map((News, i) => (
 											<div key={i} className="ContainerHeaderRight">
 												<div className="NewsContainer-Right">
 													<div className="NewsContent-Right">

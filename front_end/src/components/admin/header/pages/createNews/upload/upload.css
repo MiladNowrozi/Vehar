@@ -89,12 +89,15 @@
 				align-items: center;
 				background-color: aqua;
 				padding: 10px;
-
 				button {
 					width: 10%;
 					padding: 5px;
 					border: none;
 					border-radius: 5px;
+				}
+				.count-news-scrool {
+					display: flex;
+					gap: 5px;
 				}
 			}
 		}
@@ -145,6 +148,9 @@
 					}
 				}
 				.options-control-images-selected {
+					width: 100%;
+					position: fixed;
+					bottom: 0;
 					button {
 						width: 20%;
 					}

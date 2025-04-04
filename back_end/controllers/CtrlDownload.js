@@ -102,6 +102,7 @@ export default class DownloadControllers {
 
 	// RECEIVE URL IMAGES
 	static AllImagesUrl = async (req, res) => {
+
 		try {
 			const images = await Files.findAndCountAll({
 				where: {

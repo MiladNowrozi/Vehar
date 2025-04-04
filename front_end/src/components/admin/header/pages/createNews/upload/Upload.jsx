@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
 	const [Videos, setVideos] = useState([]);
-	const [LimitImages, setLimitImages] = useState(10);
+	const [LimitImages, setLimitImages] = useState(30);
 	const [LimitVideo, setLimitVideo] = useState(10);
 	const [loadingImages, setLoadingImages] = useState(false);
 	const [loadingVideo, setLoadingVideo] = useState(false);
@@ -93,19 +93,25 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 
 	useEffect(() => {
 		const ImagesScroll = document.getElementById("items-images-scroll-id");
-		ImagesScroll &&
-			ImagesScroll.addEventListener("scroll", () => {
-				if (
-					ImagesScroll.scrollTop + ImagesScroll.clientHeight >= ImagesScroll.scrollHeight &&
-					Images.total > LimitImages
-				) {
-					setLimitImages(LimitImages + 10);
-				}
-			});
-	}, [loadingImages, LimitImages, Images]);
+		if (!ImagesScroll) return;
+		const handleScroll = () => {
+			const { scrollTop, clientHeight, scrollHeight } = ImagesScroll;
+			if (
+				Images.images.length > LimitImages - 30 &&
+				scrollTop + 0.6 + clientHeight >= scrollHeight
+			) {
+				setLimitImages((prev) => prev + 30);
+			}
+		};
+		ImagesScroll.addEventListener("scroll", handleScroll);
+		return () => {
+			ImagesScroll.removeEventListener("scroll", handleScroll);
+		};
+	}, [loadingImages, LimitImages]);
 
 	useEffect(() => {
 		const VideoScroll = document.getElementById("items-video-scroll-id");
+
 		const handleScroll = () => {
 			if (
 				VideoScroll &&
@@ -212,6 +218,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					</div>
 				)}
 			</div>
+
 			<div className="content-gallery-files">
 				{openImages && (
 					<div className="content-images">
@@ -266,8 +273,9 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 							<div>
 								<p>انخاب شده: {selectedImage.length}</p>
 							</div>
-							<div>
-								<p> تعداد کل: {Images.total}</p>
+							<div className="count-news-scrool">
+								<p> {Images.total}</p> از
+								<p> {Images.images.length}</p>
 							</div>
 						</div>
 					</div>
