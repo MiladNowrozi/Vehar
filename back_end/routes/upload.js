@@ -39,7 +39,7 @@ router.post("/news", uploadFiles, (req, res) => {
 
 // ################# USER
 
-const Default_Image_User = "http://87.107.105.139/api/download/user?name=default-profile.jpg";
+const Default_Image_User = "https://vehar.ir/api/download/user?name=default-profile.jpg";
 
 const deleteOldImageUser = async (req, res, next) => {
 	const ChangeImg = await User.findByPk(req.user.id);
@@ -99,7 +99,7 @@ router.post("/user", deleteOldImageUser, uploadFileUser, async (req, res) => {
 });
 
 // ################# ADMIN
-const Default_Image_Admin = "http://87.107.105.139/api/download/admin?name=default-profile.jpg";
+const Default_Image_Admin = "https://vehar.ir/api/download/admin?name=default-profile.jpg";
 
 const deleteOldImageAdmin = async (req, res, next) => {
 	const ChangeImg = await Admin.findByPk(req.user.id);

@@ -20,7 +20,10 @@ export const sendEmailVerify = async (req, res, next) => {
 			if (req.query.email) {
 				if (user.Role === "Admin") {
 					try {
-						const ExistEmail = await EmailAdmin.findOne({ where: { EmailAdmin: req.query.email }, include: [{ model: Admin }] });
+						const ExistEmail = await EmailAdmin.findOne({
+							where: { EmailAdmin: req.query.email },
+							include: [{ model: Admin }],
+						});
 						if (ExistEmail) {
 							const url = `http://localhost:5000/auth/verify-email?email=${ExistEmail.EmailAdmin}&status=true`;
 							await sendEmail(
@@ -50,7 +53,10 @@ export const sendEmailVerify = async (req, res, next) => {
 					}
 				} else {
 					try {
-						const ExistEmail = await EmailUser.findOne({ where: { EmailUser: req.query.email }, include: [{ model: User }] });
+						const ExistEmail = await EmailUser.findOne({
+							where: { EmailUser: req.query.email },
+							include: [{ model: User }],
+						});
 						if (ExistEmail) {
 							const url = `http://localhost:5000/auth/verify-email?email=${ExistEmail.EmailUser}&status=true`;
 							await sendEmail(
@@ -93,8 +99,14 @@ export const sendEmailVerify = async (req, res, next) => {
 
 export const VerifyEmail = async (req, res) => {
 	try {
-		const ExistEmailUser = await EmailUser.findOne({ where: { EmailUser: req.query.email }, include: [{ model: User }] });
-		const ExistEmailAdmin = await EmailAdmin.findOne({ where: { EmailAdmin: req.query.email }, include: [{ model: Admin }] });
+		const ExistEmailUser = await EmailUser.findOne({
+			where: { EmailUser: req.query.email },
+			include: [{ model: User }],
+		});
+		const ExistEmailAdmin = await EmailAdmin.findOne({
+			where: { EmailAdmin: req.query.email },
+			include: [{ model: Admin }],
+		});
 		if (ExistEmailUser) {
 			if (!ExistEmail.user.Verify_Email) {
 				await User.update(
@@ -211,14 +223,26 @@ export const RefreshToken = async (req, res) => {
 
 			if (req.query.Role === "User") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.User_FirstName,
+						LastName: user.User_LastName,
+						User_UserName: user.User_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "72h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.User_FirstName, LastName: user.User_LastName, User_UserName: user.User_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.User_FirstName,
+						LastName: user.User_LastName,
+						User_UserName: user.User_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "500s",
@@ -242,14 +266,26 @@ export const RefreshToken = async (req, res) => {
 			}
 			if (req.query.Role === "Admin") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.Admin_FirstName,
+						LastName: user.Admin_LastName,
+						Admin_UserName: user.Admin_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.Admin_FirstName,
+						LastName: user.Admin_LastName,
+						Admin_UserName: user.Admin_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "120s",
@@ -273,14 +309,26 @@ export const RefreshToken = async (req, res) => {
 			}
 			if (req.query.Role === "Lord") {
 				const refreshToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.Admin_FirstName,
+						LastName: user.Admin_LastName,
+						Admin_UserName: user.Admin_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "1h",
 					}
 				);
 				const accessToken = jwt.sign(
-					{ id: user.id, Role: user.Role, FirstName: user.Admin_FirstName, LastName: user.Admin_LastName, Admin_UserName: user.Admin_UserName },
+					{
+						id: user.id,
+						Role: user.Role,
+						FirstName: user.Admin_FirstName,
+						LastName: user.Admin_LastName,
+						Admin_UserName: user.Admin_UserName,
+					},
 					process.env.REFRESH_TOKEN_SECRET,
 					{
 						expiresIn: "120s",
@@ -351,7 +399,7 @@ export const Register = async (req, res) => {
 						User_LastName: lastName_register,
 						User_UserName: username_register,
 						User_Password: HashPassword,
-						Default_Image: "http://87.107.105.139/api/download/user?name=default-profile.jpg",
+						Default_Image: "https://vehar.ir/api/download/user?name=default-profile.jpg",
 					});
 					await EmailUser.create({ EmailUser: email_register, userId: CreatedUser.id });
 					res.status(200).json({

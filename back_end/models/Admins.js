@@ -24,7 +24,7 @@ export const Admin = db.define("Admin", {
 	Default_Image: {
 		type: DataTypes.STRING(255),
 		allowNull: true,
-		defaultValue: "http://87.107.105.139/api/download/admin?name=default-profile.jpg",
+		defaultValue: "https://vehar.ir/api/download/admin?name=default-profile.jpg",
 	},
 	Role: {
 		type: DataTypes.STRING(100),
@@ -82,13 +82,16 @@ db.queryInterface.tableExists("Admins").then(async (e) => {
 				Role: "Lord",
 				Admin_remember: false,
 				Verify_Email: true,
-				Default_Image: "http://87.107.105.139/api/download/admin?name=default-profile.jpg",
+				Default_Image: "https://vehar.ir/api/download/admin?name=default-profile.jpg",
 			});
 			db.queryInterface.tableExists("EmailAdmins").then(async (e) => {
 				if (!e) {
 					try {
 						await EmailAdmin.sync({ alter: true });
-						await EmailAdmin.create({ EmailAdmin: "vahdatvjod@gmail.com", adminId: CreatedAdmin.id });
+						await EmailAdmin.create({
+							EmailAdmin: "vahdatvjod@gmail.com",
+							adminId: CreatedAdmin.id,
+						});
 					} catch (error) {
 						console.log(`table EmailAdmin not created! : ${error}`);
 					}

@@ -23,7 +23,7 @@ services:
     build:
       context: ./front_end
       args:
-       REACT_APP_BASE_URL: http://87.107.105.139/api
+        REACT_APP_BASE_URL: https://vehar.ir/api
 
     volumes:
       - ./front_end/build:/usr/share/nginx/html

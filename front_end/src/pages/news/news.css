@@ -1463,7 +1463,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 10px;
 
 		.content-comment-form {
 			width: 100%;
@@ -1499,6 +1498,9 @@
 					border-radius: 10px;
 				}
 			}
+		}
+		.result-send-comment {
+			font-size: 12px;
 		}
 	}
 	.content-login-and-register {
@@ -1679,7 +1681,7 @@
 								.NewsContent-Right {
 									.NewsItems-Right {
 										display: flex;
-										flex-direction: column-reverse;
+										flex-direction: column;
 										.img-content-Right {
 											.ImgNews-Right {
 												.imgStyleHeader-Right {

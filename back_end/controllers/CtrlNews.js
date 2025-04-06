@@ -1502,6 +1502,17 @@ export default class NewsControllers {
 					body: countPolitic.rows,
 				});
 			} else {
+				// const categories = ["politic", "economy", "social", "sport", "local"];
+				// const results = await Promise.all(
+				// 	categories.map((category) =>
+				// 		News.findOne({
+				// 			where: { Category: category, SubPageSlider: true },
+				// 			order: [["createdAt", "DESC"]],
+				// 		})
+				// 	)
+				// );
+				// console.log(results.map((e) => e.News_Titre));
+
 				const CountAllpolitic = await News.findAll({ where: { SubTicker: true } });
 				const countPolitic = await News.findAndCountAll({
 					where: { SubTicker: true },
