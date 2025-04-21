@@ -13,6 +13,11 @@ const Footer = () => {
 					<Link to="https://eitaa.com/vehar_ir" className="eitaa-foter"></Link>
 				</div>
 			</div>
+			<div className="license-vehar">
+				<div id="div_eRasanehTrustseal_75564"></div>
+				<script src="https://trustseal.e-rasaneh.ir/trustseal.js"></script>
+				<script>eRasaneh_Trustseal(75564, true);</script>
+			</div>
 			<div className="Content-Center-Menu">
 				<div className="Footer-Menu">
 					<Link to="/about" className="Link-footer Link-footer-1">
@@ -32,7 +37,11 @@ const Footer = () => {
 					</Link>
 				</div>
 				<div className="copy-right">
-					<p> تمام حقوق مادی و معنوی این سایت متعلق به وهار می باشد و استفاده از مطالب با ذکر منبع بلامانع است .</p>
+					<p>
+						{" "}
+						تمام حقوق مادی و معنوی این سایت متعلق به وهار می باشد و استفاده از مطالب با ذکر منبع
+						بلامانع است .
+					</p>
 				</div>
 			</div>
 			<div className="Content-Right-Menu">
