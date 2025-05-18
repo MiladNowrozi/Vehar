@@ -16,7 +16,7 @@ const Footer = () => {
 			<div className="eRasaneh">
 				<div id="div_eRasanehTrustseal_75564"></div>
 				<script src="https://trustseal.e-rasaneh.ir/trustseal.js"></script>
-				<script>eRasaneh_Trustseal(75564, true)</script>
+				<script>eRasaneh_Trustseal(75564, true);</script>
 			</div>
 			<div className="Content-Center-Menu">
 				<div className="Footer-Menu">
