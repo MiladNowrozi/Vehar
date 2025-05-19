@@ -1,7 +1,26 @@
 import { Link } from "react-router-dom";
 import { AnimationYellow } from "../../../animations/Animation";
 import "./footer.css";
+import { useEffect } from "react";
 // import Navbar from "../navbar/Navbar";
+
+useEffect(() => {
+	const script = document.createElement("script");
+	script.src = "https://trustseal.e-rasaneh.ir/trustseal.js";
+	script.async = true;
+
+	script.onload = () => {
+		if (window.eRasaneh_Trustseal) {
+			window.eRasaneh_Trustseal(75564, true);
+		}
+	};
+
+	document.body.appendChild(script);
+
+	return () => {
+		document.body.removeChild(script);
+	};
+}, []);
 
 const Footer = () => {
 	return (
@@ -15,8 +34,6 @@ const Footer = () => {
 			</div>
 			<div className="eRasaneh">
 				<div id="div_eRasanehTrustseal_75564"></div>
-				<script src="https://trustseal.e-rasaneh.ir/trustseal.js"></script>
-				<script>eRasaneh_Trustseal(75564, true);</script>
 			</div>
 			<div className="Content-Center-Menu">
 				<div className="Footer-Menu">
