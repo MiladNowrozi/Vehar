@@ -4,25 +4,25 @@ import "./footer.css";
 import { useEffect } from "react";
 // import Navbar from "../navbar/Navbar";
 
-useEffect(() => {
-	const script = document.createElement("script");
-	script.src = "https://trustseal.e-rasaneh.ir/trustseal.js";
-	script.async = true;
-
-	script.onload = () => {
-		if (window.eRasaneh_Trustseal) {
-			window.eRasaneh_Trustseal(75564, true);
-		}
-	};
-
-	document.body.appendChild(script);
-
-	return () => {
-		document.body.removeChild(script);
-	};
-}, []);
-
 const Footer = () => {
+	useEffect(() => {
+		const script = document.createElement("script");
+		script.src = "https://trustseal.e-rasaneh.ir/trustseal.js";
+		script.async = true;
+
+		script.onload = () => {
+			if (window.eRasaneh_Trustseal) {
+				window.eRasaneh_Trustseal(75564, true);
+			}
+		};
+
+		document.body.appendChild(script);
+
+		return () => {
+			document.body.removeChild(script);
+		};
+	}, []);
+
 	return (
 		<div className="Container-footer">
 			<div className="Content-Left-Menu">
