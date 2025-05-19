@@ -196,5 +196,17 @@
 				}
 			}
 		}
+		.eRasaneh {
+			img {
+				width: 25px;
+				height: 25px;
+				border-radius: 5px;
+			}
+			#div_eRasanehTrustseal_75564 {
+				position: absolute;
+				left: 30px;
+				bottom: 0px;
+			}
+		}
 	}
 }
