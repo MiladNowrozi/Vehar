@@ -13,10 +13,21 @@ const StorageNews = multer.diskStorage({
 		const year = now.getFullYear();
 		const month = String(now.getMonth() + 1).padStart(2, "0");
 
-		const dir = path.join(__dirname, "/uploads/news/", year.toString(), month);
-
-		fs.mkdirSync(dir, { recursive: true });
-		cb(null, dir);
+		const dir_image = path.join(__dirname, "/uploads/news/", year.toString(), month);
+		const dir_video = path.join(__dirname, "/uploads/news/videos/", year.toString(), month);
+		const dir_other = path.join(__dirname, "/uploads/news/other/", year.toString(), month);
+		if (file.mimetype.startsWith("image/")) {
+			fs.mkdirSync(dir_image, { recursive: true });
+			cb(null, dir_image);
+		} else if (file.mimetype.startsWith("video/")) {
+			fs.mkdirSync(dir_video, { recursive: true });
+			cb(null, dir_video);
+		} else if (!file.mimetype.startsWith("video/") && !file.mimetype.startsWith("image/")) {
+			fs.mkdirSync(dir_other, { recursive: true });
+			cb(null, dir_other);
+		} else {
+			cb(new Error("Unsupported file type"), false);
+		}
 	},
 
 	filename: function (req, file, cb) {
@@ -26,9 +37,7 @@ const StorageNews = multer.diskStorage({
 });
 
 const UploadFile = multer({ storage: StorageNews });
-export const uploadFiles = UploadFile.array("files", 100);
-
-//  ################ USER
+export const uploadFiles = UploadFile.array("files", 50);
 
 const StorageUser = multer.diskStorage({
 	destination: function (req, file, cb) {

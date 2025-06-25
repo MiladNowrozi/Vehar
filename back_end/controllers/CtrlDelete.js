@@ -41,31 +41,67 @@ export default class DeleteControllers {
 
 	//  ######## Video
 	static Video = async (req, res) => {
-		const imagePath = __dirname + "/uploads/user/" + req.query.name;
-
-		fs.readFile(imagePath, (err, data) => {
-			if (err) {
-				res.writeHead(404, { "Content-Type": "text/plain" });
-				res.end("Image not found");
-				return;
-			}
-			res.writeHead(200, { "Content-Type": "text/plain" });
-			res.end(data);
-		});
+		try {
+			const FindVideo = await Files.findAll({ where: { id: req.body } });
+			await Promise.all(
+				FindVideo.map(async (video) => {
+					const filePath = path.join(__dirname, "/uploads/news/videos/", video.FilePath);
+					try {
+						await fs.promises.unlink(filePath);
+						await Files.destroy({ where: { id: video.id } });
+					} catch (error) {
+						console.error(`Error deleting ${filePath}: ${error.message}`);
+						throw new Error(`Failed to delete ${video.FilePath}`);
+					}
+				})
+			);
+			const ResultDeleting = await Files.findAndCountAll();
+			res.status(200).json({
+				success: true,
+				body: {
+					total: ResultDeleting.count,
+					ResultDeleting: req.body,
+				},
+				message: "all videos were receive successfully!",
+			});
+		} catch (error) {
+			res.status(500).json({
+				message: error.message,
+				success: false,
+			});
+		}
 	};
 
-	//  ######## Other
+	//  ######## OTHER
 	static Other = async (req, res) => {
-		const imagePath = __dirname + "/uploads/admin/" + req.query.name;
-
-		fs.readFile(imagePath, (err, data) => {
-			if (err) {
-				res.writeHead(404, { "Content-Type": "text/plain" });
-				res.end("Image not found");
-				return;
-			}
-			res.writeHead(200, { "Content-Type": "text/plain" });
-			res.end(data);
-		});
+		try {
+			const FindVideo = await Files.findAll({ where: { id: req.body } });
+			await Promise.all(
+				FindVideo.map(async (other) => {
+					const filePath = path.join(__dirname, "/uploads/news/other/", other.FilePath);
+					try {
+						await fs.promises.unlink(filePath);
+						await Files.destroy({ where: { id: other.id } });
+					} catch (error) {
+						console.error(`Error deleting ${filePath}: ${error.message}`);
+						throw new Error(`Failed to delete ${other.FilePath}`);
+					}
+				})
+			);
+			const ResultDeleting = await Files.findAndCountAll();
+			res.status(200).json({
+				success: true,
+				body: {
+					total: ResultDeleting.count,
+					ResultDeleting: req.body,
+				},
+				message: "all other-files were receive successfully!",
+			});
+		} catch (error) {
+			res.status(500).json({
+				message: error.message,
+				success: false,
+			});
+		}
 	};
 }

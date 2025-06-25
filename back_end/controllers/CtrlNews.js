@@ -12,7 +12,7 @@ import { SubCategory } from "../models/SubCategory.js";
 import jwt from "jsonwebtoken";
 import { Activity } from "../models/Activity.js";
 
-// fs.readFile("News.json", "utf8", (err, data) => {
+// fs.readFile("News.json", "utf8", async (err, data) => {
 // 	if (err) {
 // 		console.error(err);
 // 		return;
@@ -21,19 +21,26 @@ import { Activity } from "../models/Activity.js";
 
 // 	// http:[\/]{2,2}localhost:5000[\/A-z-?=0-9۰-۹]+.jpg
 // 	// Access the data
-// 	users.slice(16, 17).forEach(async (user) => {
-// 		const imgRegex = /https?:\/\/\d+\.\d+\.\d+\.\d+\/api\/download\/news\?name=[^"]+/gi;
+
+// 	const user = users.filter((news) => {
+// 		return new Date(news.createdAt).getFullYear() === 2024;
+// 	});
+
+// 	user.map(async (user) => {
+// 		const imgRegex =
+// 			/https:\/\/vehar\.ir\/api\/download\/news\?name=\/\d{4}\/\d{2}\/[A-Za-z0-9_]+\.(jpg)/gi;
 // 		const imageUrls = [];
 // 		let match;
 // 		while ((match = imgRegex.exec(user.News_Content)) !== null) {
 // 			imageUrls.push(match[0]);
 // 		}
-// 		console.log(imageUrls[0]?.toString());
-// /
+// 		// console.log(imageUrls[0]?.toString());
+
+// 		/
 // 		try {
-// 			await News.update(
+// 			await News.create(
 // 				{
-// 					// News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
+// 					News_Titre: "به گزارش پایگاه اطلاع رسانی وهار؛",
 // 					News_Title: user.News_Title,
 // 					News_Describe: user.News_Describe,
 // 					News_Content: user.News_Content,
@@ -43,7 +50,7 @@ import { Activity } from "../models/Activity.js";
 // 					// subCategoryId: 5,
 // 					authorId: 1,
 // 				},
-// 				{ where: { id: 17 } }
+// 				// { where: { id: 17 } }
 // 			);
 
 // 			console.log("yes");
@@ -72,7 +79,7 @@ export default class NewsControllers {
 				while ((match = imgRegex.exec(req.body.News_Content)) !== null) {
 					imageUrls.push(match[1]);
 				}
-				if (imageUrls[0].length > 255) {
+				if (imageUrls[0]?.length > 255) {
 					console.log("max length URL of 'Default_Image' most be 255" + `: ${imageUrls[0]}`);
 					return res.sendStatus(401);
 				}
@@ -518,7 +525,7 @@ export default class NewsControllers {
 			imageUrls.push(match[1]);
 		}
 
-		if (imageUrls[0].length > 255) {
+		if (imageUrls[0] && imageUrls[0].length > 255) {
 			console.log("max length URL of 'Default_Image' most be 255" + `: ${imageUrls[0]}`);
 			return res.sendStatus(401);
 		}

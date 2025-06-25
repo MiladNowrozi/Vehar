@@ -1,6 +1,5 @@
 import fs, { createReadStream } from "fs";
 import path from "path";
-import { glob } from "glob";
 import { fileURLToPath } from "url";
 import { Files } from "../models/Files.js";
 import { Op } from "@sequelize/core";
@@ -70,6 +69,82 @@ export default class DownloadControllers {
 		}
 	};
 
+	//  ######## VIDEOS
+	static FilesVideo = async (req, res) => {
+		const VideoPath = __dirname + "/uploads/news/videos" + req.query.name;
+
+		if (!fs.existsSync(VideoPath)) {
+			return res.status(404).json({ error: "Video not found" });
+		}
+		const stat = fs.statSync(VideoPath);
+		const fileSize = stat.size;
+		const range = req.headers.range;
+
+		if (!range) {
+			res.writeHead(200, {
+				"Content-Length": fileSize,
+				"Content-Type": "video/mp4",
+			});
+
+			fs.createReadStream(VideoPath).pipe(res);
+		} else {
+			const parts = range.replace(/bytes=/, "").split("-");
+			const start = parseInt(parts[0], 10);
+			const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+			const chunkSize = end - start + 1;
+
+			const videoStream = fs.createReadStream(VideoPath, { start, end });
+
+			res.writeHead(206, {
+				"Content-Range": `bytes ${start}-${end}/${fileSize}`,
+				"Accept-Ranges": "bytes",
+				"Content-Length": chunkSize,
+				"Content-Type": "video/mp4",
+			});
+
+			videoStream.pipe(res);
+		}
+	};
+
+	//  ######## OTHER
+
+	static FileOther = async (req, res) => {
+		console.log(req.query.name);
+		
+		const OtherPath = __dirname + "/uploads/news/other" + req.query.name;
+		if (!fs.existsSync(OtherPath)) {
+			return res.status(404).json({ error: "this file is not found!" });
+		}
+
+		const stat = fs.statSync(OtherPath);
+		const fileSize = stat.size;
+		const range = req.headers.range;
+		if (!range) {
+			res.writeHead(200, {
+				"Content-Length": fileSize,
+				// "Content-Type": "video/mp4",
+			});
+
+			fs.createReadStream(OtherPath).pipe(res);
+		} else {
+			const parts = range.replace(/bytes=/, "").split("-");
+			const start = parseInt(parts[0], 10);
+			const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+			const chunkSize = end - start + 1;
+
+			const videoStream = fs.createReadStream(VideoPath, { start, end });
+
+			res.writeHead(206, {
+				"Content-Range": `bytes ${start}-${end}/${fileSize}`,
+				"Accept-Ranges": "bytes",
+				"Content-Length": chunkSize,
+				// "Content-Type": "video/mp4",
+			});
+
+			videoStream.pipe(res);
+		}
+	};
+
 	//  ######## USER
 	static FilesUser = async (req, res) => {
 		const imagePath = __dirname + "/uploads/user/" + req.query.name;
@@ -102,7 +177,6 @@ export default class DownloadControllers {
 
 	// RECEIVE URL IMAGES
 	static AllImagesUrl = async (req, res) => {
-
 		try {
 			const images = await Files.findAndCountAll({
 				where: {
@@ -156,31 +230,44 @@ export default class DownloadControllers {
 			res.status(500).json({ error: "Failed to read files" });
 		}
 	};
+	// RECEIVE URL OTHER
+	static AllOtherUrl = async (req, res) => {
+		try {
+			const count = await Files.findAndCountAll({
+				where: {
+					[Op.not]: {
+						[Op.or]: [
+							{ MimeType: { [Op.like]: "image/%" } },
+							{ MimeType: { [Op.like]: "video/%" } },
+						],
+					},
+				},
+			});
+			const other = await Files.findAndCountAll({
+				where: {
+					[Op.not]: {
+						[Op.or]: [
+							{ MimeType: { [Op.like]: "image/%" } },
+							{ MimeType: { [Op.like]: "video/%" } },
+						],
+					},
+				},
+				order: [["id", "ASC"]],
+				limit: count.count >= parseInt(req.query.limit) ? parseInt(req.query.limit) : count.count,
+				offset: 0,
+			});
 
-	// static AllSound = async (req, res) => {
-	// 	try {
-	// 		const images = await Files.findAndCountAll({
-	// 			where: {
-	// 				FileName: {
-	// 					[Op.or]: [{ [Op.like]: "%.mp4" }],
-	// 				},
-	// 			},
-	// 			order: [["id", "ASC"]],
-	// 			limit: parseInt(req.query.limit),
-	// 			offset: 0,
-	// 		});
-
-	// 		res.status(200).json({
-	// 			success: true,
-	// 			body: {
-	// 				total: images.count,
-	// 				images: images.rows,
-	// 			},
-	// 			message: "all images were receive successfully!",
-	// 		});
-	// 	} catch (error) {
-	// 		console.error("Error reading files:", error);
-	// 		res.status(500).json({ error: "Failed to read files" });
-	// 	}
-	// };
+			res.status(200).json({
+				success: true,
+				body: {
+					total: other.count,
+					other: other.rows,
+				},
+				message: "all other were receive successfully!",
+			});
+		} catch (error) {
+			console.error("Error reading files:", error);
+			res.status(500).json({ error: "Failed to read files" });
+		}
+	};
 }

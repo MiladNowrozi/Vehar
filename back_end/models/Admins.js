@@ -77,7 +77,7 @@ db.queryInterface.tableExists("Admins").then(async (e) => {
 			const CreatedAdmin = await Admin.create({
 				Admin_FirstName: "حسین",
 				Admin_LastName: "ناصری",
-				Admin_UserName: "Milad@2009",
+				Admin_UserName: "Milad@09169852009",
 				Admin_Password: HashPassword,
 				Role: "Lord",
 				Admin_remember: false,

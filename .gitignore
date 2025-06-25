@@ -1,6 +1,7 @@
 back_end/node_modules
 back_end/News.json
 back_end/.env
+back_end/data.json
 #
 front_end/node_modules
 front_end/build
