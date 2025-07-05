@@ -12,7 +12,11 @@ export const Files = db.define("Files", {
 		type: DataTypes.STRING(255),
 	},
 	MimeType: {
-		type: DataTypes.STRING(100),
+		type: DataTypes.STRING(255),
+	},
+	ThumbnailUrl: {
+		type: DataTypes.STRING(255),
+		allowNull: true,
 	},
 });
 

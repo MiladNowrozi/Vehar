@@ -1,5 +1,6 @@
 import fs, { createReadStream } from "fs";
 import path from "path";
+import crypto from "crypto";
 import { fileURLToPath } from "url";
 import { Files } from "../models/Files.js";
 import { Op } from "@sequelize/core";
@@ -106,11 +107,47 @@ export default class DownloadControllers {
 		}
 	};
 
+	//  ######## AllThumbnailVideo
+	static ThumbnailVideo = async (req, res) => {
+		const name = req.query.name;
+		const ThumbnailPath = __dirname + "/uploads/news/videos/thumbnails/" + name;
+
+		// Basic security: Avoid suspicious paths
+
+		if (!name || name.includes("..") || name.includes("//")) {
+			return res.status(400).json({ error: "Invalid thumbnail name." });
+		}
+
+		if (!fs.existsSync(ThumbnailPath)) {
+			return res.status(404).json({ error: "Thumbnail not found." });
+		}
+
+		const stat = fs.statSync(ThumbnailPath);
+		const etag = crypto
+			.createHash("md5")
+			.update(stat.size + "-" + stat.mtimeMs)
+			.digest("hex");
+
+		if (req.headers["if-none-match"] === etag) {
+			return res.status(304).end();
+		}
+
+		res.setHeader("Content-Type", "image/jpeg");
+		res.setHeader("Content-Length", stat.size);
+		res.setHeader("Cache-Control", "public, max-age=86400, immutable");
+		res.setHeader("ETag", etag);
+		res.setHeader("X-Content-Type-Options", "nosniff");
+		res.setHeader("Referrer-Policy", "no-referrer");
+		res.setHeader("Access-Control-Allow-Origin", "*");
+
+		fs.createReadStream(ThumbnailPath).pipe(res);
+	};
+
 	//  ######## OTHER
 
 	static FileOther = async (req, res) => {
 		console.log(req.query.name);
-		
+
 		const OtherPath = __dirname + "/uploads/news/other" + req.query.name;
 		if (!fs.existsSync(OtherPath)) {
 			return res.status(404).json({ error: "this file is not found!" });
@@ -223,7 +260,35 @@ export default class DownloadControllers {
 					total: video.count,
 					video: video.rows,
 				},
-				message: "all images were receive successfully!",
+				message: "all videos were receive successfully!",
+			});
+		} catch (error) {
+			console.error("Error reading files:", error);
+			res.status(500).json({ error: "Failed to read files" });
+		}
+	};
+
+	// RECEIVE URL AllThumbnailVideoUrl
+	static AllThumbnailVideoUrl = async (req, res) => {
+		try {
+			const ThumbnailVideo = await Files.findAndCountAll({
+				where: {
+					MimeType: {
+						[Op.like]: "video/%",
+					},
+				},
+				order: [["createdAt", "DESC"]],
+				limit: parseInt(req.query.limit),
+				offset: 0,
+			});
+
+			res.status(200).json({
+				success: true,
+				body: {
+					total: ThumbnailVideo.count,
+					video: ThumbnailVideo.rows,
+				},
+				message: "all ThumbnailVideo were receive successfully!",
 			});
 		} catch (error) {
 			console.error("Error reading files:", error);

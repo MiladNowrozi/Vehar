@@ -54,6 +54,69 @@
 			cursor: pointer;
 		}
 	}
+	.action-showing-uploading {
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		background-color: rgba(12, 12, 12, 0.438);
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		direction: rtl;
+		button {
+			border: none;
+			width: 20%;
+			cursor: pointer;
+			height: 25px;
+			border-radius: 5px;
+		}
+		.content-action {
+			width: 30%;
+			height: 50vh;
+			border-radius: 5px;
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-direction: column;
+			background-color: rgb(5, 26, 119);
+			color: #fff;
+		}
+	}
+	.ShowingFilesBeforeUploaded {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		.content-items {
+			display: flex;
+			flex-direction: column;
+			.items-upload {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				color: green;
+				video {
+					width: 150px;
+					height: 100px;
+					border-radius: 20px;
+				}
+				img {
+					width: 150px;
+					height: 100px;
+					border-radius: 20px;
+				}
+				span {
+					font-size: 25px;
+				}
+				p {
+					color: red;
+				}
+			}
+		}
+	}
 	.content-gallery-files {
 		width: 100%;
 		display: flex;
@@ -73,7 +136,7 @@
 				overflow-y: auto;
 				scrollbar-width: thin;
 				direction: rtl;
-				.list-item {
+				.list-item-images {
 					width: 100%;
 					img {
 						width: 100%;
@@ -116,11 +179,11 @@
 					direction: rtl;
 				}
 
-				.list-item {
+				.list-item-video {
 					width: 100%;
-					video {
+					img {
 						width: 100%;
-						height: 136px;
+						height: 180px;
 						border-radius: 5px;
 					}
 				}
@@ -158,12 +221,10 @@
 				.loadingOther {
 					direction: rtl;
 				}
-				.list-item {
+				.list-item-other {
 					width: 100%;
-					other {
-						width: 100%;
-						height: 136px;
-						border-radius: 5px;
+					span {
+						font-size: 70px;
 					}
 				}
 			}
@@ -197,6 +258,14 @@
 			}
 			.option-upload {
 				width: 35%;
+				label {
+					height: 52px;
+				}
+			}
+		}
+		.action-showing-uploading {
+			.content-action {
+				width: 80%;
 			}
 		}
 		.content-gallery-files {
@@ -218,6 +287,22 @@
 					button {
 						width: 20%;
 					}
+				}
+			}
+			.content-video {
+				/* .items-video {
+				} */
+				.options-control-video-selected {
+					width: 100%;
+					position: absolute;
+					bottom: 0;
+				}
+			}
+			.content-other {
+				.options-control-other-selected {
+					width: 100%;
+					position: absolute;
+					bottom: 0;
 				}
 			}
 		}

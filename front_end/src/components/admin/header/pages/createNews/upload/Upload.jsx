@@ -5,47 +5,79 @@ import { useLocation } from "react-router-dom";
 
 const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
-	const [Videos, setVideos] = useState([]);
+	const [ThumbnailVideos, setThumbnailVideos] = useState([]);
 	const [Other, setOther] = useState([]);
+	console.log(ThumbnailVideos);
+
+	const [play, setPlay] = useState(false);
 
 	const [LimitImages, setLimitImages] = useState(30);
-	const [LimitVideo, setLimitVideo] = useState(10);
+	const [LimitThumbnailVideo, setLimitThumbnailVideo] = useState(10);
 	const [LimitOther, setLimitOther] = useState(30);
 	const [loadingImages, setLoadingImages] = useState(false);
 	const [loadingVideo, setLoadingVideo] = useState(false);
 	const [loadingOther, setLoadingOther] = useState(false);
+	// PROCESS UPLOADING showing file, loading and messaging
+	const [loadingUpload, setLoadingUpload] = useState(false);
+	const [actionLoding, setActionLoading] = useState(false);
+	const [message, setMessage] = useState("");
+	const [selectedFiles, setSelectedFiles] = useState([]);
+	const [previews, setPreviews] = useState([]);
 	//
 	const [openImages, setOpenImages] = useState(false);
-	const [openVideo, setOpenVideo] = useState(false);
+	const [openThumbnailVideo, setOpenThumbnailVideo] = useState(false);
 	const [openOther, setOpenOther] = useState(false);
 	const NewsId = useLocation().pathname.split("/")[2];
 
-	const [files, setFiles] = useState([]);
-
+	const formatFileSize = (bytes) => {
+		if (bytes < 1024) return bytes + " B";
+		if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+		if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + " MB";
+		return (bytes / 1024 / 1024 / 1024).toFixed(1) + " GB";
+	};
 	const handleFileChange = (event) => {
-		setFiles(event.target.files);
+		const files = Array.from(event.target.files);
+		setSelectedFiles(files);
+
+		const previewList = files.map((file) => {
+			const url = URL.createObjectURL(file);
+			return {
+				name: file.name,
+				type: file.type,
+				size: file.size,
+				url,
+			};
+		});
+
+		setPreviews(previewList);
 	};
 
 	const handleUpload = async () => {
-		if (files.length > 0) {
+		if (selectedFiles.length > 0) {
 			const formData = new FormData();
-			for (let i = 0; i < files.length; i++) {
-				formData.append("files", files[i]);
+			for (let i = 0; i < selectedFiles.length; i++) {
+				formData.append("files", selectedFiles[i]);
 			}
 
 			try {
+				setLoadingUpload(true);
+				setActionLoading(true);
 				await AxiosInstance.post("/upload/file", formData)
 					.then((success) => {
-						alert("آپلود شما با موفقیت انجام شد .");
+						setMessage("فایل ها با موفقیت بارگزاری شدند ✅");
 					})
 					.catch((e) => {
+						setMessage("بارگزاری با شکست موجه شد ❌");
 						console.log(e);
 					});
 			} catch (error) {
+				setMessage("خطا در هنگام بارگزاری ⚠️");
 				console.error("Error uploading files:", error);
+			} finally {
+				setLoadingUpload(false);
 			}
 		} else {
-			alert("لطفاً فایل های خود را انتخاب کنید !");
+			alert("لطفاً یک فایل را انتخاب کنید !");
 		}
 	};
 
@@ -78,11 +110,11 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			try {
 				await AxiosInstance({
 					method: "get",
-					url: `download/all-videos?limit=${LimitVideo}`,
+					url: `download/all-video-thumbnail?limit=${LimitThumbnailVideo}`,
 					withCredentials: true,
 				})
 					.then((success) => {
-						setVideos(success.data.body);
+						setThumbnailVideos(success.data.body);
 					})
 					.catch((e) => {
 						console.log(e);
@@ -93,7 +125,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			setLoadingVideo(false);
 		};
 		fetchData();
-	}, [LimitVideo]);
+	}, [LimitThumbnailVideo]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -138,17 +170,21 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 
 	useEffect(() => {
 		const VideoScroll = document.getElementById("items-video-scroll-id");
-
+		if (!VideoScroll) return;
 		const handleScroll = () => {
+			const { scrollTop, clientHeight, scrollHeight } = VideoScroll;
 			if (
-				VideoScroll &&
-				VideoScroll.scrollTop + VideoScroll.clientHeight >= VideoScroll.scrollHeight
+				ThumbnailVideos.video.length > LimitThumbnailVideo - 10 &&
+				scrollTop + 1 + clientHeight >= scrollHeight
 			) {
-				setLimitVideo(LimitVideo + 10);
+				setLimitThumbnailVideo((prev) => prev + 10);
 			}
 		};
-		VideoScroll && VideoScroll.addEventListener("scroll", handleScroll);
-	}, [loadingVideo, LimitVideo]);
+		VideoScroll.addEventListener("scroll", handleScroll);
+		return () => {
+			VideoScroll.removeEventListener("scroll", handleScroll);
+		};
+	}, [loadingVideo, LimitThumbnailVideo]);
 
 	useEffect(() => {
 		const OtherScroll = document.getElementById("items-other-scroll-id");
@@ -164,10 +200,8 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		OtherScroll && OtherScroll.addEventListener("scroll", handleScroll);
 	}, [loadingOther, LimitOther]);
 
-	const [selectedFile, setSelectedFile] = useState([]);
-
 	const toggleImageSelection = (file) => {
-		setSelectedFile((prev) => {
+		setSelectedFiles((prev) => {
 			if (prev.includes(file)) {
 				return prev.filter((a) => a !== file);
 			} else {
@@ -180,15 +214,16 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		if (a.target.id === "video") {
 			if (NewsId === "upload-files") {
 				try {
-					await AxiosInstance.post("/delete/videos", selectedFile)
+					setActionLoading(true);
+					await AxiosInstance.post("/delete/videos", selectedFiles)
 						.then((success) => {
-							alert("فیلم ها با موفقیت حذف شدند .");
-							// setImages(success.data.body);
+							document.location.reload();
+							setMessage("فیلم ها با موفقیت حذف شدند ✅");
 							console.log(success.data.body);
-							setSelectedFile([]);
+							setSelectedFiles([]);
 						})
 						.catch((e) => {
-							alert("پوزش! ما نتونستیم فرایند حذف را انجام دهیم .");
+							setMessage("حذف با شکست موجه شد ❌");
 							console.log(e);
 						});
 				} catch (error) {
@@ -197,30 +232,29 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			} else {
 				setFilePickerOpen(false);
 				if (editorRef.current) {
-					console.log(selectedFile);
-					const imageTags = selectedFile
+					const imageTags = selectedFiles
 						.map(
 							(video) =>
 								`<video src="${video}" controls alt="Selected Video" style="width: 100%; height: 450px;"></video>`
 						)
 						.join("");
 					editorRef.current.insertContent(imageTags);
-					setSelectedFile([]); // Clear selection after inserting
+					setSelectedFiles([]); // Clear selection after inserting
 					document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
 				}
 			}
 		} else if (a.target.id === "image") {
 			if (NewsId === "upload-files") {
 				try {
-					await AxiosInstance.post("/delete/images", selectedFile)
+					setActionLoading(true);
+					await AxiosInstance.post("/delete/images", selectedFiles)
 						.then((success) => {
-							alert("تصاویر با موفقیت حذف شدند .");
-							// setImages(success.data.body);
+							setMessage("تصاویر با موفقیت حذف شدند ✅");
 							console.log(success.data.body);
-							setSelectedFile([]);
+							setSelectedFiles([]);
 						})
 						.catch((e) => {
-							alert("پوزش! ما نتونستیم فرایند حذف را انجام دهیم .");
+							setMessage("حذف با شکست موجه شد ❌");
 							console.log(e);
 						});
 				} catch (error) {
@@ -229,30 +263,30 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			} else {
 				setFilePickerOpen(false);
 				if (editorRef.current) {
-					console.log(selectedFile);
-					const imageTags = selectedFile
+					console.log(selectedFiles);
+					const imageTags = selectedFiles
 						.map(
 							(img) =>
 								`<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`
 						)
 						.join("");
 					editorRef.current.insertContent(imageTags);
-					setSelectedFile([]); // Clear selection after inserting
+					setSelectedFiles([]); // Clear selection after inserting
 					document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
 				}
 			}
 		} else if (a.target.id === "other") {
 			if (NewsId === "upload-files") {
+				setActionLoading(true);
 				try {
-					await AxiosInstance.post("/delete/others", selectedFile)
+					await AxiosInstance.post("/delete/others", selectedFiles)
 						.then((success) => {
-							alert("فایل با موفقیت حذف شدند .");
-							// setImages(success.data.body);
+							setMessage("فایل ها با موفقیت حذف شدند ✅");
 							console.log(success.data.body);
-							setSelectedFile([]);
+							setSelectedFiles([]);
 						})
 						.catch((e) => {
-							alert("پوزش! ما نتونستیم فرایند حذف را انجام دهیم .");
+							setMessage("حذف با شکست موجه شد ❌");
 							console.log(e);
 						});
 				} catch (error) {
@@ -261,21 +295,38 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			} else {
 				setFilePickerOpen(false);
 				if (editorRef.current) {
-					console.log(selectedFile);
-					const imageTags = selectedFile
+					console.log(selectedFiles);
+					const imageTags = selectedFiles
 						.map(
 							(img) =>
 								`<a href="${img}"><img src="${img}" alt="Selected Image" style="max-width: 100%; height: auto;" /></a>`
 						)
 						.join("");
 					editorRef.current.insertContent(imageTags);
-					setSelectedFile([]); // Clear selection after inserting
+					setSelectedFiles([]); // Clear selection after inserting
 					document.querySelector(".tox.tox-silver-sink.tox-tinymce-aux").style.display = "block";
 				}
 			}
 		} else {
 		}
 	};
+
+	// preview files before uploaded them
+
+	const renderPreview = (file) => {
+		if (file.type.startsWith("image/")) {
+			return <img src={file.url} alt={file.name} width="150" style={{ marginTop: 5 }} />;
+		} else if (file.type.startsWith("video/")) {
+			return (
+				<video width="250" controls style={{ marginTop: 5 }}>
+					<source src={file.url} type={file.type} />
+				</video>
+			);
+		} else {
+			return <span style={{ color: "#555" }}>📄</span>;
+		}
+	};
+
 	return (
 		<div className="container-gallery-files">
 			<div className="content-option-button">
@@ -283,7 +334,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					type="button"
 					onClick={() => {
 						setOpenOther(true);
-						setOpenVideo(false);
+						setOpenThumbnailVideo(false);
 						setOpenImages(false);
 						setLoadingOther(true);
 					}}
@@ -293,7 +344,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				<button
 					type="button"
 					onClick={() => {
-						setOpenVideo(true);
+						setOpenThumbnailVideo(true);
 						setOpenImages(false);
 						setOpenOther(false);
 						setLoadingVideo(true);
@@ -305,7 +356,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					type="button"
 					onClick={() => {
 						setOpenImages(true);
-						setOpenVideo(false);
+						setOpenThumbnailVideo(false);
 						setOpenOther(false);
 						setLoadingImages(true);
 					}}
@@ -321,7 +372,16 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				/>
 				{NewsId !== "create-news" && (
 					<div className="option-upload">
-						<label htmlFor="upload_files_id" className="fa fa-upload"></label>
+						<label
+							htmlFor="upload_files_id"
+							onClick={() => {
+								setOpenThumbnailVideo(false);
+								setOpenImages(false);
+								setOpenOther(false);
+								setLoadingVideo(false);
+							}}
+							className="fa fa-upload"
+						></label>
 						<button type="button" onClick={handleUpload}>
 							ارسال
 						</button>
@@ -329,6 +389,40 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				)}
 			</div>
 
+			{previews.length > 0 && (
+				<div className="ShowingFilesBeforeUploaded">
+					<h4>Selected Files:</h4>
+					<div className="content-items">
+						{previews.map((file, index) => (
+							<div key={index} className="items-upload">
+								{renderPreview(file)}
+								<strong>{file.name}</strong>
+								<p>{formatFileSize(file.size)}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+			{actionLoding && (
+				<div className="action-showing-uploading">
+					<div className="content-action">
+						<div className="item-action">
+							{loadingUpload && <p>در حال بارگزاری لطفاً صبر کنید ...</p>}
+							{!loadingUpload && message && <p>{message}</p>}
+						</div>
+						{!loadingUpload && (
+							<button
+								onClick={() => {
+									setActionLoading(false);
+									document.location.reload();
+								}}
+							>
+								بستن
+							</button>
+						)}
+					</div>
+				</div>
+			)}
 			<div className="content-gallery-files">
 				{openImages && (
 					<div className="content-images">
@@ -341,11 +435,11 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 								Images.images.map(
 									(Image, index) =>
 										(
-											<div key={index} className="list-item">
+											<div key={index} className="list-item-images">
 												<label htmlFor={"match-index" + index}>
 													<input
 														type="checkbox"
-														checked={selectedFile.includes(
+														checked={selectedFiles.includes(
 															NewsId === "upload-files"
 																? Image.id
 																: process.env.REACT_APP_SET_URLS + Image.FilePath
@@ -385,12 +479,12 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 								id="image"
 								type="button"
 								onClick={insertImagesToEditor}
-								disabled={!selectedFile}
+								disabled={!selectedFiles}
 							>
 								{NewsId === "upload-files" ? "حذف" : "درج در ادیتور"}
 							</button>
 							<div>
-								<p>انخاب شده: {selectedFile.length}</p>
+								<p>انخاب شده: {selectedFiles.length}</p>
 							</div>
 							<div className="count-news-scrool">
 								<p> {Images.total}</p> از
@@ -399,44 +493,58 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 						</div>
 					</div>
 				)}
-				{openVideo && (
+				{openThumbnailVideo && (
 					<div className="content-video">
 						<div id="items-video-scroll-id" className="items-video">
-							{Videos.video?.map((Video, index) => (
-								<div key={index} className="list-item">
+							{ThumbnailVideos.video?.map((Thumbnail, index) => (
+								<div key={index} className="list-item-video">
 									<label htmlFor={"match-index-video" + index}>
 										<input
 											type="checkbox"
-											checked={selectedFile.includes(
+											checked={selectedFiles.includes(
 												NewsId === "upload-files"
-													? Video.id
-													: process.env.REACT_APP_SET_VIDEO + Video.FilePath
+													? Thumbnail.id
+													: process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath
 											)}
 											onChange={() =>
 												toggleImageSelection(
 													NewsId === "upload-files"
-														? Video.id
-														: process.env.REACT_APP_SET_VIDEO + Video.FilePath
+														? Thumbnail.id
+														: process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath
 												)
 											}
 										/>
-										<video
+										{/* <video
 											id={"match-index-video" + index}
 											onClick={() =>
 												toggleImageSelection(
 													NewsId === "upload-files"
-														? Video.id
-														: process.env.REACT_APP_SET_VIDEO + Video.FilePath
+														? Thumbnail.id
+														: process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath
 												)
 											}
-											src={process.env.REACT_APP_SET_VIDEO + Video.FilePath}
-										></video>
+											src={process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath}
+										></video> */}
+										{play ? (
+											<video
+												id={"match-index-video" + index}
+												src={process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath}
+												controls
+												autoPlay
+											/>
+										) : (
+											<img
+												src={process.env.REACT_APP_SET_TAHUMBNAIL + Thumbnail.ThumbnailUrl}
+												alt={Thumbnail.OriginalName}
+												onClick={() => setPlay(true)}
+											/>
+										)}
 									</label>
 								</div>
 							))}
 							{loadingVideo && (
 								<p className="loadingVideo">
-									{Videos.video.length === 0 && "ویدئویی وجود ندارد !"}
+									{ThumbnailVideos.video?.length === 0 && "ویدئویی وجود ندارد !"}
 								</p>
 							)}
 						</div>
@@ -445,16 +553,16 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 								id="video"
 								type="button"
 								onClick={insertImagesToEditor}
-								disabled={!selectedFile}
+								disabled={!selectedFiles}
 							>
 								{NewsId === "upload-files" ? "حذف" : "درج در ادیتور"}
 							</button>
 							<div>
-								<p>انخاب شده: {selectedFile.length}</p>
+								<p>انخاب شده: {selectedFiles.length}</p>
 							</div>
 							<div className="count-video-scrool">
-								<p> {Videos.total}</p> از
-								<p> {Videos.video.length}</p>
+								<p> {ThumbnailVideos.total}</p> از
+								<p> {ThumbnailVideos.video.length}</p>
 							</div>
 						</div>
 					</div>
@@ -463,23 +571,23 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					<div className="content-other">
 						<div id="items-other-scroll-id" className="items-other">
 							{Other.other?.map((other, index) => (
-								<div key={index} className="list-item">
+								<div key={index} className="list-item-other">
 									<input
 										type="checkbox"
-										checked={selectedFile.includes(
+										checked={selectedFiles.includes(
 											NewsId === "upload-files"
 												? other.id
-												: process.env.REACT_APP_SET_URLS + other.FilePath
+												: process.env.REACT_APP_SET_URLS_OTHER + other.FilePath
 										)}
 										onChange={() =>
 											toggleImageSelection(
 												NewsId === "upload-files"
 													? other.id
-													: process.env.REACT_APP_SET_URLS + other.FilePath
+													: process.env.REACT_APP_SET_URLS_OTHER + other.FilePath
 											)
 										}
 									/>
-									<a
+									<span
 										onClick={() =>
 											toggleImageSelection(
 												NewsId === "upload-files"
@@ -488,11 +596,14 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 											)
 										}
 										src={process.env.REACT_APP_SET_URLS_OTHER + other.FilePath}
-									></a>
+									>
+										📄
+									</span>
+									<p>{other.OriginalName}</p>
 								</div>
 							))}
 							{loadingOther && (
-								<p className="loadingOther">{Other.other.length === 0 && "فایلی وجود ندارد !"}</p>
+								<p className="loadingOther">{Other.other?.length === 0 && "فایلی وجود ندارد !"}</p>
 							)}
 						</div>
 						<div className="options-control-other-selected">
@@ -500,12 +611,12 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 								id="other"
 								type="button"
 								onClick={insertImagesToEditor}
-								disabled={!selectedFile}
+								disabled={!selectedFiles}
 							>
 								{NewsId === "upload-files" ? "حذف" : "درج در ادیتور"}
 							</button>
 							<div>
-								<p>انخاب شده: {selectedFile.length}</p>
+								<p>انخاب شده: {selectedFiles.length}</p>
 							</div>
 							<div className="count-other-scrool">
 								<p>{Other.total}</p> از
