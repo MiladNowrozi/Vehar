@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./upload.css"; // Import the CSS file
 import { AxiosInstance } from "../../../../../../axiosInstance";
 import { useLocation } from "react-router-dom";
@@ -7,7 +7,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [Images, setImages] = useState([]);
 	const [ThumbnailVideos, setThumbnailVideos] = useState([]);
 	const [Other, setOther] = useState([]);
-	console.log(ThumbnailVideos);
 
 	const [play, setPlay] = useState(false);
 
@@ -18,11 +17,13 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 	const [loadingVideo, setLoadingVideo] = useState(false);
 	const [loadingOther, setLoadingOther] = useState(false);
 	// PROCESS UPLOADING showing file, loading and messaging
-	const [loadingUpload, setLoadingUpload] = useState(false);
-	const [actionLoding, setActionLoading] = useState(false);
 	const [message, setMessage] = useState("");
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [previews, setPreviews] = useState([]);
+	const [ProgressPreviews, setProgressPreviews] = useState(0);
+	const [ProgressUpload, setProgressUpload] = useState(0);
+	const [realProgress, setRealProgress] = useState(0);
+	const [LoadingPreviews, setLoadingPreviews] = useState(false);
 	//
 	const [openImages, setOpenImages] = useState(false);
 	const [openThumbnailVideo, setOpenThumbnailVideo] = useState(false);
@@ -36,6 +37,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		return (bytes / 1024 / 1024 / 1024).toFixed(1) + " GB";
 	};
 	const handleFileChange = (event) => {
+		setLoadingPreviews(true);
 		const files = Array.from(event.target.files);
 		setSelectedFiles(files);
 
@@ -48,23 +50,58 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 				url,
 			};
 		});
-
 		setPreviews(previewList);
+		const interval = setInterval(() => {
+			setProgressPreviews((prev) => {
+				if (prev >= 100) {
+					clearInterval(interval);
+					return 100;
+				}
+				return prev + 1; // you can speed up by changing +1 to +5, etc.
+			});
+		}, 30); // speed of upload progress
 	};
 
+	//
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setProgressUpload((prev) => {
+				if (prev >= realProgress) {
+					clearInterval(interval);
+					return prev;
+				}
+				return prev + 5;
+			});
+		}, 100);
+
+		return () => clearInterval(interval);
+	}, [realProgress]);
+
+	const controllerRef = useRef(null);
+
 	const handleUpload = async () => {
+		setProgressPreviews(0);
 		if (selectedFiles.length > 0) {
 			const formData = new FormData();
 			for (let i = 0; i < selectedFiles.length; i++) {
 				formData.append("files", selectedFiles[i]);
 			}
 
+			const controller = new AbortController();
+			controllerRef.current = controller;
+
 			try {
-				setLoadingUpload(true);
-				setActionLoading(true);
-				await AxiosInstance.post("/upload/file", formData)
+				setLoadingPreviews(true);
+				await AxiosInstance.post("/upload/file", formData, {
+					signal: controller.signal,
+					onUploadProgress: (event) => {
+						const percent = Math.round((event.loaded * 100) / event.total);
+						setRealProgress(percent);
+					},
+				})
 					.then((success) => {
-						setMessage("فایل ها با موفقیت بارگزاری شدند ✅");
+						console.log(success);
 					})
 					.catch((e) => {
 						setMessage("بارگزاری با شکست موجه شد ❌");
@@ -73,8 +110,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			} catch (error) {
 				setMessage("خطا در هنگام بارگزاری ⚠️");
 				console.error("Error uploading files:", error);
-			} finally {
-				setLoadingUpload(false);
 			}
 		} else {
 			alert("لطفاً یک فایل را انتخاب کنید !");
@@ -155,10 +190,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		if (!ImagesScroll) return;
 		const handleScroll = () => {
 			const { scrollTop, clientHeight, scrollHeight } = ImagesScroll;
-			if (
-				Images.images.length > LimitImages - 30 &&
-				scrollTop + 0.6 + clientHeight >= scrollHeight
-			) {
+			if (Images.images.length > LimitImages - 30 && scrollTop + 1 + clientHeight >= scrollHeight) {
 				setLimitImages((prev) => prev + 30);
 			}
 		};
@@ -214,10 +246,10 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		if (a.target.id === "video") {
 			if (NewsId === "upload-files") {
 				try {
-					setActionLoading(true);
+					setLoadingPreviews(true);
 					await AxiosInstance.post("/delete/videos", selectedFiles)
 						.then((success) => {
-							document.location.reload();
+							window.location.reload();
 							setMessage("فیلم ها با موفقیت حذف شدند ✅");
 							console.log(success.data.body);
 							setSelectedFiles([]);
@@ -246,7 +278,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 		} else if (a.target.id === "image") {
 			if (NewsId === "upload-files") {
 				try {
-					setActionLoading(true);
+					setLoadingPreviews(true);
 					await AxiosInstance.post("/delete/images", selectedFiles)
 						.then((success) => {
 							setMessage("تصاویر با موفقیت حذف شدند ✅");
@@ -277,7 +309,7 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 			}
 		} else if (a.target.id === "other") {
 			if (NewsId === "upload-files") {
-				setActionLoading(true);
+				setLoadingPreviews(true);
 				try {
 					await AxiosInstance.post("/delete/others", selectedFiles)
 						.then((success) => {
@@ -382,9 +414,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 							}}
 							className="fa fa-upload"
 						></label>
-						<button type="button" onClick={handleUpload}>
-							ارسال
-						</button>
 					</div>
 				)}
 			</div>
@@ -403,27 +432,68 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 					</div>
 				</div>
 			)}
-			{actionLoding && (
-				<div className="action-showing-uploading">
-					<div className="content-action">
-						<div className="item-action">
-							{loadingUpload && <p>در حال بارگزاری لطفاً صبر کنید ...</p>}
-							{!loadingUpload && message && <p>{message}</p>}
-						</div>
-						{!loadingUpload && (
-							<button
-								onClick={() => {
-									setActionLoading(false);
-									document.location.reload();
-								}}
-							>
-								بستن
-							</button>
-						)}
-					</div>
-				</div>
-			)}
 			<div className="content-gallery-files">
+				{LoadingPreviews && (
+					<div className="Container_ShowLodingPreviews">
+						<div className="content-Progress">
+							<div style={{ display: message !== "" && "none" }} className="progress-bar">
+								<div
+									className="progress-fill"
+									style={{
+										width: `${ProgressUpload === 0 ? ProgressPreviews : ProgressUpload}%`,
+									}}
+								></div>
+							</div>
+
+							<p style={{ display: message === "" && "none" }} className="message-process">
+								{message}
+							</p>
+
+							<div className="progress-text" style={{ display: message !== "" && "none" }}>
+								{ProgressUpload === 0 ? ProgressPreviews : ProgressUpload}
+								<span>%</span>
+							</div>
+
+							{ProgressUpload !== 100 && (
+								<button
+									className="ptn-submit-progress"
+									onClick={handleUpload}
+									disabled={ProgressPreviews < 100}
+									style={{ display: message !== "" && "none" }}
+								>
+									ارسال
+								</button>
+							)}
+
+							{message === "" ? (
+								<button
+									className="ptn-cancel-progress"
+									onClick={() => {
+										if (ProgressPreviews > 0 && ProgressUpload === 0) {
+											setLoadingPreviews(false);
+											window.location.reload();
+										} else {
+											controllerRef.current.abort();
+											window.location.reload();
+										}
+									}}
+								>
+									{ProgressUpload < 100 && ProgressPreviews <= 100 ? "لغو" : "بستن"}
+								</button>
+							) : (
+								<button
+									onClick={() => {
+										setLoadingPreviews(false);
+										window.location.reload();
+									}}
+									className="ptn-cancel-progress"
+								>
+									بستن
+								</button>
+							)}
+						</div>
+					</div>
+				)}
 				{openImages && (
 					<div className="content-images">
 						<div
@@ -514,17 +584,6 @@ const Upload = ({ editorRef, setFilePickerOpen }) => {
 												)
 											}
 										/>
-										{/* <video
-											id={"match-index-video" + index}
-											onClick={() =>
-												toggleImageSelection(
-													NewsId === "upload-files"
-														? Thumbnail.id
-														: process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath
-												)
-											}
-											src={process.env.REACT_APP_SET_VIDEO + Thumbnail.FilePath}
-										></video> */}
 										{play ? (
 											<video
 												id={"match-index-video" + index}
