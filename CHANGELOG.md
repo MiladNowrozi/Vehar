@@ -10,3 +10,6 @@
 - Removed mistakenly created files:
   - back_end/UpdateB.tex
   - front_end/UpdateF.tex
+
+### CI
+- Updated GitHub Actions deploy workflow to trigger only when version tag is increased.
