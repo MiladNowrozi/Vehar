@@ -1,69 +1,47 @@
-name: Deploy on Newer Tag Only
+name: Deploy to VPS
 
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
+      - "v*.*.*-*"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    outputs:
+      newer_version: ${{ steps.version_check.outputs.newer_version }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get current tag name
-        id: tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: Fetch all tags
-        run: git fetch --tags
-
-      - name: Get previous tag
-        id: prev
+      - name: Get previous and current tag
+        id: version_check
         run: |
-          PREV_TAG=$(git tag --sort=-creatordate | grep '^v' | grep -v "$TAG_NAME" | tail -n 1)
-          echo "PREV_TAG=$PREV_TAG" >> $GITHUB_ENV
+          TAGS=$(git tag --sort=-creatordate)
+          NEW_TAG=$(echo "$TAGS" | head -n1)
+          OLD_TAG=$(echo "$TAGS" | sed -n 2p)
 
-      - name: Compare versions using Bash
-        id: compare
-        run: |
-          version_gt() {
-            # remove 'v' prefix
-            v1="${1#v}"
-            v2="${2#v}"
+          echo "🟡 NEW_TAG=$NEW_TAG"
+          echo "🟡 OLD_TAG=$OLD_TAG"
 
-            # split into arrays
-            IFS='.' read -r -a ver1 <<< "$v1"
-            IFS='.' read -r -a ver2 <<< "$v2"
-
-            for i in 0 1 2; do
-              n1="${ver1[i]:-0}"
-              n2="${ver2[i]:-0}"
-              if (( n1 > n2 )); then
-                echo "NEWER_VERSION=true" >> $GITHUB_ENV
-                exit 0
-              elif (( n1 < n2 )); then
-                echo "NEWER_VERSION=false" >> $GITHUB_ENV
-                exit 0
-              fi
-            done
-
-            # versions are equal
-            echo "NEWER_VERSION=false" >> $GITHUB_ENV
-          }
-
-          version_gt "$TAG_NAME" "$PREV_TAG"
+          if [ "$NEW_TAG" != "$OLD_TAG" ]; then
+            echo "newer_version=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "newer_version=false" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
 
       - name: Set up SSH key
-        if: env.NEWER_VERSION == 'true'
+        if: steps.version_check.outputs.newer_version == 'true'
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add VPS to known hosts
-        if: env.NEWER_VERSION == 'true'
+        if: steps.version_check.outputs.newer_version == 'true'
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H -p 9011 87.107.105.139 >> ~/.ssh/known_hosts
@@ -71,6 +49,6 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy to VPS
-        if: env.NEWER_VERSION == 'true'
+        if: steps.version_check.outputs.newer_version == 'true'
         run: |
           ssh -p 9011 root@87.107.105.139 'bash -s' < ./deploy.sh
